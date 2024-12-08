@@ -11,6 +11,7 @@ import (
 
 	backend "github.com/benkoppe/bear-trak-backend/backend"
 	external "github.com/benkoppe/bear-trak-backend/dining/external"
+	"golang.org/x/text/unicode/norm"
 )
 
 func Get(url string) ([]backend.Eatery, error) {
@@ -292,8 +293,12 @@ func sortMenuItems(categories []external.MenuCategory) {
 
 func getImagePath(external external.Eatery) string {
 	name := external.Name
+	// normalize to decomposed form (NFD)
+	// this helps remove things like marks (accents)
+	decomposed := norm.NFD.String(name)
+
 	// convert to lowercase
-	lowercased := strings.ToLower(name)
+	lowercased := strings.ToLower(decomposed)
 
 	// filter characters
 	var builder strings.Builder
