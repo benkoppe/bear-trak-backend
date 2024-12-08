@@ -572,6 +572,7 @@ type Gym struct {
 	Hours               []Hours                      `json:"hours"`
 	Facilities          []GymFacilitiesItem          `json:"facilities"`
 	EquipmentCategories []GymEquipmentCategoriesItem `json:"equipmentCategories"`
+	Capacity            NilGymCapacity               `json:"capacity"`
 }
 
 // GetID returns the value of ID.
@@ -614,6 +615,11 @@ func (s *Gym) GetEquipmentCategories() []GymEquipmentCategoriesItem {
 	return s.EquipmentCategories
 }
 
+// GetCapacity returns the value of Capacity.
+func (s *Gym) GetCapacity() NilGymCapacity {
+	return s.Capacity
+}
+
 // SetID sets the value of ID.
 func (s *Gym) SetID(val int) {
 	s.ID = val
@@ -652,6 +658,47 @@ func (s *Gym) SetFacilities(val []GymFacilitiesItem) {
 // SetEquipmentCategories sets the value of EquipmentCategories.
 func (s *Gym) SetEquipmentCategories(val []GymEquipmentCategoriesItem) {
 	s.EquipmentCategories = val
+}
+
+// SetCapacity sets the value of Capacity.
+func (s *Gym) SetCapacity(val NilGymCapacity) {
+	s.Capacity = val
+}
+
+type GymCapacity struct {
+	Count       int        `json:"count"`
+	Percentage  NilFloat64 `json:"percentage"`
+	LastUpdated time.Time  `json:"lastUpdated"`
+}
+
+// GetCount returns the value of Count.
+func (s *GymCapacity) GetCount() int {
+	return s.Count
+}
+
+// GetPercentage returns the value of Percentage.
+func (s *GymCapacity) GetPercentage() NilFloat64 {
+	return s.Percentage
+}
+
+// GetLastUpdated returns the value of LastUpdated.
+func (s *GymCapacity) GetLastUpdated() time.Time {
+	return s.LastUpdated
+}
+
+// SetCount sets the value of Count.
+func (s *GymCapacity) SetCount(val int) {
+	s.Count = val
+}
+
+// SetPercentage sets the value of Percentage.
+func (s *GymCapacity) SetPercentage(val NilFloat64) {
+	s.Percentage = val
+}
+
+// SetLastUpdated sets the value of LastUpdated.
+func (s *GymCapacity) SetLastUpdated(val time.Time) {
+	s.LastUpdated = val
 }
 
 type GymEquipmentCategoriesItem struct {
@@ -866,4 +913,94 @@ func (s *Hours) SetStart(val time.Time) {
 // SetEnd sets the value of End.
 func (s *Hours) SetEnd(val time.Time) {
 	s.End = val
+}
+
+// NewNilFloat64 returns new NilFloat64 with value set to v.
+func NewNilFloat64(v float64) NilFloat64 {
+	return NilFloat64{
+		Value: v,
+	}
+}
+
+// NilFloat64 is nullable float64.
+type NilFloat64 struct {
+	Value float64
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilFloat64) SetTo(v float64) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsSet returns true if value is Null.
+func (o NilFloat64) IsNull() bool { return o.Null }
+
+// SetNull sets value to null.
+func (o *NilFloat64) SetToNull() {
+	o.Null = true
+	var v float64
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilFloat64) Get() (v float64, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilFloat64) Or(d float64) float64 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewNilGymCapacity returns new NilGymCapacity with value set to v.
+func NewNilGymCapacity(v GymCapacity) NilGymCapacity {
+	return NilGymCapacity{
+		Value: v,
+	}
+}
+
+// NilGymCapacity is nullable GymCapacity.
+type NilGymCapacity struct {
+	Value GymCapacity
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilGymCapacity) SetTo(v GymCapacity) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsSet returns true if value is Null.
+func (o NilGymCapacity) IsNull() bool { return o.Null }
+
+// SetNull sets value to null.
+func (o *NilGymCapacity) SetToNull() {
+	o.Null = true
+	var v GymCapacity
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilGymCapacity) Get() (v GymCapacity, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilGymCapacity) Or(d GymCapacity) GymCapacity {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
 }

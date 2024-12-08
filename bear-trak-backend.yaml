@@ -273,6 +273,7 @@ components:
         - hours
         - facilities
         - equipmentCategories
+        - capacity
       properties:
         id:
           type: integer
@@ -362,6 +363,30 @@ components:
                   x-stoplight:
                     id: goz36vqbr6edz
                   type: string
+        capacity:
+          type: object
+          x-stoplight:
+            id: 8wihfhwf8dwhj
+          required:
+            - count
+            - percentage
+            - lastUpdated
+          nullable: true
+          properties:
+            count:
+              type: integer
+              x-stoplight:
+                id: zsa4f78a85o37
+            percentage:
+              type: number
+              x-stoplight:
+                id: lev4eqa2vx5td
+              nullable: true
+            lastUpdated:
+              type: string
+              x-stoplight:
+                id: n9pqcuhk7s66i
+              format: date-time
     Hours:
       title: Hours
       x-stoplight:
