@@ -10,7 +10,7 @@ import (
 	"unicode"
 
 	backend "github.com/benkoppe/bear-trak-backend/backend"
-	external "github.com/benkoppe/bear-trak-backend/dining/external"
+	"github.com/benkoppe/bear-trak-backend/dining/external"
 	"golang.org/x/text/unicode/norm"
 )
 

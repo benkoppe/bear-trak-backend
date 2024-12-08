@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	backend "github.com/benkoppe/bear-trak-backend/backend"
-	dining "github.com/benkoppe/bear-trak-backend/dining"
+	"github.com/benkoppe/bear-trak-backend/dining"
 )
 
 type BackendService struct{}

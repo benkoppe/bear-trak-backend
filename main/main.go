@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	backend "github.com/benkoppe/bear-trak-backend/backend"
-	handler "github.com/benkoppe/bear-trak-backend/handler"
+	"github.com/benkoppe/bear-trak-backend/handler"
 )
 
 func main() {
