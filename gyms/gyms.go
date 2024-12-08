@@ -7,6 +7,7 @@ import (
 	backend "github.com/benkoppe/bear-trak-backend/backend"
 	"github.com/benkoppe/bear-trak-backend/gyms/external"
 	"github.com/benkoppe/bear-trak-backend/gyms/static"
+	"github.com/benkoppe/bear-trak-backend/utils"
 )
 
 func Get(url string) ([]backend.Gym, error) {
@@ -44,7 +45,7 @@ func convertStatic(static static.Gym) backend.Gym {
 	return backend.Gym{
 		ID:                  static.ID,
 		Name:                static.Name,
-		ImagePath:           static.ImageName,
+		ImagePath:           utils.ImageNameToPath("gyms", static.ImageName),
 		Latitude:            static.Location.Latitude,
 		Longitude:           static.Location.Longitude,
 		Hours:               createFutureHours(static.WeekHours),

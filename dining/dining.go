@@ -11,6 +11,7 @@ import (
 
 	backend "github.com/benkoppe/bear-trak-backend/backend"
 	"github.com/benkoppe/bear-trak-backend/dining/external"
+	"github.com/benkoppe/bear-trak-backend/utils"
 	"golang.org/x/text/unicode/norm"
 )
 
@@ -314,9 +315,6 @@ func getImagePath(external external.Eatery) string {
 	re := regexp.MustCompile(`\s+`)
 
 	// replace all whitespace with underscores
-	fileName := re.ReplaceAllString(stripped, "_")
-	fileNameFull := fileName + ".jpg"
-	filePath := "static/dining/" + fileNameFull
-
-	return filePath
+	imageName := re.ReplaceAllString(stripped, "_")
+	return utils.ImageNameToPath("dining", imageName)
 }
