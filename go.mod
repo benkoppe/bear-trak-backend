@@ -3,6 +3,8 @@ module github.com/benkoppe/bear-trak-backend
 go 1.23.3
 
 require (
+	github.com/PuerkitoBio/goquery v1.10.0 // indirect
+	github.com/andybalholm/cascadia v1.3.2 // indirect
 	github.com/dlclark/regexp2 v1.11.4 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
