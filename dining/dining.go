@@ -206,19 +206,17 @@ func hoursFromEvents(events []backend.EateryEvent) []backend.Hours {
 			currentStart = time.Time{}
 			currentEnd = time.Time{}
 		}
-
-		// append the final values if necessary
-		if !(currentStart.IsZero()) {
-			merged = append(merged, backend.Hours{
-				Start: currentStart,
-				End:   currentEnd,
-			})
-		}
-
-		return merged
 	}
 
-	return hours
+	// append the final values if necessary
+	if !(currentStart.IsZero()) {
+		merged = append(merged, backend.Hours{
+			Start: currentStart,
+			End:   currentEnd,
+		})
+	}
+
+	return merged
 }
 
 func selectNextWeekEvents(events []backend.EateryEvent) backend.EateryNextWeekEvents {
