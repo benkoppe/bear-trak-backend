@@ -378,7 +378,7 @@ components:
               x-stoplight:
                 id: zsa4f78a85o37
             percentage:
-              type: number
+              type: integer
               x-stoplight:
                 id: lev4eqa2vx5td
               nullable: true

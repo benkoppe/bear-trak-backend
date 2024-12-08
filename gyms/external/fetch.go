@@ -22,7 +22,7 @@ type GymCapacity struct {
 	Name        string
 	Count       int64
 	LastUpdated time.Time
-	Percentage  *float64
+	Percentage  *int64
 }
 
 const capacitiesTimeLayout = "01/02/2006 15:04 PM"
@@ -105,11 +105,11 @@ func (sgc stringifiedGymCapacity) toGymCapacity() (*GymCapacity, error) {
 		return nil, fmt.Errorf("failed to parse Count: %v", err)
 	}
 
-	var percentage *float64
+	var percentage *int64
 	if sgc.Percentage == "NA" {
 		percentage = nil
 	} else {
-		parsedPercentage, err := strconv.ParseFloat(sgc.Percentage, 64)
+		parsedPercentage, err := strconv.ParseInt(sgc.Percentage, 10, 64)
 		if err != nil {
 			return nil, fmt.Errorf("failed to parse Percentage: %v", err)
 		}

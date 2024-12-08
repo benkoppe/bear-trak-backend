@@ -156,12 +156,12 @@ func convertStaticGymCategoryType(category static.Equipment) backend.GymEquipmen
 }
 
 func convertExternalGymCapacity(capacity external.GymCapacity) backend.GymCapacity {
-	var percentage backend.NilFloat64
+	var percentage backend.NilInt
 
 	if capacity.Percentage != nil {
-		percentage = backend.NewNilFloat64(*capacity.Percentage)
+		percentage = backend.NewNilInt(int(*capacity.Percentage))
 	} else {
-		percentage = backend.NilFloat64{Null: true}
+		percentage = backend.NilInt{Null: true}
 	}
 
 	return backend.GymCapacity{

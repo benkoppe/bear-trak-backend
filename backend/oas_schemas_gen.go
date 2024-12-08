@@ -666,9 +666,9 @@ func (s *Gym) SetCapacity(val NilGymCapacity) {
 }
 
 type GymCapacity struct {
-	Count       int        `json:"count"`
-	Percentage  NilFloat64 `json:"percentage"`
-	LastUpdated time.Time  `json:"lastUpdated"`
+	Count       int       `json:"count"`
+	Percentage  NilInt    `json:"percentage"`
+	LastUpdated time.Time `json:"lastUpdated"`
 }
 
 // GetCount returns the value of Count.
@@ -677,7 +677,7 @@ func (s *GymCapacity) GetCount() int {
 }
 
 // GetPercentage returns the value of Percentage.
-func (s *GymCapacity) GetPercentage() NilFloat64 {
+func (s *GymCapacity) GetPercentage() NilInt {
 	return s.Percentage
 }
 
@@ -692,7 +692,7 @@ func (s *GymCapacity) SetCount(val int) {
 }
 
 // SetPercentage sets the value of Percentage.
-func (s *GymCapacity) SetPercentage(val NilFloat64) {
+func (s *GymCapacity) SetPercentage(val NilInt) {
 	s.Percentage = val
 }
 
@@ -915,51 +915,6 @@ func (s *Hours) SetEnd(val time.Time) {
 	s.End = val
 }
 
-// NewNilFloat64 returns new NilFloat64 with value set to v.
-func NewNilFloat64(v float64) NilFloat64 {
-	return NilFloat64{
-		Value: v,
-	}
-}
-
-// NilFloat64 is nullable float64.
-type NilFloat64 struct {
-	Value float64
-	Null  bool
-}
-
-// SetTo sets value to v.
-func (o *NilFloat64) SetTo(v float64) {
-	o.Null = false
-	o.Value = v
-}
-
-// IsSet returns true if value is Null.
-func (o NilFloat64) IsNull() bool { return o.Null }
-
-// SetNull sets value to null.
-func (o *NilFloat64) SetToNull() {
-	o.Null = true
-	var v float64
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o NilFloat64) Get() (v float64, ok bool) {
-	if o.Null {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o NilFloat64) Or(d float64) float64 {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewNilGymCapacity returns new NilGymCapacity with value set to v.
 func NewNilGymCapacity(v GymCapacity) NilGymCapacity {
 	return NilGymCapacity{
@@ -999,6 +954,51 @@ func (o NilGymCapacity) Get() (v GymCapacity, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o NilGymCapacity) Or(d GymCapacity) GymCapacity {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewNilInt returns new NilInt with value set to v.
+func NewNilInt(v int) NilInt {
+	return NilInt{
+		Value: v,
+	}
+}
+
+// NilInt is nullable int.
+type NilInt struct {
+	Value int
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilInt) SetTo(v int) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsSet returns true if value is Null.
+func (o NilInt) IsNull() bool { return o.Null }
+
+// SetNull sets value to null.
+func (o *NilInt) SetToNull() {
+	o.Null = true
+	var v int
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilInt) Get() (v int, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilInt) Or(d int) int {
 	if v, ok := o.Get(); ok {
 		return v
 	}
