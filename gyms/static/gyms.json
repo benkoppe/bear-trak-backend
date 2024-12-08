@@ -1,0 +1,547 @@
+[
+  {
+    "id": 0,
+    "name": "Helen Newman",
+    "imageName": "helenNewman",
+    "scrapeName": "Helen Newman Fitness Center",
+    "location": {
+      "latitude": 42.45293079085481,
+      "longitude": -76.47735203967999
+    },
+    "facilities": [
+        {
+            "type": "pool",
+            "name": "Swimming Pool"
+        },
+        {
+            "type": "bowling",
+            "name": "Bowling"
+        },
+        {
+            "type": "basketball",
+            "name": "HNH Court 1"
+        },
+        {
+            "type": "basketball",
+            "name": "HNH Court 2"
+        }
+    ],
+    "equipment": [
+        {
+            "type": "treadmills",
+            "items": []
+        },
+        {
+            "type": "ellipticals",
+            "items": []
+        },
+        {
+            "type": "rowing",
+            "items": []
+        },
+        {
+            "type": "bike",
+            "items": []
+        },
+        {
+            "type": "lifting",
+            "items": [
+                "Squat Rack",
+                "Bench Press"
+            ]
+        },
+        {
+            "type": "machines",
+            "items": [
+                "Cable Crossover",
+                "Pulldown",
+                "Chin/Dip Assist",
+                "Rear Delt/Pec Fly",
+                "Chest Press",
+                "Shoulder Press",
+                "Rotary Torso",
+                "Back Extension",
+                "Leg Extension",
+                "Leg Curl",
+                "Leg Press",
+                "Glute Extension",
+                "Inner/Outer Thigh",
+                "Calf Press"
+            ]
+        },
+        {
+            "type": "free weights",
+            "items": [
+                "Dumbbells",
+                "Barbells",
+                "EZ Curl Bar",
+                "Preacher Curl"
+            ]
+        }
+    ],
+    "weekHours": {
+      "monday": [
+        {
+          "open": "06:00",
+          "close": "21:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "06:00",
+          "close": "21:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "06:00",
+          "close": "21:00"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "06:00",
+          "close": "21:00"
+        }
+      ],
+      "friday": [
+        {
+          "open": "06:00",
+          "close": "21:00"
+        }
+      ],
+      "saturday": [
+        {
+          "open": "10:00",
+          "close": "20:00"
+        }
+      ],
+      "sunday": [
+        {
+          "open": "10:00",
+          "close": "20:00"
+        }
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "name": "Noyes",
+    "imageName": "noyes",
+    "scrapeName": "Noyes Fitness Center",
+    "location": {
+      "latitude": 42.446436199200896,
+      "longitude": -76.48799296950735
+    },
+    "facilities": [
+        {
+            "type": "basketball",
+            "name": "Noyes Court"
+        }
+    ],
+    "equipment": [
+        {
+            "type": "treadmills",
+            "items": []
+        },
+        {
+            "type": "ellipticals",
+            "items": []
+        },
+        {
+            "type": "rowing",
+            "items": []
+        },
+        {
+            "type": "bike",
+            "items": []
+        },
+        {
+            "type": "lifting",
+            "items": [
+                "Squat Rack",
+                "Bench Press"
+            ]
+        },
+        {
+            "type": "machines",
+            "items": [
+                "Cable Crossover",
+                "Pulldown",
+                "Chin/Dip Assist",
+                "Leg Extension",
+                "Leg Curl",
+                "Leg Press"
+            ]
+        },
+        {
+            "type": "free weights",
+            "items": [
+                "Dumbbells",
+                "Barbells",
+                "Glute Ham Raise"
+            ]
+        }
+    ],
+    "weekHours": {
+      "monday": [
+        {
+          "open": "07:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "07:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "07:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "07:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "open": "07:00",
+          "close": "23:00"
+        }
+      ],
+      "saturday": [
+        {
+          "open": "14:00",
+          "close": "22:00"
+        }
+      ],
+      "sunday": [
+        {
+          "open": "14:00",
+          "close": "22:00"
+        }
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "name": "Teagle Downstairs",
+    "imageName": "teagleDown",
+    "scrapeName": "Teagle Down Fitness Center",
+    "location": {
+      "latitude": 42.44583592468322,
+      "longitude": -76.47916897012868
+    },
+    "facilities": [
+        {
+            "type": "pool",
+            "name": "Swimming Pool"
+        }
+    ],
+    "equipment": [
+        {
+            "type": "lifting",
+            "items": [
+                "Squat Rack",
+                "Power Rack",
+                "Bench Press"
+            ]
+        },
+        {
+            "type": "machines",
+            "items": [
+                "Cable Crossover",
+                "Pulldown",
+                "Seated Row",
+                "Lever Row",
+                "Chin/Dip Assist",
+                "Tricep Pushdown",
+                "Rear Delt/Pec Fly",
+                "Leg Extension",
+                "Leg Curl",
+                "Leg Press"
+            ]
+        },
+        {
+            "type": "free weights",
+            "items": [
+                "Dumbbells",
+                "Barbells",
+                "Preacher Curl",
+                "Glute Ham Raise"
+            ]
+        }
+    ],
+    "weekHours": {
+      "monday": [
+        {
+          "open": "07:00",
+          "close": "08:30"
+        },
+        {
+          "open": "10:00",
+          "close": "22:45"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "07:00",
+          "close": "08:30"
+        },
+        {
+          "open": "10:00",
+          "close": "22:45"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "07:00",
+          "close": "08:30"
+        },
+        {
+          "open": "10:00",
+          "close": "22:45"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "07:00",
+          "close": "08:30"
+        },
+        {
+          "open": "10:00",
+          "close": "22:45"
+        }
+      ],
+      "friday": [
+        {
+          "open": "07:00",
+          "close": "22:45"
+        }
+      ],
+      "saturday": [
+        {
+          "open": "12:00",
+          "close": "17:30"
+        }
+      ],
+      "sunday": [
+        {
+          "open": "12:00",
+          "close": "17:30"
+        }
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "name": "Teagle Upstairs",
+    "imageName": "teagleUp",
+    "scrapeName": "Teagle Up Fitness Center",
+    "location": {
+      "latitude": 42.445900914312475,
+      "longitude": -76.47864337954337
+    },
+    "facilities": [],
+    "equipment": [
+        {
+            "type": "treadmills",
+            "items": []
+        },
+        {
+            "type": "ellipticals",
+            "items": []
+        },
+        {
+            "type": "rowing",
+            "items": []
+        },
+        {
+            "type": "bike",
+            "items": []
+        },
+        {
+            "type": "machines",
+            "items": [
+                "Pulldown",
+                "Seated Row",
+                "Tricep Pushdown",
+                "Chin/Dip Assist",
+                "Rear Delt/Pec Fly",
+                "Chest Press",
+                "Leg Extension",
+                "Leg Curl",
+                "Leg Press",
+                "Inner/Outer Thigh",
+                "360 Cable Multi-Trainer"
+            ]
+        },
+        {
+            "type": "free weights",
+            "items": [
+                "Dumbbells"
+            ]
+        },
+        {
+            "type": "misc",
+            "items": [
+                "Rope Trainer"
+            ]
+        }
+    ],
+    "weekHours": {
+      "monday": [
+        {
+          "open": "07:00",
+          "close": "22:45"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "07:00",
+          "close": "22:45"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "07:00",
+          "close": "22:45"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "07:00",
+          "close": "22:45"
+        }
+      ],
+      "friday": [
+        {
+          "open": "07:00",
+          "close": "22:45"
+        }
+      ],
+      "saturday": [
+        {
+          "open": "12:00",
+          "close": "17:30"
+        }
+      ],
+      "sunday": [
+        {
+          "open": "12:00",
+          "close": "17:30"
+        }
+      ]
+    }
+  },
+  {
+    "id": 4,
+    "name": "Toni Morrison",
+    "imageName": "toniMorrison",
+    "scrapeName": "Toni Morrison Fitness Center",
+    "location": {
+      "latitude": 42.45575458129762,
+      "longitude": -76.47888291227578
+    },
+    "facilities": [],
+    "equipment": [
+        {
+            "type": "treadmills",
+            "items": []
+        },
+        {
+            "type": "ellipticals",
+            "items": []
+        },
+        {
+            "type": "rowing",
+            "items": []
+        },
+        {
+            "type": "bike",
+            "items": []
+        },
+        {
+            "type": "lifting",
+            "items": [
+                "Squat Rack"
+            ]
+        },
+        {
+            "type": "machines",
+            "items": [
+                "Low Row",
+                "Chest Press",
+                "Pulldown",
+                "Leg Extension",
+                "Leg Curl",
+                "Leg Press"
+            ]
+        },
+        {
+            "type": "free weights",
+            "items": [
+                "Dumbbells",
+                "Barbells",
+                "EZ Curl Bar",
+                "Glute Ham Raise"
+            ]
+        },
+        {
+            "type": "misc",
+            "items": [
+                "Climb Mill"
+            ]
+        }
+    ],
+    "weekHours": {
+      "monday": [
+        {
+          "open": "14:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "14:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "14:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "14:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "open": "14:00",
+          "close": "23:00"
+        }
+      ],
+      "saturday": [
+        {
+          "open": "12:00",
+          "close": "22:00"
+        }
+      ],
+      "sunday": [
+        {
+          "open": "12:00",
+          "close": "22:00"
+        }
+      ]
+    }
+  }
+]
