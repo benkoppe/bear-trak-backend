@@ -2,9 +2,12 @@ package dining
 
 import (
 	"fmt"
+	"regexp"
 	"slices"
 	"sort"
+	"strings"
 	"time"
+	"unicode"
 
 	backend "github.com/benkoppe/bear-trak-backend/backend"
 	external "github.com/benkoppe/bear-trak-backend/dining/external"
@@ -38,6 +41,7 @@ func convertExternal(external external.Eatery) backend.Eatery {
 		ID:             external.ID,
 		Name:           external.Name,
 		NameShort:      external.NameShort,
+		ImagePath:      getImagePath(external),
 		Latitude:       external.Latitude,
 		Longitude:      external.Longitude,
 		Location:       external.Location,
@@ -284,4 +288,30 @@ func sortMenuItems(categories []external.MenuCategory) {
 			return items[i].SortIdx < items[j].SortIdx
 		})
 	}
+}
+
+func getImagePath(external external.Eatery) string {
+	name := external.Name
+	// convert to lowercase
+	lowercased := strings.ToLower(name)
+
+	// filter characters
+	var builder strings.Builder
+	for _, r := range lowercased {
+		// filter marks, and only let letters, numbers, and whitespace through
+		if !unicode.IsMark(r) && (unicode.IsLetter(r) || unicode.IsNumber(r) || unicode.IsSpace(r)) {
+			builder.WriteRune(r)
+		}
+	}
+	stripped := builder.String()
+
+	// regex pattern to match with whitespace
+	re := regexp.MustCompile(`\s+`)
+
+	// replace all whitespace with underscores
+	fileName := re.ReplaceAllString(stripped, "_")
+	fileNameFull := fileName + ".jpg"
+	filePath := "static/dining/" + fileNameFull
+
+	return filePath
 }
