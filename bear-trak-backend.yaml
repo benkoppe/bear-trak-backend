@@ -1,0 +1,448 @@
+openapi: 3.0.0
+x-stoplight:
+  id: 9w0rmq5t2ukz4
+info:
+  title: bear-trak-backend
+  version: "1.0"
+  description: This API services the iOS app BearTrak. It provides all necessary backend data.
+  contact:
+    name: Benjamin Koppe
+    url: github.com/benkoppe
+    email: koppe.development@gmail.com
+  license:
+    name: GPLv3
+    url: "https://www.gnu.org/licenses/gpl-3.0.en.html"
+servers:
+  - url: "http://localhost:3000"
+paths:
+  /v1/dining:
+    get:
+      summary: Dining
+      tags:
+        - dining
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Eatery"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: get-v1-dining
+      x-stoplight:
+        id: mr1vidtnkgibv
+      description: Returns all necessary data for BearTrak's dining section.
+  /v1/gyms:
+    get:
+      summary: Gyms
+      tags:
+        - gyms
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Gym"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: get-v1-gyms
+      x-stoplight:
+        id: bgkkzgl4exihm
+      description: Returns all necessary data for BearTrak's gym section.
+components:
+  schemas:
+    Eatery:
+      title: Eatery
+      x-stoplight:
+        id: t3d6ig3lqsua5
+      type: object
+      x-tags:
+        - dining
+      required:
+        - id
+        - name
+        - nameShort
+        - latitude
+        - longitude
+        - location
+        - hours
+        - region
+        - payMethods
+        - categories
+        - nextWeekEvents
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: 18a2zedwfskoc
+        name:
+          type: string
+          x-stoplight:
+            id: qxk0k8jknfhwf
+        nameShort:
+          type: string
+          x-stoplight:
+            id: dswz6jvcu0njw
+        latitude:
+          type: number
+          x-stoplight:
+            id: dst3snzwlgj8f
+          format: double
+        longitude:
+          type: number
+          x-stoplight:
+            id: aq7jp1pchfk33
+          format: double
+        location:
+          type: string
+          x-stoplight:
+            id: ijnjtu0smflyv
+        hours:
+          x-stoplight:
+            id: w9vicfj2xyci2
+          type: array
+          items:
+            $ref: "#/components/schemas/Hours"
+        region:
+          x-stoplight:
+            id: g762nv65cuibu
+          type: string
+          enum:
+            - central
+            - west
+            - north
+            - unknown
+          example: central
+        payMethods:
+          type: array
+          x-stoplight:
+            id: nlpfgxpn5obeb
+          items:
+            x-stoplight:
+              id: tj2iccdcf7xpp
+            type: string
+            enum:
+              - swipes
+              - bigRedBucks
+              - cash
+              - digitalWallet
+              - creditCard
+              - cornellCard
+            example: swipes
+        categories:
+          type: array
+          x-stoplight:
+            id: aizzbsbp6idt6
+          items:
+            x-stoplight:
+              id: mcasfw3bcvr08
+            type: string
+            enum:
+              - convenienceStore
+              - cafe
+              - diningRoom
+              - coffeeShop
+              - cart
+              - foodCourt
+            example: diningRoom
+        nextWeekEvents:
+          type: object
+          x-stoplight:
+            id: 2k2uouqvuivog
+          required:
+            - monday
+            - tuesday
+            - wednesday
+            - thursday
+            - friday
+            - saturday
+            - sunday
+          properties:
+            monday:
+              x-stoplight:
+                id: rxtsxv5xozp0t
+              type: array
+              nullable: true
+              items:
+                $ref: "#/components/schemas/EateryEvent"
+            tuesday:
+              x-stoplight:
+                id: 1qayemfv8za3l
+              type: array
+              nullable: true
+              items:
+                $ref: "#/components/schemas/EateryEvent"
+            wednesday:
+              type: array
+              x-stoplight:
+                id: tby1a09yx1hdd
+              nullable: true
+              items:
+                $ref: "#/components/schemas/EateryEvent"
+            thursday:
+              type: array
+              x-stoplight:
+                id: m3d80t4db5273
+              nullable: true
+              items:
+                $ref: "#/components/schemas/EateryEvent"
+            friday:
+              type: array
+              x-stoplight:
+                id: wjb3fxmxxez8t
+              nullable: true
+              items:
+                $ref: "#/components/schemas/EateryEvent"
+            saturday:
+              type: array
+              x-stoplight:
+                id: 1zcuyrewwph08
+              nullable: true
+              items:
+                $ref: "#/components/schemas/EateryEvent"
+            sunday:
+              type: array
+              x-stoplight:
+                id: uri1v7i0uw41m
+              nullable: true
+              items:
+                $ref: "#/components/schemas/EateryEvent"
+    EateryEvent:
+      title: EateryEvent
+      x-stoplight:
+        id: ydhf6l8rbeu6j
+      type: object
+      x-tags:
+        - dining
+      required:
+        - start
+        - end
+        - menuCategories
+      properties:
+        start:
+          type: string
+          x-stoplight:
+            id: 5oa36kslmmcx7
+          format: date-time
+        end:
+          type: string
+          x-stoplight:
+            id: h2sbcgylb2yox
+          format: date-time
+        menuCategories:
+          type: array
+          x-stoplight:
+            id: 0n2srgyvll5ai
+          items:
+            $ref: "#/components/schemas/EateryMenuCategory"
+    Gym:
+      title: Gym
+      x-stoplight:
+        id: arsgfiyj5hnnw
+      type: object
+      x-tags:
+        - gyms
+      required:
+        - id
+        - name
+        - imageUrl
+        - latitude
+        - longitude
+        - hours
+        - facilities
+        - equipmentCategories
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: e38t09tjxyc9p
+        name:
+          type: string
+          x-stoplight:
+            id: lvi3q8g6d7ygx
+        imageUrl:
+          type: string
+          x-stoplight:
+            id: izei9phdx10ou
+          format: uri
+        latitude:
+          type: number
+          x-stoplight:
+            id: o3lir1bffz9tn
+          format: double
+        longitude:
+          type: number
+          x-stoplight:
+            id: yvuz0dlbv0dzt
+          format: double
+        hours:
+          x-stoplight:
+            id: iodtmc4p0kero
+          type: array
+          items:
+            $ref: "#/components/schemas/Hours"
+        facilities:
+          type: array
+          x-stoplight:
+            id: pt2580qay9a2b
+          items:
+            x-stoplight:
+              id: k5e4bwpntu2ou
+            type: object
+            required:
+              - facilityType
+              - name
+            properties:
+              facilityType:
+                x-stoplight:
+                  id: 1bnyqrqq6yo61
+                type: string
+                enum:
+                  - pool
+                  - basketball
+                  - bowling
+                  - unknown
+                example: pool
+              name:
+                type: string
+                x-stoplight:
+                  id: czz0r1ru38i75
+        equipmentCategories:
+          type: array
+          x-stoplight:
+            id: oxjpkliaw0tvt
+          items:
+            x-stoplight:
+              id: psolwrpj5sist
+            type: object
+            required:
+              - categoryType
+              - items
+            properties:
+              categoryType:
+                x-stoplight:
+                  id: vw3x0rfaemk4w
+                type: string
+                enum:
+                  - treadmills
+                  - ellipticals
+                  - rowing
+                  - bike
+                  - lifting
+                  - machines
+                  - freeWeights
+                  - misc
+                example: treadmills
+              items:
+                type: array
+                x-stoplight:
+                  id: lf47giucu09l6
+                items:
+                  x-stoplight:
+                    id: goz36vqbr6edz
+                  type: string
+    Hours:
+      title: Hours
+      x-stoplight:
+        id: gxaa5try1by3b
+      type: object
+      x-tags:
+        - beartrak
+      required:
+        - start
+        - end
+      properties:
+        start:
+          type: string
+          x-stoplight:
+            id: pevsj60dcgi3a
+          format: date-time
+        end:
+          type: string
+          x-stoplight:
+            id: 5qalv4xgb0a05
+          format: date-time
+    Error:
+      title: Error
+      x-stoplight:
+        id: csh4s0fu2c0dz
+      type: object
+      x-tags:
+        - beartrak
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          x-stoplight:
+            id: 3yyr0yzzvfru1
+        message:
+          type: string
+          x-stoplight:
+            id: 3kla3y1y92kn5
+    EateryMenuCategory:
+      title: EateryMenuCategory
+      x-stoplight:
+        id: 8impsr1umx51l
+      type: object
+      required:
+        - name
+        - sortIdx
+        - items
+      properties:
+        name:
+          type: string
+          x-stoplight:
+            id: uokh1c6z62jum
+        sortIdx:
+          type: integer
+          x-stoplight:
+            id: 97tdwv3g7cq3q
+        items:
+          type: array
+          x-stoplight:
+            id: y4en48gyobthc
+          items:
+            x-stoplight:
+              id: 84h301527sshu
+            type: object
+            required:
+              - name
+              - healthy
+              - sortIdx
+            properties:
+              name:
+                type: string
+                x-stoplight:
+                  id: 7qwp93mg3fe8b
+              healthy:
+                type: boolean
+                x-stoplight:
+                  id: rjohztxb3rcw7
+              sortIdx:
+                type: integer
+                x-stoplight:
+                  id: j0rd1ephrg05l
+x-internal: false
+tags:
+  - name: beartrak
+    description: General BearTrak features
+  - name: dining
+    description: Dining features
+  - name: gyms
+    description: Gym features
