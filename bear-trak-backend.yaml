@@ -402,17 +402,12 @@ components:
       type: object
       required:
         - name
-        - sortIdx
         - items
       properties:
         name:
           type: string
           x-stoplight:
             id: uokh1c6z62jum
-        sortIdx:
-          type: integer
-          x-stoplight:
-            id: 97tdwv3g7cq3q
         items:
           type: array
           x-stoplight:
@@ -424,7 +419,6 @@ components:
             required:
               - name
               - healthy
-              - sortIdx
             properties:
               name:
                 type: string
@@ -434,10 +428,6 @@ components:
                 type: boolean
                 x-stoplight:
                   id: rjohztxb3rcw7
-              sortIdx:
-                type: integer
-                x-stoplight:
-                  id: j0rd1ephrg05l
 x-internal: false
 tags:
   - name: beartrak

@@ -508,10 +508,6 @@ func (s *EateryMenuCategory) encodeFields(e *jx.Encoder) {
 		e.Str(s.Name)
 	}
 	{
-		e.FieldStart("sortIdx")
-		e.Int(s.SortIdx)
-	}
-	{
 		e.FieldStart("items")
 		e.ArrStart()
 		for _, elem := range s.Items {
@@ -521,10 +517,9 @@ func (s *EateryMenuCategory) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfEateryMenuCategory = [3]string{
+var jsonFieldsNameOfEateryMenuCategory = [2]string{
 	0: "name",
-	1: "sortIdx",
-	2: "items",
+	1: "items",
 }
 
 // Decode decodes EateryMenuCategory from json.
@@ -548,20 +543,8 @@ func (s *EateryMenuCategory) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
-		case "sortIdx":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Int()
-				s.SortIdx = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sortIdx\"")
-			}
 		case "items":
-			requiredBitSet[0] |= 1 << 2
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				s.Items = make([]EateryMenuCategoryItemsItem, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -588,7 +571,7 @@ func (s *EateryMenuCategory) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -651,16 +634,11 @@ func (s *EateryMenuCategoryItemsItem) encodeFields(e *jx.Encoder) {
 		e.FieldStart("healthy")
 		e.Bool(s.Healthy)
 	}
-	{
-		e.FieldStart("sortIdx")
-		e.Int(s.SortIdx)
-	}
 }
 
-var jsonFieldsNameOfEateryMenuCategoryItemsItem = [3]string{
+var jsonFieldsNameOfEateryMenuCategoryItemsItem = [2]string{
 	0: "name",
 	1: "healthy",
-	2: "sortIdx",
 }
 
 // Decode decodes EateryMenuCategoryItemsItem from json.
@@ -696,18 +674,6 @@ func (s *EateryMenuCategoryItemsItem) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"healthy\"")
 			}
-		case "sortIdx":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				v, err := d.Int()
-				s.SortIdx = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sortIdx\"")
-			}
 		default:
 			return d.Skip()
 		}
@@ -718,7 +684,7 @@ func (s *EateryMenuCategoryItemsItem) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

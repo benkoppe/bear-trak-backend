@@ -247,19 +247,13 @@ func (s *EateryEvent) SetMenuCategories(val []EateryMenuCategory) {
 
 // Ref: #/components/schemas/EateryMenuCategory
 type EateryMenuCategory struct {
-	Name    string                        `json:"name"`
-	SortIdx int                           `json:"sortIdx"`
-	Items   []EateryMenuCategoryItemsItem `json:"items"`
+	Name  string                        `json:"name"`
+	Items []EateryMenuCategoryItemsItem `json:"items"`
 }
 
 // GetName returns the value of Name.
 func (s *EateryMenuCategory) GetName() string {
 	return s.Name
-}
-
-// GetSortIdx returns the value of SortIdx.
-func (s *EateryMenuCategory) GetSortIdx() int {
-	return s.SortIdx
 }
 
 // GetItems returns the value of Items.
@@ -272,11 +266,6 @@ func (s *EateryMenuCategory) SetName(val string) {
 	s.Name = val
 }
 
-// SetSortIdx sets the value of SortIdx.
-func (s *EateryMenuCategory) SetSortIdx(val int) {
-	s.SortIdx = val
-}
-
 // SetItems sets the value of Items.
 func (s *EateryMenuCategory) SetItems(val []EateryMenuCategoryItemsItem) {
 	s.Items = val
@@ -285,7 +274,6 @@ func (s *EateryMenuCategory) SetItems(val []EateryMenuCategoryItemsItem) {
 type EateryMenuCategoryItemsItem struct {
 	Name    string `json:"name"`
 	Healthy bool   `json:"healthy"`
-	SortIdx int    `json:"sortIdx"`
 }
 
 // GetName returns the value of Name.
@@ -298,11 +286,6 @@ func (s *EateryMenuCategoryItemsItem) GetHealthy() bool {
 	return s.Healthy
 }
 
-// GetSortIdx returns the value of SortIdx.
-func (s *EateryMenuCategoryItemsItem) GetSortIdx() int {
-	return s.SortIdx
-}
-
 // SetName sets the value of Name.
 func (s *EateryMenuCategoryItemsItem) SetName(val string) {
 	s.Name = val
@@ -311,11 +294,6 @@ func (s *EateryMenuCategoryItemsItem) SetName(val string) {
 // SetHealthy sets the value of Healthy.
 func (s *EateryMenuCategoryItemsItem) SetHealthy(val bool) {
 	s.Healthy = val
-}
-
-// SetSortIdx sets the value of SortIdx.
-func (s *EateryMenuCategoryItemsItem) SetSortIdx(val int) {
-	s.SortIdx = val
 }
 
 type EateryNextWeekEvents struct {

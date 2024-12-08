@@ -2,6 +2,7 @@ package dining
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 	"time"
 
@@ -70,6 +71,9 @@ func convertExternalEvents(external external.Eatery) []backend.EateryEvent {
 }
 
 func convertExternalMenu(externalEvent external.Event) []backend.EateryMenuCategory {
+	sortMenuCategories(externalEvent.Menu)
+	sortMenuItems(externalEvent.Menu)
+
 	var categories []backend.EateryMenuCategory
 
 	for _, category := range externalEvent.Menu {
@@ -79,14 +83,12 @@ func convertExternalMenu(externalEvent external.Event) []backend.EateryMenuCateg
 			items = append(items, backend.EateryMenuCategoryItemsItem{
 				Name:    item.Item,
 				Healthy: item.Healthy,
-				SortIdx: item.SortIdx,
 			})
 		}
 
 		categories = append(categories, backend.EateryMenuCategory{
-			Name:    category.Category,
-			SortIdx: category.SortIdx,
-			Items:   items,
+			Name:  category.Category,
+			Items: items,
 		})
 	}
 
@@ -248,4 +250,40 @@ func selectNextWeekEvents(events []backend.EateryEvent) backend.EateryNextWeekEv
 	}
 
 	return result
+}
+
+func sortMenuCategories(categories []external.MenuCategory) {
+	priorityCategories := []string{
+		"Chef's Table",
+		"Chef's Table - Sides",
+		"Grill",
+		"Wok/Asian Station",
+	}
+
+	sort.Slice(categories, func(i, j int) bool {
+		lhs := categories[i]
+		rhs := categories[j]
+
+		containsLeft := slices.Contains(priorityCategories, lhs.Category)
+		containsRight := slices.Contains(priorityCategories, rhs.Category)
+
+		if containsLeft && containsRight {
+			return slices.Index(priorityCategories, lhs.Category) < slices.Index(priorityCategories, rhs.Category)
+		} else if containsLeft {
+			return true
+		} else if containsRight {
+			return false
+		} else {
+			return lhs.SortIdx < rhs.SortIdx
+		}
+	})
+}
+
+func sortMenuItems(categories []external.MenuCategory) {
+	for _, category := range categories {
+		items := category.Items
+		sort.Slice(items, func(i, j int) bool {
+			return items[i].SortIdx < items[j].SortIdx
+		})
+	}
 }
