@@ -35,6 +35,10 @@ func (s *Eatery) encodeFields(e *jx.Encoder) {
 		e.Str(s.NameShort)
 	}
 	{
+		e.FieldStart("imagePath")
+		e.Str(s.ImagePath)
+	}
+	{
 		e.FieldStart("latitude")
 		e.Float64(s.Latitude)
 	}
@@ -80,18 +84,19 @@ func (s *Eatery) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfEatery = [11]string{
+var jsonFieldsNameOfEatery = [12]string{
 	0:  "id",
 	1:  "name",
 	2:  "nameShort",
-	3:  "latitude",
-	4:  "longitude",
-	5:  "location",
-	6:  "hours",
-	7:  "region",
-	8:  "payMethods",
-	9:  "categories",
-	10: "nextWeekEvents",
+	3:  "imagePath",
+	4:  "latitude",
+	5:  "longitude",
+	6:  "location",
+	7:  "hours",
+	8:  "region",
+	9:  "payMethods",
+	10: "categories",
+	11: "nextWeekEvents",
 }
 
 // Decode decodes Eatery from json.
@@ -139,8 +144,20 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"nameShort\"")
 			}
-		case "latitude":
+		case "imagePath":
 			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Str()
+				s.ImagePath = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"imagePath\"")
+			}
+		case "latitude":
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				v, err := d.Float64()
 				s.Latitude = float64(v)
@@ -152,7 +169,7 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"latitude\"")
 			}
 		case "longitude":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				v, err := d.Float64()
 				s.Longitude = float64(v)
@@ -164,7 +181,7 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"longitude\"")
 			}
 		case "location":
-			requiredBitSet[0] |= 1 << 5
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				v, err := d.Str()
 				s.Location = string(v)
@@ -176,7 +193,7 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"location\"")
 			}
 		case "hours":
-			requiredBitSet[0] |= 1 << 6
+			requiredBitSet[0] |= 1 << 7
 			if err := func() error {
 				s.Hours = make([]Hours, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -194,7 +211,7 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"hours\"")
 			}
 		case "region":
-			requiredBitSet[0] |= 1 << 7
+			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
 				if err := s.Region.Decode(d); err != nil {
 					return err
@@ -204,7 +221,7 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"region\"")
 			}
 		case "payMethods":
-			requiredBitSet[1] |= 1 << 0
+			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
 				s.PayMethods = make([]EateryPayMethodsItem, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -222,7 +239,7 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"payMethods\"")
 			}
 		case "categories":
-			requiredBitSet[1] |= 1 << 1
+			requiredBitSet[1] |= 1 << 2
 			if err := func() error {
 				s.Categories = make([]EateryCategoriesItem, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -240,7 +257,7 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"categories\"")
 			}
 		case "nextWeekEvents":
-			requiredBitSet[1] |= 1 << 2
+			requiredBitSet[1] |= 1 << 3
 			if err := func() error {
 				if err := s.NextWeekEvents.Decode(d); err != nil {
 					return err
@@ -260,7 +277,7 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
 		0b11111111,
-		0b00000111,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1298,8 +1315,8 @@ func (s *Gym) encodeFields(e *jx.Encoder) {
 		e.Str(s.Name)
 	}
 	{
-		e.FieldStart("imageUrl")
-		json.EncodeURI(e, s.ImageUrl)
+		e.FieldStart("imagePath")
+		e.Str(s.ImagePath)
 	}
 	{
 		e.FieldStart("latitude")
@@ -1338,7 +1355,7 @@ func (s *Gym) encodeFields(e *jx.Encoder) {
 var jsonFieldsNameOfGym = [8]string{
 	0: "id",
 	1: "name",
-	2: "imageUrl",
+	2: "imagePath",
 	3: "latitude",
 	4: "longitude",
 	5: "hours",
@@ -1379,17 +1396,17 @@ func (s *Gym) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
-		case "imageUrl":
+		case "imagePath":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := json.DecodeURI(d)
-				s.ImageUrl = v
+				v, err := d.Str()
+				s.ImagePath = string(v)
 				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"imageUrl\"")
+				return errors.Wrap(err, "decode field \"imagePath\"")
 			}
 		case "latitude":
 			requiredBitSet[0] |= 1 << 3

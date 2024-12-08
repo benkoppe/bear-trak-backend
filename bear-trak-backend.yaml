@@ -79,6 +79,7 @@ components:
         - id
         - name
         - nameShort
+        - imagePath
         - latitude
         - longitude
         - location
@@ -100,6 +101,10 @@ components:
           type: string
           x-stoplight:
             id: dswz6jvcu0njw
+        imagePath:
+          type: string
+          x-stoplight:
+            id: 0lv5n6id9dgjr
         latitude:
           type: number
           x-stoplight:
@@ -262,7 +267,7 @@ components:
       required:
         - id
         - name
-        - imageUrl
+        - imagePath
         - latitude
         - longitude
         - hours
@@ -277,11 +282,10 @@ components:
           type: string
           x-stoplight:
             id: lvi3q8g6d7ygx
-        imageUrl:
+        imagePath:
           type: string
           x-stoplight:
             id: izei9phdx10ou
-          format: uri
         latitude:
           type: number
           x-stoplight:

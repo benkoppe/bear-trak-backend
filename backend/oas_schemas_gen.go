@@ -4,7 +4,6 @@ package api
 
 import (
 	"fmt"
-	"net/url"
 	"time"
 
 	"github.com/go-faster/errors"
@@ -19,6 +18,7 @@ type Eatery struct {
 	ID             int                    `json:"id"`
 	Name           string                 `json:"name"`
 	NameShort      string                 `json:"nameShort"`
+	ImagePath      string                 `json:"imagePath"`
 	Latitude       float64                `json:"latitude"`
 	Longitude      float64                `json:"longitude"`
 	Location       string                 `json:"location"`
@@ -42,6 +42,11 @@ func (s *Eatery) GetName() string {
 // GetNameShort returns the value of NameShort.
 func (s *Eatery) GetNameShort() string {
 	return s.NameShort
+}
+
+// GetImagePath returns the value of ImagePath.
+func (s *Eatery) GetImagePath() string {
+	return s.ImagePath
 }
 
 // GetLatitude returns the value of Latitude.
@@ -97,6 +102,11 @@ func (s *Eatery) SetName(val string) {
 // SetNameShort sets the value of NameShort.
 func (s *Eatery) SetNameShort(val string) {
 	s.NameShort = val
+}
+
+// SetImagePath sets the value of ImagePath.
+func (s *Eatery) SetImagePath(val string) {
+	s.ImagePath = val
 }
 
 // SetLatitude sets the value of Latitude.
@@ -556,7 +566,7 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 type Gym struct {
 	ID                  int                          `json:"id"`
 	Name                string                       `json:"name"`
-	ImageUrl            url.URL                      `json:"imageUrl"`
+	ImagePath           string                       `json:"imagePath"`
 	Latitude            float64                      `json:"latitude"`
 	Longitude           float64                      `json:"longitude"`
 	Hours               []Hours                      `json:"hours"`
@@ -574,9 +584,9 @@ func (s *Gym) GetName() string {
 	return s.Name
 }
 
-// GetImageUrl returns the value of ImageUrl.
-func (s *Gym) GetImageUrl() url.URL {
-	return s.ImageUrl
+// GetImagePath returns the value of ImagePath.
+func (s *Gym) GetImagePath() string {
+	return s.ImagePath
 }
 
 // GetLatitude returns the value of Latitude.
@@ -614,9 +624,9 @@ func (s *Gym) SetName(val string) {
 	s.Name = val
 }
 
-// SetImageUrl sets the value of ImageUrl.
-func (s *Gym) SetImageUrl(val url.URL) {
-	s.ImageUrl = val
+// SetImagePath sets the value of ImagePath.
+func (s *Gym) SetImagePath(val string) {
+	s.ImagePath = val
 }
 
 // SetLatitude sets the value of Latitude.
