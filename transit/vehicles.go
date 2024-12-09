@@ -2,6 +2,7 @@ package transit
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 
 	backend "github.com/benkoppe/bear-trak-backend/backend"
@@ -84,24 +85,16 @@ func getStopBefore(stop gtfs.Stop, tripId string, staticGtfs gtfs.Static) *gtfs.
 		return nil
 	}
 
-	var sequence int = -1
+	sort.Slice(trip.StopTimes, func(i, j int) bool {
+		return trip.StopTimes[i].StopSequence < trip.StopTimes[j].StopSequence
+	})
 
-	for _, stopTime := range trip.StopTimes {
+	for i, stopTime := range trip.StopTimes {
 		if *stopTime.Stop == stop {
-			sequence = stopTime.StopSequence - 1
-			break
+			return trip.StopTimes[i-1].Stop
 		}
 	}
 
-	if sequence == -1 {
-		return nil
-	}
-
-	for _, stopTime := range trip.StopTimes {
-		if stopTime.StopSequence == sequence {
-			return stopTime.Stop
-		}
-	}
 	return nil
 }
 
