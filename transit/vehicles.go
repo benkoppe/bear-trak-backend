@@ -91,7 +91,7 @@ func getStopBefore(stop gtfs.Stop, tripId string, staticGtfs gtfs.Static) *gtfs.
 	})
 
 	for i, stopTime := range trip.StopTimes {
-		if *stopTime.Stop == stop {
+		if *stopTime.Stop == stop && (i-1) >= 0 {
 			return trip.StopTimes[i-1].Stop
 		}
 	}
