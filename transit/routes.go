@@ -111,7 +111,7 @@ func getStops(trips []gtfs.ScheduledTrip) []gtfs.Stop {
 }
 
 func getPolylines(trips []gtfs.ScheduledTrip) []string {
-	var polylines []string
+	polylines := goset.NewSet[string]()
 
 	for _, trip := range trips {
 		shape := trip.Shape
@@ -130,8 +130,8 @@ func getPolylines(trips []gtfs.ScheduledTrip) []string {
 		}
 
 		line := string(polyline.EncodeCoords(coords))
-		polylines = append(polylines, line)
+		polylines.Add(line)
 	}
 
-	return polylines
+	return polylines.Items()
 }
