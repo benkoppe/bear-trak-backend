@@ -120,6 +120,7 @@ func (s *BusRouteDirection) SetStops(val []BusRouteDirectionStopsItem) {
 	s.Stops = val
 }
 
+// Ref: #/components/schemas/BusRouteDirectionID
 type BusRouteDirectionID string
 
 const (
@@ -1194,4 +1195,174 @@ func (o NilInt) Or(d int) int {
 		return v
 	}
 	return d
+}
+
+// NewNilString returns new NilString with value set to v.
+func NewNilString(v string) NilString {
+	return NilString{
+		Value: v,
+	}
+}
+
+// NilString is nullable string.
+type NilString struct {
+	Value string
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilString) SetTo(v string) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsSet returns true if value is Null.
+func (o NilString) IsNull() bool { return o.Null }
+
+// SetNull sets value to null.
+func (o *NilString) SetToNull() {
+	o.Null = true
+	var v string
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilString) Get() (v string, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// Ref: #/components/schemas/Vehicle
+type Vehicle struct {
+	ID            int                 `json:"id"`
+	RouteId       int                 `json:"routeId"`
+	Name          string              `json:"name"`
+	DirectionId   BusRouteDirectionID `json:"directionId"`
+	Heading       int                 `json:"heading"`
+	Latitude      float64             `json:"latitude"`
+	Longitude     float64             `json:"longitude"`
+	DisplayStatus string              `json:"displayStatus"`
+	NextStop      string              `json:"nextStop"`
+	LastStop      NilString           `json:"lastStop"`
+	LastUpdated   time.Time           `json:"lastUpdated"`
+}
+
+// GetID returns the value of ID.
+func (s *Vehicle) GetID() int {
+	return s.ID
+}
+
+// GetRouteId returns the value of RouteId.
+func (s *Vehicle) GetRouteId() int {
+	return s.RouteId
+}
+
+// GetName returns the value of Name.
+func (s *Vehicle) GetName() string {
+	return s.Name
+}
+
+// GetDirectionId returns the value of DirectionId.
+func (s *Vehicle) GetDirectionId() BusRouteDirectionID {
+	return s.DirectionId
+}
+
+// GetHeading returns the value of Heading.
+func (s *Vehicle) GetHeading() int {
+	return s.Heading
+}
+
+// GetLatitude returns the value of Latitude.
+func (s *Vehicle) GetLatitude() float64 {
+	return s.Latitude
+}
+
+// GetLongitude returns the value of Longitude.
+func (s *Vehicle) GetLongitude() float64 {
+	return s.Longitude
+}
+
+// GetDisplayStatus returns the value of DisplayStatus.
+func (s *Vehicle) GetDisplayStatus() string {
+	return s.DisplayStatus
+}
+
+// GetNextStop returns the value of NextStop.
+func (s *Vehicle) GetNextStop() string {
+	return s.NextStop
+}
+
+// GetLastStop returns the value of LastStop.
+func (s *Vehicle) GetLastStop() NilString {
+	return s.LastStop
+}
+
+// GetLastUpdated returns the value of LastUpdated.
+func (s *Vehicle) GetLastUpdated() time.Time {
+	return s.LastUpdated
+}
+
+// SetID sets the value of ID.
+func (s *Vehicle) SetID(val int) {
+	s.ID = val
+}
+
+// SetRouteId sets the value of RouteId.
+func (s *Vehicle) SetRouteId(val int) {
+	s.RouteId = val
+}
+
+// SetName sets the value of Name.
+func (s *Vehicle) SetName(val string) {
+	s.Name = val
+}
+
+// SetDirectionId sets the value of DirectionId.
+func (s *Vehicle) SetDirectionId(val BusRouteDirectionID) {
+	s.DirectionId = val
+}
+
+// SetHeading sets the value of Heading.
+func (s *Vehicle) SetHeading(val int) {
+	s.Heading = val
+}
+
+// SetLatitude sets the value of Latitude.
+func (s *Vehicle) SetLatitude(val float64) {
+	s.Latitude = val
+}
+
+// SetLongitude sets the value of Longitude.
+func (s *Vehicle) SetLongitude(val float64) {
+	s.Longitude = val
+}
+
+// SetDisplayStatus sets the value of DisplayStatus.
+func (s *Vehicle) SetDisplayStatus(val string) {
+	s.DisplayStatus = val
+}
+
+// SetNextStop sets the value of NextStop.
+func (s *Vehicle) SetNextStop(val string) {
+	s.NextStop = val
+}
+
+// SetLastStop sets the value of LastStop.
+func (s *Vehicle) SetLastStop(val NilString) {
+	s.LastStop = val
+}
+
+// SetLastUpdated sets the value of LastUpdated.
+func (s *Vehicle) SetLastUpdated(val time.Time) {
+	s.LastUpdated = val
 }

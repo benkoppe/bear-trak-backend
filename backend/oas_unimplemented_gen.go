@@ -13,7 +13,7 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// GetV1Dining implements get-v1-dining operation.
+// GetV1Dining implements getV1Dining operation.
 //
 // Returns all necessary data for BearTrak's dining section.
 //
@@ -22,7 +22,7 @@ func (UnimplementedHandler) GetV1Dining(ctx context.Context) (r []Eatery, _ erro
 	return r, ht.ErrNotImplemented
 }
 
-// GetV1Gyms implements get-v1-gyms operation.
+// GetV1Gyms implements getV1Gyms operation.
 //
 // Returns all necessary data for BearTrak's gym section.
 //
@@ -31,12 +31,21 @@ func (UnimplementedHandler) GetV1Gyms(ctx context.Context) (r []Gym, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// GetV1TransitRoutes implements get-v1-transit-routes operation.
+// GetV1TransitRoutes implements getV1TransitRoutes operation.
 //
 // Returns non time-sensitive, route-related data for BearTrak's transit section.
 //
 // GET /v1/transit/routes
 func (UnimplementedHandler) GetV1TransitRoutes(ctx context.Context) (r []BusRoute, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetV1TransitVehicles implements getV1TransitVehicles operation.
+//
+// Returns time-sensitive, vehicle-related data for BearTrak's transit section.
+//
+// GET /v1/transit/vehicles
+func (UnimplementedHandler) GetV1TransitVehicles(ctx context.Context) (r []Vehicle, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

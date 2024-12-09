@@ -102,24 +102,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 't': // Prefix: "transit/routes"
+			case 't': // Prefix: "transit/"
 				origElem := elem
-				if l := len("transit/routes"); len(elem) >= l && elem[0:l] == "transit/routes" {
+				if l := len("transit/"); len(elem) >= l && elem[0:l] == "transit/" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "GET":
-						s.handleGetV1TransitRoutesRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "GET")
+					break
+				}
+				switch elem[0] {
+				case 'r': // Prefix: "routes"
+					origElem := elem
+					if l := len("routes"); len(elem) >= l && elem[0:l] == "routes" {
+						elem = elem[l:]
+					} else {
+						break
 					}
 
-					return
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleGetV1TransitRoutesRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'v': // Prefix: "vehicles"
+					origElem := elem
+					if l := len("vehicles"); len(elem) >= l && elem[0:l] == "vehicles" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleGetV1TransitVehiclesRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -232,7 +268,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					case "GET":
 						r.name = GetV1DiningOperation
 						r.summary = "Dining"
-						r.operationID = "get-v1-dining"
+						r.operationID = "getV1Dining"
 						r.pathPattern = "/v1/dining"
 						r.args = args
 						r.count = 0
@@ -257,7 +293,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					case "GET":
 						r.name = GetV1GymsOperation
 						r.summary = "Gyms"
-						r.operationID = "get-v1-gyms"
+						r.operationID = "getV1Gyms"
 						r.pathPattern = "/v1/gyms"
 						r.args = args
 						r.count = 0
@@ -268,28 +304,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
-			case 't': // Prefix: "transit/routes"
+			case 't': // Prefix: "transit/"
 				origElem := elem
-				if l := len("transit/routes"); len(elem) >= l && elem[0:l] == "transit/routes" {
+				if l := len("transit/"); len(elem) >= l && elem[0:l] == "transit/" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "GET":
-						r.name = GetV1TransitRoutesOperation
-						r.summary = "Routes"
-						r.operationID = "get-v1-transit-routes"
-						r.pathPattern = "/v1/transit/routes"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
+					break
+				}
+				switch elem[0] {
+				case 'r': // Prefix: "routes"
+					origElem := elem
+					if l := len("routes"); len(elem) >= l && elem[0:l] == "routes" {
+						elem = elem[l:]
+					} else {
+						break
 					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = GetV1TransitRoutesOperation
+							r.summary = "Routes"
+							r.operationID = "getV1TransitRoutes"
+							r.pathPattern = "/v1/transit/routes"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'v': // Prefix: "vehicles"
+					origElem := elem
+					if l := len("vehicles"); len(elem) >= l && elem[0:l] == "vehicles" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = GetV1TransitVehiclesOperation
+							r.summary = "Vehicles"
+							r.operationID = "getV1TransitVehicles"
+							r.pathPattern = "/v1/transit/vehicles"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem

@@ -38,7 +38,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      operationId: get-v1-dining
+      operationId: getV1Dining
       x-stoplight:
         id: mr1vidtnkgibv
       description: Returns all necessary data for BearTrak's dining section.
@@ -62,7 +62,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      operationId: get-v1-gyms
+      operationId: getV1Gyms
       x-stoplight:
         id: bgkkzgl4exihm
       description: Returns all necessary data for BearTrak's gym section.
@@ -86,10 +86,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      operationId: get-v1-transit-routes
+      operationId: getV1TransitRoutes
       x-stoplight:
         id: x9u9nrkadrz7r
       description: "Returns non time-sensitive, route-related data for BearTrak's transit section."
+  /v1/transit/vehicles:
+    get:
+      summary: Vehicles
+      tags:
+        - transit
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vehicle"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: getV1TransitVehicles
+      x-stoplight:
+        id: skii58kqavo15
+      description: "Returns time-sensitive, vehicle-related data for BearTrak's transit section."
 components:
   schemas:
     Eatery:
@@ -538,13 +562,7 @@ components:
         - stops
       properties:
         id:
-          x-stoplight:
-            id: kk1mw68pitkng
-          type: string
-          enum:
-            - inbound
-            - outbound
-            - unspecified
+          $ref: "#/components/schemas/BusRouteDirectionID"
         polylines:
           type: array
           x-stoplight:
@@ -580,6 +598,83 @@ components:
                 x-stoplight:
                   id: 8ex75a6rjzhoe
                 format: double
+    BusRouteDirectionID:
+      title: BusRouteDirectionID
+      x-stoplight:
+        id: qmc7awv5sjbun
+      type: string
+      enum:
+        - inbound
+        - outbound
+        - unspecified
+      x-tags:
+        - transit
+    Vehicle:
+      title: Vehicle
+      x-stoplight:
+        id: q5h6ogp9k6x42
+      type: object
+      x-tags:
+        - transit
+      required:
+        - id
+        - routeId
+        - name
+        - directionId
+        - heading
+        - latitude
+        - longitude
+        - displayStatus
+        - nextStop
+        - lastStop
+        - lastUpdated
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: uhfjn6hkr952f
+        routeId:
+          type: integer
+          x-stoplight:
+            id: 6m19093vr3ruc
+        name:
+          type: string
+          x-stoplight:
+            id: 567j14181oyv2
+        directionId:
+          $ref: "#/components/schemas/BusRouteDirectionID"
+        heading:
+          type: integer
+          x-stoplight:
+            id: jzsp7ano0smnx
+        latitude:
+          type: number
+          x-stoplight:
+            id: 4u4i4u2m9xuvq
+          format: double
+        longitude:
+          type: number
+          x-stoplight:
+            id: xg7c3au65nxqx
+          format: double
+        displayStatus:
+          type: string
+          x-stoplight:
+            id: 60gfjaay32ggk
+        nextStop:
+          type: string
+          x-stoplight:
+            id: limm1msm9d5iu
+        lastStop:
+          type: string
+          x-stoplight:
+            id: f9na87dt9fa28
+          nullable: true
+        lastUpdated:
+          type: string
+          x-stoplight:
+            id: npwbh2swyuu70
+          format: date-time
 x-internal: false
 tags:
   - name: beartrak

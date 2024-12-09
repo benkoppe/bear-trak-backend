@@ -22,24 +22,30 @@ import (
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
-	// GetV1Dining invokes get-v1-dining operation.
+	// GetV1Dining invokes getV1Dining operation.
 	//
 	// Returns all necessary data for BearTrak's dining section.
 	//
 	// GET /v1/dining
 	GetV1Dining(ctx context.Context) ([]Eatery, error)
-	// GetV1Gyms invokes get-v1-gyms operation.
+	// GetV1Gyms invokes getV1Gyms operation.
 	//
 	// Returns all necessary data for BearTrak's gym section.
 	//
 	// GET /v1/gyms
 	GetV1Gyms(ctx context.Context) ([]Gym, error)
-	// GetV1TransitRoutes invokes get-v1-transit-routes operation.
+	// GetV1TransitRoutes invokes getV1TransitRoutes operation.
 	//
 	// Returns non time-sensitive, route-related data for BearTrak's transit section.
 	//
 	// GET /v1/transit/routes
 	GetV1TransitRoutes(ctx context.Context) ([]BusRoute, error)
+	// GetV1TransitVehicles invokes getV1TransitVehicles operation.
+	//
+	// Returns time-sensitive, vehicle-related data for BearTrak's transit section.
+	//
+	// GET /v1/transit/vehicles
+	GetV1TransitVehicles(ctx context.Context) ([]Vehicle, error)
 }
 
 // Client implements OAS client.
@@ -94,7 +100,7 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 	return u
 }
 
-// GetV1Dining invokes get-v1-dining operation.
+// GetV1Dining invokes getV1Dining operation.
 //
 // Returns all necessary data for BearTrak's dining section.
 //
@@ -106,7 +112,7 @@ func (c *Client) GetV1Dining(ctx context.Context) ([]Eatery, error) {
 
 func (c *Client) sendGetV1Dining(ctx context.Context) (res []Eatery, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("get-v1-dining"),
+		otelogen.OperationID("getV1Dining"),
 		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/v1/dining"),
 	}
@@ -166,7 +172,7 @@ func (c *Client) sendGetV1Dining(ctx context.Context) (res []Eatery, err error) 
 	return result, nil
 }
 
-// GetV1Gyms invokes get-v1-gyms operation.
+// GetV1Gyms invokes getV1Gyms operation.
 //
 // Returns all necessary data for BearTrak's gym section.
 //
@@ -178,7 +184,7 @@ func (c *Client) GetV1Gyms(ctx context.Context) ([]Gym, error) {
 
 func (c *Client) sendGetV1Gyms(ctx context.Context) (res []Gym, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("get-v1-gyms"),
+		otelogen.OperationID("getV1Gyms"),
 		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/v1/gyms"),
 	}
@@ -238,7 +244,7 @@ func (c *Client) sendGetV1Gyms(ctx context.Context) (res []Gym, err error) {
 	return result, nil
 }
 
-// GetV1TransitRoutes invokes get-v1-transit-routes operation.
+// GetV1TransitRoutes invokes getV1TransitRoutes operation.
 //
 // Returns non time-sensitive, route-related data for BearTrak's transit section.
 //
@@ -250,7 +256,7 @@ func (c *Client) GetV1TransitRoutes(ctx context.Context) ([]BusRoute, error) {
 
 func (c *Client) sendGetV1TransitRoutes(ctx context.Context) (res []BusRoute, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("get-v1-transit-routes"),
+		otelogen.OperationID("getV1TransitRoutes"),
 		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/v1/transit/routes"),
 	}
@@ -303,6 +309,78 @@ func (c *Client) sendGetV1TransitRoutes(ctx context.Context) (res []BusRoute, er
 
 	stage = "DecodeResponse"
 	result, err := decodeGetV1TransitRoutesResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// GetV1TransitVehicles invokes getV1TransitVehicles operation.
+//
+// Returns time-sensitive, vehicle-related data for BearTrak's transit section.
+//
+// GET /v1/transit/vehicles
+func (c *Client) GetV1TransitVehicles(ctx context.Context) ([]Vehicle, error) {
+	res, err := c.sendGetV1TransitVehicles(ctx)
+	return res, err
+}
+
+func (c *Client) sendGetV1TransitVehicles(ctx context.Context) (res []Vehicle, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("getV1TransitVehicles"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/transit/vehicles"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, GetV1TransitVehiclesOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/transit/vehicles"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeGetV1TransitVehiclesResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

@@ -8,24 +8,30 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// GetV1Dining implements get-v1-dining operation.
+	// GetV1Dining implements getV1Dining operation.
 	//
 	// Returns all necessary data for BearTrak's dining section.
 	//
 	// GET /v1/dining
 	GetV1Dining(ctx context.Context) ([]Eatery, error)
-	// GetV1Gyms implements get-v1-gyms operation.
+	// GetV1Gyms implements getV1Gyms operation.
 	//
 	// Returns all necessary data for BearTrak's gym section.
 	//
 	// GET /v1/gyms
 	GetV1Gyms(ctx context.Context) ([]Gym, error)
-	// GetV1TransitRoutes implements get-v1-transit-routes operation.
+	// GetV1TransitRoutes implements getV1TransitRoutes operation.
 	//
 	// Returns non time-sensitive, route-related data for BearTrak's transit section.
 	//
 	// GET /v1/transit/routes
 	GetV1TransitRoutes(ctx context.Context) ([]BusRoute, error)
+	// GetV1TransitVehicles implements getV1TransitVehicles operation.
+	//
+	// Returns time-sensitive, vehicle-related data for BearTrak's transit section.
+	//
+	// GET /v1/transit/vehicles
+	GetV1TransitVehicles(ctx context.Context) ([]Vehicle, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.
