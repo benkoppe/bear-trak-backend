@@ -34,6 +34,12 @@ type Invoker interface {
 	//
 	// GET /v1/gyms
 	GetV1Gyms(ctx context.Context) ([]Gym, error)
+	// GetV1TransitRoutes invokes get-v1-transit-routes operation.
+	//
+	// Returns non time-sensitive, route-related data for BearTrak's transit section.
+	//
+	// GET /v1/transit/routes
+	GetV1TransitRoutes(ctx context.Context) ([]BusRoute, error)
 }
 
 // Client implements OAS client.
@@ -225,6 +231,78 @@ func (c *Client) sendGetV1Gyms(ctx context.Context) (res []Gym, err error) {
 
 	stage = "DecodeResponse"
 	result, err := decodeGetV1GymsResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// GetV1TransitRoutes invokes get-v1-transit-routes operation.
+//
+// Returns non time-sensitive, route-related data for BearTrak's transit section.
+//
+// GET /v1/transit/routes
+func (c *Client) GetV1TransitRoutes(ctx context.Context) ([]BusRoute, error) {
+	res, err := c.sendGetV1TransitRoutes(ctx)
+	return res, err
+}
+
+func (c *Client) sendGetV1TransitRoutes(ctx context.Context) (res []BusRoute, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("get-v1-transit-routes"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/transit/routes"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, GetV1TransitRoutesOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/transit/routes"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeGetV1TransitRoutesResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

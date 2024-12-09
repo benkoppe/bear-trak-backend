@@ -13,6 +13,197 @@ func (s *ErrorStatusCode) Error() string {
 	return fmt.Sprintf("code %d: %+v", s.StatusCode, s.Response)
 }
 
+// Ref: #/components/schemas/BusRoute
+type BusRoute struct {
+	ID         int                 `json:"id"`
+	SortIdx    int                 `json:"sortIdx"`
+	Name       string              `json:"name"`
+	Code       string              `json:"code"`
+	Color      string              `json:"color"`
+	Directions []BusRouteDirection `json:"directions"`
+}
+
+// GetID returns the value of ID.
+func (s *BusRoute) GetID() int {
+	return s.ID
+}
+
+// GetSortIdx returns the value of SortIdx.
+func (s *BusRoute) GetSortIdx() int {
+	return s.SortIdx
+}
+
+// GetName returns the value of Name.
+func (s *BusRoute) GetName() string {
+	return s.Name
+}
+
+// GetCode returns the value of Code.
+func (s *BusRoute) GetCode() string {
+	return s.Code
+}
+
+// GetColor returns the value of Color.
+func (s *BusRoute) GetColor() string {
+	return s.Color
+}
+
+// GetDirections returns the value of Directions.
+func (s *BusRoute) GetDirections() []BusRouteDirection {
+	return s.Directions
+}
+
+// SetID sets the value of ID.
+func (s *BusRoute) SetID(val int) {
+	s.ID = val
+}
+
+// SetSortIdx sets the value of SortIdx.
+func (s *BusRoute) SetSortIdx(val int) {
+	s.SortIdx = val
+}
+
+// SetName sets the value of Name.
+func (s *BusRoute) SetName(val string) {
+	s.Name = val
+}
+
+// SetCode sets the value of Code.
+func (s *BusRoute) SetCode(val string) {
+	s.Code = val
+}
+
+// SetColor sets the value of Color.
+func (s *BusRoute) SetColor(val string) {
+	s.Color = val
+}
+
+// SetDirections sets the value of Directions.
+func (s *BusRoute) SetDirections(val []BusRouteDirection) {
+	s.Directions = val
+}
+
+// Ref: #/components/schemas/BusRouteDirection
+type BusRouteDirection struct {
+	ID        BusRouteDirectionID          `json:"id"`
+	Polylines []string                     `json:"polylines"`
+	Stops     []BusRouteDirectionStopsItem `json:"stops"`
+}
+
+// GetID returns the value of ID.
+func (s *BusRouteDirection) GetID() BusRouteDirectionID {
+	return s.ID
+}
+
+// GetPolylines returns the value of Polylines.
+func (s *BusRouteDirection) GetPolylines() []string {
+	return s.Polylines
+}
+
+// GetStops returns the value of Stops.
+func (s *BusRouteDirection) GetStops() []BusRouteDirectionStopsItem {
+	return s.Stops
+}
+
+// SetID sets the value of ID.
+func (s *BusRouteDirection) SetID(val BusRouteDirectionID) {
+	s.ID = val
+}
+
+// SetPolylines sets the value of Polylines.
+func (s *BusRouteDirection) SetPolylines(val []string) {
+	s.Polylines = val
+}
+
+// SetStops sets the value of Stops.
+func (s *BusRouteDirection) SetStops(val []BusRouteDirectionStopsItem) {
+	s.Stops = val
+}
+
+type BusRouteDirectionID string
+
+const (
+	BusRouteDirectionIDInbound     BusRouteDirectionID = "inbound"
+	BusRouteDirectionIDOutbound    BusRouteDirectionID = "outbound"
+	BusRouteDirectionIDUnspecified BusRouteDirectionID = "unspecified"
+)
+
+// AllValues returns all BusRouteDirectionID values.
+func (BusRouteDirectionID) AllValues() []BusRouteDirectionID {
+	return []BusRouteDirectionID{
+		BusRouteDirectionIDInbound,
+		BusRouteDirectionIDOutbound,
+		BusRouteDirectionIDUnspecified,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s BusRouteDirectionID) MarshalText() ([]byte, error) {
+	switch s {
+	case BusRouteDirectionIDInbound:
+		return []byte(s), nil
+	case BusRouteDirectionIDOutbound:
+		return []byte(s), nil
+	case BusRouteDirectionIDUnspecified:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *BusRouteDirectionID) UnmarshalText(data []byte) error {
+	switch BusRouteDirectionID(data) {
+	case BusRouteDirectionIDInbound:
+		*s = BusRouteDirectionIDInbound
+		return nil
+	case BusRouteDirectionIDOutbound:
+		*s = BusRouteDirectionIDOutbound
+		return nil
+	case BusRouteDirectionIDUnspecified:
+		*s = BusRouteDirectionIDUnspecified
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type BusRouteDirectionStopsItem struct {
+	Name      string  `json:"name"`
+	Longitude float64 `json:"longitude"`
+	Latitude  float64 `json:"latitude"`
+}
+
+// GetName returns the value of Name.
+func (s *BusRouteDirectionStopsItem) GetName() string {
+	return s.Name
+}
+
+// GetLongitude returns the value of Longitude.
+func (s *BusRouteDirectionStopsItem) GetLongitude() float64 {
+	return s.Longitude
+}
+
+// GetLatitude returns the value of Latitude.
+func (s *BusRouteDirectionStopsItem) GetLatitude() float64 {
+	return s.Latitude
+}
+
+// SetName sets the value of Name.
+func (s *BusRouteDirectionStopsItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetLongitude sets the value of Longitude.
+func (s *BusRouteDirectionStopsItem) SetLongitude(val float64) {
+	s.Longitude = val
+}
+
+// SetLatitude sets the value of Latitude.
+func (s *BusRouteDirectionStopsItem) SetLatitude(val float64) {
+	s.Latitude = val
+}
+
 // Ref: #/components/schemas/Eatery
 type Eatery struct {
 	ID             int                    `json:"id"`

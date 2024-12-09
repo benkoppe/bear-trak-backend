@@ -6,6 +6,7 @@ package api
 type OperationName = string
 
 const (
-	GetV1DiningOperation OperationName = "GetV1Dining"
-	GetV1GymsOperation   OperationName = "GetV1Gyms"
+	GetV1DiningOperation        OperationName = "GetV1Dining"
+	GetV1GymsOperation          OperationName = "GetV1Gyms"
+	GetV1TransitRoutesOperation OperationName = "GetV1TransitRoutes"
 )

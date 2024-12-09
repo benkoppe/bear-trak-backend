@@ -31,6 +31,15 @@ func (UnimplementedHandler) GetV1Gyms(ctx context.Context) (r []Gym, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
+// GetV1TransitRoutes implements get-v1-transit-routes operation.
+//
+// Returns non time-sensitive, route-related data for BearTrak's transit section.
+//
+// GET /v1/transit/routes
+func (UnimplementedHandler) GetV1TransitRoutes(ctx context.Context) (r []BusRoute, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // NewError creates *ErrorStatusCode from error returned by handler.
 //
 // Used for common default response.

@@ -20,6 +20,12 @@ type Handler interface {
 	//
 	// GET /v1/gyms
 	GetV1Gyms(ctx context.Context) ([]Gym, error)
+	// GetV1TransitRoutes implements get-v1-transit-routes operation.
+	//
+	// Returns non time-sensitive, route-related data for BearTrak's transit section.
+	//
+	// GET /v1/transit/routes
+	GetV1TransitRoutes(ctx context.Context) ([]BusRoute, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

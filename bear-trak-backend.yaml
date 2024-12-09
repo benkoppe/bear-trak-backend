@@ -66,6 +66,30 @@ paths:
       x-stoplight:
         id: bgkkzgl4exihm
       description: Returns all necessary data for BearTrak's gym section.
+  /v1/transit/routes:
+    get:
+      summary: Routes
+      tags:
+        - transit
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BusRoute"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: get-v1-transit-routes
+      x-stoplight:
+        id: x9u9nrkadrz7r
+      description: "Returns non time-sensitive, route-related data for BearTrak's transit section."
 components:
   schemas:
     Eatery:
@@ -460,6 +484,102 @@ components:
                 type: boolean
                 x-stoplight:
                   id: rjohztxb3rcw7
+    BusRoute:
+      title: BusRoute
+      x-stoplight:
+        id: vhrxfmwszwvn2
+      type: object
+      x-tags:
+        - transit
+      required:
+        - id
+        - sortIdx
+        - name
+        - code
+        - color
+        - directions
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: 3vfevaxf6xjbk
+        sortIdx:
+          type: integer
+          x-stoplight:
+            id: s3aekiyhvbk14
+        name:
+          type: string
+          x-stoplight:
+            id: 7oejyd392fskq
+        code:
+          type: string
+          x-stoplight:
+            id: 9su1abmfvsxfj
+        color:
+          type: string
+          x-stoplight:
+            id: 2vmtul5fbjffg
+        directions:
+          type: array
+          x-stoplight:
+            id: 3pi8o0g8reop2
+          items:
+            $ref: "#/components/schemas/BusRouteDirection"
+    BusRouteDirection:
+      title: BusRouteDirection
+      x-stoplight:
+        id: 8jnaphnnk1zxd
+      type: object
+      x-tags:
+        - transit
+      required:
+        - id
+        - polylines
+        - stops
+      properties:
+        id:
+          x-stoplight:
+            id: kk1mw68pitkng
+          type: string
+          enum:
+            - inbound
+            - outbound
+            - unspecified
+        polylines:
+          type: array
+          x-stoplight:
+            id: 5mzhkyrav5a9h
+          items:
+            x-stoplight:
+              id: k8yafv893ob0y
+            type: string
+        stops:
+          type: array
+          x-stoplight:
+            id: ev6rvsgiqp36x
+          items:
+            x-stoplight:
+              id: hssrmp4oydcsm
+            type: object
+            required:
+              - name
+              - longitude
+              - latitude
+            properties:
+              name:
+                type: string
+                x-stoplight:
+                  id: 8bthd9s2oujf0
+              longitude:
+                type: number
+                x-stoplight:
+                  id: 8jdebpdrx6ivm
+                format: double
+              latitude:
+                type: number
+                x-stoplight:
+                  id: 8ex75a6rjzhoe
+                format: double
 x-internal: false
 tags:
   - name: beartrak
@@ -468,3 +588,5 @@ tags:
     description: Dining features
   - name: gyms
     description: Gym features
+  - name: transit
+    description: Transit features
