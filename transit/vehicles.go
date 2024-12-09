@@ -37,23 +37,17 @@ func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) ([]backend.
 			return nil, fmt.Errorf("failed to parse route ID as integer: %v", err)
 		}
 
-		staticTrip := matchingTrip(tripId.ID, staticGtfs)
-		if staticTrip == nil {
-			return nil, fmt.Errorf("failed to find a matching trip given ID: %s", tripId.ID)
+		nextStop := getStop(vehicle, staticGtfs)
+		if nextStop == nil {
+			return nil, fmt.Errorf("failed to find a next stop for vehicle ID: %d", id)
 		}
 
-		nextStopTime := nextStopTime(vehicle, *staticTrip)
-		if nextStopTime == nil {
-			return nil, fmt.Errorf("failed to find a next stop time for vehicle ID: %d", id)
-		}
-		nextStop := nextStopTime.Stop.Name
-
-		lastStopTime := stopTimeBefore(*staticTrip, *nextStopTime)
-		var lastStop backend.NilString
-		if lastStopTime == nil {
-			lastStop = backend.NilString{Null: true}
+		lastStop := getStopBefore(*nextStop, tripId.ID, staticGtfs)
+		var lastStopName backend.NilString
+		if lastStop == nil {
+			lastStopName = backend.NilString{Null: true}
 		} else {
-			lastStop = backend.NewNilString(lastStopTime.Stop.Name)
+			lastStopName = backend.NewNilString(lastStop.Name)
 		}
 
 		vehicles = append(vehicles, backend.Vehicle{
@@ -64,8 +58,8 @@ func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) ([]backend.
 			Heading:       int(*vehicle.Position.Bearing),
 			Longitude:     float64(*vehicle.Position.Longitude),
 			Latitude:      float64(*vehicle.Position.Latitude),
-			NextStop:      nextStop,
-			LastStop:      lastStop,
+			NextStop:      nextStop.Name,
+			LastStop:      lastStopName,
 			DisplayStatus: vehicle.CurrentStatus.String(),
 			LastUpdated:   *vehicle.Timestamp,
 		})
@@ -74,7 +68,44 @@ func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) ([]backend.
 	return vehicles, nil
 }
 
-func matchingTrip(tripId string, staticGtfs gtfs.Static) *gtfs.ScheduledTrip {
+func getStop(vehicle gtfs.Vehicle, staticGtfs gtfs.Static) *gtfs.Stop {
+	for _, stop := range staticGtfs.Stops {
+		if stop.Id == *vehicle.StopID {
+			return &stop
+		}
+	}
+	return nil
+}
+
+func getStopBefore(stop gtfs.Stop, tripId string, staticGtfs gtfs.Static) *gtfs.Stop {
+	trip := getTrip(tripId, staticGtfs)
+
+	if trip == nil {
+		return nil
+	}
+
+	var sequence int = -1
+
+	for _, stopTime := range trip.StopTimes {
+		if *stopTime.Stop == stop {
+			sequence = stopTime.StopSequence - 1
+			break
+		}
+	}
+
+	if sequence == -1 {
+		return nil
+	}
+
+	for _, stopTime := range trip.StopTimes {
+		if stopTime.StopSequence == sequence {
+			return stopTime.Stop
+		}
+	}
+	return nil
+}
+
+func getTrip(tripId string, staticGtfs gtfs.Static) *gtfs.ScheduledTrip {
 	for _, trip := range staticGtfs.Trips {
 		if trip.ID == tripId {
 			return &trip
@@ -82,44 +113,3 @@ func matchingTrip(tripId string, staticGtfs gtfs.Static) *gtfs.ScheduledTrip {
 	}
 	return nil
 }
-
-func nextStopTime(vehicle gtfs.Vehicle, staticTrip gtfs.ScheduledTrip) *gtfs.ScheduledStopTime {
-	stopId := vehicle.StopID
-
-	for _, stopTime := range staticTrip.StopTimes {
-		if stopTime.Stop.Id == *stopId {
-			return &stopTime
-		}
-	}
-
-	return nil
-}
-
-func stopTimeBefore(staticTrip gtfs.ScheduledTrip, stopTime gtfs.ScheduledStopTime) *gtfs.ScheduledStopTime {
-	targetSequence := stopTime.StopSequence - 1
-
-	for _, stopTime := range staticTrip.StopTimes {
-		if stopTime.StopSequence == targetSequence {
-			return &stopTime
-		}
-	}
-
-	return nil
-}
-
-func nillableStop(stop *gtfs.Stop) backend.NilString {
-	if stop == nil {
-		return backend.NilString{Null: true}
-	} else {
-		return backend.NewNilString(stop.Name)
-	}
-}
-
-// func getLastStop(vehicle gtfs.Vehicle, staticGtfs gtfs.Static) string {
-//   for _, trip := range staticGtfs.Trips {
-//     if trip.ID == tripId {
-//       trip.
-//
-//     }
-//   }
-// }
