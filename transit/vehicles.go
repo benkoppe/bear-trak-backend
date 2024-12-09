@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sort"
 	"strconv"
+	"strings"
 
 	backend "github.com/benkoppe/bear-trak-backend/backend"
 	"github.com/benkoppe/bear-trak-backend/transit/external_gtfs"
@@ -61,7 +62,7 @@ func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) ([]backend.
 			Latitude:      float64(*vehicle.Position.Latitude),
 			NextStop:      nextStop.Name,
 			LastStop:      lastStopName,
-			DisplayStatus: vehicle.CurrentStatus.String(),
+			DisplayStatus: capitalizeWords(vehicle.OccupancyStatus.String()),
 			LastUpdated:   *vehicle.Timestamp,
 		})
 	}
@@ -105,4 +106,12 @@ func getTrip(tripId string, staticGtfs gtfs.Static) *gtfs.ScheduledTrip {
 		}
 	}
 	return nil
+}
+
+func capitalizeWords(input string) string {
+	words := strings.Fields(input)
+	for i, word := range words {
+		words[i] = strings.ToUpper(string(word[0])) + strings.ToLower(word[1:])
+	}
+	return strings.Join(words, " ")
 }
