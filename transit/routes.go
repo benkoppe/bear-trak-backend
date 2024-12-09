@@ -34,8 +34,8 @@ func GetRoutes(staticUrl string, realtimeUrls external_gtfs.RealtimeUrls) ([]bac
 		routeIdVehicles[vehicle.RouteId] = append(routeIdVehicles[vehicle.RouteId], vehicle)
 	}
 
-	for _, route := range routes {
-		route.Vehicles = routeIdVehicles[route.ID]
+	for i := range routes {
+		routes[i].Vehicles = routeIdVehicles[routes[i].ID]
 	}
 
 	return routes, nil
