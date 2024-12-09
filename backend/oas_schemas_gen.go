@@ -21,6 +21,7 @@ type BusRoute struct {
 	Code       string              `json:"code"`
 	Color      string              `json:"color"`
 	Directions []BusRouteDirection `json:"directions"`
+	Vehicles   []Vehicle           `json:"vehicles"`
 }
 
 // GetID returns the value of ID.
@@ -53,6 +54,11 @@ func (s *BusRoute) GetDirections() []BusRouteDirection {
 	return s.Directions
 }
 
+// GetVehicles returns the value of Vehicles.
+func (s *BusRoute) GetVehicles() []Vehicle {
+	return s.Vehicles
+}
+
 // SetID sets the value of ID.
 func (s *BusRoute) SetID(val int) {
 	s.ID = val
@@ -81,6 +87,11 @@ func (s *BusRoute) SetColor(val string) {
 // SetDirections sets the value of Directions.
 func (s *BusRoute) SetDirections(val []BusRouteDirection) {
 	s.Directions = val
+}
+
+// SetVehicles sets the value of Vehicles.
+func (s *BusRoute) SetVehicles(val []Vehicle) {
+	s.Vehicles = val
 }
 
 // Ref: #/components/schemas/BusRouteDirection
@@ -170,9 +181,15 @@ func (s *BusRouteDirectionID) UnmarshalText(data []byte) error {
 }
 
 type BusRouteDirectionStopsItem struct {
+	ID        string  `json:"id"`
 	Name      string  `json:"name"`
 	Longitude float64 `json:"longitude"`
 	Latitude  float64 `json:"latitude"`
+}
+
+// GetID returns the value of ID.
+func (s *BusRouteDirectionStopsItem) GetID() string {
+	return s.ID
 }
 
 // GetName returns the value of Name.
@@ -188,6 +205,11 @@ func (s *BusRouteDirectionStopsItem) GetLongitude() float64 {
 // GetLatitude returns the value of Latitude.
 func (s *BusRouteDirectionStopsItem) GetLatitude() float64 {
 	return s.Latitude
+}
+
+// SetID sets the value of ID.
+func (s *BusRouteDirectionStopsItem) SetID(val string) {
+	s.ID = val
 }
 
 // SetName sets the value of Name.

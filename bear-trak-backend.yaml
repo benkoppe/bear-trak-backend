@@ -522,6 +522,7 @@ components:
         - code
         - color
         - directions
+        - vehicles
       properties:
         id:
           type: integer
@@ -549,6 +550,12 @@ components:
             id: 3pi8o0g8reop2
           items:
             $ref: "#/components/schemas/BusRouteDirection"
+        vehicles:
+          type: array
+          x-stoplight:
+            id: 2fivt02tij82b
+          items:
+            $ref: "#/components/schemas/Vehicle"
     BusRouteDirection:
       title: BusRouteDirection
       x-stoplight:
@@ -580,10 +587,15 @@ components:
               id: hssrmp4oydcsm
             type: object
             required:
+              - id
               - name
               - longitude
               - latitude
             properties:
+              id:
+                type: string
+                x-stoplight:
+                  id: gvhgj7smacrzj
               name:
                 type: string
                 x-stoplight:
