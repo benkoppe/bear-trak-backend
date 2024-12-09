@@ -28,14 +28,14 @@ func GetRoutes(staticUrl string) ([]backend.BusRoute, error) {
 			Name:       route.Description,
 			Code:       route.ShortName,
 			Color:      route.Color,
-			Directions: deriveRouteDirections(route, staticGtfs),
+			Directions: deriveRouteDirections(route, *staticGtfs),
 		})
 	}
 
 	return routes, nil
 }
 
-func deriveRouteDirections(route gtfs.Route, staticGtfs *gtfs.Static) []backend.BusRouteDirection {
+func deriveRouteDirections(route gtfs.Route, staticGtfs gtfs.Static) []backend.BusRouteDirection {
 	directionTrips := getDirectionTrips(route, staticGtfs)
 
 	var directions []backend.BusRouteDirection
@@ -78,7 +78,7 @@ func convertStaticStops(stops []gtfs.Stop) []backend.BusRouteDirectionStopsItem 
 	return backendStops
 }
 
-func getDirectionTrips(route gtfs.Route, staticGtfs *gtfs.Static) map[gtfs.DirectionID][]gtfs.ScheduledTrip {
+func getDirectionTrips(route gtfs.Route, staticGtfs gtfs.Static) map[gtfs.DirectionID][]gtfs.ScheduledTrip {
 	var routeTrips []gtfs.ScheduledTrip
 
 	for _, trip := range staticGtfs.Trips {
