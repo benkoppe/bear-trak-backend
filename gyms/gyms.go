@@ -165,8 +165,8 @@ func convertExternalGymCapacity(capacity external.GymCapacity) backend.GymCapaci
 	}
 
 	return backend.GymCapacity{
-		int(capacity.Count),
-		percentage,
-		capacity.LastUpdated,
+		Count:       int(capacity.Count),
+		Percentage:  percentage,
+		LastUpdated: capacity.LastUpdated,
 	}
 }
