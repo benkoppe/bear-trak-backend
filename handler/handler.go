@@ -21,7 +21,11 @@ func (bs *BackendService) GetV1Gyms(ctx context.Context) ([]backend.Gym, error) 
 }
 
 func (bs *BackendService) GetV1TransitRoutes(ctx context.Context) ([]backend.BusRoute, error) {
-	return transit.GetRoutes(gtfsStaticUrl)
+	return transit.GetRoutes(gtfsStaticUrl, external_gtfs.RealtimeUrls{
+		Alerts:           gtfsRealtimeAlertsUrl,
+		VehiclePositions: gtfsRealtimeVehiclePositionsUrl,
+		TripUpdates:      gtfsRealtimeTripUpdatesUrl,
+	})
 }
 
 func (bs *BackendService) GetV1TransitVehicles(ctx context.Context) ([]backend.Vehicle, error) {

@@ -17,6 +17,10 @@ func GetVehicles(staticUrl string, realtimeUrls external_gtfs.RealtimeUrls) ([]b
 		return nil, fmt.Errorf("failed to load realtime gtfs data: %v", err)
 	}
 
+	return getVehicles(*staticGtfs, *realtimeGtfs)
+}
+
+func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) ([]backend.Vehicle, error) {
 	var vehicles []backend.Vehicle
 
 	for _, vehicle := range realtimeGtfs.Vehicles {
@@ -36,8 +40,8 @@ func GetVehicles(staticUrl string, realtimeUrls external_gtfs.RealtimeUrls) ([]b
 		nextStopTime := nextStopTime(vehicle)
 		lastStopTime := stopTimeBefore(vehicle, *nextStopTime)
 
-		nextStop := stopMatchingTime(nextStopTime, *staticGtfs)
-		lastStop := stopMatchingTime(lastStopTime, *staticGtfs)
+		nextStop := stopMatchingTime(nextStopTime, staticGtfs)
+		lastStop := stopMatchingTime(lastStopTime, staticGtfs)
 
 		vehicles = append(vehicles, backend.Vehicle{
 			ID:            id,

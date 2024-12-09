@@ -11,9 +11,37 @@ import (
 	"github.com/twpayne/go-polyline"
 )
 
-func GetRoutes(staticUrl string) ([]backend.BusRoute, error) {
+func GetRoutes(staticUrl string, realtimeUrls external_gtfs.RealtimeUrls) ([]backend.BusRoute, error) {
 	staticGtfs := external_gtfs.GetStaticGtfs(staticUrl)
 
+	realtimeGtfs, err := external_gtfs.GetRealtimeGtfs(realtimeUrls)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load realtime gtfs data: %v", err)
+	}
+
+	routes, err := getRoutes(*staticGtfs)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse routes: %v", err)
+	}
+
+	vehicles, err := getVehicles(*staticGtfs, *realtimeGtfs)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load vehicles: %v", err)
+	}
+
+	routeIdVehicles := make(map[int]([]backend.Vehicle))
+	for _, vehicle := range vehicles {
+		routeIdVehicles[vehicle.RouteId] = append(routeIdVehicles[vehicle.RouteId], vehicle)
+	}
+
+	for _, route := range routes {
+		route.Vehicles = routeIdVehicles[route.ID]
+	}
+
+	return routes, nil
+}
+
+func getRoutes(staticGtfs gtfs.Static) ([]backend.BusRoute, error) {
 	var routes []backend.BusRoute
 
 	for _, route := range staticGtfs.Routes {
@@ -28,7 +56,7 @@ func GetRoutes(staticUrl string) ([]backend.BusRoute, error) {
 			Name:       route.Description,
 			Code:       route.ShortName,
 			Color:      route.Color,
-			Directions: deriveRouteDirections(route, *staticGtfs),
+			Directions: deriveRouteDirections(route, staticGtfs),
 		})
 	}
 
@@ -69,6 +97,7 @@ func convertStaticStops(stops []gtfs.Stop) []backend.BusRouteDirectionStopsItem 
 
 	for _, stop := range stops {
 		backendStops = append(backendStops, backend.BusRouteDirectionStopsItem{
+			ID:        stop.Id,
 			Name:      stop.Name,
 			Longitude: *stop.Longitude,
 			Latitude:  *stop.Latitude,
