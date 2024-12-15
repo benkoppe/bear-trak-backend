@@ -3,5 +3,6 @@ services:
     image: kortuga/bear-trak-backend:3
     container_name: bear-trak-backend
     restart: always
+    build: .
     ports:
       - "3000:3000"
