@@ -1,5 +1,7 @@
 services:
-  backend:
-    build: .
+  bear-trak-backend:
+    image: kortuga/bear-trak-backend:latest
+    container_name: bear-trak-backend
+    restart: always
     ports:
       - "3000:3000"
