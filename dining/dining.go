@@ -190,7 +190,7 @@ func hoursFromEvents(events []backend.EateryEvent) []backend.Hours {
 	var currentStart time.Time
 	var currentEnd time.Time
 
-	for _, hour := range hours[1:] {
+	for _, hour := range hours {
 		if currentStart.IsZero() {
 			currentStart = hour.Start
 			currentEnd = hour.End
