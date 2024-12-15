@@ -3,6 +3,9 @@ services:
     image: kortuga/bear-trak-backend:latest
     container_name: bear-trak-backend
     restart: always
-    build: .
+    build:
+      context: .
+      platforms:
+        - "linux/amd64"
     ports:
       - "3000:3000"
