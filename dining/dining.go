@@ -193,16 +193,10 @@ func hoursFromEvents(events []backend.EateryEvent) []backend.Hours {
 
 	// merge close start and end times
 	var merged []backend.Hours
-	var currentStart time.Time
-	var currentEnd time.Time
+	currentStart := hours[0].Start
+	currentEnd := hours[0].End
 
 	for _, hour := range hours {
-		if currentStart.IsZero() {
-			currentStart = hour.Start
-			currentEnd = hour.End
-			continue
-		}
-
 		diff := hour.Start.Sub(currentEnd)
 		if diff < 0 {
 			diff = -diff
@@ -215,18 +209,16 @@ func hoursFromEvents(events []backend.EateryEvent) []backend.Hours {
 				Start: currentStart,
 				End:   currentEnd,
 			})
-			currentStart = time.Time{}
-			currentEnd = time.Time{}
+			currentStart = hour.Start
+			currentEnd = hour.End
 		}
 	}
 
-	// append the final values if necessary
-	if !(currentStart.IsZero()) {
-		merged = append(merged, backend.Hours{
-			Start: currentStart,
-			End:   currentEnd,
-		})
-	}
+	// append the final values
+	merged = append(merged, backend.Hours{
+		Start: currentStart,
+		End:   currentEnd,
+	})
 
 	return merged
 }
