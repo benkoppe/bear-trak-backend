@@ -36,13 +36,13 @@ func loadData(filePath string) error {
 
 		data, e := io.ReadAll(file)
 		if e != nil {
-			err = fmt.Errorf("coult not read file: %v", err)
+			err = fmt.Errorf("could not read file: %v", err)
 			return
 		}
 
 		err = json.Unmarshal(data, &gyms)
 		if err != nil {
-			err = fmt.Errorf("coult not unmarshal JSON: %v", err)
+			err = fmt.Errorf("could not unmarshal JSON: %v", err)
 			return
 		}
 	})
