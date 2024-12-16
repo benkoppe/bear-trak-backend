@@ -136,6 +136,7 @@ components:
         - payMethods
         - categories
         - nextWeekEvents
+        - allWeekMenu
       properties:
         id:
           type: integer
@@ -277,6 +278,13 @@ components:
               nullable: true
               items:
                 $ref: "#/components/schemas/EateryEvent"
+        allWeekMenu:
+          type: array
+          x-stoplight:
+            id: nywsrv2ysf0x0
+          nullable: true
+          items:
+            $ref: "#/components/schemas/EateryMenuCategory"
     EateryEvent:
       title: EateryEvent
       x-stoplight:

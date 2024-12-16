@@ -639,9 +639,21 @@ func (s *Eatery) encodeFields(e *jx.Encoder) {
 		e.FieldStart("nextWeekEvents")
 		s.NextWeekEvents.Encode(e)
 	}
+	{
+		e.FieldStart("allWeekMenu")
+		if s.AllWeekMenu == nil {
+			e.Null()
+		} else {
+			e.ArrStart()
+			for _, elem := range s.AllWeekMenu {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
 }
 
-var jsonFieldsNameOfEatery = [12]string{
+var jsonFieldsNameOfEatery = [13]string{
 	0:  "id",
 	1:  "name",
 	2:  "nameShort",
@@ -654,6 +666,7 @@ var jsonFieldsNameOfEatery = [12]string{
 	9:  "payMethods",
 	10: "categories",
 	11: "nextWeekEvents",
+	12: "allWeekMenu",
 }
 
 // Decode decodes Eatery from json.
@@ -823,6 +836,31 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"nextWeekEvents\"")
 			}
+		case "allWeekMenu":
+			requiredBitSet[1] |= 1 << 4
+			if err := func() error {
+				switch tt := d.Next(); tt {
+				case jx.Null:
+					if err := d.Skip(); err != nil {
+						return err
+					}
+				default:
+					s.AllWeekMenu = make([]EateryMenuCategory, 0)
+					if err := d.Arr(func(d *jx.Decoder) error {
+						var elem EateryMenuCategory
+						if err := elem.Decode(d); err != nil {
+							return err
+						}
+						s.AllWeekMenu = append(s.AllWeekMenu, elem)
+						return nil
+					}); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"allWeekMenu\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -834,7 +872,7 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
 		0b11111111,
-		0b00001111,
+		0b00011111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

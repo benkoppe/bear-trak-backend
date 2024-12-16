@@ -241,6 +241,7 @@ type Eatery struct {
 	PayMethods     []EateryPayMethodsItem `json:"payMethods"`
 	Categories     []EateryCategoriesItem `json:"categories"`
 	NextWeekEvents EateryNextWeekEvents   `json:"nextWeekEvents"`
+	AllWeekMenu    []EateryMenuCategory   `json:"allWeekMenu"`
 }
 
 // GetID returns the value of ID.
@@ -303,6 +304,11 @@ func (s *Eatery) GetNextWeekEvents() EateryNextWeekEvents {
 	return s.NextWeekEvents
 }
 
+// GetAllWeekMenu returns the value of AllWeekMenu.
+func (s *Eatery) GetAllWeekMenu() []EateryMenuCategory {
+	return s.AllWeekMenu
+}
+
 // SetID sets the value of ID.
 func (s *Eatery) SetID(val int) {
 	s.ID = val
@@ -361,6 +367,11 @@ func (s *Eatery) SetCategories(val []EateryCategoriesItem) {
 // SetNextWeekEvents sets the value of NextWeekEvents.
 func (s *Eatery) SetNextWeekEvents(val EateryNextWeekEvents) {
 	s.NextWeekEvents = val
+}
+
+// SetAllWeekMenu sets the value of AllWeekMenu.
+func (s *Eatery) SetAllWeekMenu(val []EateryMenuCategory) {
+	s.AllWeekMenu = val
 }
 
 type EateryCategoriesItem string
