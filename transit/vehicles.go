@@ -92,8 +92,8 @@ func getStopAfter(stop gtfs.Stop, trip gtfs.ScheduledTrip) *gtfs.Stop {
 		return trip.StopTimes[i].StopSequence < trip.StopTimes[j].StopSequence
 	})
 
-	for i, stopTime := range trip.StopTimes {
-		if *stopTime.Stop == stop && (i-1) >= 0 {
+	for i, stopTime := range trip.StopTimes[:len(trip.StopTimes)-1] {
+		if *stopTime.Stop == stop {
 			return trip.StopTimes[i+1].Stop
 		}
 	}
