@@ -116,7 +116,12 @@ func (sgc stringifiedGymCapacity) toGymCapacity() (*GymCapacity, error) {
 		percentage = &parsedPercentage
 	}
 
-	lastUpdated, err := time.Parse(capacitiesTimeLayout, sgc.LastUpdated)
+	estLocation, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		return nil, fmt.Errorf("Error loading location: %v", err)
+	}
+
+	lastUpdated, err := time.ParseInLocation(capacitiesTimeLayout, sgc.LastUpdated, estLocation)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse LastUpdated: %v", err)
 	}
