@@ -1,0 +1,1106 @@
+[
+  {
+    "id": 7,
+    "name": "Amit Bhatia Libe Café",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Baked Goods",
+            "healthy": false
+          },
+          {
+            "item": "Kosher FreshTake",
+            "healthy": false
+          },
+          {
+            "item": "Refrigerated Grab-n-Go",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Pepsi Beverages",
+            "healthy": false
+          },
+          {
+            "item": "Starbucks Coffee",
+            "healthy": false
+          },
+          {
+            "item": "Tazo Tea",
+            "healthy": false
+          },
+          {
+            "item": "Hot Cocoa",
+            "healthy": false
+          },
+          {
+            "item": "Smoothies",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Atrium Café",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Hot and Cold Deli Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Soup",
+            "healthy": false
+          },
+          {
+            "item": "Chili",
+            "healthy": false
+          },
+          {
+            "item": "Salads",
+            "healthy": false
+          },
+          {
+            "item": "Baked Goods",
+            "healthy": false
+          },
+          {
+            "item": "Refrigerated Grab-n-Go",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Pepsi Beverages",
+            "healthy": false
+          },
+          {
+            "item": "Starbucks Coffee",
+            "healthy": false
+          },
+          {
+            "item": "Tazo Tea",
+            "healthy": false
+          },
+          {
+            "item": "Hot Cocoa",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Bear Necessities Grill & C-Store",
+    "allWeekMenu": [
+      {
+        "category": "Grill",
+        "items": [
+          {
+            "item": "Wings",
+            "healthy": false
+          },
+          {
+            "item": "Chicken Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Burgers",
+            "healthy": false
+          },
+          {
+            "item": "5-Star Subs",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Breakfast Menu",
+            "healthy": false
+          },
+          {
+            "item": "Pizza",
+            "healthy": false
+          },
+          {
+            "item": "Calzones",
+            "healthy": false
+          },
+          {
+            "item": "Deli and Signature Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Kosher FreshTake",
+            "healthy": false
+          },
+          {
+            "item": "Soup",
+            "healthy": false
+          },
+          {
+            "item": "Chili",
+            "healthy": false
+          },
+          {
+            "item": "Salads",
+            "healthy": false
+          },
+          {
+            "item": "Refrigerated Grab-n-Go",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Sides",
+        "items": [
+          {
+            "item": "Fries",
+            "healthy": false
+          },
+          {
+            "item": "Mozzarella Sticks",
+            "healthy": false
+          },
+          {
+            "item": "Onion Petals",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Pepsi Beverages",
+            "healthy": false
+          },
+          {
+            "item": "Starbucks Coffee",
+            "healthy": false
+          },
+          {
+            "item": "Tazo Tea",
+            "healthy": false
+          },
+          {
+            "item": "Hot Cocoa",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Big Red Barn",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Panini and Signature Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Soup",
+            "healthy": false
+          },
+          {
+            "item": "Salads",
+            "healthy": false
+          },
+          {
+            "item": "Refrigerated Grab-n-Go",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Pepsi Beverages",
+            "healthy": false
+          },
+          {
+            "item": "Hot Coffee",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Bus Stop Bagels",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Breakfast Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Bagel Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Snack Foods",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Starbucks Coffee",
+            "healthy": false
+          },
+          {
+            "item": "Tazo Tea",
+            "healthy": false
+          },
+          {
+            "item": "Pepsi Beverages",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Special",
+        "items": [
+          {
+            "item": "96oz Coffee2Go",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Café Jennie",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Baked Goods",
+            "healthy": false
+          },
+          {
+            "item": "Refrigerated Grab-n-Go",
+            "healthy": false
+          },
+          {
+            "item": "Deli and Signature Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Breakfast Menu",
+            "healthy": false
+          },
+          {
+            "item": "Bagel Sandwiches",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Hot Coffee",
+            "healthy": false
+          },
+          {
+            "item": "Javiva",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 45,
+    "name": "College of Veterinary Medicine Café",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Burgers",
+            "healthy": false
+          },
+          {
+            "item": "Pizza",
+            "healthy": false
+          },
+          {
+            "item": "Refrigerated Grab-n-Go",
+            "healthy": false
+          },
+          {
+            "item": "Breakfast Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Salads",
+            "healthy": false
+          },
+          {
+            "item": "Subs",
+            "healthy": false
+          },
+          {
+            "item": "Kosher FreshTake",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Cornell Dairy Bar",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Hot Dogs",
+            "healthy": false
+          },
+          {
+            "item": "Baked Goods",
+            "healthy": false
+          },
+          {
+            "item": "Refrigerated Grab-n-Go",
+            "healthy": false
+          },
+          {
+            "item": "Soup",
+            "healthy": false
+          },
+          {
+            "item": "Breakfast Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Deli and Signature Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Chili",
+            "healthy": false
+          },
+          {
+            "item": "Breakfast Menu",
+            "healthy": false
+          },
+          {
+            "item": "Salads",
+            "healthy": false
+          },
+          {
+            "item": "Bagel Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Snack Foods",
+            "healthy": false
+          },
+          {
+            "item": "Kosher FreshTake",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Hot Cocoa",
+            "healthy": false
+          },
+          {
+            "item": "Pepsi Beverages",
+            "healthy": false
+          },
+          {
+            "item": "Finger Lakes Specialty Coffees",
+            "healthy": false
+          },
+          {
+            "item": "Mighty Leaf Tea",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 41,
+    "name": "Crossings Café",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Smoothies",
+            "healthy": false
+          },
+          {
+            "item": "Breakfast Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Quesadillas",
+            "healthy": false
+          },
+          {
+            "item": "Salads",
+            "healthy": false
+          },
+          {
+            "item": "Panini and Signature Sandwiches",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Mighty Leaf Tea",
+            "healthy": false
+          },
+          {
+            "item": "Peet's Coffee",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "name": "Franny's",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Soup",
+            "healthy": false
+          },
+          {
+            "item": "Salads",
+            "healthy": false
+          },
+          {
+            "item": "Fries",
+            "healthy": false
+          },
+          {
+            "item": "Rice Bowls",
+            "healthy": false
+          },
+          {
+            "item": "Noodle Bowls",
+            "healthy": false
+          },
+          {
+            "item": "Banh Mi Sandwiches",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Goldie's Café",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Baked Goods",
+            "healthy": false
+          },
+          {
+            "item": "Refrigerated Grab-n-Go",
+            "healthy": false
+          },
+          {
+            "item": "Soup",
+            "healthy": false
+          },
+          {
+            "item": "Breakfast Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Deli and Signature Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Snack Foods",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Starbucks Coffee",
+            "healthy": false
+          },
+          {
+            "item": "Tazo Tea",
+            "healthy": false
+          },
+          {
+            "item": "Hot Cocoa",
+            "healthy": false
+          },
+          {
+            "item": "Frappuccino",
+            "healthy": false
+          },
+          {
+            "item": "Pepsi Beverages",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Green Dragon",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Refrigerated Grab-n-Go",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Hot Cocoa",
+            "healthy": false
+          },
+          {
+            "item": "Pepsi Beverages",
+            "healthy": false
+          },
+          {
+            "item": "Finger Lakes Specialty Coffees",
+            "healthy": false
+          },
+          {
+            "item": "Mighty Leaf Tea",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "name": "Hot Dog Cart",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Hot Dogs",
+            "healthy": false
+          },
+          {
+            "item": "Snack Foods",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Pepsi Beverages",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "name": "Ice Cream Bike",
+    "allWeekMenu": [
+      {
+        "category": "Desserts",
+        "items": [
+          {
+            "item": "Ice Cream",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "name": "Jansen's Market",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Refrigerated Grab-n-Go",
+            "healthy": false
+          },
+          {
+            "item": "Bubble Tea",
+            "healthy": false
+          },
+          {
+            "item": "Peanut Butter Sandwich Bar",
+            "healthy": false
+          },
+          {
+            "item": "Kosher FreshTake",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Starbucks Coffee",
+            "healthy": false
+          },
+          {
+            "item": "Tazo Tea",
+            "healthy": false
+          },
+          {
+            "item": "Hot Cocoa",
+            "healthy": false
+          },
+          {
+            "item": "Smoothies",
+            "healthy": false
+          },
+          {
+            "item": "Pepsi Beverages",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 42,
+    "name": "Mann Café",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Breakfast Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Burritos",
+            "healthy": false
+          },
+          {
+            "item": "Bagel Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Panini and Signature Sandwiches",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Teatulia Teas",
+            "healthy": false
+          },
+          {
+            "item": "Copper Horse Coffee",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "name": "Martha's Café",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Baked Goods",
+            "healthy": false
+          },
+          {
+            "item": "Breakfast Menu",
+            "healthy": false
+          },
+          {
+            "item": "Salads",
+            "healthy": false
+          },
+          {
+            "item": "Hot and Cold Mediterranean Bowls",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Hot Cocoa",
+            "healthy": false
+          },
+          {
+            "item": "Milk",
+            "healthy": false
+          },
+          {
+            "item": "Teatulia Teas",
+            "healthy": false
+          },
+          {
+            "item": "Copper Horse Coffee",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Mattin's Café",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Baked Goods",
+            "healthy": false
+          },
+          {
+            "item": "Refrigerated Grab-n-Go",
+            "healthy": false
+          },
+          {
+            "item": "Soup",
+            "healthy": false
+          },
+          {
+            "item": "Hot and Cold Deli Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Salads",
+            "healthy": false
+          },
+          {
+            "item": "Snack Foods",
+            "healthy": false
+          },
+          {
+            "item": "Wings",
+            "healthy": false
+          },
+          {
+            "item": "Kosher FreshTake",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Starbucks Coffee",
+            "healthy": false
+          },
+          {
+            "item": "Tazo Tea",
+            "healthy": false
+          },
+          {
+            "item": "Hot Cocoa",
+            "healthy": false
+          },
+          {
+            "item": "Pepsi Beverages",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "name": "McCormick's Restaurant",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Salads",
+            "healthy": false
+          },
+          {
+            "item": "Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Wraps",
+            "healthy": false
+          },
+          {
+            "item": "Shareables",
+            "healthy": false
+          },
+          {
+            "item": "Daily Specials",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "North Star Dining Room",
+    "allWeekMenu": [
+      {
+        "category": "Payment Options",
+        "items": [
+          {
+            "item": "Meal Plan - Debit",
+            "healthy": false
+          },
+          {
+            "item": "Meal Plan - Swipe",
+            "healthy": false
+          },
+          {
+            "item": "Cornell Card",
+            "healthy": false
+          },
+          {
+            "item": "Major Credit Cards",
+            "healthy": false
+          },
+          {
+            "item": "Mobile Payments",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 44,
+    "name": "Novick's Café",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Baked Goods",
+            "healthy": false
+          },
+          {
+            "item": "Breakfast Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Panini and Signature Sandwiches",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Hot Coffee",
+            "healthy": false
+          },
+          {
+            "item": "Peet's Coffee",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "name": "Rusty's",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Baked Goods",
+            "healthy": false
+          },
+          {
+            "item": "Refrigerated Grab-n-Go",
+            "healthy": false
+          },
+          {
+            "item": "Salads",
+            "healthy": false
+          },
+          {
+            "item": "Snack Foods",
+            "healthy": false
+          }
+        ]
+      },
+      {
+        "category": "Drinks",
+        "items": [
+          {
+            "item": "Starbucks Coffee",
+            "healthy": false
+          },
+          {
+            "item": "Tazo Tea",
+            "healthy": false
+          },
+          {
+            "item": "Hot Cocoa",
+            "healthy": false
+          },
+          {
+            "item": "Pepsi Beverages",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Straight from the Market",
+    "allWeekMenu": [
+      {
+        "category": "Food",
+        "items": [
+          {
+            "item": "Refrigerated Grab-n-Go",
+            "healthy": false
+          },
+          {
+            "item": "Soup",
+            "healthy": false
+          },
+          {
+            "item": "Salads",
+            "healthy": false
+          },
+          {
+            "item": "Snack Foods",
+            "healthy": false
+          },
+          {
+            "item": "Ice Cream",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "name": "Trillium",
+    "allWeekMenu": [
+      {
+        "category": "Food Stations",
+        "items": [
+          {
+            "item": "Mexican Food",
+            "healthy": false
+          },
+          {
+            "item": "Asian Dishes",
+            "healthy": false
+          },
+          {
+            "item": "Sumptuous Burgers",
+            "healthy": false
+          },
+          {
+            "item": "Pasta Bar",
+            "healthy": false
+          },
+          {
+            "item": "Sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Salads",
+            "healthy": false
+          },
+          {
+            "item": "Soups",
+            "healthy": false
+          },
+          {
+            "item": "Made-to-Order Omelets",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  }
+]

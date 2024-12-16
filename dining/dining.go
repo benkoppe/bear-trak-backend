@@ -11,6 +11,7 @@ import (
 
 	backend "github.com/benkoppe/bear-trak-backend/backend"
 	"github.com/benkoppe/bear-trak-backend/dining/external"
+	"github.com/benkoppe/bear-trak-backend/dining/static"
 	"github.com/benkoppe/bear-trak-backend/utils"
 	"golang.org/x/text/unicode/norm"
 )
@@ -32,6 +33,9 @@ func Get(url string) ([]backend.Eatery, error) {
 	for i, externalEatery := range externalEateries {
 		eateries[i] = convertExternal(externalEatery)
 	}
+
+	staticEateries := static.GetEateries()
+	eateries = appendStaticMenus(eateries, staticEateries)
 
 	return eateries, nil
 }
@@ -315,4 +319,57 @@ func getImagePath(external external.Eatery) string {
 	// replace all whitespace with underscores
 	imageName := re.ReplaceAllString(stripped, "_")
 	return utils.ImageNameToPath("dining", imageName)
+}
+
+func appendStaticMenus(eateries []backend.Eatery, staticEateries []static.Eatery) []backend.Eatery {
+	var converted []backend.Eatery
+
+	for _, eatery := range eateries {
+		fmt.Println(eatery.Name)
+		staticEatery := matchingStaticEatery(eatery, staticEateries)
+
+		if staticEatery == nil {
+			converted = append(converted, eatery)
+			continue
+		}
+
+		if staticEatery.AllWeekMenu != nil {
+			eatery.AllWeekMenu = convertStaticMenu(*staticEatery.AllWeekMenu)
+		}
+
+		converted = append(converted, eatery)
+	}
+
+	return converted
+}
+
+func convertStaticMenu(staticCategories []static.MenuCategory) []backend.EateryMenuCategory {
+	var categories []backend.EateryMenuCategory
+
+	for _, staticCategory := range staticCategories {
+		var items []backend.EateryMenuCategoryItemsItem
+
+		for _, staticItem := range staticCategory.Items {
+			items = append(items, backend.EateryMenuCategoryItemsItem{
+				Name:    staticItem.Item,
+				Healthy: staticItem.Healthy,
+			})
+		}
+
+		categories = append(categories, backend.EateryMenuCategory{
+			Name:  staticCategory.Category,
+			Items: items,
+		})
+	}
+
+	return categories
+}
+
+func matchingStaticEatery(eatery backend.Eatery, staticEateries []static.Eatery) *static.Eatery {
+	for _, staticEatery := range staticEateries {
+		if staticEatery.ID == eatery.ID {
+			return &staticEatery
+		}
+	}
+	return nil
 }
