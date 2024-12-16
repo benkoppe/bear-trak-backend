@@ -1,6 +1,6 @@
 services:
   bear-trak-backend:
-    image: kortuga/bear-trak-backend:latest
+    image: index.docker.io/kortuga/bear-trak-backend:latest
     container_name: bear-trak-backend
     restart: always
     build:
