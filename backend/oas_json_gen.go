@@ -2911,7 +2911,7 @@ func (s *Vehicle) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("lastStop")
-		e.Str(s.LastStop)
+		s.LastStop.Encode(e)
 	}
 	{
 		e.FieldStart("lastUpdated")
@@ -3060,9 +3060,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 		case "lastStop":
 			requiredBitSet[1] |= 1 << 2
 			if err := func() error {
-				v, err := d.Str()
-				s.LastStop = string(v)
-				if err != nil {
+				if err := s.LastStop.Decode(d); err != nil {
 					return err
 				}
 				return nil

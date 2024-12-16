@@ -696,6 +696,7 @@ components:
           type: string
           x-stoplight:
             id: f9na87dt9fa28
+          nullable: true
         lastUpdated:
           type: string
           x-stoplight:
