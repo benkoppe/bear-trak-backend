@@ -2902,12 +2902,16 @@ func (s *Vehicle) encodeFields(e *jx.Encoder) {
 		e.Str(s.DisplayStatus)
 	}
 	{
+		e.FieldStart("destination")
+		s.Destination.Encode(e)
+	}
+	{
 		e.FieldStart("nextStop")
-		e.Str(s.NextStop)
+		s.NextStop.Encode(e)
 	}
 	{
 		e.FieldStart("lastStop")
-		s.LastStop.Encode(e)
+		e.Str(s.LastStop)
 	}
 	{
 		e.FieldStart("lastUpdated")
@@ -2915,7 +2919,7 @@ func (s *Vehicle) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfVehicle = [11]string{
+var jsonFieldsNameOfVehicle = [12]string{
 	0:  "id",
 	1:  "routeId",
 	2:  "name",
@@ -2924,9 +2928,10 @@ var jsonFieldsNameOfVehicle = [11]string{
 	5:  "latitude",
 	6:  "longitude",
 	7:  "displayStatus",
-	8:  "nextStop",
-	9:  "lastStop",
-	10: "lastUpdated",
+	8:  "destination",
+	9:  "nextStop",
+	10: "lastStop",
+	11: "lastUpdated",
 }
 
 // Decode decodes Vehicle from json.
@@ -3032,12 +3037,20 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"displayStatus\"")
 			}
-		case "nextStop":
+		case "destination":
 			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
-				v, err := d.Str()
-				s.NextStop = string(v)
-				if err != nil {
+				if err := s.Destination.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"destination\"")
+			}
+		case "nextStop":
+			requiredBitSet[1] |= 1 << 1
+			if err := func() error {
+				if err := s.NextStop.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -3045,9 +3058,11 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"nextStop\"")
 			}
 		case "lastStop":
-			requiredBitSet[1] |= 1 << 1
+			requiredBitSet[1] |= 1 << 2
 			if err := func() error {
-				if err := s.LastStop.Decode(d); err != nil {
+				v, err := d.Str()
+				s.LastStop = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -3055,7 +3070,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"lastStop\"")
 			}
 		case "lastUpdated":
-			requiredBitSet[1] |= 1 << 2
+			requiredBitSet[1] |= 1 << 3
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.LastUpdated = v
@@ -3077,7 +3092,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
 		0b11111111,
-		0b00000111,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

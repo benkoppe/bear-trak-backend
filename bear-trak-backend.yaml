@@ -645,6 +645,7 @@ components:
         - latitude
         - longitude
         - displayStatus
+        - destination
         - nextStop
         - lastStop
         - lastUpdated
@@ -681,15 +682,20 @@ components:
           type: string
           x-stoplight:
             id: 60gfjaay32ggk
+        destination:
+          type: string
+          x-stoplight:
+            id: zw8pf118dz5f5
+          nullable: true
         nextStop:
           type: string
           x-stoplight:
             id: limm1msm9d5iu
+          nullable: true
         lastStop:
           type: string
           x-stoplight:
             id: f9na87dt9fa28
-          nullable: true
         lastUpdated:
           type: string
           x-stoplight:

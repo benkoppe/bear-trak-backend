@@ -1285,8 +1285,9 @@ type Vehicle struct {
 	Latitude      float64             `json:"latitude"`
 	Longitude     float64             `json:"longitude"`
 	DisplayStatus string              `json:"displayStatus"`
-	NextStop      string              `json:"nextStop"`
-	LastStop      NilString           `json:"lastStop"`
+	Destination   NilString           `json:"destination"`
+	NextStop      NilString           `json:"nextStop"`
+	LastStop      string              `json:"lastStop"`
 	LastUpdated   time.Time           `json:"lastUpdated"`
 }
 
@@ -1330,13 +1331,18 @@ func (s *Vehicle) GetDisplayStatus() string {
 	return s.DisplayStatus
 }
 
+// GetDestination returns the value of Destination.
+func (s *Vehicle) GetDestination() NilString {
+	return s.Destination
+}
+
 // GetNextStop returns the value of NextStop.
-func (s *Vehicle) GetNextStop() string {
+func (s *Vehicle) GetNextStop() NilString {
 	return s.NextStop
 }
 
 // GetLastStop returns the value of LastStop.
-func (s *Vehicle) GetLastStop() NilString {
+func (s *Vehicle) GetLastStop() string {
 	return s.LastStop
 }
 
@@ -1385,13 +1391,18 @@ func (s *Vehicle) SetDisplayStatus(val string) {
 	s.DisplayStatus = val
 }
 
+// SetDestination sets the value of Destination.
+func (s *Vehicle) SetDestination(val NilString) {
+	s.Destination = val
+}
+
 // SetNextStop sets the value of NextStop.
-func (s *Vehicle) SetNextStop(val string) {
+func (s *Vehicle) SetNextStop(val NilString) {
 	s.NextStop = val
 }
 
 // SetLastStop sets the value of LastStop.
-func (s *Vehicle) SetLastStop(val NilString) {
+func (s *Vehicle) SetLastStop(val string) {
 	s.LastStop = val
 }
 
