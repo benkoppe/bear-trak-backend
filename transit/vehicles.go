@@ -40,9 +40,10 @@ func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) ([]backend.
 			return nil, fmt.Errorf("failed to parse route ID as integer: %v", err)
 		}
 
+		lastStopName := backend.NilString{Null: true}
 		lastStop := getStop(vehicle, staticGtfs)
-		if lastStop == nil {
-			return nil, fmt.Errorf("failed to find a last stop for vehicle ID: %d", id)
+		if lastStop != nil {
+			lastStopName = backend.NewNilString(lastStop.Name)
 		}
 
 		directionId := tripId.DirectionID
@@ -53,9 +54,11 @@ func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) ([]backend.
 			directionId = trip.DirectionId
 			destination = backend.NewNilString(trip.Headsign)
 
-			nextStop := getStopAfter(*lastStop, *trip)
-			if nextStop != nil {
-				nextStopName = backend.NewNilString(nextStop.Name)
+			if lastStop != nil {
+				nextStop := getStopAfter(*lastStop, *trip)
+				if nextStop != nil {
+					nextStopName = backend.NewNilString(nextStop.Name)
+				}
 			}
 		}
 
@@ -68,7 +71,7 @@ func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) ([]backend.
 			Longitude:     float64(*vehicle.Position.Longitude),
 			Latitude:      float64(*vehicle.Position.Latitude),
 			Destination:   destination,
-			LastStop:      lastStop.Name,
+			LastStop:      lastStopName,
 			NextStop:      nextStopName,
 			DisplayStatus: capitalizeWords(vehicle.OccupancyStatus.String()),
 			LastUpdated:   *vehicle.Timestamp,
@@ -79,6 +82,10 @@ func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) ([]backend.
 }
 
 func getStop(vehicle gtfs.Vehicle, staticGtfs gtfs.Static) *gtfs.Stop {
+	if vehicle.StopID == nil {
+		return nil
+	}
+
 	for _, stop := range staticGtfs.Stops {
 		if stop.Id == *vehicle.StopID {
 			return &stop
