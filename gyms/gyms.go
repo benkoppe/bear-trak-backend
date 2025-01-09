@@ -14,7 +14,7 @@ func Get(url string) ([]backend.Gym, error) {
 	staticData := static.GetGyms()
 
 	if len(staticData) == 0 {
-		return nil, fmt.Errorf("loaded empty static gyms.")
+		return nil, fmt.Errorf("loaded empty static gyms")
 	}
 
 	externalData, err := external.FetchData(url)
