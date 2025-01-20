@@ -47,7 +47,7 @@ func getRoutes(staticGtfs gtfs.Static) ([]backend.BusRoute, error) {
 	for _, route := range staticGtfs.Routes {
 		id, err := strconv.Atoi(route.Id)
 		if err != nil {
-			return nil, fmt.Errorf("Failed to parse route ID: %v", err)
+			return nil, fmt.Errorf("failed to parse route ID: %v", err)
 		}
 
 		routes = append(routes, backend.BusRoute{
