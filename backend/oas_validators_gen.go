@@ -72,6 +72,17 @@ func (s *BusRoute) Validate() error {
 			Error: err,
 		})
 	}
+	if err := func() error {
+		if s.Polylines == nil {
+			return errors.New("nil is invalid value")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "polylines",
+			Error: err,
+		})
+	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
 	}
@@ -84,28 +95,6 @@ func (s *BusRouteDirection) Validate() error {
 	}
 
 	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.ID.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "id",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if s.Polylines == nil {
-			return errors.New("nil is invalid value")
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "polylines",
-			Error: err,
-		})
-	}
 	if err := func() error {
 		if s.Stops == nil {
 			return errors.New("nil is invalid value")
@@ -138,19 +127,6 @@ func (s *BusRouteDirection) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
-}
-
-func (s BusRouteDirectionID) Validate() error {
-	switch s {
-	case "inbound":
-		return nil
-	case "outbound":
-		return nil
-	case "unspecified":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
 }
 
 func (s *BusRouteDirectionStopsItem) Validate() error {
@@ -840,17 +816,6 @@ func (s *Vehicle) Validate() error {
 	}
 
 	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.DirectionId.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "directionId",
-			Error: err,
-		})
-	}
 	if err := func() error {
 		if err := (validate.Float{}).Validate(float64(s.Latitude)); err != nil {
 			return errors.Wrap(err, "float")

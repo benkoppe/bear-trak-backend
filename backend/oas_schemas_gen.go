@@ -22,6 +22,7 @@ type BusRoute struct {
 	Color      string              `json:"color"`
 	Directions []BusRouteDirection `json:"directions"`
 	Vehicles   []Vehicle           `json:"vehicles"`
+	Polylines  []string            `json:"polylines"`
 }
 
 // GetID returns the value of ID.
@@ -59,6 +60,11 @@ func (s *BusRoute) GetVehicles() []Vehicle {
 	return s.Vehicles
 }
 
+// GetPolylines returns the value of Polylines.
+func (s *BusRoute) GetPolylines() []string {
+	return s.Polylines
+}
+
 // SetID sets the value of ID.
 func (s *BusRoute) SetID(val int) {
 	s.ID = val
@@ -94,21 +100,20 @@ func (s *BusRoute) SetVehicles(val []Vehicle) {
 	s.Vehicles = val
 }
 
+// SetPolylines sets the value of Polylines.
+func (s *BusRoute) SetPolylines(val []string) {
+	s.Polylines = val
+}
+
 // Ref: #/components/schemas/BusRouteDirection
 type BusRouteDirection struct {
-	ID        BusRouteDirectionID          `json:"id"`
-	Polylines []string                     `json:"polylines"`
-	Stops     []BusRouteDirectionStopsItem `json:"stops"`
+	Name  string                       `json:"name"`
+	Stops []BusRouteDirectionStopsItem `json:"stops"`
 }
 
-// GetID returns the value of ID.
-func (s *BusRouteDirection) GetID() BusRouteDirectionID {
-	return s.ID
-}
-
-// GetPolylines returns the value of Polylines.
-func (s *BusRouteDirection) GetPolylines() []string {
-	return s.Polylines
+// GetName returns the value of Name.
+func (s *BusRouteDirection) GetName() string {
+	return s.Name
 }
 
 // GetStops returns the value of Stops.
@@ -116,68 +121,14 @@ func (s *BusRouteDirection) GetStops() []BusRouteDirectionStopsItem {
 	return s.Stops
 }
 
-// SetID sets the value of ID.
-func (s *BusRouteDirection) SetID(val BusRouteDirectionID) {
-	s.ID = val
-}
-
-// SetPolylines sets the value of Polylines.
-func (s *BusRouteDirection) SetPolylines(val []string) {
-	s.Polylines = val
+// SetName sets the value of Name.
+func (s *BusRouteDirection) SetName(val string) {
+	s.Name = val
 }
 
 // SetStops sets the value of Stops.
 func (s *BusRouteDirection) SetStops(val []BusRouteDirectionStopsItem) {
 	s.Stops = val
-}
-
-// Ref: #/components/schemas/BusRouteDirectionID
-type BusRouteDirectionID string
-
-const (
-	BusRouteDirectionIDInbound     BusRouteDirectionID = "inbound"
-	BusRouteDirectionIDOutbound    BusRouteDirectionID = "outbound"
-	BusRouteDirectionIDUnspecified BusRouteDirectionID = "unspecified"
-)
-
-// AllValues returns all BusRouteDirectionID values.
-func (BusRouteDirectionID) AllValues() []BusRouteDirectionID {
-	return []BusRouteDirectionID{
-		BusRouteDirectionIDInbound,
-		BusRouteDirectionIDOutbound,
-		BusRouteDirectionIDUnspecified,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s BusRouteDirectionID) MarshalText() ([]byte, error) {
-	switch s {
-	case BusRouteDirectionIDInbound:
-		return []byte(s), nil
-	case BusRouteDirectionIDOutbound:
-		return []byte(s), nil
-	case BusRouteDirectionIDUnspecified:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *BusRouteDirectionID) UnmarshalText(data []byte) error {
-	switch BusRouteDirectionID(data) {
-	case BusRouteDirectionIDInbound:
-		*s = BusRouteDirectionIDInbound
-		return nil
-	case BusRouteDirectionIDOutbound:
-		*s = BusRouteDirectionIDOutbound
-		return nil
-	case BusRouteDirectionIDUnspecified:
-		*s = BusRouteDirectionIDUnspecified
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
 }
 
 type BusRouteDirectionStopsItem struct {
@@ -1230,65 +1181,18 @@ func (o NilInt) Or(d int) int {
 	return d
 }
 
-// NewNilString returns new NilString with value set to v.
-func NewNilString(v string) NilString {
-	return NilString{
-		Value: v,
-	}
-}
-
-// NilString is nullable string.
-type NilString struct {
-	Value string
-	Null  bool
-}
-
-// SetTo sets value to v.
-func (o *NilString) SetTo(v string) {
-	o.Null = false
-	o.Value = v
-}
-
-// IsSet returns true if value is Null.
-func (o NilString) IsNull() bool { return o.Null }
-
-// SetNull sets value to null.
-func (o *NilString) SetToNull() {
-	o.Null = true
-	var v string
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o NilString) Get() (v string, ok bool) {
-	if o.Null {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o NilString) Or(d string) string {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // Ref: #/components/schemas/Vehicle
 type Vehicle struct {
-	ID            int                 `json:"id"`
-	RouteId       int                 `json:"routeId"`
-	Name          string              `json:"name"`
-	DirectionId   BusRouteDirectionID `json:"directionId"`
-	Heading       int                 `json:"heading"`
-	Latitude      float64             `json:"latitude"`
-	Longitude     float64             `json:"longitude"`
-	DisplayStatus string              `json:"displayStatus"`
-	Destination   NilString           `json:"destination"`
-	NextStop      NilString           `json:"nextStop"`
-	LastStop      NilString           `json:"lastStop"`
-	LastUpdated   time.Time           `json:"lastUpdated"`
+	ID            int       `json:"id"`
+	RouteId       int       `json:"routeId"`
+	Direction     string    `json:"direction"`
+	Heading       int       `json:"heading"`
+	Latitude      float64   `json:"latitude"`
+	Longitude     float64   `json:"longitude"`
+	DisplayStatus string    `json:"displayStatus"`
+	Destination   string    `json:"destination"`
+	LastStop      string    `json:"lastStop"`
+	LastUpdated   time.Time `json:"lastUpdated"`
 }
 
 // GetID returns the value of ID.
@@ -1301,14 +1205,9 @@ func (s *Vehicle) GetRouteId() int {
 	return s.RouteId
 }
 
-// GetName returns the value of Name.
-func (s *Vehicle) GetName() string {
-	return s.Name
-}
-
-// GetDirectionId returns the value of DirectionId.
-func (s *Vehicle) GetDirectionId() BusRouteDirectionID {
-	return s.DirectionId
+// GetDirection returns the value of Direction.
+func (s *Vehicle) GetDirection() string {
+	return s.Direction
 }
 
 // GetHeading returns the value of Heading.
@@ -1332,17 +1231,12 @@ func (s *Vehicle) GetDisplayStatus() string {
 }
 
 // GetDestination returns the value of Destination.
-func (s *Vehicle) GetDestination() NilString {
+func (s *Vehicle) GetDestination() string {
 	return s.Destination
 }
 
-// GetNextStop returns the value of NextStop.
-func (s *Vehicle) GetNextStop() NilString {
-	return s.NextStop
-}
-
 // GetLastStop returns the value of LastStop.
-func (s *Vehicle) GetLastStop() NilString {
+func (s *Vehicle) GetLastStop() string {
 	return s.LastStop
 }
 
@@ -1361,14 +1255,9 @@ func (s *Vehicle) SetRouteId(val int) {
 	s.RouteId = val
 }
 
-// SetName sets the value of Name.
-func (s *Vehicle) SetName(val string) {
-	s.Name = val
-}
-
-// SetDirectionId sets the value of DirectionId.
-func (s *Vehicle) SetDirectionId(val BusRouteDirectionID) {
-	s.DirectionId = val
+// SetDirection sets the value of Direction.
+func (s *Vehicle) SetDirection(val string) {
+	s.Direction = val
 }
 
 // SetHeading sets the value of Heading.
@@ -1392,17 +1281,12 @@ func (s *Vehicle) SetDisplayStatus(val string) {
 }
 
 // SetDestination sets the value of Destination.
-func (s *Vehicle) SetDestination(val NilString) {
+func (s *Vehicle) SetDestination(val string) {
 	s.Destination = val
 }
 
-// SetNextStop sets the value of NextStop.
-func (s *Vehicle) SetNextStop(val NilString) {
-	s.NextStop = val
-}
-
 // SetLastStop sets the value of LastStop.
-func (s *Vehicle) SetLastStop(val NilString) {
+func (s *Vehicle) SetLastStop(val string) {
 	s.LastStop = val
 }
 

@@ -58,9 +58,17 @@ func (s *BusRoute) encodeFields(e *jx.Encoder) {
 		}
 		e.ArrEnd()
 	}
+	{
+		e.FieldStart("polylines")
+		e.ArrStart()
+		for _, elem := range s.Polylines {
+			e.Str(elem)
+		}
+		e.ArrEnd()
+	}
 }
 
-var jsonFieldsNameOfBusRoute = [7]string{
+var jsonFieldsNameOfBusRoute = [8]string{
 	0: "id",
 	1: "sortIdx",
 	2: "name",
@@ -68,6 +76,7 @@ var jsonFieldsNameOfBusRoute = [7]string{
 	4: "color",
 	5: "directions",
 	6: "vehicles",
+	7: "polylines",
 }
 
 // Decode decodes BusRoute from json.
@@ -175,6 +184,26 @@ func (s *BusRoute) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"vehicles\"")
 			}
+		case "polylines":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				s.Polylines = make([]string, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
+						return err
+					}
+					s.Polylines = append(s.Polylines, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"polylines\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -185,7 +214,7 @@ func (s *BusRoute) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b01111111,
+		0b11111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -241,16 +270,8 @@ func (s *BusRouteDirection) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *BusRouteDirection) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("id")
-		s.ID.Encode(e)
-	}
-	{
-		e.FieldStart("polylines")
-		e.ArrStart()
-		for _, elem := range s.Polylines {
-			e.Str(elem)
-		}
-		e.ArrEnd()
+		e.FieldStart("name")
+		e.Str(s.Name)
 	}
 	{
 		e.FieldStart("stops")
@@ -262,10 +283,9 @@ func (s *BusRouteDirection) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfBusRouteDirection = [3]string{
-	0: "id",
-	1: "polylines",
-	2: "stops",
+var jsonFieldsNameOfBusRouteDirection = [2]string{
+	0: "name",
+	1: "stops",
 }
 
 // Decode decodes BusRouteDirection from json.
@@ -277,38 +297,20 @@ func (s *BusRouteDirection) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "id":
+		case "name":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.ID.Decode(d); err != nil {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"id\"")
-			}
-		case "polylines":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				s.Polylines = make([]string, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem string
-					v, err := d.Str()
-					elem = string(v)
-					if err != nil {
-						return err
-					}
-					s.Polylines = append(s.Polylines, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"polylines\"")
+				return errors.Wrap(err, "decode field \"name\"")
 			}
 		case "stops":
-			requiredBitSet[0] |= 1 << 2
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				s.Stops = make([]BusRouteDirectionStopsItem, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -335,7 +337,7 @@ func (s *BusRouteDirection) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -377,48 +379,6 @@ func (s *BusRouteDirection) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *BusRouteDirection) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes BusRouteDirectionID as json.
-func (s BusRouteDirectionID) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes BusRouteDirectionID from json.
-func (s *BusRouteDirectionID) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode BusRouteDirectionID to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch BusRouteDirectionID(v) {
-	case BusRouteDirectionIDInbound:
-		*s = BusRouteDirectionIDInbound
-	case BusRouteDirectionIDOutbound:
-		*s = BusRouteDirectionIDOutbound
-	case BusRouteDirectionIDUnspecified:
-		*s = BusRouteDirectionIDUnspecified
-	default:
-		*s = BusRouteDirectionID(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s BusRouteDirectionID) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *BusRouteDirectionID) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -2814,52 +2774,6 @@ func (s *NilInt) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes string as json.
-func (o NilString) Encode(e *jx.Encoder) {
-	if o.Null {
-		e.Null()
-		return
-	}
-	e.Str(string(o.Value))
-}
-
-// Decode decodes string from json.
-func (o *NilString) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode NilString to nil")
-	}
-	if d.Next() == jx.Null {
-		if err := d.Null(); err != nil {
-			return err
-		}
-
-		var v string
-		o.Value = v
-		o.Null = true
-		return nil
-	}
-	o.Null = false
-	v, err := d.Str()
-	if err != nil {
-		return err
-	}
-	o.Value = string(v)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s NilString) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *NilString) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
 // Encode implements json.Marshaler.
 func (s *Vehicle) Encode(e *jx.Encoder) {
 	e.ObjStart()
@@ -2878,12 +2792,8 @@ func (s *Vehicle) encodeFields(e *jx.Encoder) {
 		e.Int(s.RouteId)
 	}
 	{
-		e.FieldStart("name")
-		e.Str(s.Name)
-	}
-	{
-		e.FieldStart("directionId")
-		s.DirectionId.Encode(e)
+		e.FieldStart("direction")
+		e.Str(s.Direction)
 	}
 	{
 		e.FieldStart("heading")
@@ -2903,15 +2813,11 @@ func (s *Vehicle) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("destination")
-		s.Destination.Encode(e)
-	}
-	{
-		e.FieldStart("nextStop")
-		s.NextStop.Encode(e)
+		e.Str(s.Destination)
 	}
 	{
 		e.FieldStart("lastStop")
-		s.LastStop.Encode(e)
+		e.Str(s.LastStop)
 	}
 	{
 		e.FieldStart("lastUpdated")
@@ -2919,19 +2825,17 @@ func (s *Vehicle) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfVehicle = [12]string{
-	0:  "id",
-	1:  "routeId",
-	2:  "name",
-	3:  "directionId",
-	4:  "heading",
-	5:  "latitude",
-	6:  "longitude",
-	7:  "displayStatus",
-	8:  "destination",
-	9:  "nextStop",
-	10: "lastStop",
-	11: "lastUpdated",
+var jsonFieldsNameOfVehicle = [10]string{
+	0: "id",
+	1: "routeId",
+	2: "direction",
+	3: "heading",
+	4: "latitude",
+	5: "longitude",
+	6: "displayStatus",
+	7: "destination",
+	8: "lastStop",
+	9: "lastUpdated",
 }
 
 // Decode decodes Vehicle from json.
@@ -2967,30 +2871,20 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"routeId\"")
 			}
-		case "name":
+		case "direction":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				v, err := d.Str()
-				s.Name = string(v)
+				s.Direction = string(v)
 				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
-			}
-		case "directionId":
-			requiredBitSet[0] |= 1 << 3
-			if err := func() error {
-				if err := s.DirectionId.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"directionId\"")
+				return errors.Wrap(err, "decode field \"direction\"")
 			}
 		case "heading":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				v, err := d.Int()
 				s.Heading = int(v)
@@ -3002,7 +2896,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"heading\"")
 			}
 		case "latitude":
-			requiredBitSet[0] |= 1 << 5
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				v, err := d.Float64()
 				s.Latitude = float64(v)
@@ -3014,7 +2908,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"latitude\"")
 			}
 		case "longitude":
-			requiredBitSet[0] |= 1 << 6
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				v, err := d.Float64()
 				s.Longitude = float64(v)
@@ -3026,7 +2920,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"longitude\"")
 			}
 		case "displayStatus":
-			requiredBitSet[0] |= 1 << 7
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				v, err := d.Str()
 				s.DisplayStatus = string(v)
@@ -3038,29 +2932,23 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"displayStatus\"")
 			}
 		case "destination":
-			requiredBitSet[1] |= 1 << 0
+			requiredBitSet[0] |= 1 << 7
 			if err := func() error {
-				if err := s.Destination.Decode(d); err != nil {
+				v, err := d.Str()
+				s.Destination = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"destination\"")
 			}
-		case "nextStop":
-			requiredBitSet[1] |= 1 << 1
-			if err := func() error {
-				if err := s.NextStop.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"nextStop\"")
-			}
 		case "lastStop":
-			requiredBitSet[1] |= 1 << 2
+			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
-				if err := s.LastStop.Decode(d); err != nil {
+				v, err := d.Str()
+				s.LastStop = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -3068,7 +2956,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"lastStop\"")
 			}
 		case "lastUpdated":
-			requiredBitSet[1] |= 1 << 3
+			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.LastUpdated = v
@@ -3090,7 +2978,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
 		0b11111111,
-		0b00001111,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

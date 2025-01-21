@@ -531,6 +531,7 @@ components:
         - color
         - directions
         - vehicles
+        - polylines
       properties:
         id:
           type: integer
@@ -564,6 +565,14 @@ components:
             id: 2fivt02tij82b
           items:
             $ref: "#/components/schemas/Vehicle"
+        polylines:
+          type: array
+          x-stoplight:
+            id: apf2oz09wv0hj
+          items:
+            x-stoplight:
+              id: k4qbqd38w9rvo
+            type: string
     BusRouteDirection:
       title: BusRouteDirection
       x-stoplight:
@@ -572,20 +581,13 @@ components:
       x-tags:
         - transit
       required:
-        - id
-        - polylines
+        - name
         - stops
       properties:
-        id:
-          $ref: "#/components/schemas/BusRouteDirectionID"
-        polylines:
-          type: array
+        name:
+          type: string
           x-stoplight:
-            id: 5mzhkyrav5a9h
-          items:
-            x-stoplight:
-              id: k8yafv893ob0y
-            type: string
+            id: yonpoy41jcheq
         stops:
           type: array
           x-stoplight:
@@ -618,17 +620,6 @@ components:
                 x-stoplight:
                   id: 8ex75a6rjzhoe
                 format: double
-    BusRouteDirectionID:
-      title: BusRouteDirectionID
-      x-stoplight:
-        id: qmc7awv5sjbun
-      type: string
-      enum:
-        - inbound
-        - outbound
-        - unspecified
-      x-tags:
-        - transit
     Vehicle:
       title: Vehicle
       x-stoplight:
@@ -639,14 +630,12 @@ components:
       required:
         - id
         - routeId
-        - name
-        - directionId
+        - direction
         - heading
         - latitude
         - longitude
         - displayStatus
         - destination
-        - nextStop
         - lastStop
         - lastUpdated
       properties:
@@ -658,12 +647,10 @@ components:
           type: integer
           x-stoplight:
             id: 6m19093vr3ruc
-        name:
+        direction:
           type: string
           x-stoplight:
-            id: 567j14181oyv2
-        directionId:
-          $ref: "#/components/schemas/BusRouteDirectionID"
+            id: 0gq4ujpx2tumr
         heading:
           type: integer
           x-stoplight:
@@ -686,17 +673,10 @@ components:
           type: string
           x-stoplight:
             id: zw8pf118dz5f5
-          nullable: true
-        nextStop:
-          type: string
-          x-stoplight:
-            id: limm1msm9d5iu
-          nullable: true
         lastStop:
           type: string
           x-stoplight:
             id: f9na87dt9fa28
-          nullable: true
         lastUpdated:
           type: string
           x-stoplight:
