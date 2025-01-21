@@ -7,7 +7,6 @@ import (
 	"github.com/benkoppe/bear-trak-backend/dining"
 	"github.com/benkoppe/bear-trak-backend/gyms"
 	"github.com/benkoppe/bear-trak-backend/transit"
-	"github.com/benkoppe/bear-trak-backend/transit/external_gtfs"
 )
 
 type BackendService struct{}
@@ -21,19 +20,11 @@ func (bs *BackendService) GetV1Gyms(ctx context.Context) ([]backend.Gym, error) 
 }
 
 func (bs *BackendService) GetV1TransitRoutes(ctx context.Context) ([]backend.BusRoute, error) {
-	return transit.GetRoutes(gtfsStaticUrl, external_gtfs.RealtimeUrls{
-		Alerts:           gtfsRealtimeAlertsUrl,
-		VehiclePositions: gtfsRealtimeVehiclePositionsUrl,
-		TripUpdates:      gtfsRealtimeTripUpdatesUrl,
-	})
+	return transit.GetRoutes(availtecUrl, gtfsStaticUrl)
 }
 
 func (bs *BackendService) GetV1TransitVehicles(ctx context.Context) ([]backend.Vehicle, error) {
-	return transit.GetVehicles(gtfsStaticUrl, external_gtfs.RealtimeUrls{
-		Alerts:           gtfsRealtimeAlertsUrl,
-		VehiclePositions: gtfsRealtimeVehiclePositionsUrl,
-		TripUpdates:      gtfsRealtimeTripUpdatesUrl,
-	})
+	return transit.GetVehicles(availtecUrl)
 }
 
 func (bs *BackendService) NewError(ctx context.Context, err error) *backend.ErrorStatusCode {

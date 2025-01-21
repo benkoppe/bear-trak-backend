@@ -6,25 +6,26 @@ import (
 
 	"github.com/amit7itz/goset"
 	backend "github.com/benkoppe/bear-trak-backend/backend"
+	availtec "github.com/benkoppe/bear-trak-backend/transit/external_availtec"
 	"github.com/benkoppe/bear-trak-backend/transit/external_gtfs"
 	"github.com/jamespfennell/gtfs"
 	"github.com/twpayne/go-polyline"
 )
 
-func GetRoutes(staticUrl string, realtimeUrls external_gtfs.RealtimeUrls) ([]backend.BusRoute, error) {
+func GetRoutes(availtecUrl string, staticUrl string) ([]backend.BusRoute, error) {
 	staticGtfs := external_gtfs.GetStaticGtfs(staticUrl)
 
-	realtimeGtfs, err := external_gtfs.GetRealtimeGtfs(realtimeUrls)
+	availtecRoutes, err := availtec.FetchRoutes(availtecUrl)
 	if err != nil {
-		return nil, fmt.Errorf("failed to load realtime gtfs data: %v", err)
+		return nil, fmt.Errorf("failed to load availtec routes: %v", err)
 	}
 
-	routes, err := getRoutes(*staticGtfs)
+	routes, err := getRoutes(availtecRoutes, *staticGtfs)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse routes: %v", err)
 	}
 
-	vehicles, err := getVehicles(*staticGtfs, *realtimeGtfs)
+	vehicles, err := getVehiclesFromRoutes(availtecRoutes)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load vehicles: %v", err)
 	}
@@ -41,54 +42,59 @@ func GetRoutes(staticUrl string, realtimeUrls external_gtfs.RealtimeUrls) ([]bac
 	return routes, nil
 }
 
-func getRoutes(staticGtfs gtfs.Static) ([]backend.BusRoute, error) {
+func getRoutes(availtecRoutes []availtec.Route, staticGtfs gtfs.Static) ([]backend.BusRoute, error) {
 	var routes []backend.BusRoute
 
-	for _, route := range staticGtfs.Routes {
-		id, err := strconv.Atoi(route.Id)
-		if err != nil {
-			return nil, fmt.Errorf("failed to parse route ID: %v", err)
+	for _, route := range availtecRoutes {
+		var gtfsRoute *gtfs.Route
+		for _, gtfsRouteOption := range staticGtfs.Routes {
+			if gtfsRouteOption.Id == strconv.Itoa(route.RouteId) {
+				gtfsRoute = &gtfsRouteOption
+				break
+			}
+		}
+
+		if gtfsRoute == nil {
+			return nil, fmt.Errorf("failed to find GTFS route for route ID: %v", route.RouteId)
+		}
+
+		tripsMap := getDirectionTrips(*gtfsRoute, staticGtfs)
+
+		var polylines []string
+		var directions []backend.BusRouteDirection
+
+		for directionId, trips := range tripsMap {
+			polylines = append(polylines, getPolylines(trips)...)
+			stops := getStops(trips)
+
+			directions = append(directions, backend.BusRouteDirection{
+				Name:  convertStaticDirectionId(directionId),
+				Stops: convertStaticStops(stops),
+			})
 		}
 
 		routes = append(routes, backend.BusRoute{
-			ID:         id,
-			SortIdx:    int(*route.SortOrder),
-			Name:       route.Description,
-			Code:       route.ShortName,
+			ID:         route.RouteId,
+			SortIdx:    route.SortOrder,
+			Name:       route.GoogleDescription,
+			Code:       route.RouteAbbreviation,
 			Color:      route.Color,
-			Directions: deriveRouteDirections(route, staticGtfs),
+			Directions: directions,
+			Polylines:  polylines,
 		})
 	}
 
 	return routes, nil
 }
 
-func deriveRouteDirections(route gtfs.Route, staticGtfs gtfs.Static) []backend.BusRouteDirection {
-	directionTrips := getDirectionTrips(route, staticGtfs)
-
-	var directions []backend.BusRouteDirection
-
-	for directionId, trips := range directionTrips {
-		stops := getStops(trips)
-		polylines := getPolylines(trips)
-		directions = append(directions, backend.BusRouteDirection{
-			ID:        convertStaticDirectionId(directionId),
-			Polylines: polylines,
-			Stops:     convertStaticStops(stops),
-		})
-	}
-
-	return directions
-}
-
-func convertStaticDirectionId(id gtfs.DirectionID) backend.BusRouteDirectionID {
+func convertStaticDirectionId(id gtfs.DirectionID) string {
 	switch id {
 	case gtfs.DirectionID_True:
-		return backend.BusRouteDirectionIDOutbound
+		return "O"
 	case gtfs.DirectionID_False:
-		return backend.BusRouteDirectionIDInbound
+		return "I"
 	default:
-		return backend.BusRouteDirectionIDUnspecified
+		return "?"
 	}
 }
 
