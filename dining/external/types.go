@@ -65,17 +65,17 @@ type MenuCategory struct {
 type MenuItem struct {
 	Item    string `json:"item"`
 	Healthy bool   `json:"healthy"`
-	SortIdx int    `json:"sortIdx`
+	SortIdx int    `json:"sortIdx"`
 }
 
 type PayMethod struct {
 	Descr      string `json:"descr"`
-	DescrShort string `json:"descrshort`
+	DescrShort string `json:"descrshort"`
 }
 
 type EateryType struct {
 	Descr      string `json:"descr"`
-	DescSshort string `json:"descrshort`
+	DescSshort string `json:"descrshort"`
 }
 
 type DiningCuisine struct {
