@@ -65,7 +65,8 @@ func findCapacityData(static static.Gym, externalData []external.GymCapacity) *e
 }
 
 func createFutureHours(staticHours static.WeekHours) []backend.Hours {
-	now := time.Now()
+	est := utils.LoadEST()
+	now := time.Now().In(est)
 	var futureHours []backend.Hours
 
 	for i := 0; i < 7; i++ {

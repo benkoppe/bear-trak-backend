@@ -26,7 +26,8 @@ func (ut *UnixTime) UnmarshalJSON(data []byte) error {
 }
 
 func (ut UnixTime) ToTime() time.Time {
-	return time.Time(ut)
+	est := LoadEST()
+	return time.Time(ut).In(est)
 }
 
 // Defines a MicrosoftTime
@@ -92,5 +93,6 @@ func (mt *MicrosoftTime) UnmarshalJSON(data []byte) error {
 }
 
 func (mt MicrosoftTime) ToTime() time.Time {
-	return time.Time(mt)
+	est := LoadEST()
+	return time.Time(mt).In(est)
 }

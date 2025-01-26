@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/benkoppe/bear-trak-backend/utils"
 )
 
 type Gym struct {
@@ -105,9 +107,6 @@ func (t TimeString) ToDate(date time.Time) (time.Time, error) {
 	if err != nil {
 		return time.Time{}, err
 	}
-	estLocation, err := time.LoadLocation("America/New_York")
-	if err != nil {
-		return time.Time{}, err
-	}
-	return time.Date(date.Year(), date.Month(), date.Day(), parsed.Hour, parsed.Minute, 0, 0, estLocation), nil
+	est := utils.LoadEST()
+	return time.Date(date.Year(), date.Month(), date.Day(), parsed.Hour, parsed.Minute, 0, 0, est), nil
 }

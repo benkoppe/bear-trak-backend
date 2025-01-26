@@ -171,17 +171,13 @@ func convertExternalCategories(external external.Eatery) []backend.EateryCategor
 func hoursFromEvents(events []backend.EateryEvent) []backend.Hours {
 	var hours []backend.Hours
 
-	estLocation, err := time.LoadLocation("America/New_York")
-	if err != nil {
-		fmt.Println("Failed to load est time.")
-		return hours
-	}
+	est := utils.LoadEST()
 
 	// convert to hours objects
 	for _, event := range events {
 		hours = append(hours, backend.Hours{
-			Start: event.Start.In(estLocation),
-			End:   event.End.In(estLocation),
+			Start: event.Start.In(est),
+			End:   event.End.In(est),
 		})
 	}
 
@@ -228,7 +224,8 @@ func hoursFromEvents(events []backend.EateryEvent) []backend.Hours {
 }
 
 func selectNextWeekEvents(events []backend.EateryEvent) backend.EateryNextWeekEvents {
-	now := time.Now()
+	est := utils.LoadEST()
+	now := time.Now().In(est)
 	weekStart := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 	weekEnd := weekStart.AddDate(0, 0, 7)
 

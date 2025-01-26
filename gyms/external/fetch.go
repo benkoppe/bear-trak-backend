@@ -9,6 +9,8 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
+
+	"github.com/benkoppe/bear-trak-backend/utils"
 )
 
 type stringifiedGymCapacity struct {
@@ -116,12 +118,8 @@ func (sgc stringifiedGymCapacity) toGymCapacity() (*GymCapacity, error) {
 		percentage = &parsedPercentage
 	}
 
-	estLocation, err := time.LoadLocation("America/New_York")
-	if err != nil {
-		return nil, fmt.Errorf("Error loading location: %v", err)
-	}
-
-	lastUpdated, err := time.ParseInLocation(capacitiesTimeLayout, sgc.LastUpdated, estLocation)
+	est := utils.LoadEST()
+	lastUpdated, err := time.ParseInLocation(capacitiesTimeLayout, sgc.LastUpdated, est)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse LastUpdated: %v", err)
 	}
