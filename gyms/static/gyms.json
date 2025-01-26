@@ -9,75 +9,67 @@
       "longitude": -76.47735203967999
     },
     "facilities": [
-        {
-            "type": "pool",
-            "name": "Swimming Pool"
-        },
-        {
-            "type": "bowling",
-            "name": "Bowling"
-        },
-        {
-            "type": "basketball",
-            "name": "HNH Court 1"
-        },
-        {
-            "type": "basketball",
-            "name": "HNH Court 2"
-        }
+      {
+        "type": "pool",
+        "name": "Swimming Pool"
+      },
+      {
+        "type": "bowling",
+        "name": "Bowling"
+      },
+      {
+        "type": "basketball",
+        "name": "HNH Court 1"
+      },
+      {
+        "type": "basketball",
+        "name": "HNH Court 2"
+      }
     ],
     "equipment": [
-        {
-            "type": "treadmills",
-            "items": []
-        },
-        {
-            "type": "ellipticals",
-            "items": []
-        },
-        {
-            "type": "rowing",
-            "items": []
-        },
-        {
-            "type": "bike",
-            "items": []
-        },
-        {
-            "type": "lifting",
-            "items": [
-                "Squat Rack",
-                "Bench Press"
-            ]
-        },
-        {
-            "type": "machines",
-            "items": [
-                "Cable Crossover",
-                "Pulldown",
-                "Chin/Dip Assist",
-                "Rear Delt/Pec Fly",
-                "Chest Press",
-                "Shoulder Press",
-                "Rotary Torso",
-                "Back Extension",
-                "Leg Extension",
-                "Leg Curl",
-                "Leg Press",
-                "Glute Extension",
-                "Inner/Outer Thigh",
-                "Calf Press"
-            ]
-        },
-        {
-            "type": "free weights",
-            "items": [
-                "Dumbbells",
-                "Barbells",
-                "EZ Curl Bar",
-                "Preacher Curl"
-            ]
-        }
+      {
+        "type": "treadmills",
+        "items": []
+      },
+      {
+        "type": "ellipticals",
+        "items": []
+      },
+      {
+        "type": "rowing",
+        "items": []
+      },
+      {
+        "type": "bike",
+        "items": []
+      },
+      {
+        "type": "lifting",
+        "items": ["Squat Rack", "Bench Press"]
+      },
+      {
+        "type": "machines",
+        "items": [
+          "Cable Crossover",
+          "Pulldown",
+          "Chin/Dip Assist",
+          "Rear Delt/Pec Fly",
+          "Chest Press",
+          "Shoulder Press",
+          "Rotary Torso",
+          "Back Extension",
+          "Leg Extension",
+          "Leg Curl",
+          "Leg Press",
+          "Glute Extension",
+          "Inner/Outer Thigh",
+          "Calf Press"
+        ]
+      },
+      {
+        "type": "free weights",
+        "items": ["Dumbbells", "Barbells", "EZ Curl Bar", "Preacher Curl"]
+      }
     ],
     "weekHours": {
       "monday": [
@@ -134,54 +126,47 @@
       "longitude": -76.48799296950735
     },
     "facilities": [
-        {
-            "type": "basketball",
-            "name": "Noyes Court"
-        }
+      {
+        "type": "basketball",
+        "name": "Noyes Court"
+      }
     ],
     "equipment": [
-        {
-            "type": "treadmills",
-            "items": []
-        },
-        {
-            "type": "ellipticals",
-            "items": []
-        },
-        {
-            "type": "rowing",
-            "items": []
-        },
-        {
-            "type": "bike",
-            "items": []
-        },
-        {
-            "type": "lifting",
-            "items": [
-                "Squat Rack",
-                "Bench Press"
-            ]
-        },
-        {
-            "type": "machines",
-            "items": [
-                "Cable Crossover",
-                "Pulldown",
-                "Chin/Dip Assist",
-                "Leg Extension",
-                "Leg Curl",
-                "Leg Press"
-            ]
-        },
-        {
-            "type": "free weights",
-            "items": [
-                "Dumbbells",
-                "Barbells",
-                "Glute Ham Raise"
-            ]
-        }
+      {
+        "type": "treadmills",
+        "items": []
+      },
+      {
+        "type": "ellipticals",
+        "items": []
+      },
+      {
+        "type": "rowing",
+        "items": []
+      },
+      {
+        "type": "bike",
+        "items": []
+      },
+      {
+        "type": "lifting",
+        "items": ["Squat Rack", "Bench Press"]
+      },
+      {
+        "type": "machines",
+        "items": [
+          "Cable Crossover",
+          "Pulldown",
+          "Chin/Dip Assist",
+          "Leg Extension",
+          "Leg Curl",
+          "Leg Press"
+        ]
+      },
+      {
+        "type": "free weights",
+        "items": ["Dumbbells", "Barbells", "Glute Ham Raise"]
+      }
     ],
     "weekHours": {
       "monday": [
@@ -238,44 +223,35 @@
       "longitude": -76.47916897012868
     },
     "facilities": [
-        {
-            "type": "pool",
-            "name": "Swimming Pool"
-        }
+      {
+        "type": "pool",
+        "name": "Swimming Pool"
+      }
     ],
     "equipment": [
-        {
-            "type": "lifting",
-            "items": [
-                "Squat Rack",
-                "Power Rack",
-                "Bench Press"
-            ]
-        },
-        {
-            "type": "machines",
-            "items": [
-                "Cable Crossover",
-                "Pulldown",
-                "Seated Row",
-                "Lever Row",
-                "Chin/Dip Assist",
-                "Tricep Pushdown",
-                "Rear Delt/Pec Fly",
-                "Leg Extension",
-                "Leg Curl",
-                "Leg Press"
-            ]
-        },
-        {
-            "type": "free weights",
-            "items": [
-                "Dumbbells",
-                "Barbells",
-                "Preacher Curl",
-                "Glute Ham Raise"
-            ]
-        }
+      {
+        "type": "lifting",
+        "items": ["Squat Rack", "Power Rack", "Bench Press"]
+      },
+      {
+        "type": "machines",
+        "items": [
+          "Cable Crossover",
+          "Pulldown",
+          "Seated Row",
+          "Lever Row",
+          "Chin/Dip Assist",
+          "Tricep Pushdown",
+          "Rear Delt/Pec Fly",
+          "Leg Extension",
+          "Leg Curl",
+          "Leg Press"
+        ]
+      },
+      {
+        "type": "free weights",
+        "items": ["Dumbbells", "Barbells", "Preacher Curl", "Glute Ham Raise"]
+      }
     ],
     "weekHours": {
       "monday": [
@@ -349,50 +325,46 @@
     },
     "facilities": [],
     "equipment": [
-        {
-            "type": "treadmills",
-            "items": []
-        },
-        {
-            "type": "ellipticals",
-            "items": []
-        },
-        {
-            "type": "rowing",
-            "items": []
-        },
-        {
-            "type": "bike",
-            "items": []
-        },
-        {
-            "type": "machines",
-            "items": [
-                "Pulldown",
-                "Seated Row",
-                "Tricep Pushdown",
-                "Chin/Dip Assist",
-                "Rear Delt/Pec Fly",
-                "Chest Press",
-                "Leg Extension",
-                "Leg Curl",
-                "Leg Press",
-                "Inner/Outer Thigh",
-                "360 Cable Multi-Trainer"
-            ]
-        },
-        {
-            "type": "free weights",
-            "items": [
-                "Dumbbells"
-            ]
-        },
-        {
-            "type": "misc",
-            "items": [
-                "Rope Trainer"
-            ]
-        }
+      {
+        "type": "treadmills",
+        "items": []
+      },
+      {
+        "type": "ellipticals",
+        "items": []
+      },
+      {
+        "type": "rowing",
+        "items": []
+      },
+      {
+        "type": "bike",
+        "items": []
+      },
+      {
+        "type": "machines",
+        "items": [
+          "Pulldown",
+          "Seated Row",
+          "Tricep Pushdown",
+          "Chin/Dip Assist",
+          "Rear Delt/Pec Fly",
+          "Chest Press",
+          "Leg Extension",
+          "Leg Curl",
+          "Leg Press",
+          "Inner/Outer Thigh",
+          "360 Cable Multi-Trainer"
+        ]
+      },
+      {
+        "type": "free weights",
+        "items": ["Dumbbells"]
+      },
+      {
+        "type": "misc",
+        "items": ["Rope Trainer"]
+      }
     ],
     "weekHours": {
       "monday": [
@@ -450,54 +422,45 @@
     },
     "facilities": [],
     "equipment": [
-        {
-            "type": "treadmills",
-            "items": []
-        },
-        {
-            "type": "ellipticals",
-            "items": []
-        },
-        {
-            "type": "rowing",
-            "items": []
-        },
-        {
-            "type": "bike",
-            "items": []
-        },
-        {
-            "type": "lifting",
-            "items": [
-                "Squat Rack"
-            ]
-        },
-        {
-            "type": "machines",
-            "items": [
-                "Low Row",
-                "Chest Press",
-                "Pulldown",
-                "Leg Extension",
-                "Leg Curl",
-                "Leg Press"
-            ]
-        },
-        {
-            "type": "free weights",
-            "items": [
-                "Dumbbells",
-                "Barbells",
-                "EZ Curl Bar",
-                "Glute Ham Raise"
-            ]
-        },
-        {
-            "type": "misc",
-            "items": [
-                "Climb Mill"
-            ]
-        }
+      {
+        "type": "treadmills",
+        "items": []
+      },
+      {
+        "type": "ellipticals",
+        "items": []
+      },
+      {
+        "type": "rowing",
+        "items": []
+      },
+      {
+        "type": "bike",
+        "items": []
+      },
+      {
+        "type": "lifting",
+        "items": ["Squat Rack"]
+      },
+      {
+        "type": "machines",
+        "items": [
+          "Low Row",
+          "Chest Press",
+          "Pulldown",
+          "Leg Extension",
+          "Leg Curl",
+          "Leg Press"
+        ]
+      },
+      {
+        "type": "free weights",
+        "items": ["Dumbbells", "Barbells", "EZ Curl Bar", "Glute Ham Raise"]
+      },
+      {
+        "type": "misc",
+        "items": ["Climb Mill"]
+      }
     ],
     "weekHours": {
       "monday": [
