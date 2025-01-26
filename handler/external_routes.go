@@ -3,7 +3,7 @@ package handler
 const (
 	eateriesUrl = "https://now.dining.cornell.edu/api/1.0/dining/eateries.json"
 
-	gymCapacitiesUrl = "https://connect2concepts.com/connect2/?type=bar&key=355de24d-d0e4-4262-ae97-bc0c78b92839&loc_status=false"
+	gymCapacitiesUrl = "https://goboardapi.azurewebsites.net/api/FacilityCount/GetCountsByAccount?AccountAPIKey=355de24d-d0e4-4262-ae97-bc0c78b92839"
 
 	availtecUrl = "https://realtimetcatbus.availtec.com/InfoPoint/rest"
 

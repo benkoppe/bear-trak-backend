@@ -31,7 +31,7 @@ func Get(url string) ([]backend.Gym, error) {
 
 		capacityData := findCapacityData(staticGym, externalData)
 		if capacityData != nil {
-			capacity := convertExternalGymCapacity(*capacityData)
+			capacity := convertExternalGymCapacity(staticGym, *capacityData)
 			gym.Capacity = backend.NewNilGymCapacity(capacity)
 		}
 
@@ -55,9 +55,9 @@ func convertStatic(static static.Gym) backend.Gym {
 	}
 }
 
-func findCapacityData(static static.Gym, externalData []external.GymCapacity) *external.GymCapacity {
+func findCapacityData(static static.Gym, externalData []external.Gym) *external.Gym {
 	for _, capacityData := range externalData {
-		if capacityData.Name == static.ScrapeName {
+		if capacityData.LocationName == static.ScrapeName {
 			return &capacityData
 		}
 	}
@@ -156,18 +156,18 @@ func convertStaticGymCategoryType(category static.Equipment) backend.GymEquipmen
 	}
 }
 
-func convertExternalGymCapacity(capacity external.GymCapacity) backend.GymCapacity {
-	var percentage backend.NilInt
+func convertExternalGymCapacity(gym static.Gym, capacity external.Gym) backend.GymCapacity {
+	percentage := backend.NewNilInt(capacity.GetPercentage())
 
-	if capacity.Percentage != nil {
-		percentage = backend.NewNilInt(int(*capacity.Percentage))
-	} else {
+	// if gym is closed, set percentage to null
+	est := utils.LoadEST()
+	if !gym.WeekHours.IsOpen(time.Now().In(est)) {
 		percentage = backend.NilInt{Null: true}
 	}
 
 	return backend.GymCapacity{
-		Count:       int(capacity.Count),
+		Total:       capacity.TotalCapacity,
 		Percentage:  percentage,
-		LastUpdated: capacity.LastUpdated,
+		LastUpdated: capacity.LastUpdatedDateAndTime.ToTime(),
 	}
 }

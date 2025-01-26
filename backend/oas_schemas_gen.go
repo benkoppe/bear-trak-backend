@@ -842,14 +842,14 @@ func (s *Gym) SetCapacity(val NilGymCapacity) {
 }
 
 type GymCapacity struct {
-	Count       int       `json:"count"`
+	Total       int       `json:"total"`
 	Percentage  NilInt    `json:"percentage"`
 	LastUpdated time.Time `json:"lastUpdated"`
 }
 
-// GetCount returns the value of Count.
-func (s *GymCapacity) GetCount() int {
-	return s.Count
+// GetTotal returns the value of Total.
+func (s *GymCapacity) GetTotal() int {
+	return s.Total
 }
 
 // GetPercentage returns the value of Percentage.
@@ -862,9 +862,9 @@ func (s *GymCapacity) GetLastUpdated() time.Time {
 	return s.LastUpdated
 }
 
-// SetCount sets the value of Count.
-func (s *GymCapacity) SetCount(val int) {
-	s.Count = val
+// SetTotal sets the value of Total.
+func (s *GymCapacity) SetTotal(val int) {
+	s.Total = val
 }
 
 // SetPercentage sets the value of Percentage.

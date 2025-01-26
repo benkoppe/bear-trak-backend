@@ -2123,8 +2123,8 @@ func (s *GymCapacity) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *GymCapacity) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("count")
-		e.Int(s.Count)
+		e.FieldStart("total")
+		e.Int(s.Total)
 	}
 	{
 		e.FieldStart("percentage")
@@ -2137,7 +2137,7 @@ func (s *GymCapacity) encodeFields(e *jx.Encoder) {
 }
 
 var jsonFieldsNameOfGymCapacity = [3]string{
-	0: "count",
+	0: "total",
 	1: "percentage",
 	2: "lastUpdated",
 }
@@ -2151,17 +2151,17 @@ func (s *GymCapacity) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "count":
+		case "total":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
 				v, err := d.Int()
-				s.Count = int(v)
+				s.Total = int(v)
 				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"count\"")
+				return errors.Wrap(err, "decode field \"total\"")
 			}
 		case "percentage":
 			requiredBitSet[0] |= 1 << 1

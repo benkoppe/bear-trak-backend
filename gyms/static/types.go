@@ -73,6 +73,27 @@ func (w WeekHours) GetHours(date time.Time) []Hours {
 	}
 }
 
+func (w WeekHours) IsOpen(date time.Time) bool {
+	dayHours := w.GetHours(date)
+
+	for _, hours := range dayHours {
+		open, err := hours.Open.ToDate(date)
+		if err != nil {
+			continue
+		}
+		close, err := hours.Close.ToDate(date)
+		if err != nil {
+			continue
+		}
+
+		if open.Before(date) && date.Before(close) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func (t TimeString) parseTime() (struct {
 	Hour   int
 	Minute int

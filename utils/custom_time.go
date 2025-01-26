@@ -96,3 +96,51 @@ func (mt MicrosoftTime) ToTime() time.Time {
 	est := LoadEST()
 	return time.Time(mt).In(est)
 }
+
+// Defines an EST time
+// this is encoded in the gyms capacities API as
+// a typical time string, but missing the EST timezone,
+// as in: "2025-01-25T23:39:21.53" for 01/25/2025 11:39 PM
+
+type ESTTime time.Time
+
+func (et *ESTTime) UnmarshalJSON(data []byte) error {
+	// Remove the quotes from the JSON string
+	s := string(data)
+	if len(s) < 2 {
+		return fmt.Errorf("invalid time format")
+	}
+	s = s[1 : len(s)-1] // Trim the surrounding quotes
+
+	// Split the time string into main part and fractional seconds
+	parts := strings.Split(s, ".")
+	if len(parts) == 2 {
+		fractional := parts[1]
+		// Pad the fractional part to ensure three digits
+		if len(fractional) < 3 {
+			fractional = fractional + strings.Repeat("0", 3-len(fractional))
+		} else if len(fractional) > 3 {
+			fractional = fractional[:3]
+		}
+		s = parts[0] + "." + fractional
+	} else {
+		// If no fractional part, add ".000"
+		s = s + ".000"
+	}
+
+	layout := "2006-01-02T15:04:05.000" // layout matches 2025-01-25T23:39:21.53
+	est := LoadEST()
+
+	t, err := time.ParseInLocation(layout, s, est)
+	if err != nil {
+		return err
+	}
+
+	*et = ESTTime(t)
+	return nil
+}
+
+func (et ESTTime) ToTime() time.Time {
+	est := LoadEST()
+	return time.Time(et).In(est)
+}
