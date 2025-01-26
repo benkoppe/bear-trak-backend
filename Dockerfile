@@ -1,5 +1,5 @@
 # Use a Go runtime as a parent image
-FROM golang:1.23
+FROM golang:latest
 
 WORKDIR /usr/src/app
 
