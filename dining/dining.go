@@ -325,7 +325,6 @@ func appendStaticMenus(eateries []backend.Eatery, staticEateries []static.Eatery
 	var converted []backend.Eatery
 
 	for _, eatery := range eateries {
-		fmt.Println(eatery.Name)
 		staticEatery := matchingStaticEatery(eatery, staticEateries)
 
 		if staticEatery == nil {
