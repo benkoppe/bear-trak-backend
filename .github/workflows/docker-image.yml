@@ -26,7 +26,7 @@ jobs:
         uses: docker/setup-compose-action@v1.0.0
 
       - name: Build Image
-        run: docker-compose build
+        run: docker compose build
 
       - name: Push Image
-        run: docker-compose push
+        run: docker compose push
