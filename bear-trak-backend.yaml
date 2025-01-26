@@ -424,12 +424,12 @@ components:
           x-stoplight:
             id: 8wihfhwf8dwhj
           required:
-            - count
+            - total
             - percentage
             - lastUpdated
           nullable: true
           properties:
-            count:
+            total:
               type: integer
               x-stoplight:
                 id: zsa4f78a85o37
