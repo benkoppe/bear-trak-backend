@@ -19,11 +19,11 @@ import (
 func Get(url string) ([]backend.Eatery, error) {
 	externalResponse, err := external.FetchData(url)
 	if err != nil {
-		return nil, fmt.Errorf("Error fetching external data: %w", err)
+		return nil, fmt.Errorf("error fetching external data: %w", err)
 	}
 
 	if externalResponse == nil {
-		return nil, fmt.Errorf("Fetched nil external data.")
+		return nil, fmt.Errorf("fetched nil external data")
 	}
 
 	externalEateries := externalResponse.Data.Eateries
