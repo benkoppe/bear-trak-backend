@@ -16,5 +16,19 @@
       "title": "Show Me",
       "url": "https://go.thekoppe.com/BearTrak"
     }
+  },
+  {
+    "id": 2,
+    "title": "Test 3",
+    "message": "This test should only show once!",
+    "enabled": true,
+    "showOnce": true
+  },
+  {
+    "id": 3,
+    "title": "Test 4",
+    "message": "This test should never show!",
+    "enabled": false,
+    "showOnce": false
   }
 ]
