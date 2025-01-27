@@ -37,6 +37,6 @@
     "message": "This test will only show on old builds!",
     "enabled": true,
     "showOnce": false,
-    "maxBuild": 21
+    "maxBuild": 19
   }
 ]
