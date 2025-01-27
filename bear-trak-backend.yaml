@@ -145,12 +145,15 @@ components:
       x-stoplight:
         id: ae6llgzegnzv5
       type: object
+      x-tags:
+        - beartrak
       required:
         - id
         - title
         - message
         - enabled
         - showOnce
+        - maxBuild
         - button
       properties:
         id:
@@ -173,6 +176,11 @@ components:
           type: boolean
           x-stoplight:
             id: asz4nk5bkpxut
+        maxBuild:
+          type: integer
+          x-stoplight:
+            id: irt2vgltn41jt
+          nullable: true
         button:
           type: object
           x-stoplight:
@@ -191,8 +199,6 @@ components:
               x-stoplight:
                 id: 9rhio1ewe055f
               format: uri
-      x-tags:
-        - beartrak
     Error:
       title: Error
       x-stoplight:

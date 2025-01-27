@@ -43,18 +43,23 @@ func (s *Alert) encodeFields(e *jx.Encoder) {
 		e.Bool(s.ShowOnce)
 	}
 	{
+		e.FieldStart("maxBuild")
+		s.MaxBuild.Encode(e)
+	}
+	{
 		e.FieldStart("button")
 		s.Button.Encode(e)
 	}
 }
 
-var jsonFieldsNameOfAlert = [6]string{
+var jsonFieldsNameOfAlert = [7]string{
 	0: "id",
 	1: "title",
 	2: "message",
 	3: "enabled",
 	4: "showOnce",
-	5: "button",
+	5: "maxBuild",
+	6: "button",
 }
 
 // Decode decodes Alert from json.
@@ -126,8 +131,18 @@ func (s *Alert) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"showOnce\"")
 			}
-		case "button":
+		case "maxBuild":
 			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				if err := s.MaxBuild.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"maxBuild\"")
+			}
+		case "button":
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				if err := s.Button.Decode(d); err != nil {
 					return err
@@ -146,7 +161,7 @@ func (s *Alert) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00111111,
+		0b01111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

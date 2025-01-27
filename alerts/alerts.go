@@ -18,12 +18,16 @@ func Get() ([]backend.Alert, error) {
 
 func convertStatic(static static.Alert) backend.Alert {
 	button := backend.NilAlertButton{Null: true}
-
 	if static.Button != nil {
 		button = backend.NewNilAlertButton(backend.AlertButton{
 			Title: static.Button.Title,
 			URL:   *static.Button.URL.URL,
 		})
+	}
+
+	maxBuild := backend.NilInt{Null: true}
+	if static.MaxBuild != nil {
+		maxBuild = backend.NewNilInt(*static.MaxBuild)
 	}
 
 	return backend.Alert{
@@ -33,5 +37,6 @@ func convertStatic(static static.Alert) backend.Alert {
 		Enabled:  static.Enabled,
 		ShowOnce: static.ShowOnce,
 		Button:   button,
+		MaxBuild: maxBuild,
 	}
 }

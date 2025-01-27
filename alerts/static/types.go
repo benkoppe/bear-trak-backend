@@ -13,6 +13,8 @@ type Alert struct {
 	Enabled  bool `json:"enabled"`
 	ShowOnce bool `json:"showOnce"`
 
+	MaxBuild *int `json:"maxBuild,omitempty"` // alerts won't be displayed on builds after this optional property
+
 	Button *AlertButton `json:"button,omitempty"`
 }
 

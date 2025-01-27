@@ -21,6 +21,7 @@ type Alert struct {
 	Message  string         `json:"message"`
 	Enabled  bool           `json:"enabled"`
 	ShowOnce bool           `json:"showOnce"`
+	MaxBuild NilInt         `json:"maxBuild"`
 	Button   NilAlertButton `json:"button"`
 }
 
@@ -47,6 +48,11 @@ func (s *Alert) GetEnabled() bool {
 // GetShowOnce returns the value of ShowOnce.
 func (s *Alert) GetShowOnce() bool {
 	return s.ShowOnce
+}
+
+// GetMaxBuild returns the value of MaxBuild.
+func (s *Alert) GetMaxBuild() NilInt {
+	return s.MaxBuild
 }
 
 // GetButton returns the value of Button.
@@ -77,6 +83,11 @@ func (s *Alert) SetEnabled(val bool) {
 // SetShowOnce sets the value of ShowOnce.
 func (s *Alert) SetShowOnce(val bool) {
 	s.ShowOnce = val
+}
+
+// SetMaxBuild sets the value of MaxBuild.
+func (s *Alert) SetMaxBuild(val NilInt) {
+	s.MaxBuild = val
 }
 
 // SetButton sets the value of Button.

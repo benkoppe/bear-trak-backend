@@ -30,5 +30,13 @@
     "message": "This test should never show!",
     "enabled": false,
     "showOnce": false
+  },
+  {
+    "id": 4,
+    "title": "Test 5",
+    "message": "This test will only show on old builds!",
+    "enabled": true,
+    "showOnce": false,
+    "maxBuild": 21
   }
 ]
