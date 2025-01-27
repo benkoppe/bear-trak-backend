@@ -13,6 +13,15 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// GetV1Alerts implements getV1Alerts operation.
+//
+// Returns all of BearTrak's active alerts.
+//
+// GET /v1/alerts
+func (UnimplementedHandler) GetV1Alerts(ctx context.Context) (r []Alert, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // GetV1Dining implements getV1Dining operation.
 //
 // Returns all necessary data for BearTrak's dining section.

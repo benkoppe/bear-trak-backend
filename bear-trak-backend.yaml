@@ -18,6 +18,30 @@ servers:
   - url: "http://localhost:3000"
     description: Localhost deployment.
 paths:
+  /v1/alerts:
+    get:
+      summary: Alerts
+      tags:
+        - beartrak
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alert"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: getV1Alerts
+      x-stoplight:
+        id: i81d677y6pf4u
+      description: Returns all of BearTrak's active alerts.
   /v1/dining:
     get:
       summary: Dining
@@ -116,6 +140,99 @@ paths:
       description: "Returns time-sensitive, vehicle-related data for BearTrak's transit section."
 components:
   schemas:
+    Alert:
+      title: Alert
+      x-stoplight:
+        id: ae6llgzegnzv5
+      type: object
+      required:
+        - id
+        - title
+        - message
+        - enabled
+        - showOnce
+        - button
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: 80tpwhx3zfpi6
+        title:
+          type: string
+          x-stoplight:
+            id: yem4lvu39oask
+        message:
+          type: string
+          x-stoplight:
+            id: bp5ir995yemxs
+        enabled:
+          type: boolean
+          x-stoplight:
+            id: 5cgo7ogy7oizn
+        showOnce:
+          type: boolean
+          x-stoplight:
+            id: asz4nk5bkpxut
+        button:
+          type: object
+          x-stoplight:
+            id: 149c9ieot39qz
+          required:
+            - title
+            - url
+          nullable: true
+          properties:
+            title:
+              type: string
+              x-stoplight:
+                id: 897j0kv2lom6r
+            url:
+              type: string
+              x-stoplight:
+                id: 9rhio1ewe055f
+              format: uri
+      x-tags:
+        - beartrak
+    Error:
+      title: Error
+      x-stoplight:
+        id: csh4s0fu2c0dz
+      type: object
+      x-tags:
+        - beartrak
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          x-stoplight:
+            id: 3yyr0yzzvfru1
+        message:
+          type: string
+          x-stoplight:
+            id: 3kla3y1y92kn5
+    Hours:
+      title: Hours
+      x-stoplight:
+        id: gxaa5try1by3b
+      type: object
+      x-tags:
+        - beartrak
+      required:
+        - start
+        - end
+      properties:
+        start:
+          type: string
+          x-stoplight:
+            id: pevsj60dcgi3a
+          format: date-time
+        end:
+          type: string
+          x-stoplight:
+            id: 5qalv4xgb0a05
+          format: date-time
     Eatery:
       title: Eatery
       x-stoplight:
@@ -313,6 +430,39 @@ components:
             id: 0n2srgyvll5ai
           items:
             $ref: "#/components/schemas/EateryMenuCategory"
+    EateryMenuCategory:
+      title: EateryMenuCategory
+      x-stoplight:
+        id: 8impsr1umx51l
+      type: object
+      required:
+        - name
+        - items
+      properties:
+        name:
+          type: string
+          x-stoplight:
+            id: uokh1c6z62jum
+        items:
+          type: array
+          x-stoplight:
+            id: y4en48gyobthc
+          items:
+            x-stoplight:
+              id: 84h301527sshu
+            type: object
+            required:
+              - name
+              - healthy
+            properties:
+              name:
+                type: string
+                x-stoplight:
+                  id: 7qwp93mg3fe8b
+              healthy:
+                type: boolean
+                x-stoplight:
+                  id: rjohztxb3rcw7
     Gym:
       title: Gym
       x-stoplight:
@@ -443,79 +593,6 @@ components:
               x-stoplight:
                 id: n9pqcuhk7s66i
               format: date-time
-    Hours:
-      title: Hours
-      x-stoplight:
-        id: gxaa5try1by3b
-      type: object
-      x-tags:
-        - beartrak
-      required:
-        - start
-        - end
-      properties:
-        start:
-          type: string
-          x-stoplight:
-            id: pevsj60dcgi3a
-          format: date-time
-        end:
-          type: string
-          x-stoplight:
-            id: 5qalv4xgb0a05
-          format: date-time
-    Error:
-      title: Error
-      x-stoplight:
-        id: csh4s0fu2c0dz
-      type: object
-      x-tags:
-        - beartrak
-      required:
-        - code
-        - message
-      properties:
-        code:
-          type: integer
-          x-stoplight:
-            id: 3yyr0yzzvfru1
-        message:
-          type: string
-          x-stoplight:
-            id: 3kla3y1y92kn5
-    EateryMenuCategory:
-      title: EateryMenuCategory
-      x-stoplight:
-        id: 8impsr1umx51l
-      type: object
-      required:
-        - name
-        - items
-      properties:
-        name:
-          type: string
-          x-stoplight:
-            id: uokh1c6z62jum
-        items:
-          type: array
-          x-stoplight:
-            id: y4en48gyobthc
-          items:
-            x-stoplight:
-              id: 84h301527sshu
-            type: object
-            required:
-              - name
-              - healthy
-            properties:
-              name:
-                type: string
-                x-stoplight:
-                  id: 7qwp93mg3fe8b
-              healthy:
-                type: boolean
-                x-stoplight:
-                  id: rjohztxb3rcw7
     BusRoute:
       title: BusRoute
       x-stoplight:

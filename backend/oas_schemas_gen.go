@@ -4,6 +4,7 @@ package api
 
 import (
 	"fmt"
+	"net/url"
 	"time"
 
 	"github.com/go-faster/errors"
@@ -11,6 +12,101 @@ import (
 
 func (s *ErrorStatusCode) Error() string {
 	return fmt.Sprintf("code %d: %+v", s.StatusCode, s.Response)
+}
+
+// Ref: #/components/schemas/Alert
+type Alert struct {
+	ID       int            `json:"id"`
+	Title    string         `json:"title"`
+	Message  string         `json:"message"`
+	Enabled  bool           `json:"enabled"`
+	ShowOnce bool           `json:"showOnce"`
+	Button   NilAlertButton `json:"button"`
+}
+
+// GetID returns the value of ID.
+func (s *Alert) GetID() int {
+	return s.ID
+}
+
+// GetTitle returns the value of Title.
+func (s *Alert) GetTitle() string {
+	return s.Title
+}
+
+// GetMessage returns the value of Message.
+func (s *Alert) GetMessage() string {
+	return s.Message
+}
+
+// GetEnabled returns the value of Enabled.
+func (s *Alert) GetEnabled() bool {
+	return s.Enabled
+}
+
+// GetShowOnce returns the value of ShowOnce.
+func (s *Alert) GetShowOnce() bool {
+	return s.ShowOnce
+}
+
+// GetButton returns the value of Button.
+func (s *Alert) GetButton() NilAlertButton {
+	return s.Button
+}
+
+// SetID sets the value of ID.
+func (s *Alert) SetID(val int) {
+	s.ID = val
+}
+
+// SetTitle sets the value of Title.
+func (s *Alert) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetMessage sets the value of Message.
+func (s *Alert) SetMessage(val string) {
+	s.Message = val
+}
+
+// SetEnabled sets the value of Enabled.
+func (s *Alert) SetEnabled(val bool) {
+	s.Enabled = val
+}
+
+// SetShowOnce sets the value of ShowOnce.
+func (s *Alert) SetShowOnce(val bool) {
+	s.ShowOnce = val
+}
+
+// SetButton sets the value of Button.
+func (s *Alert) SetButton(val NilAlertButton) {
+	s.Button = val
+}
+
+type AlertButton struct {
+	Title string  `json:"title"`
+	URL   url.URL `json:"url"`
+}
+
+// GetTitle returns the value of Title.
+func (s *AlertButton) GetTitle() string {
+	return s.Title
+}
+
+// GetURL returns the value of URL.
+func (s *AlertButton) GetURL() url.URL {
+	return s.URL
+}
+
+// SetTitle sets the value of Title.
+func (s *AlertButton) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetURL sets the value of URL.
+func (s *AlertButton) SetURL(val url.URL) {
+	s.URL = val
 }
 
 // Ref: #/components/schemas/BusRoute
@@ -1089,6 +1185,51 @@ func (s *Hours) SetStart(val time.Time) {
 // SetEnd sets the value of End.
 func (s *Hours) SetEnd(val time.Time) {
 	s.End = val
+}
+
+// NewNilAlertButton returns new NilAlertButton with value set to v.
+func NewNilAlertButton(v AlertButton) NilAlertButton {
+	return NilAlertButton{
+		Value: v,
+	}
+}
+
+// NilAlertButton is nullable AlertButton.
+type NilAlertButton struct {
+	Value AlertButton
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilAlertButton) SetTo(v AlertButton) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsSet returns true if value is Null.
+func (o NilAlertButton) IsNull() bool { return o.Null }
+
+// SetNull sets value to null.
+func (o *NilAlertButton) SetToNull() {
+	o.Null = true
+	var v AlertButton
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilAlertButton) Get() (v AlertButton, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilAlertButton) Or(d AlertButton) AlertButton {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
 }
 
 // NewNilGymCapacity returns new NilGymCapacity with value set to v.

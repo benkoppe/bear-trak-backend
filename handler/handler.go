@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 
+	"github.com/benkoppe/bear-trak-backend/alerts"
 	backend "github.com/benkoppe/bear-trak-backend/backend"
 	"github.com/benkoppe/bear-trak-backend/dining"
 	"github.com/benkoppe/bear-trak-backend/gyms"
@@ -10,6 +11,10 @@ import (
 )
 
 type BackendService struct{}
+
+func (bs *BackendService) GetV1Alerts(ctx context.Context) ([]backend.Alert, error) {
+	return alerts.Get()
+}
 
 func (bs *BackendService) GetV1Dining(ctx context.Context) ([]backend.Eatery, error) {
 	return dining.Get(eateriesUrl)

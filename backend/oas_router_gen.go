@@ -60,6 +60,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
+			case 'a': // Prefix: "alerts"
+				origElem := elem
+				if l := len("alerts"); len(elem) >= l && elem[0:l] == "alerts" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "GET":
+						s.handleGetV1AlertsRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
+					}
+
+					return
+				}
+
+				elem = origElem
 			case 'd': // Prefix: "dining"
 				origElem := elem
 				if l := len("dining"); len(elem) >= l && elem[0:l] == "dining" {
@@ -254,6 +275,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
+			case 'a': // Prefix: "alerts"
+				origElem := elem
+				if l := len("alerts"); len(elem) >= l && elem[0:l] == "alerts" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "GET":
+						r.name = GetV1AlertsOperation
+						r.summary = "Alerts"
+						r.operationID = "getV1Alerts"
+						r.pathPattern = "/v1/alerts"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+
+				elem = origElem
 			case 'd': // Prefix: "dining"
 				origElem := elem
 				if l := len("dining"); len(elem) >= l && elem[0:l] == "dining" {

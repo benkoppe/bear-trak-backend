@@ -1,0 +1,20 @@
+[
+  {
+    "id": 0,
+    "title": "Test",
+    "message": "This is a test alert!",
+    "enabled": true,
+    "showOnce": false
+  },
+  {
+    "id": 1,
+    "title": "Test 2",
+    "message": "This is a test alert with a button!",
+    "enabled": true,
+    "showOnce": false,
+    "button": {
+      "title": "Show Me",
+      "url": "https://go.thekoppe.com/BearTrak"
+    }
+  }
+]

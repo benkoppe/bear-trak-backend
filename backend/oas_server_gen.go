@@ -8,6 +8,12 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// GetV1Alerts implements getV1Alerts operation.
+	//
+	// Returns all of BearTrak's active alerts.
+	//
+	// GET /v1/alerts
+	GetV1Alerts(ctx context.Context) ([]Alert, error)
 	// GetV1Dining implements getV1Dining operation.
 	//
 	// Returns all necessary data for BearTrak's dining section.
