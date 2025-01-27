@@ -2,7 +2,7 @@ package static
 
 type Eatery struct {
 	ID          int             `json:"id"`
-	AllWeekMenu *[]MenuCategory `json:"allWeekMenu",omitempty`
+	AllWeekMenu *[]MenuCategory `json:"allWeekMenu,omitempty"`
 }
 
 type MenuCategory struct {
