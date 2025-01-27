@@ -3,14 +3,14 @@
     "id": 0,
     "title": "Test",
     "message": "This is a test alert!",
-    "enabled": true,
+    "enabled": false,
     "showOnce": false
   },
   {
     "id": 1,
     "title": "Test 2",
     "message": "This is a test alert with a button!",
-    "enabled": true,
+    "enabled": false,
     "showOnce": false,
     "button": {
       "title": "Show Me",
@@ -21,7 +21,7 @@
     "id": 2,
     "title": "Test 3",
     "message": "This test should only show once!",
-    "enabled": true,
+    "enabled": false,
     "showOnce": true
   },
   {
@@ -35,7 +35,7 @@
     "id": 4,
     "title": "Test 5",
     "message": "This test will only show on old builds!",
-    "enabled": true,
+    "enabled": false,
     "showOnce": false,
     "maxBuild": 19
   }

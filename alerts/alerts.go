@@ -10,6 +10,11 @@ func Get() ([]backend.Alert, error) {
 	var alerts []backend.Alert
 
 	for _, staticAlert := range staticAlerts {
+		// filter disabled alerts
+		if !staticAlert.Enabled {
+			continue
+		}
+
 		alerts = append(alerts, convertStatic(staticAlert))
 	}
 
