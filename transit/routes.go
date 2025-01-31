@@ -5,14 +5,14 @@ import (
 	"strconv"
 
 	"github.com/amit7itz/goset"
-	backend "github.com/benkoppe/bear-trak-backend/backend"
+	"github.com/benkoppe/bear-trak-backend/api"
 	availtec "github.com/benkoppe/bear-trak-backend/transit/external_availtec"
 	"github.com/benkoppe/bear-trak-backend/transit/external_gtfs"
 	"github.com/jamespfennell/gtfs"
 	"github.com/twpayne/go-polyline"
 )
 
-func GetRoutes(availtecUrl string, staticUrl string) ([]backend.BusRoute, error) {
+func GetRoutes(availtecUrl string, staticUrl string) ([]api.BusRoute, error) {
 	staticGtfs := external_gtfs.GetStaticGtfs(staticUrl)
 
 	availtecRoutes, err := availtec.FetchRoutes(availtecUrl)
@@ -30,7 +30,7 @@ func GetRoutes(availtecUrl string, staticUrl string) ([]backend.BusRoute, error)
 		return nil, fmt.Errorf("failed to load vehicles: %v", err)
 	}
 
-	routeIdVehicles := make(map[int]([]backend.Vehicle))
+	routeIdVehicles := make(map[int]([]api.Vehicle))
 	for _, vehicle := range vehicles {
 		routeIdVehicles[vehicle.RouteId] = append(routeIdVehicles[vehicle.RouteId], vehicle)
 	}
@@ -42,8 +42,8 @@ func GetRoutes(availtecUrl string, staticUrl string) ([]backend.BusRoute, error)
 	return routes, nil
 }
 
-func getRoutes(availtecRoutes []availtec.Route, staticGtfs gtfs.Static) ([]backend.BusRoute, error) {
-	var routes []backend.BusRoute
+func getRoutes(availtecRoutes []availtec.Route, staticGtfs gtfs.Static) ([]api.BusRoute, error) {
+	var routes []api.BusRoute
 
 	for _, route := range availtecRoutes {
 		var gtfsRoute *gtfs.Route
@@ -61,19 +61,19 @@ func getRoutes(availtecRoutes []availtec.Route, staticGtfs gtfs.Static) ([]backe
 		tripsMap := getDirectionTrips(*gtfsRoute, staticGtfs)
 
 		var polylines []string
-		var directions []backend.BusRouteDirection
+		var directions []api.BusRouteDirection
 
 		for directionId, trips := range tripsMap {
 			polylines = append(polylines, getPolylines(trips)...)
 			stops := getStops(trips)
 
-			directions = append(directions, backend.BusRouteDirection{
+			directions = append(directions, api.BusRouteDirection{
 				Name:  convertStaticDirectionId(directionId),
 				Stops: convertStaticStops(stops),
 			})
 		}
 
-		routes = append(routes, backend.BusRoute{
+		routes = append(routes, api.BusRoute{
 			ID:         route.RouteId,
 			SortIdx:    route.SortOrder,
 			Name:       route.GoogleDescription,
@@ -98,11 +98,11 @@ func convertStaticDirectionId(id gtfs.DirectionID) string {
 	}
 }
 
-func convertStaticStops(stops []gtfs.Stop) []backend.BusRouteDirectionStopsItem {
-	var backendStops []backend.BusRouteDirectionStopsItem
+func convertStaticStops(stops []gtfs.Stop) []api.BusRouteDirectionStopsItem {
+	var backendStops []api.BusRouteDirectionStopsItem
 
 	for _, stop := range stops {
-		backendStops = append(backendStops, backend.BusRouteDirectionStopsItem{
+		backendStops = append(backendStops, api.BusRouteDirectionStopsItem{
 			ID:        stop.Id,
 			Name:      stop.Name,
 			Longitude: *stop.Longitude,

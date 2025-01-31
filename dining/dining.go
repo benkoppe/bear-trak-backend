@@ -9,14 +9,14 @@ import (
 	"time"
 	"unicode"
 
-	backend "github.com/benkoppe/bear-trak-backend/backend"
+	"github.com/benkoppe/bear-trak-backend/api"
 	"github.com/benkoppe/bear-trak-backend/dining/external"
 	"github.com/benkoppe/bear-trak-backend/dining/static"
 	"github.com/benkoppe/bear-trak-backend/utils"
 	"golang.org/x/text/unicode/norm"
 )
 
-func Get(url string) ([]backend.Eatery, error) {
+func Get(url string) ([]api.Eatery, error) {
 	externalResponse, err := external.FetchData(url)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching external data: %w", err)
@@ -28,7 +28,7 @@ func Get(url string) ([]backend.Eatery, error) {
 
 	externalEateries := externalResponse.Data.Eateries
 
-	eateries := make([]backend.Eatery, len(externalEateries))
+	eateries := make([]api.Eatery, len(externalEateries))
 
 	for i, externalEatery := range externalEateries {
 		eateries[i] = convertExternal(externalEatery)
@@ -40,10 +40,10 @@ func Get(url string) ([]backend.Eatery, error) {
 	return eateries, nil
 }
 
-func convertExternal(external external.Eatery) backend.Eatery {
+func convertExternal(external external.Eatery) api.Eatery {
 	events := convertExternalEvents(external)
 
-	return backend.Eatery{
+	return api.Eatery{
 		ID:             external.ID,
 		Name:           external.Name,
 		NameShort:      external.NameShort,
@@ -59,12 +59,12 @@ func convertExternal(external external.Eatery) backend.Eatery {
 	}
 }
 
-func convertExternalEvents(external external.Eatery) []backend.EateryEvent {
-	var events []backend.EateryEvent
+func convertExternalEvents(external external.Eatery) []api.EateryEvent {
+	var events []api.EateryEvent
 
 	for _, operatingHours := range external.OperatingHours {
 		for _, event := range operatingHours.Events {
-			events = append(events, backend.EateryEvent{
+			events = append(events, api.EateryEvent{
 				Start:          event.StartTimestamp.ToTime(),
 				End:            event.EndTimestamp.ToTime(),
 				MenuCategories: convertExternalMenu(event),
@@ -80,23 +80,23 @@ func convertExternalEvents(external external.Eatery) []backend.EateryEvent {
 	return events
 }
 
-func convertExternalMenu(externalEvent external.Event) []backend.EateryMenuCategory {
+func convertExternalMenu(externalEvent external.Event) []api.EateryMenuCategory {
 	sortMenuCategories(externalEvent.Menu)
 	sortMenuItems(externalEvent.Menu)
 
-	var categories []backend.EateryMenuCategory
+	var categories []api.EateryMenuCategory
 
 	for _, category := range externalEvent.Menu {
-		var items []backend.EateryMenuCategoryItemsItem
+		var items []api.EateryMenuCategoryItemsItem
 
 		for _, item := range category.Items {
-			items = append(items, backend.EateryMenuCategoryItemsItem{
+			items = append(items, api.EateryMenuCategoryItemsItem{
 				Name:    item.Item,
 				Healthy: item.Healthy,
 			})
 		}
 
-		categories = append(categories, backend.EateryMenuCategory{
+		categories = append(categories, api.EateryMenuCategory{
 			Name:  category.Category,
 			Items: items,
 		})
@@ -105,36 +105,36 @@ func convertExternalMenu(externalEvent external.Event) []backend.EateryMenuCateg
 	return categories
 }
 
-func convertExternalRegion(external external.Eatery) backend.EateryRegion {
+func convertExternalRegion(external external.Eatery) api.EateryRegion {
 	switch external.CampusArea.Descrshort {
 	case "Central":
-		return backend.EateryRegionCentral
+		return api.EateryRegionCentral
 	case "West":
-		return backend.EateryRegionWest
+		return api.EateryRegionWest
 	case "North":
-		return backend.EateryRegionNorth
+		return api.EateryRegionNorth
 	default:
-		return backend.EateryRegionUnknown
+		return api.EateryRegionUnknown
 	}
 }
 
-func convertExternalPayMethods(external external.Eatery) []backend.EateryPayMethodsItem {
-	var payMethods []backend.EateryPayMethodsItem
+func convertExternalPayMethods(external external.Eatery) []api.EateryPayMethodsItem {
+	var payMethods []api.EateryPayMethodsItem
 
 	for _, payMethod := range external.PayMethods {
 		switch payMethod.DescrShort {
 		case "Meal Plan - Swipe":
-			payMethods = append(payMethods, backend.EateryPayMethodsItemSwipes)
+			payMethods = append(payMethods, api.EateryPayMethodsItemSwipes)
 		case "Meal Plan - Debit":
-			payMethods = append(payMethods, backend.EateryPayMethodsItemBigRedBucks)
+			payMethods = append(payMethods, api.EateryPayMethodsItemBigRedBucks)
 		case "Cash":
-			payMethods = append(payMethods, backend.EateryPayMethodsItemCash)
+			payMethods = append(payMethods, api.EateryPayMethodsItemCash)
 		case "Mobile Payments":
-			payMethods = append(payMethods, backend.EateryPayMethodsItemDigitalWallet)
+			payMethods = append(payMethods, api.EateryPayMethodsItemDigitalWallet)
 		case "Major Credit Cards":
-			payMethods = append(payMethods, backend.EateryPayMethodsItemCreditCard)
+			payMethods = append(payMethods, api.EateryPayMethodsItemCreditCard)
 		case "Cornell Card":
-			payMethods = append(payMethods, backend.EateryPayMethodsItemCornellCard)
+			payMethods = append(payMethods, api.EateryPayMethodsItemCornellCard)
 		default:
 			continue
 		}
@@ -143,23 +143,23 @@ func convertExternalPayMethods(external external.Eatery) []backend.EateryPayMeth
 	return payMethods
 }
 
-func convertExternalCategories(external external.Eatery) []backend.EateryCategoriesItem {
-	var categories []backend.EateryCategoriesItem
+func convertExternalCategories(external external.Eatery) []api.EateryCategoriesItem {
+	var categories []api.EateryCategoriesItem
 
 	for _, eateryType := range external.EateryTypes {
 		switch eateryType.Descr {
 		case "Convenience Store":
-			categories = append(categories, backend.EateryCategoriesItemConvenienceStore)
+			categories = append(categories, api.EateryCategoriesItemConvenienceStore)
 		case "Cafe":
-			categories = append(categories, backend.EateryCategoriesItemCafe)
+			categories = append(categories, api.EateryCategoriesItemCafe)
 		case "Dining Room":
-			categories = append(categories, backend.EateryCategoriesItemDiningRoom)
+			categories = append(categories, api.EateryCategoriesItemDiningRoom)
 		case "Coffee Shop":
-			categories = append(categories, backend.EateryCategoriesItemCoffeeShop)
+			categories = append(categories, api.EateryCategoriesItemCoffeeShop)
 		case "Cart":
-			categories = append(categories, backend.EateryCategoriesItemCart)
+			categories = append(categories, api.EateryCategoriesItemCart)
 		case "Food Court":
-			categories = append(categories, backend.EateryCategoriesItemFoodCourt)
+			categories = append(categories, api.EateryCategoriesItemFoodCourt)
 		default:
 			continue
 		}
@@ -168,14 +168,14 @@ func convertExternalCategories(external external.Eatery) []backend.EateryCategor
 	return categories
 }
 
-func hoursFromEvents(events []backend.EateryEvent) []backend.Hours {
-	var hours []backend.Hours
+func hoursFromEvents(events []api.EateryEvent) []api.Hours {
+	var hours []api.Hours
 
 	est := utils.LoadEST()
 
 	// convert to hours objects
 	for _, event := range events {
-		hours = append(hours, backend.Hours{
+		hours = append(hours, api.Hours{
 			Start: event.Start.In(est),
 			End:   event.End.In(est),
 		})
@@ -192,7 +192,7 @@ func hoursFromEvents(events []backend.EateryEvent) []backend.Hours {
 	})
 
 	// merge close start and end times
-	var merged []backend.Hours
+	var merged []api.Hours
 	currentStart := hours[0].Start
 	currentEnd := hours[0].End
 
@@ -205,7 +205,7 @@ func hoursFromEvents(events []backend.EateryEvent) []backend.Hours {
 			currentEnd = hour.End
 			continue
 		} else {
-			merged = append(merged, backend.Hours{
+			merged = append(merged, api.Hours{
 				Start: currentStart,
 				End:   currentEnd,
 			})
@@ -215,7 +215,7 @@ func hoursFromEvents(events []backend.EateryEvent) []backend.Hours {
 	}
 
 	// append the final values
-	merged = append(merged, backend.Hours{
+	merged = append(merged, api.Hours{
 		Start: currentStart,
 		End:   currentEnd,
 	})
@@ -223,13 +223,13 @@ func hoursFromEvents(events []backend.EateryEvent) []backend.Hours {
 	return merged
 }
 
-func selectNextWeekEvents(events []backend.EateryEvent) backend.EateryNextWeekEvents {
+func selectNextWeekEvents(events []api.EateryEvent) api.EateryNextWeekEvents {
 	est := utils.LoadEST()
 	now := time.Now().In(est)
 	weekStart := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 	weekEnd := weekStart.AddDate(0, 0, 7)
 
-	result := backend.EateryNextWeekEvents{}
+	result := api.EateryNextWeekEvents{}
 
 	for _, event := range events {
 		if event.Start.After(weekStart) && event.Start.Before(weekEnd) {
@@ -318,8 +318,8 @@ func getImagePath(external external.Eatery) string {
 	return utils.ImageNameToPath("dining", imageName)
 }
 
-func appendStaticMenus(eateries []backend.Eatery, staticEateries []static.Eatery) []backend.Eatery {
-	var converted []backend.Eatery
+func appendStaticMenus(eateries []api.Eatery, staticEateries []static.Eatery) []api.Eatery {
+	var converted []api.Eatery
 
 	for _, eatery := range eateries {
 		staticEatery := matchingStaticEatery(eatery, staticEateries)
@@ -339,20 +339,20 @@ func appendStaticMenus(eateries []backend.Eatery, staticEateries []static.Eatery
 	return converted
 }
 
-func convertStaticMenu(staticCategories []static.MenuCategory) []backend.EateryMenuCategory {
-	var categories []backend.EateryMenuCategory
+func convertStaticMenu(staticCategories []static.MenuCategory) []api.EateryMenuCategory {
+	var categories []api.EateryMenuCategory
 
 	for _, staticCategory := range staticCategories {
-		var items []backend.EateryMenuCategoryItemsItem
+		var items []api.EateryMenuCategoryItemsItem
 
 		for _, staticItem := range staticCategory.Items {
-			items = append(items, backend.EateryMenuCategoryItemsItem{
+			items = append(items, api.EateryMenuCategoryItemsItem{
 				Name:    staticItem.Item,
 				Healthy: staticItem.Healthy,
 			})
 		}
 
-		categories = append(categories, backend.EateryMenuCategory{
+		categories = append(categories, api.EateryMenuCategory{
 			Name:  staticCategory.Category,
 			Items: items,
 		})
@@ -361,7 +361,7 @@ func convertStaticMenu(staticCategories []static.MenuCategory) []backend.EateryM
 	return categories
 }
 
-func matchingStaticEatery(eatery backend.Eatery, staticEateries []static.Eatery) *static.Eatery {
+func matchingStaticEatery(eatery api.Eatery, staticEateries []static.Eatery) *static.Eatery {
 	for _, staticEatery := range staticEateries {
 		if staticEatery.ID == eatery.ID {
 			return &staticEatery

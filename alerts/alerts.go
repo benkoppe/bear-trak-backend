@@ -2,12 +2,12 @@ package alerts
 
 import (
 	"github.com/benkoppe/bear-trak-backend/alerts/static"
-	backend "github.com/benkoppe/bear-trak-backend/backend"
+	"github.com/benkoppe/bear-trak-backend/api"
 )
 
-func Get() ([]backend.Alert, error) {
+func Get() ([]api.Alert, error) {
 	staticAlerts := static.GetAlerts()
-	var alerts []backend.Alert
+	var alerts []api.Alert
 
 	for _, staticAlert := range staticAlerts {
 		// filter disabled alerts
@@ -21,21 +21,21 @@ func Get() ([]backend.Alert, error) {
 	return alerts, nil
 }
 
-func convertStatic(static static.Alert) backend.Alert {
-	button := backend.NilAlertButton{Null: true}
+func convertStatic(static static.Alert) api.Alert {
+	button := api.NilAlertButton{Null: true}
 	if static.Button != nil {
-		button = backend.NewNilAlertButton(backend.AlertButton{
+		button = api.NewNilAlertButton(api.AlertButton{
 			Title: static.Button.Title,
 			URL:   *static.Button.URL.URL,
 		})
 	}
 
-	maxBuild := backend.NilInt{Null: true}
+	maxBuild := api.NilInt{Null: true}
 	if static.MaxBuild != nil {
-		maxBuild = backend.NewNilInt(*static.MaxBuild)
+		maxBuild = api.NewNilInt(*static.MaxBuild)
 	}
 
-	return backend.Alert{
+	return api.Alert{
 		ID:       static.ID,
 		Title:    static.Title,
 		Message:  static.Message,

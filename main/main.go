@@ -3,15 +3,17 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 
-	backend "github.com/benkoppe/bear-trak-backend/backend"
+	"github.com/benkoppe/bear-trak-backend/api"
 	"github.com/benkoppe/bear-trak-backend/handler"
+	"github.com/benkoppe/bear-trak-backend/utils"
 )
 
 func main() {
 	// create main service
 	service := &handler.BackendService{}
-	srv, err := backend.NewServer(service)
+	srv, err := api.NewServer(service)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,8 +29,29 @@ func main() {
 	fileServer := http.FileServer(http.Dir(staticDir))
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
+	// start the hourly tasks in a separate goroutine
+	go runHourlyTasks()
+
 	// start the server
 	if err := http.ListenAndServe(":3000", mux); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func runHourlyTasks() {
+	// initial run
+	executeHourlyTasks()
+
+	// create a ticker to run the tasks every hour
+	ticker := time.NewTicker(1 * time.Hour)
+	defer ticker.Stop()
+
+	for range ticker.C {
+		executeHourlyTasks()
+	}
+}
+
+func executeHourlyTasks() {
+	est := utils.LoadEST()
+	log.Println("Executing hourly tasks at:", time.Now().In(est))
 }
