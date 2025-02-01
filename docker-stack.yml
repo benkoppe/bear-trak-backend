@@ -5,7 +5,8 @@ services:
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
       - "--entryPoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.dnschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare"
       - "--certificatesresolvers.myresolver.acme.email=koppe.development@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       - "--entrypoints.web.address=:80"
@@ -30,9 +31,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.go.loadbalancer.server.port=3000"
-      - "traefik.http.routers.web.rule=Host(`beartrakapi.thekoppe.com`)"
-      - "traefik.http.routers.web.entrypoints=websecure"
-      - "traefik.http.routers.web.tls.certresolver=myresolver"
+      - "traefik.http.routers.go.rule=Host(`beartrakapi.thekoppe.com`)"
+      - "traefik.http.routers.go.entrypoints=websecure"
+      - "traefik.http.routers.go.tls.certresolver=myresolver"
       - "org.opencontainers.image.source=https://github.com/benkoppe/bear-trak-backend"
     build:
       context: ./go-server
@@ -49,9 +50,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.otp.loadbalancer.server.port=8080"
-      - "traefik.http.routers.web.rule=Host(`transit.thekoppe.com`)"
-      - "traefik.http.routers.web.entrypoints=websecure"
-      - "traefik.http.routers.web.tls.certresolver=myresolver"
+      - "traefik.http.routers.otp.rule=Host(`transit.thekoppe.com`)"
+      - "traefik.http.routers.otp.entrypoints=websecure"
+      - "traefik.http.routers.otp.tls.certresolver=myresolver"
       - "org.opencontainers.image.source=https://github.com/benkoppe/bear-trak-backend"
     build:
       context: ./otp
