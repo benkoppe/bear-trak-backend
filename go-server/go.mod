@@ -1,4 +1,4 @@
-module github.com/benkoppe/bear-trak-backend
+module github.com/benkoppe/bear-trak-backend/go-server
 
 go 1.23.3
 

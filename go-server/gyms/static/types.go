@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/benkoppe/bear-trak-backend/utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
 type Gym struct {

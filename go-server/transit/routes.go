@@ -5,9 +5,9 @@ import (
 	"strconv"
 
 	"github.com/amit7itz/goset"
-	"github.com/benkoppe/bear-trak-backend/api"
-	availtec "github.com/benkoppe/bear-trak-backend/transit/external_availtec"
-	"github.com/benkoppe/bear-trak-backend/transit/external_gtfs"
+	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	availtec "github.com/benkoppe/bear-trak-backend/go-server/transit/external_availtec"
+	"github.com/benkoppe/bear-trak-backend/go-server/transit/external_gtfs"
 	"github.com/jamespfennell/gtfs"
 	"github.com/twpayne/go-polyline"
 )

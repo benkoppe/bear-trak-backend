@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/benkoppe/bear-trak-backend/api"
-	"github.com/benkoppe/bear-trak-backend/gyms/external"
-	"github.com/benkoppe/bear-trak-backend/gyms/static"
-	"github.com/benkoppe/bear-trak-backend/utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/external"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/static"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
 func Get(url string) ([]api.Gym, error) {

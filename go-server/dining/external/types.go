@@ -1,7 +1,7 @@
 package external
 
 import (
-	"github.com/benkoppe/bear-trak-backend/utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
 type EateryAPIResponse struct {

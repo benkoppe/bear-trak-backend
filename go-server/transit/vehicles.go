@@ -3,8 +3,8 @@ package transit
 import (
 	"fmt"
 
-	"github.com/benkoppe/bear-trak-backend/api"
-	availtec "github.com/benkoppe/bear-trak-backend/transit/external_availtec"
+	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	availtec "github.com/benkoppe/bear-trak-backend/go-server/transit/external_availtec"
 )
 
 func GetVehicles(availtecUrl string) ([]api.Vehicle, error) {

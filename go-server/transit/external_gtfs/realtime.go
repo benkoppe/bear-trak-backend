@@ -5,7 +5,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/benkoppe/bear-trak-backend/utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 	"github.com/jamespfennell/gtfs"
 )
 

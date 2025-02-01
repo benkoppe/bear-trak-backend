@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/benkoppe/bear-trak-backend/api"
-	"github.com/benkoppe/bear-trak-backend/handler"
-	"github.com/benkoppe/bear-trak-backend/utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/handler"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
 func main() {

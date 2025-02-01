@@ -1,8 +1,8 @@
 package alerts
 
 import (
-	"github.com/benkoppe/bear-trak-backend/alerts/static"
-	"github.com/benkoppe/bear-trak-backend/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/alerts/static"
+	"github.com/benkoppe/bear-trak-backend/go-server/api"
 )
 
 func Get() ([]api.Alert, error) {

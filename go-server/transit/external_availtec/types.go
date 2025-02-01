@@ -1,6 +1,6 @@
 package external_availtec
 
-import "github.com/benkoppe/bear-trak-backend/utils"
+import "github.com/benkoppe/bear-trak-backend/go-server/utils"
 
 type Route struct {
 	Color                    string    `json:"Color"`

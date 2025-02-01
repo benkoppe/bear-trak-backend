@@ -3,11 +3,11 @@ package handler
 import (
 	"context"
 
-	"github.com/benkoppe/bear-trak-backend/alerts"
-	"github.com/benkoppe/bear-trak-backend/api"
-	"github.com/benkoppe/bear-trak-backend/dining"
-	"github.com/benkoppe/bear-trak-backend/gyms"
-	"github.com/benkoppe/bear-trak-backend/transit"
+	"github.com/benkoppe/bear-trak-backend/go-server/alerts"
+	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/dining"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms"
+	"github.com/benkoppe/bear-trak-backend/go-server/transit"
 )
 
 type BackendService struct{}

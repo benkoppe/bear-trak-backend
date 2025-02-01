@@ -9,10 +9,10 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/benkoppe/bear-trak-backend/api"
-	"github.com/benkoppe/bear-trak-backend/dining/external"
-	"github.com/benkoppe/bear-trak-backend/dining/static"
-	"github.com/benkoppe/bear-trak-backend/utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/dining/external"
+	"github.com/benkoppe/bear-trak-backend/go-server/dining/static"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 	"golang.org/x/text/unicode/norm"
 )
 

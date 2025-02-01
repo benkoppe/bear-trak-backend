@@ -1,6 +1,6 @@
 package external
 
-import "github.com/benkoppe/bear-trak-backend/utils"
+import "github.com/benkoppe/bear-trak-backend/go-server/utils"
 
 type Gym struct {
 	LocationID   int    `json:"LocationId"`
