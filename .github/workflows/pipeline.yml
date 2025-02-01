@@ -6,6 +6,7 @@ on:
 
 permissions:
   packages: write
+  packages: read
   contents: read
 
 jobs:
@@ -50,17 +51,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create env file
-        run: |
-          echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
-          echo "CLOUDFLARE_DNS_API_TOKEN=${{ secrets.CLOUDFLARE_DNS_API_TOKEN }}" >> ./envfile
-
       - name: Docker Stack deploy
-        uses: cssnr/stack-deploy-action@v1
+        uses: serversideup/github-action-docker-swarm-deploy@v3
         with:
-          name: bear-trak
-          file: docker-stack.yml
-          host: beartrakssh.thekoppe.com
-          user: deploy
-          ssh_key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
-          env_file: ./envfile
+          docker_compose_file_path: docker-stack.yml
+          ssh_deploy_private_key: "${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}"
+          ssh_remote_hostname: beartrakssh.thekoppe.com
+          registry: "ghcr.io"
+          registry-username: ${{ github.actor }}
+          registry-token: ${{ secrets.GITHUB_TOKEN }}
+          stack_name: bear-trak
+        env:
+          GIT_COMMIT_HASH: "${{ github.sha }}"
+          CLOUDFLARE_DNS_API_TOKEN: "${{ secrets.CLOUDFLARE_DNS_API_TOKEN }}"
