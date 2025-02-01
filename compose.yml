@@ -1,18 +1,11 @@
 services:
-  bear-trak-backend:
+  go-server:
     image: index.docker.io/kortuga/bear-trak-backend:latest
-    container_name: bear-trak-backend
     restart: always
     build:
-      context: .
+      context: ./go-server
+      dockerfile: ../docker/go/Dockerfile
       platforms:
         - "linux/amd64"
     ports:
       - "3000:3000"
-  watchtower:
-    image: containrrr/watchtower
-    container_name: watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - $HOME/.docker/config.json:/config.json
-    command: --interval 30
