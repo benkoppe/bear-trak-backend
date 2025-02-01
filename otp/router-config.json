@@ -1,0 +1,24 @@
+{
+  "updaters": [
+    {
+      "type": "vehicle-positions",
+      "url": "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-Realtime.ashx?&Type=VehiclePosition",
+      "feedId": "1",
+      "frequency": "1m",
+      "fuzzyTripMatching": true,
+      "features": ["position"]
+    },
+    {
+      "type": "real-time-alerts",
+      "url": "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-Realtime.ashx?&Type=Alert",
+      "feedId": "1",
+      "frequency": "1m"
+    },
+    {
+      "type": "stop-time-updater",
+      "url": "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-Realtime.ashx?&Type=TripUpdate",
+      "feedId": "1",
+      "frequency": "1m"
+    }
+  ]
+}
