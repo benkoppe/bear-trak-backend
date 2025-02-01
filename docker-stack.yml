@@ -1,0 +1,66 @@
+services:
+  traefik:
+    image: traefik:v3.3
+    command:
+      - "--providers.docker"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=koppe.development@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+    ports:
+      - mode: host
+        protocol: tcp
+        published: 80
+        target: 80
+      - mode: host
+        protocol: tcp
+        published: 443
+        target: 443
+    volumes:
+      - letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  go-server:
+    image: ghcr.io/benkoppe/bear-trak-go:${GIT_COMMIT_HASH:-latest}
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.go.loadbalancer.port=3000"
+      - "traefik.http.routers.web.rule=Host(`beartrakapi.thekoppe.com`)"
+      - "traefik.http.routers.web.entrypoints=websecure"
+      - "traefik.http.routers.web.tls.certresolver=myresolver"
+      - "org.opencontainers.image.source=https://github.com/benkoppe/bear-trak-backend"
+    build:
+      context: ./go-server
+      dockerfile: ../docker/go/Dockerfile
+      platforms:
+        - "linux/amd64"
+    deploy:
+      update_config:
+        order: start-first
+
+  otp:
+    image: ghcr.io/benkoppe/bear-trak-otp:${GIT_COMMIT_HASH:-latest}
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.otp.loadbalancer.port=8080"
+      - "traefik.http.routers.web.rule=Host(`transit.thekoppe.com`)"
+      - "traefik.http.routers.web.entrypoints=websecure"
+      - "traefik.http.routers.web.tls.certresolver=myresolver"
+      - "org.opencontainers.image.source=https://github.com/benkoppe/bear-trak-backend"
+    build:
+      context: ./otp
+      dockerfile: ../docker/otp/Dockerfile
+      platforms:
+        - "linux/amd64"
+    deploy:
+      update_config:
+        order: start-first
+
+volumes:
+  letsencrypt:
