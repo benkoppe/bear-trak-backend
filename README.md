@@ -4,6 +4,16 @@ This is the backend for BearTrak.
 
 It consists of a Go server and [OpenTripPlanner](https://www.opentripplanner.org/) (otp) instance.
 
+## Todo
+
+- [ ] write `go-server` tests & integrate into `Pipeline`.
+- [ ] the codebase yearns for postgreSQL.
+  - log gym capacity history for trends?
+  - social features?
+- [ ] centralize shared data like external transit URLs.
+- [ ] create the `otp` graph in the build step.
+- [ ] figure out how to detect when the `otp` static GTFS data becomes invalid.
+
 ## How to deploy
 
 Each piece of the backend is containerized - latest images can be seen in the `Packages` section on the right. Images are pulled and reverse proxied with [traefik](https://github.com/traefik/traefik) in accordance to `docker-stack.yml`.
