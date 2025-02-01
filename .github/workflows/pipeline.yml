@@ -53,7 +53,7 @@ jobs:
       - name: Docker Stack deploy
         uses: serversideup/github-action-docker-swarm-deploy@v3
         with:
-          docker_compose_file_path: docker-stack.yml
+          docker_compose_file_path: -c docker-stack.yml
           ssh_deploy_private_key: "${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}"
           ssh_remote_hostname: beartrakssh.thekoppe.com
           registry: "ghcr.io"
