@@ -13,7 +13,7 @@ services:
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
     environment:
-      - CLOUDFLARE_DNS_API_TOKEN: "${CLOUDFLARE_DNS_API_TOKEN}"
+      - CLOUDFLARE_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN}
     ports:
       - mode: host
         protocol: tcp
