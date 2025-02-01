@@ -1,0 +1,64 @@
+name: Pipeline
+on:
+  push:
+    branches:
+      - "main"
+
+permissions:
+  packages: write
+
+jobs:
+  build-and-push-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log into the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: https://ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push `go-server` image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./go-server
+          file: docker/go/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/benkoppe/bear-trak-go:latest
+            ghcr.io/benkoppe/bear-trak-go:${{ github.sha }}
+
+      - name: Build and push `otp` image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./otp
+          file: docker/otp/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/benkoppe/bear-trak-otp:latest
+            ghcr.io/benkoppe/bear-trak-otp:${{ github.sha }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - build-and-push-images
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create env file
+        run: |
+          echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
+
+      - name: Docker Stack deploy
+        uses: cssnr/stack-deploy-action@v1
+        with:
+          name: bear-trak
+          file: docker-stack.yml
+          host: beartrakssh.thekoppe.com
+          user: deploy
+          ssh_key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          env_file: ./envfile
