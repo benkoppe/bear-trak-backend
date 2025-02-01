@@ -14,4 +14,4 @@ Pushes to the `main` branch trigger a GitHub action that builds & pushes both im
   - Set the repository secret `DEPLOY_SSH_PRIVATE_KEY` to the corresponding private key.
   - You're done! A `docker stack deploy` command will be used to push production to the server.
   - To bypass the GitHub action, you can set up your own Docker context and run `docker stack deploy -c ./docker-stack.yml bear-trak`.
-- Now that a server has been set up, the GitHub action will automatically deploy using `docker-stack.yml`. :)
+- Now that a server has been set up, the GitHub action will automatically deploy using `docker-stack.yml` :)
