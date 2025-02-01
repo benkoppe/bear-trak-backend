@@ -1,8 +1,8 @@
 # bear-trak-backend
 
-This repository is used to run BearTrak's backend.
+This is BearTrak's backend.
 
-The backend consists of a Go server and OpenTripPlanner (otp) instance.
+It consists of a Go server and [OpenTripPlanner](https://www.opentripplanner.org/) (otp) instance.
 
 ## How to deploy
 
