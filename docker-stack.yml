@@ -29,7 +29,7 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.go.loadbalancer.port=3000"
+      - "traefik.http.services.go.loadbalancer.server.port=3000"
       - "traefik.http.routers.web.rule=Host(`beartrakapi.thekoppe.com`)"
       - "traefik.http.routers.web.entrypoints=websecure"
       - "traefik.http.routers.web.tls.certresolver=myresolver"
@@ -48,7 +48,7 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.otp.loadbalancer.port=8080"
+      - "traefik.http.services.otp.loadbalancer.server.port=8080"
       - "traefik.http.routers.web.rule=Host(`transit.thekoppe.com`)"
       - "traefik.http.routers.web.entrypoints=websecure"
       - "traefik.http.routers.web.tls.certresolver=myresolver"
