@@ -8,8 +8,4 @@ const (
 	availtecUrl = "https://realtimetcatbus.availtec.com/InfoPoint/rest"
 
 	gtfsStaticUrl = "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-zip.ashx"
-
-	gtfsRealtimeAlertsUrl           = "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-Realtime.ashx?&Type=Alert"
-	gtfsRealtimeVehiclePositionsUrl = "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-Realtime.ashx?&Type=VehiclePosition"
-	gtfsRealtimeTripUpdatesUrl      = "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-Realtime.ashx?&Type=TripUpdate"
 )
