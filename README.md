@@ -13,6 +13,7 @@ It consists of a Go server and [OpenTripPlanner](https://www.opentripplanner.org
 - [ ] centralize shared data like external transit URLs.
 - [ ] create the `otp` graph in the build step.
 - [ ] figure out how to detect when the `otp` static GTFS data becomes invalid.
+- [ ] figure out why the `Pipeline` sometimes doesn't create a replica for `otp`.
 
 ## How to deploy
 
