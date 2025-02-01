@@ -61,6 +61,9 @@ services:
       dockerfile: ../docker/otp/Dockerfile
       platforms:
         - "linux/amd64"
+    deploy:
+      update_config:
+        order: stop-first
 
 volumes:
   letsencrypt:
