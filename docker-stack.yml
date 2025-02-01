@@ -39,7 +39,7 @@ services:
       - "org.opencontainers.image.source=https://github.com/benkoppe/bear-trak-backend"
     build:
       context: ./go-server
-      dockerfile: ../docker/go/Dockerfile
+      dockerfile: ../go-server/Dockerfile
       platforms:
         - "linux/amd64"
     deploy:
@@ -58,7 +58,7 @@ services:
       - "org.opencontainers.image.source=https://github.com/benkoppe/bear-trak-backend"
     build:
       context: ./otp
-      dockerfile: ../docker/otp/Dockerfile
+      dockerfile: ../otp/Dockerfile
       platforms:
         - "linux/amd64"
     deploy:
