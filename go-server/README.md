@@ -1,14 +1,22 @@
 # BearTrak's `go-server`
 
-This Go server provides BearTrak with most of its data! 
+This Go server provides BearTrak with most of its data!
 
 Start it up with:
+
 ```bash
-$ go run main.go 
+go run main.go
 ```
+
 This will serve both an OpenAPI-specified REST API (described below), and some static files on the subpath `/static`.
 
 It will also start a (currently unused) hourly timer to run tasks.
+
+To build and run the Docker container:
+
+```
+docker compose up --build
+```
 
 ## OpenAPI Code Generation
 
