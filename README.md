@@ -7,13 +7,14 @@ It consists of a Go server and [OpenTripPlanner](https://www.opentripplanner.org
 ## Todo
 
 - [ ] write `go-server` tests & integrate into `Pipeline`.
-- [ ] the codebase yearns for postgreSQL.
-  - log gym capacity history for trends?
+- [ ] the codebase yearns for a database.
+  - log gym capacity history trends?
+  - log dining menu trends?
   - social features?
 - [ ] centralize shared data like external transit URLs.
-- [ ] create the `otp` graph in the build step.
+- [x] create the `otp` graph in the build step.
 - [ ] figure out how to detect when the `otp` static GTFS data becomes invalid.
-- [ ] figure out why the `Pipeline` sometimes doesn't create a replica for `otp`.
+- [x] figure out why the `Pipeline` sometimes doesn't create a replica for `otp`.
 
 ## How to deploy
 
