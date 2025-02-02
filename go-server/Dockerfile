@@ -1,4 +1,4 @@
-# Use a Go runtime as a parent image
+# Multistage Dockerfile to build and deploy
 FROM golang:1.23 AS build-stage
 
 WORKDIR /app
