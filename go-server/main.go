@@ -1,6 +1,8 @@
 package main
 
 import (
+	"embed"
+	"io/fs"
 	"log"
 	"net/http"
 	"time"
@@ -9,6 +11,9 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/handler"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
+
+//go:embed static/*
+var embeddedStaticFiles embed.FS
 
 func main() {
 	// create main service
@@ -24,9 +29,14 @@ func main() {
 	// mount the API
 	mux.Handle("/", srv)
 
-	// serve static files from "./static" under the "/static" route
-	staticDir := "./static"
-	fileServer := http.FileServer(http.Dir(staticDir))
+	// create a sub filesystem rooted as "static"
+	staticFS, err := fs.Sub(embeddedStaticFiles, "static")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// serve static files from the embedded filesystem on /static/
+	fileServer := http.FileServer(http.FS(staticFS))
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
 	// start the hourly tasks in a separate goroutine
