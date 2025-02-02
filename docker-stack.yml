@@ -40,8 +40,6 @@ services:
     build:
       context: ./go-server
       dockerfile: ../go-server/Dockerfile
-      platforms:
-        - "linux/amd64"
     deploy:
       update_config:
         order: start-first

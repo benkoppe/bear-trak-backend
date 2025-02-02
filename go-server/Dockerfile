@@ -1,17 +1,23 @@
 # Use a Go runtime as a parent image
-FROM golang:latest
+FROM golang:1.23 AS build-stage
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
 COPY go.mod go.sum ./
 RUN go mod download && go mod verify
 
 COPY . .
-RUN go build -v -o /usr/local/bin/app ./main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o /main
 
-# expose the server port
+# Deploy the application binary into a lean image
+FROM gcr.io/distroless/base-debian11 AS build-release-stage
+
+WORKDIR /
+
+COPY --from=build-stage /main /main
+
 EXPOSE 3000
 
-# run
-CMD ["app"]
+USER nonroot:nonroot
+
+CMD ["/main"]
