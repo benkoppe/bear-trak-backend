@@ -61,7 +61,7 @@ services:
         - "linux/amd64"
     deploy:
       update_config:
-        order: stop-first
+        order: start-first
 
 volumes:
   letsencrypt:

@@ -16,5 +16,8 @@ EXPOSE 8080
 # Set java options
 ENV JAVA_TOOL_OPTIONS="-Xmx2g"
 
+# Build the OTP graph
+RUN /docker-entrypoint.sh --build --save
+
 # Start OTP
-CMD [ "--build", "--serve"]
+CMD [ "--load", "--serve"]
