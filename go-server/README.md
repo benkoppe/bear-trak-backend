@@ -20,7 +20,7 @@ docker compose up --build
 
 ## OpenAPI Code Generation
 
-The OpenAPI spec file [openapi.yaml](https://github.com/ogen-go/ogen) is the source of truth for this backend. Both the client and server sides are generated from this configuration file.
+The OpenAPI spec file [openapi.yaml](/go-server/openapi.yaml) is the source of truth for this backend. Both the client and server sides are generated from this configuration file.
 
 `go-server` uses [ogen](https://github.com/ogen-go/ogen) to generate the `api` module, which provides contracts for the backend to fulfill.
 
