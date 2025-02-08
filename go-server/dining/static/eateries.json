@@ -915,37 +915,6 @@
     ]
   },
   {
-    "id": 3,
-    "name": "North Star Dining Room",
-    "allWeekMenu": [
-      {
-        "category": "Payment Options",
-        "items": [
-          {
-            "item": "Meal Plan - Debit",
-            "healthy": false
-          },
-          {
-            "item": "Meal Plan - Swipe",
-            "healthy": false
-          },
-          {
-            "item": "Cornell Card",
-            "healthy": false
-          },
-          {
-            "item": "Major Credit Cards",
-            "healthy": false
-          },
-          {
-            "item": "Mobile Payments",
-            "healthy": false
-          }
-        ]
-      }
-    ]
-  },
-  {
     "id": 44,
     "name": "Novick's Café",
     "allWeekMenu": [
