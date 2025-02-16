@@ -104,21 +104,16 @@ func (s *Server) handleDeleteV1DiningUserRequest(args [0]string, argsEscaped boo
 			ID:   "deleteV1DiningUser",
 		}
 	)
-	request, close, err := s.decodeDeleteV1DiningUserRequest(r)
+	params, err := decodeDeleteV1DiningUserParams(args, argsEscaped, r)
 	if err != nil {
-		err = &ogenerrors.DecodeRequestError{
+		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
 			Err:              err,
 		}
-		defer recordError("DecodeRequest", err)
+		defer recordError("DecodeParams", err)
 		s.cfg.ErrorHandler(ctx, w, r, err)
 		return
 	}
-	defer func() {
-		if err := close(); err != nil {
-			recordError("CloseRequest", err)
-		}
-	}()
 
 	var response DeleteV1DiningUserRes
 	if m := s.cfg.Middleware; m != nil {
@@ -127,14 +122,19 @@ func (s *Server) handleDeleteV1DiningUserRequest(args [0]string, argsEscaped boo
 			OperationName:    DeleteV1DiningUserOperation,
 			OperationSummary: "Delete",
 			OperationID:      "deleteV1DiningUser",
-			Body:             request,
-			Params:           middleware.Parameters{},
-			Raw:              r,
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "sessionId",
+					In:   "query",
+				}: params.SessionId,
+			},
+			Raw: r,
 		}
 
 		type (
-			Request  = OptDiningUserSession
-			Params   = struct{}
+			Request  = struct{}
+			Params   = DeleteV1DiningUserParams
 			Response = DeleteV1DiningUserRes
 		)
 		response, err = middleware.HookMiddleware[
@@ -144,14 +144,14 @@ func (s *Server) handleDeleteV1DiningUserRequest(args [0]string, argsEscaped boo
 		](
 			m,
 			mreq,
-			nil,
+			unpackDeleteV1DiningUserParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.DeleteV1DiningUser(ctx, request)
+				response, err = s.h.DeleteV1DiningUser(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.DeleteV1DiningUser(ctx, request)
+		response, err = s.h.DeleteV1DiningUser(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -513,21 +513,16 @@ func (s *Server) handleGetV1DiningUserAccountsRequest(args [0]string, argsEscape
 			ID:   "getV1DiningUserAccounts",
 		}
 	)
-	request, close, err := s.decodeGetV1DiningUserAccountsRequest(r)
+	params, err := decodeGetV1DiningUserAccountsParams(args, argsEscaped, r)
 	if err != nil {
-		err = &ogenerrors.DecodeRequestError{
+		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
 			Err:              err,
 		}
-		defer recordError("DecodeRequest", err)
+		defer recordError("DecodeParams", err)
 		s.cfg.ErrorHandler(ctx, w, r, err)
 		return
 	}
-	defer func() {
-		if err := close(); err != nil {
-			recordError("CloseRequest", err)
-		}
-	}()
 
 	var response GetV1DiningUserAccountsRes
 	if m := s.cfg.Middleware; m != nil {
@@ -536,14 +531,19 @@ func (s *Server) handleGetV1DiningUserAccountsRequest(args [0]string, argsEscape
 			OperationName:    GetV1DiningUserAccountsOperation,
 			OperationSummary: "Dining Accounts",
 			OperationID:      "getV1DiningUserAccounts",
-			Body:             request,
-			Params:           middleware.Parameters{},
-			Raw:              r,
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "sessionId",
+					In:   "query",
+				}: params.SessionId,
+			},
+			Raw: r,
 		}
 
 		type (
-			Request  = OptDiningUserSession
-			Params   = struct{}
+			Request  = struct{}
+			Params   = GetV1DiningUserAccountsParams
 			Response = GetV1DiningUserAccountsRes
 		)
 		response, err = middleware.HookMiddleware[
@@ -553,14 +553,14 @@ func (s *Server) handleGetV1DiningUserAccountsRequest(args [0]string, argsEscape
 		](
 			m,
 			mreq,
-			nil,
+			unpackGetV1DiningUserAccountsParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.GetV1DiningUserAccounts(ctx, request)
+				response, err = s.h.GetV1DiningUserAccounts(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.GetV1DiningUserAccounts(ctx, request)
+		response, err = s.h.GetV1DiningUserAccounts(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -662,21 +662,16 @@ func (s *Server) handleGetV1DiningUserBarcodeRequest(args [0]string, argsEscaped
 			ID:   "getV1DiningUserBarcode",
 		}
 	)
-	request, close, err := s.decodeGetV1DiningUserBarcodeRequest(r)
+	params, err := decodeGetV1DiningUserBarcodeParams(args, argsEscaped, r)
 	if err != nil {
-		err = &ogenerrors.DecodeRequestError{
+		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
 			Err:              err,
 		}
-		defer recordError("DecodeRequest", err)
+		defer recordError("DecodeParams", err)
 		s.cfg.ErrorHandler(ctx, w, r, err)
 		return
 	}
-	defer func() {
-		if err := close(); err != nil {
-			recordError("CloseRequest", err)
-		}
-	}()
 
 	var response GetV1DiningUserBarcodeRes
 	if m := s.cfg.Middleware; m != nil {
@@ -685,14 +680,19 @@ func (s *Server) handleGetV1DiningUserBarcodeRequest(args [0]string, argsEscaped
 			OperationName:    GetV1DiningUserBarcodeOperation,
 			OperationSummary: "Dining Barcode",
 			OperationID:      "getV1DiningUserBarcode",
-			Body:             request,
-			Params:           middleware.Parameters{},
-			Raw:              r,
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "sessionId",
+					In:   "query",
+				}: params.SessionId,
+			},
+			Raw: r,
 		}
 
 		type (
-			Request  = OptDiningUserSession
-			Params   = struct{}
+			Request  = struct{}
+			Params   = GetV1DiningUserBarcodeParams
 			Response = GetV1DiningUserBarcodeRes
 		)
 		response, err = middleware.HookMiddleware[
@@ -702,14 +702,14 @@ func (s *Server) handleGetV1DiningUserBarcodeRequest(args [0]string, argsEscaped
 		](
 			m,
 			mreq,
-			nil,
+			unpackGetV1DiningUserBarcodeParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.GetV1DiningUserBarcode(ctx, request)
+				response, err = s.h.GetV1DiningUserBarcode(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.GetV1DiningUserBarcode(ctx, request)
+		response, err = s.h.GetV1DiningUserBarcode(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -811,21 +811,16 @@ func (s *Server) handleGetV1DiningUserSessionRequest(args [0]string, argsEscaped
 			ID:   "getV1DiningUserSession",
 		}
 	)
-	request, close, err := s.decodeGetV1DiningUserSessionRequest(r)
+	params, err := decodeGetV1DiningUserSessionParams(args, argsEscaped, r)
 	if err != nil {
-		err = &ogenerrors.DecodeRequestError{
+		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
 			Err:              err,
 		}
-		defer recordError("DecodeRequest", err)
+		defer recordError("DecodeParams", err)
 		s.cfg.ErrorHandler(ctx, w, r, err)
 		return
 	}
-	defer func() {
-		if err := close(); err != nil {
-			recordError("CloseRequest", err)
-		}
-	}()
 
 	var response GetV1DiningUserSessionRes
 	if m := s.cfg.Middleware; m != nil {
@@ -834,14 +829,23 @@ func (s *Server) handleGetV1DiningUserSessionRequest(args [0]string, argsEscaped
 			OperationName:    GetV1DiningUserSessionOperation,
 			OperationSummary: "Refresh Token",
 			OperationID:      "getV1DiningUserSession",
-			Body:             request,
-			Params:           middleware.Parameters{},
-			Raw:              r,
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "deviceId",
+					In:   "query",
+				}: params.DeviceId,
+				{
+					Name: "PIN",
+					In:   "query",
+				}: params.PIN,
+			},
+			Raw: r,
 		}
 
 		type (
-			Request  = OptDiningUserDevice
-			Params   = struct{}
+			Request  = struct{}
+			Params   = GetV1DiningUserSessionParams
 			Response = GetV1DiningUserSessionRes
 		)
 		response, err = middleware.HookMiddleware[
@@ -851,14 +855,14 @@ func (s *Server) handleGetV1DiningUserSessionRequest(args [0]string, argsEscaped
 		](
 			m,
 			mreq,
-			nil,
+			unpackGetV1DiningUserSessionParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.GetV1DiningUserSession(ctx, request)
+				response, err = s.h.GetV1DiningUserSession(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.GetV1DiningUserSession(ctx, request)
+		response, err = s.h.GetV1DiningUserSession(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -1350,21 +1354,16 @@ func (s *Server) handlePostV1DiningUserRequest(args [0]string, argsEscaped bool,
 			ID:   "postV1DiningUser",
 		}
 	)
-	request, close, err := s.decodePostV1DiningUserRequest(r)
+	params, err := decodePostV1DiningUserParams(args, argsEscaped, r)
 	if err != nil {
-		err = &ogenerrors.DecodeRequestError{
+		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
 			Err:              err,
 		}
-		defer recordError("DecodeRequest", err)
+		defer recordError("DecodeParams", err)
 		s.cfg.ErrorHandler(ctx, w, r, err)
 		return
 	}
-	defer func() {
-		if err := close(); err != nil {
-			recordError("CloseRequest", err)
-		}
-	}()
 
 	var response PostV1DiningUserRes
 	if m := s.cfg.Middleware; m != nil {
@@ -1373,14 +1372,27 @@ func (s *Server) handlePostV1DiningUserRequest(args [0]string, argsEscaped bool,
 			OperationName:    PostV1DiningUserOperation,
 			OperationSummary: "Register",
 			OperationID:      "postV1DiningUser",
-			Body:             request,
-			Params:           middleware.Parameters{},
-			Raw:              r,
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "sessionId",
+					In:   "query",
+				}: params.SessionId,
+				{
+					Name: "deviceId",
+					In:   "query",
+				}: params.DeviceId,
+				{
+					Name: "PIN",
+					In:   "query",
+				}: params.PIN,
+			},
+			Raw: r,
 		}
 
 		type (
-			Request  = OptPostV1DiningUserReq
-			Params   = struct{}
+			Request  = struct{}
+			Params   = PostV1DiningUserParams
 			Response = PostV1DiningUserRes
 		)
 		response, err = middleware.HookMiddleware[
@@ -1390,14 +1402,14 @@ func (s *Server) handlePostV1DiningUserRequest(args [0]string, argsEscaped bool,
 		](
 			m,
 			mreq,
-			nil,
+			unpackPostV1DiningUserParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.PostV1DiningUser(ctx, request)
+				response, err = s.h.PostV1DiningUser(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.PostV1DiningUser(ctx, request)
+		response, err = s.h.PostV1DiningUser(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {

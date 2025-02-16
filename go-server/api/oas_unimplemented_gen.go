@@ -18,7 +18,7 @@ var _ Handler = UnimplementedHandler{}
 // Deletes a user given a session.
 //
 // DELETE /v1/dining/user
-func (UnimplementedHandler) DeleteV1DiningUser(ctx context.Context, req OptDiningUserSession) (r DeleteV1DiningUserRes, _ error) {
+func (UnimplementedHandler) DeleteV1DiningUser(ctx context.Context, params DeleteV1DiningUserParams) (r DeleteV1DiningUserRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -45,7 +45,7 @@ func (UnimplementedHandler) GetV1Dining(ctx context.Context) (r []Eatery, _ erro
 // Returns a dining user's transaction accounts given a session.
 //
 // GET /v1/dining/user/accounts
-func (UnimplementedHandler) GetV1DiningUserAccounts(ctx context.Context, req OptDiningUserSession) (r GetV1DiningUserAccountsRes, _ error) {
+func (UnimplementedHandler) GetV1DiningUserAccounts(ctx context.Context, params GetV1DiningUserAccountsParams) (r GetV1DiningUserAccountsRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -54,7 +54,7 @@ func (UnimplementedHandler) GetV1DiningUserAccounts(ctx context.Context, req Opt
 // Returns a user's dining hall barcode given a session.
 //
 // GET /v1/dining/user/barcode
-func (UnimplementedHandler) GetV1DiningUserBarcode(ctx context.Context, req OptDiningUserSession) (r GetV1DiningUserBarcodeRes, _ error) {
+func (UnimplementedHandler) GetV1DiningUserBarcode(ctx context.Context, params GetV1DiningUserBarcodeParams) (r GetV1DiningUserBarcodeRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -63,7 +63,7 @@ func (UnimplementedHandler) GetV1DiningUserBarcode(ctx context.Context, req OptD
 // Refreshes a session given a user device.
 //
 // GET /v1/dining/user/session
-func (UnimplementedHandler) GetV1DiningUserSession(ctx context.Context, req OptDiningUserDevice) (r GetV1DiningUserSessionRes, _ error) {
+func (UnimplementedHandler) GetV1DiningUserSession(ctx context.Context, params GetV1DiningUserSessionParams) (r GetV1DiningUserSessionRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -99,7 +99,7 @@ func (UnimplementedHandler) GetV1TransitVehicles(ctx context.Context) (r []Vehic
 // Registers a new user given a device and session.
 //
 // POST /v1/dining/user
-func (UnimplementedHandler) PostV1DiningUser(ctx context.Context, req OptPostV1DiningUserReq) (r PostV1DiningUserRes, _ error) {
+func (UnimplementedHandler) PostV1DiningUser(ctx context.Context, params PostV1DiningUserParams) (r PostV1DiningUserRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

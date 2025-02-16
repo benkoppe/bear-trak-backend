@@ -15,6 +15,7 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
 	"go.opentelemetry.io/otel/trace"
 
+	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/ogen-go/ogen/otelogen"
 	"github.com/ogen-go/ogen/uri"
@@ -32,7 +33,7 @@ type Invoker interface {
 	// Deletes a user given a session.
 	//
 	// DELETE /v1/dining/user
-	DeleteV1DiningUser(ctx context.Context, request OptDiningUserSession) (DeleteV1DiningUserRes, error)
+	DeleteV1DiningUser(ctx context.Context, params DeleteV1DiningUserParams) (DeleteV1DiningUserRes, error)
 	// GetV1Alerts invokes getV1Alerts operation.
 	//
 	// Returns all of BearTrak's active alerts.
@@ -50,19 +51,19 @@ type Invoker interface {
 	// Returns a dining user's transaction accounts given a session.
 	//
 	// GET /v1/dining/user/accounts
-	GetV1DiningUserAccounts(ctx context.Context, request OptDiningUserSession) (GetV1DiningUserAccountsRes, error)
+	GetV1DiningUserAccounts(ctx context.Context, params GetV1DiningUserAccountsParams) (GetV1DiningUserAccountsRes, error)
 	// GetV1DiningUserBarcode invokes getV1DiningUserBarcode operation.
 	//
 	// Returns a user's dining hall barcode given a session.
 	//
 	// GET /v1/dining/user/barcode
-	GetV1DiningUserBarcode(ctx context.Context, request OptDiningUserSession) (GetV1DiningUserBarcodeRes, error)
+	GetV1DiningUserBarcode(ctx context.Context, params GetV1DiningUserBarcodeParams) (GetV1DiningUserBarcodeRes, error)
 	// GetV1DiningUserSession invokes getV1DiningUserSession operation.
 	//
 	// Refreshes a session given a user device.
 	//
 	// GET /v1/dining/user/session
-	GetV1DiningUserSession(ctx context.Context, request OptDiningUserDevice) (GetV1DiningUserSessionRes, error)
+	GetV1DiningUserSession(ctx context.Context, params GetV1DiningUserSessionParams) (GetV1DiningUserSessionRes, error)
 	// GetV1Gyms invokes getV1Gyms operation.
 	//
 	// Returns all necessary data for BearTrak's gym section.
@@ -86,7 +87,7 @@ type Invoker interface {
 	// Registers a new user given a device and session.
 	//
 	// POST /v1/dining/user
-	PostV1DiningUser(ctx context.Context, request OptPostV1DiningUserReq) (PostV1DiningUserRes, error)
+	PostV1DiningUser(ctx context.Context, params PostV1DiningUserParams) (PostV1DiningUserRes, error)
 }
 
 // Client implements OAS client.
@@ -141,12 +142,12 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 // Deletes a user given a session.
 //
 // DELETE /v1/dining/user
-func (c *Client) DeleteV1DiningUser(ctx context.Context, request OptDiningUserSession) (DeleteV1DiningUserRes, error) {
-	res, err := c.sendDeleteV1DiningUser(ctx, request)
+func (c *Client) DeleteV1DiningUser(ctx context.Context, params DeleteV1DiningUserParams) (DeleteV1DiningUserRes, error) {
+	res, err := c.sendDeleteV1DiningUser(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendDeleteV1DiningUser(ctx context.Context, request OptDiningUserSession) (res DeleteV1DiningUserRes, err error) {
+func (c *Client) sendDeleteV1DiningUser(ctx context.Context, params DeleteV1DiningUserParams) (res DeleteV1DiningUserRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteV1DiningUser"),
 		semconv.HTTPRequestMethodKey.String("DELETE"),
@@ -186,13 +187,28 @@ func (c *Client) sendDeleteV1DiningUser(ctx context.Context, request OptDiningUs
 	pathParts[0] = "/v1/dining/user"
 	uri.AddPathParts(u, pathParts[:]...)
 
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "sessionId" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "sessionId",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(params.SessionId))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
 	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "DELETE", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeDeleteV1DiningUserRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
 	}
 
 	stage = "SendRequest"
@@ -360,12 +376,12 @@ func (c *Client) sendGetV1Dining(ctx context.Context) (res []Eatery, err error) 
 // Returns a dining user's transaction accounts given a session.
 //
 // GET /v1/dining/user/accounts
-func (c *Client) GetV1DiningUserAccounts(ctx context.Context, request OptDiningUserSession) (GetV1DiningUserAccountsRes, error) {
-	res, err := c.sendGetV1DiningUserAccounts(ctx, request)
+func (c *Client) GetV1DiningUserAccounts(ctx context.Context, params GetV1DiningUserAccountsParams) (GetV1DiningUserAccountsRes, error) {
+	res, err := c.sendGetV1DiningUserAccounts(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendGetV1DiningUserAccounts(ctx context.Context, request OptDiningUserSession) (res GetV1DiningUserAccountsRes, err error) {
+func (c *Client) sendGetV1DiningUserAccounts(ctx context.Context, params GetV1DiningUserAccountsParams) (res GetV1DiningUserAccountsRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1DiningUserAccounts"),
 		semconv.HTTPRequestMethodKey.String("GET"),
@@ -405,13 +421,28 @@ func (c *Client) sendGetV1DiningUserAccounts(ctx context.Context, request OptDin
 	pathParts[0] = "/v1/dining/user/accounts"
 	uri.AddPathParts(u, pathParts[:]...)
 
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "sessionId" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "sessionId",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(params.SessionId))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
 	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeGetV1DiningUserAccountsRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
 	}
 
 	stage = "SendRequest"
@@ -435,12 +466,12 @@ func (c *Client) sendGetV1DiningUserAccounts(ctx context.Context, request OptDin
 // Returns a user's dining hall barcode given a session.
 //
 // GET /v1/dining/user/barcode
-func (c *Client) GetV1DiningUserBarcode(ctx context.Context, request OptDiningUserSession) (GetV1DiningUserBarcodeRes, error) {
-	res, err := c.sendGetV1DiningUserBarcode(ctx, request)
+func (c *Client) GetV1DiningUserBarcode(ctx context.Context, params GetV1DiningUserBarcodeParams) (GetV1DiningUserBarcodeRes, error) {
+	res, err := c.sendGetV1DiningUserBarcode(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendGetV1DiningUserBarcode(ctx context.Context, request OptDiningUserSession) (res GetV1DiningUserBarcodeRes, err error) {
+func (c *Client) sendGetV1DiningUserBarcode(ctx context.Context, params GetV1DiningUserBarcodeParams) (res GetV1DiningUserBarcodeRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1DiningUserBarcode"),
 		semconv.HTTPRequestMethodKey.String("GET"),
@@ -480,13 +511,28 @@ func (c *Client) sendGetV1DiningUserBarcode(ctx context.Context, request OptDini
 	pathParts[0] = "/v1/dining/user/barcode"
 	uri.AddPathParts(u, pathParts[:]...)
 
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "sessionId" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "sessionId",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(params.SessionId))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
 	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeGetV1DiningUserBarcodeRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
 	}
 
 	stage = "SendRequest"
@@ -510,12 +556,12 @@ func (c *Client) sendGetV1DiningUserBarcode(ctx context.Context, request OptDini
 // Refreshes a session given a user device.
 //
 // GET /v1/dining/user/session
-func (c *Client) GetV1DiningUserSession(ctx context.Context, request OptDiningUserDevice) (GetV1DiningUserSessionRes, error) {
-	res, err := c.sendGetV1DiningUserSession(ctx, request)
+func (c *Client) GetV1DiningUserSession(ctx context.Context, params GetV1DiningUserSessionParams) (GetV1DiningUserSessionRes, error) {
+	res, err := c.sendGetV1DiningUserSession(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendGetV1DiningUserSession(ctx context.Context, request OptDiningUserDevice) (res GetV1DiningUserSessionRes, err error) {
+func (c *Client) sendGetV1DiningUserSession(ctx context.Context, params GetV1DiningUserSessionParams) (res GetV1DiningUserSessionRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1DiningUserSession"),
 		semconv.HTTPRequestMethodKey.String("GET"),
@@ -555,13 +601,42 @@ func (c *Client) sendGetV1DiningUserSession(ctx context.Context, request OptDini
 	pathParts[0] = "/v1/dining/user/session"
 	uri.AddPathParts(u, pathParts[:]...)
 
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "deviceId" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "deviceId",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(params.DeviceId))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "PIN" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "PIN",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(params.PIN))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
 	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeGetV1DiningUserSessionRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
 	}
 
 	stage = "SendRequest"
@@ -801,12 +876,12 @@ func (c *Client) sendGetV1TransitVehicles(ctx context.Context) (res []Vehicle, e
 // Registers a new user given a device and session.
 //
 // POST /v1/dining/user
-func (c *Client) PostV1DiningUser(ctx context.Context, request OptPostV1DiningUserReq) (PostV1DiningUserRes, error) {
-	res, err := c.sendPostV1DiningUser(ctx, request)
+func (c *Client) PostV1DiningUser(ctx context.Context, params PostV1DiningUserParams) (PostV1DiningUserRes, error) {
+	res, err := c.sendPostV1DiningUser(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendPostV1DiningUser(ctx context.Context, request OptPostV1DiningUserReq) (res PostV1DiningUserRes, err error) {
+func (c *Client) sendPostV1DiningUser(ctx context.Context, params PostV1DiningUserParams) (res PostV1DiningUserRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("postV1DiningUser"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -846,13 +921,56 @@ func (c *Client) sendPostV1DiningUser(ctx context.Context, request OptPostV1Dini
 	pathParts[0] = "/v1/dining/user"
 	uri.AddPathParts(u, pathParts[:]...)
 
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "sessionId" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "sessionId",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(params.SessionId))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "deviceId" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "deviceId",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(params.DeviceId))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "PIN" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "PIN",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(params.PIN))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
 	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodePostV1DiningUserRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
 	}
 
 	stage = "SendRequest"

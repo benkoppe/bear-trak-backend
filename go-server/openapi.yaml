@@ -167,14 +167,11 @@ paths:
       operationId: postV1DiningUser
       x-stoplight:
         id: bk7qsagm0f0yz
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/DiningUserDevice"
-                - $ref: "#/components/schemas/DiningUserSession"
       description: Registers a new user given a device and session
+      parameters:
+        - $ref: "#/components/parameters/DiningUserSession"
+        - $ref: "#/components/parameters/DiningUserDeviceId"
+        - $ref: "#/components/parameters/DiningUserDevicePin"
     delete:
       summary: Delete
       tags:
@@ -199,12 +196,9 @@ paths:
       operationId: deleteV1DiningUser
       x-stoplight:
         id: lcyrjqsgno3u9
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DiningUserSession"
       description: Deletes a user given a session
+      parameters:
+        - $ref: "#/components/parameters/DiningUserSession"
   /v1/dining/user/session:
     get:
       summary: Refresh Token
@@ -217,7 +211,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DiningUserSession"
+                type: string
         "401":
           description: Unauthorized
           content: {}
@@ -230,13 +224,10 @@ paths:
       operationId: getV1DiningUserSession
       x-stoplight:
         id: kqdhzz2k3y749
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DiningUserDevice"
       description: Refreshes a session given a user device
-      parameters: []
+      parameters:
+        - $ref: "#/components/parameters/DiningUserDeviceId"
+        - $ref: "#/components/parameters/DiningUserDevicePin"
     parameters: []
   /v1/dining/user/accounts:
     get:
@@ -265,12 +256,9 @@ paths:
       operationId: getV1DiningUserAccounts
       x-stoplight:
         id: o3dflz1hb8swp
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DiningUserSession"
       description: Returns a dining user's transaction accounts given a session
+      parameters:
+        - $ref: "#/components/parameters/DiningUserSession"
     parameters: []
   /v1/dining/user/barcode:
     get:
@@ -297,12 +285,9 @@ paths:
       operationId: getV1DiningUserBarcode
       x-stoplight:
         id: jgs6ef4pobwfv
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DiningUserSession"
       description: Returns a user's dining hall barcode given a session
+      parameters:
+        - $ref: "#/components/parameters/DiningUserSession"
     parameters: []
 components:
   schemas:
@@ -943,43 +928,6 @@ components:
           x-stoplight:
             id: npwbh2swyuu70
           format: date-time
-    DiningUserSession:
-      title: DiningUserSession
-      x-stoplight:
-        id: ar9uplt0j1quo
-      type: object
-      required:
-        - sessionId
-      properties:
-        sessionId:
-          type: string
-          x-stoplight:
-            id: d78hdrfpspd39
-      x-tags:
-        - dining
-        - diningUser
-    DiningUserDevice:
-      title: DiningUserDevice
-      x-stoplight:
-        id: qmckz2g6f0vqa
-      type: object
-      required:
-        - deviceId
-        - PIN
-      properties:
-        deviceId:
-          type: string
-          x-stoplight:
-            id: x3ir24rhbqhz7
-        PIN:
-          type: string
-          x-stoplight:
-            id: 8fsnbyxp5nytp
-          minLength: 4
-          maxLength: 4
-      x-tags:
-        - dining
-        - diningUser
     DiningUserAccount:
       title: DiningUserAccount
       x-stoplight:
@@ -1006,6 +954,28 @@ components:
           x-stoplight:
             id: dqeq85tkzp558
           format: double
+  parameters:
+    DiningUserSession:
+      name: sessionId
+      in: query
+      required: true
+      schema:
+        type: string
+      description: An authenticated dining user sessionId
+    DiningUserDeviceId:
+      name: deviceId
+      in: query
+      required: true
+      schema:
+        type: string
+      description: A dining user deviceId
+    DiningUserDevicePin:
+      name: PIN
+      in: query
+      required: true
+      schema:
+        type: string
+      description: A dining user device PIN.
 x-internal: false
 tags:
   - name: beartrak

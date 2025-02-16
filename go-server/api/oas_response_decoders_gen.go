@@ -515,7 +515,7 @@ func decodeGetV1DiningUserSessionResponse(resp *http.Response) (res GetV1DiningU
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response DiningUserSession
+			var response GetV1DiningUserSessionOKApplicationJSON
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

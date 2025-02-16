@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/alerts"
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
@@ -34,44 +33,24 @@ func (bs *BackendService) GetV1TransitVehicles(ctx context.Context) ([]api.Vehic
 	return transit.GetVehicles(availtecUrl)
 }
 
-func (bs *BackendService) PostV1DiningUser(ctx context.Context, req api.OptPostV1DiningUserReq) (api.PostV1DiningUserRes, error) {
-	if !req.IsSet() {
-		return nil, fmt.Errorf("missing required fields")
-	}
-
-	return dining_users.CreateUser(cbordBaseUrl, req.Value)
+func (bs *BackendService) PostV1DiningUser(ctx context.Context, params api.PostV1DiningUserParams) (api.PostV1DiningUserRes, error) {
+	return dining_users.CreateUser(cbordBaseUrl, params)
 }
 
-func (bs *BackendService) DeleteV1DiningUser(ctx context.Context, req api.OptDiningUserSession) (api.DeleteV1DiningUserRes, error) {
-	if !req.IsSet() {
-		return nil, fmt.Errorf("missing required fields")
-	}
-
-	return dining_users.DeleteUser(cbordBaseUrl, req.Value)
+func (bs *BackendService) DeleteV1DiningUser(ctx context.Context, params api.DeleteV1DiningUserParams) (api.DeleteV1DiningUserRes, error) {
+	return dining_users.DeleteUser(cbordBaseUrl, params)
 }
 
-func (bs *BackendService) GetV1DiningUserSession(ctx context.Context, req api.OptDiningUserDevice) (api.GetV1DiningUserSessionRes, error) {
-	if !req.IsSet() {
-		return nil, fmt.Errorf("missing required fields")
-	}
-
-	return dining_users.RefreshUserToken(cbordBaseUrl, req.Value)
+func (bs *BackendService) GetV1DiningUserSession(ctx context.Context, params api.GetV1DiningUserSessionParams) (api.GetV1DiningUserSessionRes, error) {
+	return dining_users.RefreshUserToken(cbordBaseUrl, params)
 }
 
-func (bs *BackendService) GetV1DiningUserAccounts(ctx context.Context, req api.OptDiningUserSession) (api.GetV1DiningUserAccountsRes, error) {
-	if !req.IsSet() {
-		return nil, fmt.Errorf("missing required fields")
-	}
-
-	return dining_users.GetUserAccounts(cbordBaseUrl, req.Value)
+func (bs *BackendService) GetV1DiningUserAccounts(ctx context.Context, params api.GetV1DiningUserAccountsParams) (api.GetV1DiningUserAccountsRes, error) {
+	return dining_users.GetUserAccounts(cbordBaseUrl, params)
 }
 
-func (bs *BackendService) GetV1DiningUserBarcode(ctx context.Context, req api.OptDiningUserSession) (api.GetV1DiningUserBarcodeRes, error) {
-	if !req.IsSet() {
-		return nil, fmt.Errorf("missing required fields")
-	}
-
-	return dining_users.GetUserBarcode(cbordBaseUrl, req.Value)
+func (bs *BackendService) GetV1DiningUserBarcode(ctx context.Context, params api.GetV1DiningUserBarcodeParams) (api.GetV1DiningUserBarcodeRes, error) {
+	return dining_users.GetUserBarcode(cbordBaseUrl, params)
 }
 
 func (bs *BackendService) NewError(ctx context.Context, err error) *api.ErrorStatusCode {
