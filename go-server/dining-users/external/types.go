@@ -21,10 +21,10 @@ type accountsResponse struct {
 }
 
 type accountsResponseBody struct {
-	Accounts []account `json:"accounts"`
+	Accounts []Account `json:"accounts"`
 }
 
-type account struct {
+type Account struct {
 	ID       string  `json:"id"`
 	IsActive bool    `json:"isActive"`
 	Name     string  `json:"accountDisplayName"`
