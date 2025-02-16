@@ -138,6 +138,172 @@ paths:
       x-stoplight:
         id: skii58kqavo15
       description: "Returns time-sensitive, vehicle-related data for BearTrak's transit section."
+  /v1/dining/user:
+    parameters: []
+    post:
+      summary: Register
+      tags:
+        - dining
+        - diningUser
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+        "400":
+          description: "Bad Request: device already exists"
+          content: {}
+        "401":
+          description: "Unauthorized: bad sessionId"
+          content: {}
+        default:
+          description: Default
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: postV1DiningUser
+      x-stoplight:
+        id: bk7qsagm0f0yz
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/DiningUserDevice"
+                - $ref: "#/components/schemas/DiningUserSession"
+      description: Registers a new user given a device and session
+    delete:
+      summary: Delete
+      tags:
+        - dining
+        - diningUser
+      responses:
+        "200":
+          description: OK deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+        "401":
+          description: Unauthorized
+          content: {}
+        default:
+          description: Default
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: deleteV1DiningUser
+      x-stoplight:
+        id: lcyrjqsgno3u9
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiningUserSession"
+      description: Deletes a user given a session
+  /v1/dining/user/session:
+    get:
+      summary: Refresh Token
+      tags:
+        - dining
+        - diningUser
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiningUserSession"
+        "401":
+          description: Unauthorized
+          content: {}
+        default:
+          description: Default
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: getV1DiningUserSession
+      x-stoplight:
+        id: kqdhzz2k3y749
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiningUserDevice"
+      description: Refreshes a session given a user device
+      parameters: []
+    parameters: []
+  /v1/dining/user/accounts:
+    get:
+      summary: Dining Accounts
+      tags:
+        - dining
+        - diningUser
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DiningUserAccount"
+        "401":
+          description: Unauthorized
+          content: {}
+        default:
+          description: Default
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: getV1DiningUserAccounts
+      x-stoplight:
+        id: o3dflz1hb8swp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiningUserSession"
+      description: Returns a dining user's transaction accounts given a session
+    parameters: []
+  /v1/dining/user/barcode:
+    get:
+      summary: Dining Barcode
+      tags:
+        - dining
+        - diningUser
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+        "401":
+          description: Unauthorized
+          content: {}
+        default:
+          description: Default
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: getV1DiningUserBarcode
+      x-stoplight:
+        id: jgs6ef4pobwfv
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiningUserSession"
+      description: Returns a user's dining hall barcode given a session
+    parameters: []
 components:
   schemas:
     Alert:
@@ -218,6 +384,18 @@ components:
           type: string
           x-stoplight:
             id: 3kla3y1y92kn5
+    Success:
+      title: Success
+      x-stoplight:
+        id: gblzf81b3is45
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          x-stoplight:
+            id: z9vnqvcye9u9l
     Hours:
       title: Hours
       x-stoplight:
@@ -765,12 +943,77 @@ components:
           x-stoplight:
             id: npwbh2swyuu70
           format: date-time
+    DiningUserSession:
+      title: DiningUserSession
+      x-stoplight:
+        id: ar9uplt0j1quo
+      type: object
+      required:
+        - sessionId
+      properties:
+        sessionId:
+          type: string
+          x-stoplight:
+            id: d78hdrfpspd39
+      x-tags:
+        - dining
+        - diningUser
+    DiningUserDevice:
+      title: DiningUserDevice
+      x-stoplight:
+        id: qmckz2g6f0vqa
+      type: object
+      required:
+        - deviceId
+        - PIN
+      properties:
+        deviceId:
+          type: string
+          x-stoplight:
+            id: x3ir24rhbqhz7
+        PIN:
+          type: string
+          x-stoplight:
+            id: 8fsnbyxp5nytp
+          minLength: 4
+          maxLength: 4
+      x-tags:
+        - dining
+        - diningUser
+    DiningUserAccount:
+      title: DiningUserAccount
+      x-stoplight:
+        id: yrurmcxv5gqz3
+      type: object
+      x-tags:
+        - dining
+        - diningUser
+      required:
+        - accountId
+        - name
+        - balance
+      properties:
+        accountId:
+          type: string
+          x-stoplight:
+            id: tga9md1npd8m0
+        name:
+          type: string
+          x-stoplight:
+            id: mkynvgvjlp2de
+        balance:
+          type: number
+          x-stoplight:
+            id: dqeq85tkzp558
+          format: double
 x-internal: false
 tags:
   - name: beartrak
     description: General BearTrak features
   - name: dining
     description: Dining features
+  - name: diningUser
+    description: Dining features that require a user login
   - name: gyms
     description: Gym features
   - name: transit

@@ -27,6 +27,12 @@ func trimTrailingSlashes(u *url.URL) {
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
+	// DeleteV1DiningUser invokes deleteV1DiningUser operation.
+	//
+	// Deletes a user given a session.
+	//
+	// DELETE /v1/dining/user
+	DeleteV1DiningUser(ctx context.Context, request OptDiningUserSession) (DeleteV1DiningUserRes, error)
 	// GetV1Alerts invokes getV1Alerts operation.
 	//
 	// Returns all of BearTrak's active alerts.
@@ -39,6 +45,24 @@ type Invoker interface {
 	//
 	// GET /v1/dining
 	GetV1Dining(ctx context.Context) ([]Eatery, error)
+	// GetV1DiningUserAccounts invokes getV1DiningUserAccounts operation.
+	//
+	// Returns a dining user's transaction accounts given a session.
+	//
+	// GET /v1/dining/user/accounts
+	GetV1DiningUserAccounts(ctx context.Context, request OptDiningUserSession) (GetV1DiningUserAccountsRes, error)
+	// GetV1DiningUserBarcode invokes getV1DiningUserBarcode operation.
+	//
+	// Returns a user's dining hall barcode given a session.
+	//
+	// GET /v1/dining/user/barcode
+	GetV1DiningUserBarcode(ctx context.Context, request OptDiningUserSession) (GetV1DiningUserBarcodeRes, error)
+	// GetV1DiningUserSession invokes getV1DiningUserSession operation.
+	//
+	// Refreshes a session given a user device.
+	//
+	// GET /v1/dining/user/session
+	GetV1DiningUserSession(ctx context.Context, request OptDiningUserDevice) (GetV1DiningUserSessionRes, error)
 	// GetV1Gyms invokes getV1Gyms operation.
 	//
 	// Returns all necessary data for BearTrak's gym section.
@@ -57,6 +81,12 @@ type Invoker interface {
 	//
 	// GET /v1/transit/vehicles
 	GetV1TransitVehicles(ctx context.Context) ([]Vehicle, error)
+	// PostV1DiningUser invokes postV1DiningUser operation.
+	//
+	// Registers a new user given a device and session.
+	//
+	// POST /v1/dining/user
+	PostV1DiningUser(ctx context.Context, request OptPostV1DiningUserReq) (PostV1DiningUserRes, error)
 }
 
 // Client implements OAS client.
@@ -104,6 +134,81 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 		return c.serverURL
 	}
 	return u
+}
+
+// DeleteV1DiningUser invokes deleteV1DiningUser operation.
+//
+// Deletes a user given a session.
+//
+// DELETE /v1/dining/user
+func (c *Client) DeleteV1DiningUser(ctx context.Context, request OptDiningUserSession) (DeleteV1DiningUserRes, error) {
+	res, err := c.sendDeleteV1DiningUser(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendDeleteV1DiningUser(ctx context.Context, request OptDiningUserSession) (res DeleteV1DiningUserRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("deleteV1DiningUser"),
+		semconv.HTTPRequestMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/v1/dining/user"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, DeleteV1DiningUserOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/dining/user"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "DELETE", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeDeleteV1DiningUserRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeDeleteV1DiningUserResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
 }
 
 // GetV1Alerts invokes getV1Alerts operation.
@@ -243,6 +348,231 @@ func (c *Client) sendGetV1Dining(ctx context.Context) (res []Eatery, err error) 
 
 	stage = "DecodeResponse"
 	result, err := decodeGetV1DiningResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// GetV1DiningUserAccounts invokes getV1DiningUserAccounts operation.
+//
+// Returns a dining user's transaction accounts given a session.
+//
+// GET /v1/dining/user/accounts
+func (c *Client) GetV1DiningUserAccounts(ctx context.Context, request OptDiningUserSession) (GetV1DiningUserAccountsRes, error) {
+	res, err := c.sendGetV1DiningUserAccounts(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendGetV1DiningUserAccounts(ctx context.Context, request OptDiningUserSession) (res GetV1DiningUserAccountsRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("getV1DiningUserAccounts"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/dining/user/accounts"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, GetV1DiningUserAccountsOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/dining/user/accounts"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeGetV1DiningUserAccountsRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeGetV1DiningUserAccountsResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// GetV1DiningUserBarcode invokes getV1DiningUserBarcode operation.
+//
+// Returns a user's dining hall barcode given a session.
+//
+// GET /v1/dining/user/barcode
+func (c *Client) GetV1DiningUserBarcode(ctx context.Context, request OptDiningUserSession) (GetV1DiningUserBarcodeRes, error) {
+	res, err := c.sendGetV1DiningUserBarcode(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendGetV1DiningUserBarcode(ctx context.Context, request OptDiningUserSession) (res GetV1DiningUserBarcodeRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("getV1DiningUserBarcode"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/dining/user/barcode"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, GetV1DiningUserBarcodeOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/dining/user/barcode"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeGetV1DiningUserBarcodeRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeGetV1DiningUserBarcodeResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// GetV1DiningUserSession invokes getV1DiningUserSession operation.
+//
+// Refreshes a session given a user device.
+//
+// GET /v1/dining/user/session
+func (c *Client) GetV1DiningUserSession(ctx context.Context, request OptDiningUserDevice) (GetV1DiningUserSessionRes, error) {
+	res, err := c.sendGetV1DiningUserSession(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendGetV1DiningUserSession(ctx context.Context, request OptDiningUserDevice) (res GetV1DiningUserSessionRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("getV1DiningUserSession"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/dining/user/session"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, GetV1DiningUserSessionOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/dining/user/session"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeGetV1DiningUserSessionRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeGetV1DiningUserSessionResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -459,6 +789,81 @@ func (c *Client) sendGetV1TransitVehicles(ctx context.Context) (res []Vehicle, e
 
 	stage = "DecodeResponse"
 	result, err := decodeGetV1TransitVehiclesResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// PostV1DiningUser invokes postV1DiningUser operation.
+//
+// Registers a new user given a device and session.
+//
+// POST /v1/dining/user
+func (c *Client) PostV1DiningUser(ctx context.Context, request OptPostV1DiningUserReq) (PostV1DiningUserRes, error) {
+	res, err := c.sendPostV1DiningUser(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendPostV1DiningUser(ctx context.Context, request OptPostV1DiningUserReq) (res PostV1DiningUserRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("postV1DiningUser"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/dining/user"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, PostV1DiningUserOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/dining/user"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodePostV1DiningUserRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodePostV1DiningUserResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

@@ -285,6 +285,91 @@ func (s *BusRouteDirectionStopsItem) SetLatitude(val float64) {
 	s.Latitude = val
 }
 
+// DeleteV1DiningUserUnauthorized is response for DeleteV1DiningUser operation.
+type DeleteV1DiningUserUnauthorized struct{}
+
+func (*DeleteV1DiningUserUnauthorized) deleteV1DiningUserRes() {}
+
+// Ref: #/components/schemas/DiningUserAccount
+type DiningUserAccount struct {
+	AccountId string  `json:"accountId"`
+	Name      string  `json:"name"`
+	Balance   float64 `json:"balance"`
+}
+
+// GetAccountId returns the value of AccountId.
+func (s *DiningUserAccount) GetAccountId() string {
+	return s.AccountId
+}
+
+// GetName returns the value of Name.
+func (s *DiningUserAccount) GetName() string {
+	return s.Name
+}
+
+// GetBalance returns the value of Balance.
+func (s *DiningUserAccount) GetBalance() float64 {
+	return s.Balance
+}
+
+// SetAccountId sets the value of AccountId.
+func (s *DiningUserAccount) SetAccountId(val string) {
+	s.AccountId = val
+}
+
+// SetName sets the value of Name.
+func (s *DiningUserAccount) SetName(val string) {
+	s.Name = val
+}
+
+// SetBalance sets the value of Balance.
+func (s *DiningUserAccount) SetBalance(val float64) {
+	s.Balance = val
+}
+
+// Ref: #/components/schemas/DiningUserDevice
+type DiningUserDevice struct {
+	DeviceId string `json:"deviceId"`
+	PIN      string `json:"PIN"`
+}
+
+// GetDeviceId returns the value of DeviceId.
+func (s *DiningUserDevice) GetDeviceId() string {
+	return s.DeviceId
+}
+
+// GetPIN returns the value of PIN.
+func (s *DiningUserDevice) GetPIN() string {
+	return s.PIN
+}
+
+// SetDeviceId sets the value of DeviceId.
+func (s *DiningUserDevice) SetDeviceId(val string) {
+	s.DeviceId = val
+}
+
+// SetPIN sets the value of PIN.
+func (s *DiningUserDevice) SetPIN(val string) {
+	s.PIN = val
+}
+
+// Ref: #/components/schemas/DiningUserSession
+type DiningUserSession struct {
+	SessionId string `json:"sessionId"`
+}
+
+// GetSessionId returns the value of SessionId.
+func (s *DiningUserSession) GetSessionId() string {
+	return s.SessionId
+}
+
+// SetSessionId sets the value of SessionId.
+func (s *DiningUserSession) SetSessionId(val string) {
+	s.SessionId = val
+}
+
+func (*DiningUserSession) getV1DiningUserSessionRes() {}
+
 // Ref: #/components/schemas/Eatery
 type Eatery struct {
 	ID             int                    `json:"id"`
@@ -845,6 +930,29 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
+type GetV1DiningUserAccountsOKApplicationJSON []DiningUserAccount
+
+func (*GetV1DiningUserAccountsOKApplicationJSON) getV1DiningUserAccountsRes() {}
+
+// GetV1DiningUserAccountsUnauthorized is response for GetV1DiningUserAccounts operation.
+type GetV1DiningUserAccountsUnauthorized struct{}
+
+func (*GetV1DiningUserAccountsUnauthorized) getV1DiningUserAccountsRes() {}
+
+type GetV1DiningUserBarcodeOKApplicationJSON string
+
+func (*GetV1DiningUserBarcodeOKApplicationJSON) getV1DiningUserBarcodeRes() {}
+
+// GetV1DiningUserBarcodeUnauthorized is response for GetV1DiningUserBarcode operation.
+type GetV1DiningUserBarcodeUnauthorized struct{}
+
+func (*GetV1DiningUserBarcodeUnauthorized) getV1DiningUserBarcodeRes() {}
+
+// GetV1DiningUserSessionUnauthorized is response for GetV1DiningUserSession operation.
+type GetV1DiningUserSessionUnauthorized struct{}
+
+func (*GetV1DiningUserSessionUnauthorized) getV1DiningUserSessionRes() {}
+
 // Ref: #/components/schemas/Gym
 type Gym struct {
 	ID                  int                          `json:"id"`
@@ -1332,6 +1440,209 @@ func (o NilInt) Or(d int) int {
 	}
 	return d
 }
+
+// NewOptDiningUserDevice returns new OptDiningUserDevice with value set to v.
+func NewOptDiningUserDevice(v DiningUserDevice) OptDiningUserDevice {
+	return OptDiningUserDevice{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiningUserDevice is optional DiningUserDevice.
+type OptDiningUserDevice struct {
+	Value DiningUserDevice
+	Set   bool
+}
+
+// IsSet returns true if OptDiningUserDevice was set.
+func (o OptDiningUserDevice) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiningUserDevice) Reset() {
+	var v DiningUserDevice
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiningUserDevice) SetTo(v DiningUserDevice) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiningUserDevice) Get() (v DiningUserDevice, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiningUserDevice) Or(d DiningUserDevice) DiningUserDevice {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDiningUserSession returns new OptDiningUserSession with value set to v.
+func NewOptDiningUserSession(v DiningUserSession) OptDiningUserSession {
+	return OptDiningUserSession{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiningUserSession is optional DiningUserSession.
+type OptDiningUserSession struct {
+	Value DiningUserSession
+	Set   bool
+}
+
+// IsSet returns true if OptDiningUserSession was set.
+func (o OptDiningUserSession) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiningUserSession) Reset() {
+	var v DiningUserSession
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiningUserSession) SetTo(v DiningUserSession) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiningUserSession) Get() (v DiningUserSession, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiningUserSession) Or(d DiningUserSession) DiningUserSession {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptPostV1DiningUserReq returns new OptPostV1DiningUserReq with value set to v.
+func NewOptPostV1DiningUserReq(v PostV1DiningUserReq) OptPostV1DiningUserReq {
+	return OptPostV1DiningUserReq{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPostV1DiningUserReq is optional PostV1DiningUserReq.
+type OptPostV1DiningUserReq struct {
+	Value PostV1DiningUserReq
+	Set   bool
+}
+
+// IsSet returns true if OptPostV1DiningUserReq was set.
+func (o OptPostV1DiningUserReq) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPostV1DiningUserReq) Reset() {
+	var v PostV1DiningUserReq
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPostV1DiningUserReq) SetTo(v PostV1DiningUserReq) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPostV1DiningUserReq) Get() (v PostV1DiningUserReq, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPostV1DiningUserReq) Or(d PostV1DiningUserReq) PostV1DiningUserReq {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// PostV1DiningUserBadRequest is response for PostV1DiningUser operation.
+type PostV1DiningUserBadRequest struct{}
+
+func (*PostV1DiningUserBadRequest) postV1DiningUserRes() {}
+
+// Merged schema.
+type PostV1DiningUserReq struct {
+	DeviceId  string `json:"deviceId"`
+	PIN       string `json:"PIN"`
+	SessionId string `json:"sessionId"`
+}
+
+// GetDeviceId returns the value of DeviceId.
+func (s *PostV1DiningUserReq) GetDeviceId() string {
+	return s.DeviceId
+}
+
+// GetPIN returns the value of PIN.
+func (s *PostV1DiningUserReq) GetPIN() string {
+	return s.PIN
+}
+
+// GetSessionId returns the value of SessionId.
+func (s *PostV1DiningUserReq) GetSessionId() string {
+	return s.SessionId
+}
+
+// SetDeviceId sets the value of DeviceId.
+func (s *PostV1DiningUserReq) SetDeviceId(val string) {
+	s.DeviceId = val
+}
+
+// SetPIN sets the value of PIN.
+func (s *PostV1DiningUserReq) SetPIN(val string) {
+	s.PIN = val
+}
+
+// SetSessionId sets the value of SessionId.
+func (s *PostV1DiningUserReq) SetSessionId(val string) {
+	s.SessionId = val
+}
+
+// PostV1DiningUserUnauthorized is response for PostV1DiningUser operation.
+type PostV1DiningUserUnauthorized struct{}
+
+func (*PostV1DiningUserUnauthorized) postV1DiningUserRes() {}
+
+// Ref: #/components/schemas/Success
+type Success struct {
+	Message string `json:"message"`
+}
+
+// GetMessage returns the value of Message.
+func (s *Success) GetMessage() string {
+	return s.Message
+}
+
+// SetMessage sets the value of Message.
+func (s *Success) SetMessage(val string) {
+	s.Message = val
+}
+
+func (*Success) deleteV1DiningUserRes() {}
+func (*Success) postV1DiningUserRes()   {}
 
 // Ref: #/components/schemas/Vehicle
 type Vehicle struct {

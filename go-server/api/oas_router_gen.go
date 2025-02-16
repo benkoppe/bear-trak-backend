@@ -90,7 +90,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
 					switch r.Method {
 					case "GET":
 						s.handleGetV1DiningRequest([0]string{}, elemIsEscaped, w, r)
@@ -99,6 +98,110 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/user"
+					origElem := elem
+					if l := len("/user"); len(elem) >= l && elem[0:l] == "/user" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch r.Method {
+						case "DELETE":
+							s.handleDeleteV1DiningUserRequest([0]string{}, elemIsEscaped, w, r)
+						case "POST":
+							s.handlePostV1DiningUserRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,POST")
+						}
+
+						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+						origElem := elem
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'a': // Prefix: "accounts"
+							origElem := elem
+							if l := len("accounts"); len(elem) >= l && elem[0:l] == "accounts" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleGetV1DiningUserAccountsRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'b': // Prefix: "barcode"
+							origElem := elem
+							if l := len("barcode"); len(elem) >= l && elem[0:l] == "barcode" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleGetV1DiningUserBarcodeRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 's': // Prefix: "session"
+							origElem := elem
+							if l := len("session"); len(elem) >= l && elem[0:l] == "session" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleGetV1DiningUserSessionRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -309,7 +412,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
 					switch method {
 					case "GET":
 						r.name = GetV1DiningOperation
@@ -322,6 +424,132 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					default:
 						return
 					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/user"
+					origElem := elem
+					if l := len("/user"); len(elem) >= l && elem[0:l] == "/user" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch method {
+						case "DELETE":
+							r.name = DeleteV1DiningUserOperation
+							r.summary = "Delete"
+							r.operationID = "deleteV1DiningUser"
+							r.pathPattern = "/v1/dining/user"
+							r.args = args
+							r.count = 0
+							return r, true
+						case "POST":
+							r.name = PostV1DiningUserOperation
+							r.summary = "Register"
+							r.operationID = "postV1DiningUser"
+							r.pathPattern = "/v1/dining/user"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+						origElem := elem
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'a': // Prefix: "accounts"
+							origElem := elem
+							if l := len("accounts"); len(elem) >= l && elem[0:l] == "accounts" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = GetV1DiningUserAccountsOperation
+									r.summary = "Dining Accounts"
+									r.operationID = "getV1DiningUserAccounts"
+									r.pathPattern = "/v1/dining/user/accounts"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'b': // Prefix: "barcode"
+							origElem := elem
+							if l := len("barcode"); len(elem) >= l && elem[0:l] == "barcode" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = GetV1DiningUserBarcodeOperation
+									r.summary = "Dining Barcode"
+									r.operationID = "getV1DiningUserBarcode"
+									r.pathPattern = "/v1/dining/user/barcode"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 's': // Prefix: "session"
+							origElem := elem
+							if l := len("session"); len(elem) >= l && elem[0:l] == "session" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = GetV1DiningUserSessionOperation
+									r.summary = "Refresh Token"
+									r.operationID = "getV1DiningUserSession"
+									r.pathPattern = "/v1/dining/user/session"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem

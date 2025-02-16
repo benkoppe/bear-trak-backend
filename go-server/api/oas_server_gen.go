@@ -8,6 +8,12 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// DeleteV1DiningUser implements deleteV1DiningUser operation.
+	//
+	// Deletes a user given a session.
+	//
+	// DELETE /v1/dining/user
+	DeleteV1DiningUser(ctx context.Context, req OptDiningUserSession) (DeleteV1DiningUserRes, error)
 	// GetV1Alerts implements getV1Alerts operation.
 	//
 	// Returns all of BearTrak's active alerts.
@@ -20,6 +26,24 @@ type Handler interface {
 	//
 	// GET /v1/dining
 	GetV1Dining(ctx context.Context) ([]Eatery, error)
+	// GetV1DiningUserAccounts implements getV1DiningUserAccounts operation.
+	//
+	// Returns a dining user's transaction accounts given a session.
+	//
+	// GET /v1/dining/user/accounts
+	GetV1DiningUserAccounts(ctx context.Context, req OptDiningUserSession) (GetV1DiningUserAccountsRes, error)
+	// GetV1DiningUserBarcode implements getV1DiningUserBarcode operation.
+	//
+	// Returns a user's dining hall barcode given a session.
+	//
+	// GET /v1/dining/user/barcode
+	GetV1DiningUserBarcode(ctx context.Context, req OptDiningUserSession) (GetV1DiningUserBarcodeRes, error)
+	// GetV1DiningUserSession implements getV1DiningUserSession operation.
+	//
+	// Refreshes a session given a user device.
+	//
+	// GET /v1/dining/user/session
+	GetV1DiningUserSession(ctx context.Context, req OptDiningUserDevice) (GetV1DiningUserSessionRes, error)
 	// GetV1Gyms implements getV1Gyms operation.
 	//
 	// Returns all necessary data for BearTrak's gym section.
@@ -38,6 +62,12 @@ type Handler interface {
 	//
 	// GET /v1/transit/vehicles
 	GetV1TransitVehicles(ctx context.Context) ([]Vehicle, error)
+	// PostV1DiningUser implements postV1DiningUser operation.
+	//
+	// Registers a new user given a device and session.
+	//
+	// POST /v1/dining/user
+	PostV1DiningUser(ctx context.Context, req OptPostV1DiningUserReq) (PostV1DiningUserRes, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.
