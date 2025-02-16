@@ -2,6 +2,7 @@ package dining_users
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining-users/external"
@@ -78,7 +79,18 @@ func GetUserAccounts(externalBaseUrl string, params api.GetV1DiningUserAccountsP
 		accounts = append(accounts, convertExternalAccount(account))
 	}
 
-	res := api.GetV1DiningUserAccountsOKApplicationJSON(accounts)
+	// extract account type (first word) and filter
+	var filteredAccounts []api.DiningUserAccount
+	for _, account := range accounts {
+		accountType, shortName := splitAccountName(account)
+		account.Name = shortName
+
+		if strings.HasPrefix(accountType, "CB") || strings.HasPrefix(accountType, "BRB") || strings.HasPrefix(accountType, "GET") {
+			filteredAccounts = append(filteredAccounts, account)
+		}
+	}
+
+	res := api.GetV1DiningUserAccountsOKApplicationJSON(filteredAccounts)
 	return &res, nil
 }
 
@@ -88,4 +100,13 @@ func convertExternalAccount(account external.Account) api.DiningUserAccount {
 		Name:      account.Name,
 		Balance:   account.Balance,
 	}
+}
+
+func splitAccountName(account api.DiningUserAccount) (firstWord, remaining string) {
+	parts := strings.SplitN(account.Name, " ", 2)
+	firstWord = parts[0]
+	if len(parts) > 1 {
+		remaining = parts[1]
+	}
+	return
 }
