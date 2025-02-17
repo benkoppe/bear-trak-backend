@@ -26,6 +26,12 @@ type Handler interface {
 	//
 	// GET /v1/dining
 	GetV1Dining(ctx context.Context) ([]Eatery, error)
+	// GetV1DiningUser implements getV1DiningUser operation.
+	//
+	// Get Information.
+	//
+	// GET /v1/dining/user
+	GetV1DiningUser(ctx context.Context, params GetV1DiningUserParams) (GetV1DiningUserRes, error)
 	// GetV1DiningUserAccounts implements getV1DiningUserAccounts operation.
 	//
 	// Returns a dining user's transaction accounts given a session.

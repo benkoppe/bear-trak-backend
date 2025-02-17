@@ -9,6 +9,7 @@ const (
 	DeleteV1DiningUserOperation      OperationName = "DeleteV1DiningUser"
 	GetV1AlertsOperation             OperationName = "GetV1Alerts"
 	GetV1DiningOperation             OperationName = "GetV1Dining"
+	GetV1DiningUserOperation         OperationName = "GetV1DiningUser"
 	GetV1DiningUserAccountsOperation OperationName = "GetV1DiningUserAccounts"
 	GetV1DiningUserBarcodeOperation  OperationName = "GetV1DiningUserBarcode"
 	GetV1DiningUserSessionOperation  OperationName = "GetV1DiningUserSession"

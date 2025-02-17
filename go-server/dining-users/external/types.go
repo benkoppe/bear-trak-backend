@@ -9,11 +9,13 @@ type stringResponse struct {
 }
 
 type userIDResponse struct {
-	Response *userIDResponseBody `json:"response"`
+	Response *UserIDResponseBody `json:"response"`
 }
 
-type userIDResponseBody struct {
-	ID string `json:"id"`
+type UserIDResponseBody struct {
+	ID        string `json:"id"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
 }
 
 type accountsResponse struct {
@@ -29,4 +31,13 @@ type Account struct {
 	IsActive bool    `json:"isActive"`
 	Name     string  `json:"accountDisplayName"`
 	Balance  float64 `json:"balance"`
+}
+
+type userPhotoResponse struct {
+	Response *userPhotoResponseBody `json:"response"`
+}
+
+type userPhotoResponseBody struct {
+	MimeType string `json:"mimeType"`
+	Data     string `json:"data"`
 }

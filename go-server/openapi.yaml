@@ -140,6 +140,29 @@ paths:
       description: "Returns time-sensitive, vehicle-related data for BearTrak's transit section."
   /v1/dining/user:
     parameters: []
+    get:
+      summary: Get Information
+      tags: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiningUser"
+        "401":
+          description: Unauthorized
+        default:
+          description: Default
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: getV1DiningUser
+      x-stoplight:
+        id: oypusjbwr7hrc
+      parameters:
+        - $ref: "#/components/parameters/DiningUserSession"
     post:
       summary: Register
       tags:
@@ -954,6 +977,33 @@ components:
           x-stoplight:
             id: dqeq85tkzp558
           format: double
+    DiningUser:
+      title: DiningUser
+      x-stoplight:
+        id: az7m9ghjiw1oe
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+      properties:
+        id:
+          type: string
+          x-stoplight:
+            id: 3h5x43g20mrou
+        firstName:
+          type: string
+          x-stoplight:
+            id: kj94o3xd365tf
+        lastName:
+          type: string
+          x-stoplight:
+            id: 8ve6g5ortxk32
+        photoJpeg:
+          type: string
+          x-stoplight:
+            id: xw1yzgr6ga0f0
+          format: byte
   parameters:
     DiningUserSession:
       name: sessionId

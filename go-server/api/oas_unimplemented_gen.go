@@ -40,6 +40,15 @@ func (UnimplementedHandler) GetV1Dining(ctx context.Context) (r []Eatery, _ erro
 	return r, ht.ErrNotImplemented
 }
 
+// GetV1DiningUser implements getV1DiningUser operation.
+//
+// Get Information.
+//
+// GET /v1/dining/user
+func (UnimplementedHandler) GetV1DiningUser(ctx context.Context, params GetV1DiningUserParams) (r GetV1DiningUserRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // GetV1DiningUserAccounts implements getV1DiningUserAccounts operation.
 //
 // Returns a dining user's transaction accounts given a session.

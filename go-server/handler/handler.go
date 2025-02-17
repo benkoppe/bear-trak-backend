@@ -33,6 +33,10 @@ func (bs *BackendService) GetV1TransitVehicles(ctx context.Context) ([]api.Vehic
 	return transit.GetVehicles(availtecUrl)
 }
 
+func (bs *BackendService) GetV1DiningUser(ctx context.Context, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {
+	return dining_users.GetUser(cbordBaseUrl, params)
+}
+
 func (bs *BackendService) PostV1DiningUser(ctx context.Context, params api.PostV1DiningUserParams) (api.PostV1DiningUserRes, error) {
 	return dining_users.CreateUser(cbordBaseUrl, params)
 }

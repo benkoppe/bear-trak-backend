@@ -13,6 +13,10 @@ type GetV1DiningUserBarcodeRes interface {
 	getV1DiningUserBarcodeRes()
 }
 
+type GetV1DiningUserRes interface {
+	getV1DiningUserRes()
+}
+
 type GetV1DiningUserSessionRes interface {
 	getV1DiningUserSessionRes()
 }

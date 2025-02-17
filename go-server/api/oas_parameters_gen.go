@@ -70,6 +70,64 @@ func decodeDeleteV1DiningUserParams(args [0]string, argsEscaped bool, r *http.Re
 	return params, nil
 }
 
+// GetV1DiningUserParams is parameters of getV1DiningUser operation.
+type GetV1DiningUserParams struct {
+	// An authenticated dining user sessionId.
+	SessionId string
+}
+
+func unpackGetV1DiningUserParams(packed middleware.Parameters) (params GetV1DiningUserParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "sessionId",
+			In:   "query",
+		}
+		params.SessionId = packed[key].(string)
+	}
+	return params
+}
+
+func decodeGetV1DiningUserParams(args [0]string, argsEscaped bool, r *http.Request) (params GetV1DiningUserParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: sessionId.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "sessionId",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.SessionId = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "sessionId",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // GetV1DiningUserAccountsParams is parameters of getV1DiningUserAccounts operation.
 type GetV1DiningUserAccountsParams struct {
 	// An authenticated dining user sessionId.

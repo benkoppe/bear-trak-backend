@@ -290,6 +290,56 @@ type DeleteV1DiningUserUnauthorized struct{}
 
 func (*DeleteV1DiningUserUnauthorized) deleteV1DiningUserRes() {}
 
+// Ref: #/components/schemas/DiningUser
+type DiningUser struct {
+	ID        string `json:"id"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	PhotoJpeg []byte `json:"photoJpeg"`
+}
+
+// GetID returns the value of ID.
+func (s *DiningUser) GetID() string {
+	return s.ID
+}
+
+// GetFirstName returns the value of FirstName.
+func (s *DiningUser) GetFirstName() string {
+	return s.FirstName
+}
+
+// GetLastName returns the value of LastName.
+func (s *DiningUser) GetLastName() string {
+	return s.LastName
+}
+
+// GetPhotoJpeg returns the value of PhotoJpeg.
+func (s *DiningUser) GetPhotoJpeg() []byte {
+	return s.PhotoJpeg
+}
+
+// SetID sets the value of ID.
+func (s *DiningUser) SetID(val string) {
+	s.ID = val
+}
+
+// SetFirstName sets the value of FirstName.
+func (s *DiningUser) SetFirstName(val string) {
+	s.FirstName = val
+}
+
+// SetLastName sets the value of LastName.
+func (s *DiningUser) SetLastName(val string) {
+	s.LastName = val
+}
+
+// SetPhotoJpeg sets the value of PhotoJpeg.
+func (s *DiningUser) SetPhotoJpeg(val []byte) {
+	s.PhotoJpeg = val
+}
+
+func (*DiningUser) getV1DiningUserRes() {}
+
 // Ref: #/components/schemas/DiningUserAccount
 type DiningUserAccount struct {
 	AccountId string  `json:"accountId"`
@@ -913,6 +963,11 @@ func (*GetV1DiningUserSessionOKApplicationJSON) getV1DiningUserSessionRes() {}
 type GetV1DiningUserSessionUnauthorized struct{}
 
 func (*GetV1DiningUserSessionUnauthorized) getV1DiningUserSessionRes() {}
+
+// GetV1DiningUserUnauthorized is response for GetV1DiningUser operation.
+type GetV1DiningUserUnauthorized struct{}
+
+func (*GetV1DiningUserUnauthorized) getV1DiningUserRes() {}
 
 // Ref: #/components/schemas/Gym
 type Gym struct {

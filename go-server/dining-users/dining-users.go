@@ -1,8 +1,10 @@
 package dining_users
 
 import (
+	"encoding/base64"
 	"fmt"
 	"strings"
+	"unicode"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining-users/external"
@@ -40,6 +42,62 @@ func RefreshUserToken(externalBaseUrl string, params api.GetV1DiningUserSessionP
 
 	res := api.GetV1DiningUserSessionOKApplicationJSON(*resp)
 	return &res, nil
+}
+
+func GetUser(externalBaseUrl string, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {
+	idResp, err := external.FetchUserID(externalBaseUrl, params.SessionId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user id: %w", err)
+	}
+	if idResp == nil {
+		return &api.GetV1DiningUserUnauthorized{}, nil
+	}
+
+	res := convertExternalUser(*idResp)
+
+	photoResp, err := external.FetchUserPhoto(externalBaseUrl, params.SessionId, idResp.ID)
+	if photoResp != nil {
+		if photoResp.MimeType == "image/jpeg" && photoResp.Data != "" {
+			decodedBytes, err := base64.StdEncoding.DecodeString(photoResp.Data)
+			if err == nil {
+				res.PhotoJpeg = decodedBytes
+			}
+		}
+	} else {
+		if err != nil {
+			fmt.Println("photoResp had non-breaking error: %w", err)
+		} else {
+			fmt.Println("photoResp is nil")
+		}
+	}
+
+	return &res, nil
+}
+
+func convertExternalUser(user external.UserIDResponseBody) api.DiningUser {
+	return api.DiningUser{
+		ID:        user.ID,
+		FirstName: toProperCaseEachWord(user.FirstName),
+		LastName:  toProperCaseEachWord(user.LastName),
+	}
+}
+
+func toProperCaseWord(word string) string {
+	if word == "" {
+		return word
+	}
+
+	runes := []rune(strings.ToLower(word))
+	runes[0] = unicode.ToUpper(runes[0])
+	return string(runes)
+}
+
+func toProperCaseEachWord(s string) string {
+	words := strings.Fields(s)
+	for i, w := range words {
+		words[i] = toProperCaseWord(w)
+	}
+	return strings.Join(words, " ")
 }
 
 func GetUserBarcode(externalBaseUrl string, params api.GetV1DiningUserBarcodeParams) (api.GetV1DiningUserBarcodeRes, error) {

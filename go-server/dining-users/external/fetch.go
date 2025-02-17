@@ -7,7 +7,7 @@ import (
 )
 
 // nil if authentication fails, errors for other failure
-func FetchUserID(baseUrl string, sessionId string) (*userIDResponseBody, error) {
+func FetchUserID(baseUrl string, sessionId string) (*UserIDResponseBody, error) {
 	fullUrl, err := utils.ExtendUrl(baseUrl, "user")
 	if fullUrl == nil {
 		return nil, fmt.Errorf("failed to extend url: %w", err)
@@ -69,4 +69,26 @@ func FetchAccounts(baseUrl string, sessionId string, userId string) (*accountsRe
 	}
 
 	return resp.Response, err
+}
+
+func FetchUserPhoto(baseUrl string, sessionId string, userId string) (*userPhotoResponseBody, error) {
+	fullUrl, err := utils.ExtendUrl(baseUrl, "user")
+	if fullUrl == nil {
+		return nil, fmt.Errorf("failed to extend url: %w", err)
+	}
+
+	requestBody := map[string]interface{}{
+		"method": "retrieveUserPhoto",
+		"params": map[string]string{
+			"sessionId": sessionId,
+			"userId":    userId,
+		},
+	}
+
+	resp, err := utils.DoPostRequest[userPhotoResponse](*fullUrl, requestBody)
+	if resp == nil {
+		return nil, err
+	}
+
+	return resp.Response, nil
 }

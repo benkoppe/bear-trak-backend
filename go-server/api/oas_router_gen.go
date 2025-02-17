@@ -112,10 +112,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						switch r.Method {
 						case "DELETE":
 							s.handleDeleteV1DiningUserRequest([0]string{}, elemIsEscaped, w, r)
+						case "GET":
+							s.handleGetV1DiningUserRequest([0]string{}, elemIsEscaped, w, r)
 						case "POST":
 							s.handlePostV1DiningUserRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "DELETE,POST")
+							s.notAllowed(w, r, "DELETE,GET,POST")
 						}
 
 						return
@@ -440,6 +442,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = DeleteV1DiningUserOperation
 							r.summary = "Delete"
 							r.operationID = "deleteV1DiningUser"
+							r.pathPattern = "/v1/dining/user"
+							r.args = args
+							r.count = 0
+							return r, true
+						case "GET":
+							r.name = GetV1DiningUserOperation
+							r.summary = "Get Information"
+							r.operationID = "getV1DiningUser"
 							r.pathPattern = "/v1/dining/user"
 							r.args = args
 							r.count = 0
