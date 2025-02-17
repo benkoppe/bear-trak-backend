@@ -85,7 +85,7 @@ func GetUserAccounts(externalBaseUrl string, params api.GetV1DiningUserAccountsP
 		accountType, shortName := splitAccountName(account)
 		account.Name = shortName
 
-		if strings.HasPrefix(accountType, "CB") || strings.HasPrefix(accountType, "BRB") || strings.HasPrefix(accountType, "GET") {
+		if strings.HasPrefix(accountType, "CB") || strings.HasPrefix(accountType, "BRB") {
 			filteredAccounts = append(filteredAccounts, account)
 		}
 	}
