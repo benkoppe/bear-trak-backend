@@ -973,10 +973,32 @@ components:
           x-stoplight:
             id: mkynvgvjlp2de
         balance:
-          type: number
           x-stoplight:
-            id: dqeq85tkzp558
-          format: double
+            id: hf26bs0tm2j4p
+          oneOf:
+            - type: object
+              x-ogen-name: MoneyBalance
+              x-stoplight:
+                id: 9ykuy8dtzyzal
+              required:
+                - money
+              properties:
+                money:
+                  type: number
+                  x-stoplight:
+                    id: eje28xnbu5tnn
+                  format: double
+            - type: object
+              x-ogen-name: SwipeBalance
+              x-stoplight:
+                id: f3rsr4mdsr19q
+              required:
+                - swipes
+              properties:
+                swipes:
+                  type: integer
+                  x-stoplight:
+                    id: rcqg86njnxepw
     DiningUser:
       title: DiningUser
       x-stoplight:

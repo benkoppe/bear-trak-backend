@@ -186,35 +186,48 @@ func GetUserAccounts(externalBaseUrl string, params api.GetV1DiningUserAccountsP
 		return &api.GetV1DiningUserAccountsUnauthorized{}, nil
 	}
 
-	var accounts []api.DiningUserAccount
-	for _, account := range resp.Accounts {
-		accounts = append(accounts, convertExternalAccount(account))
-	}
-
 	// extract account type (first word) and filter
-	var filteredAccounts []api.DiningUserAccount
-	for _, account := range accounts {
+	var response []api.DiningUserAccount
+	for _, account := range resp.Accounts {
 		accountType, shortName := splitAccountName(account)
 		account.Name = shortName
 
-		if strings.HasPrefix(accountType, "CB") || strings.HasPrefix(accountType, "BRB") {
-			filteredAccounts = append(filteredAccounts, account)
+		if strings.HasPrefix(accountType, "CC1") || strings.HasPrefix(accountType, "GET") || strings.HasPrefix(accountType, "01n") {
+			continue
 		}
+
+		if strings.HasPrefix(accountType, "CB") || strings.HasPrefix(accountType, "BRB") {
+			response = append(response, convertExternalAccount(account, true))
+			continue
+		}
+
+		response = append(response, convertExternalAccount(account, false))
 	}
 
-	res := api.GetV1DiningUserAccountsOKApplicationJSON(filteredAccounts)
+	res := api.GetV1DiningUserAccountsOKApplicationJSON(response)
 	return &res, nil
 }
 
-func convertExternalAccount(account external.Account) api.DiningUserAccount {
+func convertExternalAccount(account external.Account, moneyBalance bool) api.DiningUserAccount {
+	var balance api.DiningUserAccountBalance
+	if moneyBalance {
+		balance = api.NewMoneyBalanceDiningUserAccountBalance(api.MoneyBalance{
+			Money: account.Balance,
+		})
+	} else {
+		balance = api.NewSwipeBalanceDiningUserAccountBalance(api.SwipeBalance{
+			Swipes: int(account.Balance),
+		})
+	}
+
 	return api.DiningUserAccount{
 		AccountId: account.ID,
 		Name:      account.Name,
-		Balance:   account.Balance,
+		Balance:   balance,
 	}
 }
 
-func splitAccountName(account api.DiningUserAccount) (firstWord, remaining string) {
+func splitAccountName(account external.Account) (firstWord, remaining string) {
 	parts := strings.SplitN(account.Name, " ", 2)
 	firstWord = parts[0]
 	if len(parts) > 1 {
