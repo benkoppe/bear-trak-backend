@@ -1,16 +1,44 @@
 package dining_users
 
 import (
+	"context"
+	"crypto/sha256"
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 	"strings"
 	"unicode"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining-users/external"
 )
 
-func CreateUser(externalBaseUrl string, params api.PostV1DiningUserParams) (api.PostV1DiningUserRes, error) {
+func hashUserId(userIdResp external.UserIDResponseBody) string {
+	hasher := sha256.New()
+	hasher.Write([]byte(userIdResp.ID))
+	return hex.EncodeToString(hasher.Sum(nil))
+}
+
+func CreateUser(ctx context.Context, externalBaseUrl string, params api.PostV1DiningUserParams, queries *db.Queries) (api.PostV1DiningUserRes, error) {
+	idResp, err := external.FetchUserID(externalBaseUrl, params.SessionId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch user info: %w", err)
+	}
+	if idResp == nil {
+		return &api.PostV1DiningUserUnauthorized{}, nil
+	}
+
+	hashedId := hashUserId(*idResp)
+	users, err := queries.GetDiningUserAll(ctx, hashedId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch users from database: %w", err)
+	}
+	if len(users) > 0 {
+		// disallow more than one login per user
+		return &api.PostV1DiningUserBadRequest{}, nil
+	}
+
 	resp, err := external.CreatePIN(externalBaseUrl, params.DeviceId, params.PIN, params.SessionId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create PIN: %w", err)
@@ -20,17 +48,41 @@ func CreateUser(externalBaseUrl string, params api.PostV1DiningUserParams) (api.
 		return &api.PostV1DiningUserUnauthorized{}, nil
 	}
 
+	_, err = queries.CreateDiningUser(ctx, db.CreateDiningUserParams{
+		UserID:   hashedId,
+		DeviceID: params.DeviceId,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to create user in database: %w", err)
+	}
+
 	return &api.Success{Message: "User created."}, nil
 }
 
-func DeleteUser(externalBaseUrl string, session api.DeleteV1DiningUserParams) (api.DeleteV1DiningUserRes, error) {
-	// TODO: implement correctly
-	// this needs a database to do correctly, to associate user ids with devices
+func DeleteUser(ctx context.Context, externalBaseUrl string, params api.DeleteV1DiningUserParams, queries *db.Queries) (api.DeleteV1DiningUserRes, error) {
+	idResp, err := external.FetchUserID(externalBaseUrl, params.SessionId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch user info: %w", err)
+	}
+	if idResp == nil {
+		return &api.DeleteV1DiningUserUnauthorized{}, nil
+	}
+
+	hashedId := hashUserId(*idResp)
+	err = queries.DeleteDiningUser(ctx, hashedId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to delete user from database: %w", err)
+	}
 
 	return &api.Success{Message: "User deleted."}, nil
 }
 
-func RefreshUserToken(externalBaseUrl string, params api.GetV1DiningUserSessionParams) (api.GetV1DiningUserSessionRes, error) {
+func RefreshUserToken(ctx context.Context, externalBaseUrl string, params api.GetV1DiningUserSessionParams, queries *db.Queries) (api.GetV1DiningUserSessionRes, error) {
+	user, err := queries.GetDiningUser(ctx, params.DeviceId)
+	if err != nil {
+		return &api.GetV1DiningUserSessionUnauthorized{}, nil
+	}
+
 	resp, err := external.CreateSession(externalBaseUrl, params.DeviceId, params.PIN)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create session: %w", err)
@@ -39,6 +91,8 @@ func RefreshUserToken(externalBaseUrl string, params api.GetV1DiningUserSessionP
 	if resp == nil {
 		return &api.GetV1DiningUserSessionUnauthorized{}, nil
 	}
+
+	queries.UpdateDiningUserSession(ctx, user.ID)
 
 	res := api.GetV1DiningUserSessionOKApplicationJSON(*resp)
 	return &res, nil

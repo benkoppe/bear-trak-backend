@@ -18,6 +18,8 @@ To build and run the Docker container:
 docker compose up --build
 ```
 
+This docker compose is only for running locally. For production, we use the main `docker-stack.yml`.
+
 ## OpenAPI Code Generation
 
 The OpenAPI spec file [openapi.yaml](/go-server/openapi.yaml) is the source of truth for this backend. Both the client and server sides are generated from this configuration file.

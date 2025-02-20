@@ -37,12 +37,39 @@ services:
       - "traefik.http.routers.go.entrypoints=websecure"
       - "traefik.http.routers.go.tls.certresolver=myresolver"
       - "org.opencontainers.image.source=https://github.com/benkoppe/bear-trak-backend"
+    secrets:
+      - db-password
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=app
+      - POSTGRES_PORT=5432
+      - POSTGRES_SSLMODE=disable
     build:
       context: ./go-server
       dockerfile: ../go-server/Dockerfile
     deploy:
       update_config:
         order: start-first
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    user: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    secrets:
+      - db-password
+    environment:
+      - POSTGRES_DB=app
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   otp:
     image: ghcr.io/benkoppe/bear-trak-otp:${GIT_COMMIT_HASH:-latest}
@@ -64,4 +91,9 @@ services:
         order: start-first
 
 volumes:
+  db-data:
   letsencrypt:
+
+secrets:
+  db-password:
+    external: true

@@ -5,13 +5,16 @@ import (
 
 	"github.com/benkoppe/bear-trak-backend/go-server/alerts"
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining"
 	dining_users "github.com/benkoppe/bear-trak-backend/go-server/dining-users"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms"
 	"github.com/benkoppe/bear-trak-backend/go-server/transit"
 )
 
-type BackendService struct{}
+type BackendService struct {
+	DB *db.Queries
+}
 
 func (bs *BackendService) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
 	return alerts.Get()
@@ -38,15 +41,15 @@ func (bs *BackendService) GetV1DiningUser(ctx context.Context, params api.GetV1D
 }
 
 func (bs *BackendService) PostV1DiningUser(ctx context.Context, params api.PostV1DiningUserParams) (api.PostV1DiningUserRes, error) {
-	return dining_users.CreateUser(cbordBaseUrl, params)
+	return dining_users.CreateUser(ctx, cbordBaseUrl, params, bs.DB)
 }
 
 func (bs *BackendService) DeleteV1DiningUser(ctx context.Context, params api.DeleteV1DiningUserParams) (api.DeleteV1DiningUserRes, error) {
-	return dining_users.DeleteUser(cbordBaseUrl, params)
+	return dining_users.DeleteUser(ctx, cbordBaseUrl, params, bs.DB)
 }
 
 func (bs *BackendService) GetV1DiningUserSession(ctx context.Context, params api.GetV1DiningUserSessionParams) (api.GetV1DiningUserSessionRes, error) {
-	return dining_users.RefreshUserToken(cbordBaseUrl, params)
+	return dining_users.RefreshUserToken(ctx, cbordBaseUrl, params, bs.DB)
 }
 
 func (bs *BackendService) GetV1DiningUserAccounts(ctx context.Context, params api.GetV1DiningUserAccountsParams) (api.GetV1DiningUserAccountsRes, error) {

@@ -1,13 +1,17 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"io/fs"
 	"log"
 	"net/http"
 	"time"
 
+	_ "github.com/bmizerany/pq"
+
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	"github.com/benkoppe/bear-trak-backend/go-server/handler"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
@@ -16,8 +20,17 @@ import (
 var embeddedStaticFiles embed.FS
 
 func main() {
+	// connect to db
+	pool, err := connectToDbPool(context.Background())
+	if err != nil {
+		log.Fatalf("Error connecting to the database: %v", err)
+	}
+	defer pool.Close()
+
 	// create main service
-	service := &handler.BackendService{}
+	service := &handler.BackendService{
+		DB: db.New(pool),
+	}
 	srv, err := api.NewServer(service)
 	if err != nil {
 		log.Fatal(err)

@@ -3,5 +3,32 @@ services:
     build:
       context: .
       target: final
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=app
+      - POSTGRES_PORT=5432
+      - POSTGRES_SSLMODE=disable
     ports:
       - 3000:3000
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    user: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=app
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db-data:
