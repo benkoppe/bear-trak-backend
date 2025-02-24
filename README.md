@@ -7,7 +7,7 @@ It consists of a Go server and [OpenTripPlanner](https://www.opentripplanner.org
 ## Todo
 
 - [ ] write `go-server` tests & integrate into `Pipeline`.
-- [ ] the codebase yearns for a database.
+- [x] the codebase yearns for a database.
   - log gym capacity history trends?
   - log dining menu trends?
   - social features?
