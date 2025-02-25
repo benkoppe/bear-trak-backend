@@ -58,6 +58,7 @@ services:
   db:
     image: postgres
     user: postgres
+    restart: always
     volumes:
       - db-data:/var/lib/postgresql/data
     secrets:
