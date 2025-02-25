@@ -14,7 +14,7 @@ RUN curl -L -o /var/opentripplanner/tcat.gtfs.zip "https://realtimetcatbus.avail
 EXPOSE 8080
 
 # Set java options
-ENV JAVA_TOOL_OPTIONS="-Xmx2g"
+ENV JAVA_TOOL_OPTIONS="-Xmx500m"
 
 # Build the OTP graph
 RUN /docker-entrypoint.sh --build --save
