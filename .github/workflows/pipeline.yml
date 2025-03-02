@@ -11,6 +11,22 @@ permissions:
 jobs:
   build-and-push-images:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [go-server, otp]
+        include:
+          - service: go-server
+            context: ./go-server
+            dockerfile: go-server/Dockerfile
+            tags: |
+              ghcr.io/benkoppe/bear-trak-go:latest
+              ghcr.io/benkoppe/bear-trak-go:${{ github.sha }}
+          - service: otp
+            context: ./otp
+            dockerfile: otp/Dockerfile
+            tags: |
+              ghcr.io/benkoppe/bear-trak-otp:latest
+              ghcr.io/benkoppe/bear-trak-otp:${{ github.sha }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,25 +38,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push `go-server` image
+      - name: Build and push ${{ matrix.service }} image
         uses: docker/build-push-action@v6
         with:
-          context: ./go-server
-          file: go-server/Dockerfile
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
           push: true
-          tags: |
-            ghcr.io/benkoppe/bear-trak-go:latest
-            ghcr.io/benkoppe/bear-trak-go:${{ github.sha }}
-
-      - name: Build and push `otp` image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./otp
-          file: otp/Dockerfile
-          push: true
-          tags: |
-            ghcr.io/benkoppe/bear-trak-otp:latest
-            ghcr.io/benkoppe/bear-trak-otp:${{ github.sha }}
+          tags: ${{ matrix.tags }}
 
   deploy:
     runs-on: ubuntu-latest
