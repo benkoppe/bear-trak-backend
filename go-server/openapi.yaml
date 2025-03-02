@@ -174,7 +174,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Success"
+                $ref: "#/components/schemas/DiningUser"
         "400":
           description: "Bad Request: device already exists"
           content: {}
@@ -977,7 +977,7 @@ components:
             id: hf26bs0tm2j4p
           oneOf:
             - type: object
-              x-ogen-name: MoneyBalance
+              x-ogen-name: DiningUserMoneyBalance
               x-stoplight:
                 id: 9ykuy8dtzyzal
               required:
@@ -989,7 +989,7 @@ components:
                     id: eje28xnbu5tnn
                   format: double
             - type: object
-              x-ogen-name: SwipeBalance
+              x-ogen-name: DiningUserSwipeBalance
               x-stoplight:
                 id: f3rsr4mdsr19q
               required:

@@ -338,7 +338,8 @@ func (s *DiningUser) SetPhotoJpeg(val []byte) {
 	s.PhotoJpeg = val
 }
 
-func (*DiningUser) getV1DiningUserRes() {}
+func (*DiningUser) getV1DiningUserRes()  {}
+func (*DiningUser) postV1DiningUserRes() {}
 
 // Ref: #/components/schemas/DiningUserAccount
 type DiningUserAccount struct {
@@ -379,9 +380,9 @@ func (s *DiningUserAccount) SetBalance(val DiningUserAccountBalance) {
 
 // DiningUserAccountBalance represents sum type.
 type DiningUserAccountBalance struct {
-	Type         DiningUserAccountBalanceType // switch on this field
-	MoneyBalance MoneyBalance
-	SwipeBalance SwipeBalance
+	Type                   DiningUserAccountBalanceType // switch on this field
+	DiningUserMoneyBalance DiningUserMoneyBalance
+	DiningUserSwipeBalance DiningUserSwipeBalance
 }
 
 // DiningUserAccountBalanceType is oneOf type of DiningUserAccountBalance.
@@ -389,60 +390,88 @@ type DiningUserAccountBalanceType string
 
 // Possible values for DiningUserAccountBalanceType.
 const (
-	MoneyBalanceDiningUserAccountBalance DiningUserAccountBalanceType = "MoneyBalance"
-	SwipeBalanceDiningUserAccountBalance DiningUserAccountBalanceType = "SwipeBalance"
+	DiningUserMoneyBalanceDiningUserAccountBalance DiningUserAccountBalanceType = "DiningUserMoneyBalance"
+	DiningUserSwipeBalanceDiningUserAccountBalance DiningUserAccountBalanceType = "DiningUserSwipeBalance"
 )
 
-// IsMoneyBalance reports whether DiningUserAccountBalance is MoneyBalance.
-func (s DiningUserAccountBalance) IsMoneyBalance() bool {
-	return s.Type == MoneyBalanceDiningUserAccountBalance
+// IsDiningUserMoneyBalance reports whether DiningUserAccountBalance is DiningUserMoneyBalance.
+func (s DiningUserAccountBalance) IsDiningUserMoneyBalance() bool {
+	return s.Type == DiningUserMoneyBalanceDiningUserAccountBalance
 }
 
-// IsSwipeBalance reports whether DiningUserAccountBalance is SwipeBalance.
-func (s DiningUserAccountBalance) IsSwipeBalance() bool {
-	return s.Type == SwipeBalanceDiningUserAccountBalance
+// IsDiningUserSwipeBalance reports whether DiningUserAccountBalance is DiningUserSwipeBalance.
+func (s DiningUserAccountBalance) IsDiningUserSwipeBalance() bool {
+	return s.Type == DiningUserSwipeBalanceDiningUserAccountBalance
 }
 
-// SetMoneyBalance sets DiningUserAccountBalance to MoneyBalance.
-func (s *DiningUserAccountBalance) SetMoneyBalance(v MoneyBalance) {
-	s.Type = MoneyBalanceDiningUserAccountBalance
-	s.MoneyBalance = v
+// SetDiningUserMoneyBalance sets DiningUserAccountBalance to DiningUserMoneyBalance.
+func (s *DiningUserAccountBalance) SetDiningUserMoneyBalance(v DiningUserMoneyBalance) {
+	s.Type = DiningUserMoneyBalanceDiningUserAccountBalance
+	s.DiningUserMoneyBalance = v
 }
 
-// GetMoneyBalance returns MoneyBalance and true boolean if DiningUserAccountBalance is MoneyBalance.
-func (s DiningUserAccountBalance) GetMoneyBalance() (v MoneyBalance, ok bool) {
-	if !s.IsMoneyBalance() {
+// GetDiningUserMoneyBalance returns DiningUserMoneyBalance and true boolean if DiningUserAccountBalance is DiningUserMoneyBalance.
+func (s DiningUserAccountBalance) GetDiningUserMoneyBalance() (v DiningUserMoneyBalance, ok bool) {
+	if !s.IsDiningUserMoneyBalance() {
 		return v, false
 	}
-	return s.MoneyBalance, true
+	return s.DiningUserMoneyBalance, true
 }
 
-// NewMoneyBalanceDiningUserAccountBalance returns new DiningUserAccountBalance from MoneyBalance.
-func NewMoneyBalanceDiningUserAccountBalance(v MoneyBalance) DiningUserAccountBalance {
+// NewDiningUserMoneyBalanceDiningUserAccountBalance returns new DiningUserAccountBalance from DiningUserMoneyBalance.
+func NewDiningUserMoneyBalanceDiningUserAccountBalance(v DiningUserMoneyBalance) DiningUserAccountBalance {
 	var s DiningUserAccountBalance
-	s.SetMoneyBalance(v)
+	s.SetDiningUserMoneyBalance(v)
 	return s
 }
 
-// SetSwipeBalance sets DiningUserAccountBalance to SwipeBalance.
-func (s *DiningUserAccountBalance) SetSwipeBalance(v SwipeBalance) {
-	s.Type = SwipeBalanceDiningUserAccountBalance
-	s.SwipeBalance = v
+// SetDiningUserSwipeBalance sets DiningUserAccountBalance to DiningUserSwipeBalance.
+func (s *DiningUserAccountBalance) SetDiningUserSwipeBalance(v DiningUserSwipeBalance) {
+	s.Type = DiningUserSwipeBalanceDiningUserAccountBalance
+	s.DiningUserSwipeBalance = v
 }
 
-// GetSwipeBalance returns SwipeBalance and true boolean if DiningUserAccountBalance is SwipeBalance.
-func (s DiningUserAccountBalance) GetSwipeBalance() (v SwipeBalance, ok bool) {
-	if !s.IsSwipeBalance() {
+// GetDiningUserSwipeBalance returns DiningUserSwipeBalance and true boolean if DiningUserAccountBalance is DiningUserSwipeBalance.
+func (s DiningUserAccountBalance) GetDiningUserSwipeBalance() (v DiningUserSwipeBalance, ok bool) {
+	if !s.IsDiningUserSwipeBalance() {
 		return v, false
 	}
-	return s.SwipeBalance, true
+	return s.DiningUserSwipeBalance, true
 }
 
-// NewSwipeBalanceDiningUserAccountBalance returns new DiningUserAccountBalance from SwipeBalance.
-func NewSwipeBalanceDiningUserAccountBalance(v SwipeBalance) DiningUserAccountBalance {
+// NewDiningUserSwipeBalanceDiningUserAccountBalance returns new DiningUserAccountBalance from DiningUserSwipeBalance.
+func NewDiningUserSwipeBalanceDiningUserAccountBalance(v DiningUserSwipeBalance) DiningUserAccountBalance {
 	var s DiningUserAccountBalance
-	s.SetSwipeBalance(v)
+	s.SetDiningUserSwipeBalance(v)
 	return s
+}
+
+type DiningUserMoneyBalance struct {
+	Money float64 `json:"money"`
+}
+
+// GetMoney returns the value of Money.
+func (s *DiningUserMoneyBalance) GetMoney() float64 {
+	return s.Money
+}
+
+// SetMoney sets the value of Money.
+func (s *DiningUserMoneyBalance) SetMoney(val float64) {
+	s.Money = val
+}
+
+type DiningUserSwipeBalance struct {
+	Swipes int `json:"swipes"`
+}
+
+// GetSwipes returns the value of Swipes.
+func (s *DiningUserSwipeBalance) GetSwipes() int {
+	return s.Swipes
+}
+
+// SetSwipes sets the value of Swipes.
+func (s *DiningUserSwipeBalance) SetSwipes(val int) {
+	s.Swipes = val
 }
 
 // Ref: #/components/schemas/Eatery
@@ -1390,20 +1419,6 @@ func (s *Hours) SetEnd(val time.Time) {
 	s.End = val
 }
 
-type MoneyBalance struct {
-	Money float64 `json:"money"`
-}
-
-// GetMoney returns the value of Money.
-func (s *MoneyBalance) GetMoney() float64 {
-	return s.Money
-}
-
-// SetMoney sets the value of Money.
-func (s *MoneyBalance) SetMoney(val float64) {
-	s.Money = val
-}
-
 // NewNilAlertButton returns new NilAlertButton with value set to v.
 func NewNilAlertButton(v AlertButton) NilAlertButton {
 	return NilAlertButton{
@@ -1565,21 +1580,6 @@ func (s *Success) SetMessage(val string) {
 }
 
 func (*Success) deleteV1DiningUserRes() {}
-func (*Success) postV1DiningUserRes()   {}
-
-type SwipeBalance struct {
-	Swipes int `json:"swipes"`
-}
-
-// GetSwipes returns the value of Swipes.
-func (s *SwipeBalance) GetSwipes() int {
-	return s.Swipes
-}
-
-// SetSwipes sets the value of Swipes.
-func (s *SwipeBalance) SetSwipes(val int) {
-	s.Swipes = val
-}
 
 // Ref: #/components/schemas/Vehicle
 type Vehicle struct {

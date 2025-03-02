@@ -1114,19 +1114,19 @@ func (s *DiningUserAccount) UnmarshalJSON(data []byte) error {
 // Encode encodes DiningUserAccountBalance as json.
 func (s DiningUserAccountBalance) Encode(e *jx.Encoder) {
 	switch s.Type {
-	case MoneyBalanceDiningUserAccountBalance:
-		s.MoneyBalance.Encode(e)
-	case SwipeBalanceDiningUserAccountBalance:
-		s.SwipeBalance.Encode(e)
+	case DiningUserMoneyBalanceDiningUserAccountBalance:
+		s.DiningUserMoneyBalance.Encode(e)
+	case DiningUserSwipeBalanceDiningUserAccountBalance:
+		s.DiningUserSwipeBalance.Encode(e)
 	}
 }
 
 func (s DiningUserAccountBalance) encodeFields(e *jx.Encoder) {
 	switch s.Type {
-	case MoneyBalanceDiningUserAccountBalance:
-		s.MoneyBalance.encodeFields(e)
-	case SwipeBalanceDiningUserAccountBalance:
-		s.SwipeBalance.encodeFields(e)
+	case DiningUserMoneyBalanceDiningUserAccountBalance:
+		s.DiningUserMoneyBalance.encodeFields(e)
+	case DiningUserSwipeBalanceDiningUserAccountBalance:
+		s.DiningUserSwipeBalance.encodeFields(e)
 	}
 }
 
@@ -1145,7 +1145,7 @@ func (s *DiningUserAccountBalance) Decode(d *jx.Decoder) error {
 		return d.ObjBytes(func(d *jx.Decoder, key []byte) error {
 			switch string(key) {
 			case "money":
-				match := MoneyBalanceDiningUserAccountBalance
+				match := DiningUserMoneyBalanceDiningUserAccountBalance
 				if found && s.Type != match {
 					s.Type = ""
 					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
@@ -1153,7 +1153,7 @@ func (s *DiningUserAccountBalance) Decode(d *jx.Decoder) error {
 				found = true
 				s.Type = match
 			case "swipes":
-				match := SwipeBalanceDiningUserAccountBalance
+				match := DiningUserSwipeBalanceDiningUserAccountBalance
 				if found && s.Type != match {
 					s.Type = ""
 					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
@@ -1170,12 +1170,12 @@ func (s *DiningUserAccountBalance) Decode(d *jx.Decoder) error {
 		return errors.New("unable to detect sum type variant")
 	}
 	switch s.Type {
-	case MoneyBalanceDiningUserAccountBalance:
-		if err := s.MoneyBalance.Decode(d); err != nil {
+	case DiningUserMoneyBalanceDiningUserAccountBalance:
+		if err := s.DiningUserMoneyBalance.Decode(d); err != nil {
 			return err
 		}
-	case SwipeBalanceDiningUserAccountBalance:
-		if err := s.SwipeBalance.Decode(d); err != nil {
+	case DiningUserSwipeBalanceDiningUserAccountBalance:
+		if err := s.DiningUserSwipeBalance.Decode(d); err != nil {
 			return err
 		}
 	default:
@@ -1193,6 +1193,198 @@ func (s DiningUserAccountBalance) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *DiningUserAccountBalance) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *DiningUserMoneyBalance) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *DiningUserMoneyBalance) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("money")
+		e.Float64(s.Money)
+	}
+}
+
+var jsonFieldsNameOfDiningUserMoneyBalance = [1]string{
+	0: "money",
+}
+
+// Decode decodes DiningUserMoneyBalance from json.
+func (s *DiningUserMoneyBalance) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode DiningUserMoneyBalance to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "money":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Float64()
+				s.Money = float64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"money\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode DiningUserMoneyBalance")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfDiningUserMoneyBalance) {
+					name = jsonFieldsNameOfDiningUserMoneyBalance[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *DiningUserMoneyBalance) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *DiningUserMoneyBalance) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *DiningUserSwipeBalance) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *DiningUserSwipeBalance) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("swipes")
+		e.Int(s.Swipes)
+	}
+}
+
+var jsonFieldsNameOfDiningUserSwipeBalance = [1]string{
+	0: "swipes",
+}
+
+// Decode decodes DiningUserSwipeBalance from json.
+func (s *DiningUserSwipeBalance) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode DiningUserSwipeBalance to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "swipes":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.Swipes = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"swipes\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode DiningUserSwipeBalance")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfDiningUserSwipeBalance) {
+					name = jsonFieldsNameOfDiningUserSwipeBalance[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *DiningUserSwipeBalance) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *DiningUserSwipeBalance) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -3481,102 +3673,6 @@ func (s *Hours) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode implements json.Marshaler.
-func (s *MoneyBalance) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *MoneyBalance) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("money")
-		e.Float64(s.Money)
-	}
-}
-
-var jsonFieldsNameOfMoneyBalance = [1]string{
-	0: "money",
-}
-
-// Decode decodes MoneyBalance from json.
-func (s *MoneyBalance) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode MoneyBalance to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "money":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Float64()
-				s.Money = float64(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"money\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode MoneyBalance")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfMoneyBalance) {
-					name = jsonFieldsNameOfMoneyBalance[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *MoneyBalance) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *MoneyBalance) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
 // Encode encodes AlertButton as json.
 func (o NilAlertButton) Encode(e *jx.Encoder) {
 	if o.Null {
@@ -3803,102 +3899,6 @@ func (s *Success) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *Success) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *SwipeBalance) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *SwipeBalance) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("swipes")
-		e.Int(s.Swipes)
-	}
-}
-
-var jsonFieldsNameOfSwipeBalance = [1]string{
-	0: "swipes",
-}
-
-// Decode decodes SwipeBalance from json.
-func (s *SwipeBalance) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode SwipeBalance to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "swipes":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Int()
-				s.Swipes = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"swipes\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode SwipeBalance")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfSwipeBalance) {
-					name = jsonFieldsNameOfSwipeBalance[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *SwipeBalance) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *SwipeBalance) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

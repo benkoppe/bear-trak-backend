@@ -56,7 +56,16 @@ func CreateUser(ctx context.Context, externalBaseUrl string, params api.PostV1Di
 		return nil, fmt.Errorf("failed to create user in database: %w", err)
 	}
 
-	return &api.Success{Message: "User created."}, nil
+	user, err := GetUser(externalBaseUrl, api.GetV1DiningUserParams{SessionId: params.SessionId})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %w", err)
+	}
+
+	if diningUser, ok := user.(*api.DiningUser); ok {
+		return diningUser, nil
+	}
+
+	return nil, fmt.Errorf("failed to convert user to DiningUser")
 }
 
 func DeleteUser(ctx context.Context, externalBaseUrl string, params api.DeleteV1DiningUserParams, queries *db.Queries) (api.DeleteV1DiningUserRes, error) {
@@ -211,11 +220,11 @@ func GetUserAccounts(externalBaseUrl string, params api.GetV1DiningUserAccountsP
 func convertExternalAccount(account external.Account, moneyBalance bool) api.DiningUserAccount {
 	var balance api.DiningUserAccountBalance
 	if moneyBalance {
-		balance = api.NewMoneyBalanceDiningUserAccountBalance(api.MoneyBalance{
+		balance = api.NewDiningUserMoneyBalanceDiningUserAccountBalance(api.DiningUserMoneyBalance{
 			Money: account.Balance,
 		})
 	} else {
-		balance = api.NewSwipeBalanceDiningUserAccountBalance(api.SwipeBalance{
+		balance = api.NewDiningUserSwipeBalanceDiningUserAccountBalance(api.DiningUserSwipeBalance{
 			Swipes: int(account.Balance),
 		})
 	}

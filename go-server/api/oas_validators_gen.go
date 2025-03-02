@@ -188,16 +188,39 @@ func (s *DiningUserAccount) Validate() error {
 
 func (s DiningUserAccountBalance) Validate() error {
 	switch s.Type {
-	case MoneyBalanceDiningUserAccountBalance:
-		if err := s.MoneyBalance.Validate(); err != nil {
+	case DiningUserMoneyBalanceDiningUserAccountBalance:
+		if err := s.DiningUserMoneyBalance.Validate(); err != nil {
 			return err
 		}
 		return nil
-	case SwipeBalanceDiningUserAccountBalance:
+	case DiningUserSwipeBalanceDiningUserAccountBalance:
 		return nil // no validation needed
 	default:
 		return errors.Errorf("invalid type %q", s.Type)
 	}
+}
+
+func (s *DiningUserMoneyBalance) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := (validate.Float{}).Validate(float64(s.Money)); err != nil {
+			return errors.Wrap(err, "float")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "money",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
 }
 
 func (s *Eatery) Validate() error {
@@ -870,29 +893,6 @@ func (s GymFacilitiesItemFacilityType) Validate() error {
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
-}
-
-func (s *MoneyBalance) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := (validate.Float{}).Validate(float64(s.Money)); err != nil {
-			return errors.Wrap(err, "float")
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "money",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
 }
 
 func (s *Vehicle) Validate() error {
