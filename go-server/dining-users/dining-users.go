@@ -62,7 +62,14 @@ func CreateUser(ctx context.Context, externalBaseUrl string, params api.PostV1Di
 	}
 
 	if diningUser, ok := user.(*api.DiningUser); ok {
-		return diningUser, nil
+		resp := api.PostV1DiningUserCreated{
+			Message:   "User created.",
+			ID:        diningUser.ID,
+			FirstName: diningUser.FirstName,
+			LastName:  diningUser.LastName,
+			PhotoJpeg: diningUser.PhotoJpeg,
+		}
+		return &resp, nil
 	}
 
 	return nil, fmt.Errorf("failed to convert user to DiningUser")

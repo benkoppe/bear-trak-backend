@@ -235,7 +235,7 @@ func encodeGetV1TransitVehiclesResponse(response []Vehicle, w http.ResponseWrite
 
 func encodePostV1DiningUserResponse(response PostV1DiningUserRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *DiningUser:
+	case *PostV1DiningUserCreated:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(201)
 		span.SetStatus(codes.Ok, http.StatusText(201))

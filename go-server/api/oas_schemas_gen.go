@@ -338,8 +338,7 @@ func (s *DiningUser) SetPhotoJpeg(val []byte) {
 	s.PhotoJpeg = val
 }
 
-func (*DiningUser) getV1DiningUserRes()  {}
-func (*DiningUser) postV1DiningUserRes() {}
+func (*DiningUser) getV1DiningUserRes() {}
 
 // Ref: #/components/schemas/DiningUserAccount
 type DiningUserAccount struct {
@@ -1558,6 +1557,67 @@ func (o NilInt) Or(d int) int {
 type PostV1DiningUserBadRequest struct{}
 
 func (*PostV1DiningUserBadRequest) postV1DiningUserRes() {}
+
+// Merged schema.
+type PostV1DiningUserCreated struct {
+	Message   string `json:"message"`
+	ID        string `json:"id"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	PhotoJpeg []byte `json:"photoJpeg"`
+}
+
+// GetMessage returns the value of Message.
+func (s *PostV1DiningUserCreated) GetMessage() string {
+	return s.Message
+}
+
+// GetID returns the value of ID.
+func (s *PostV1DiningUserCreated) GetID() string {
+	return s.ID
+}
+
+// GetFirstName returns the value of FirstName.
+func (s *PostV1DiningUserCreated) GetFirstName() string {
+	return s.FirstName
+}
+
+// GetLastName returns the value of LastName.
+func (s *PostV1DiningUserCreated) GetLastName() string {
+	return s.LastName
+}
+
+// GetPhotoJpeg returns the value of PhotoJpeg.
+func (s *PostV1DiningUserCreated) GetPhotoJpeg() []byte {
+	return s.PhotoJpeg
+}
+
+// SetMessage sets the value of Message.
+func (s *PostV1DiningUserCreated) SetMessage(val string) {
+	s.Message = val
+}
+
+// SetID sets the value of ID.
+func (s *PostV1DiningUserCreated) SetID(val string) {
+	s.ID = val
+}
+
+// SetFirstName sets the value of FirstName.
+func (s *PostV1DiningUserCreated) SetFirstName(val string) {
+	s.FirstName = val
+}
+
+// SetLastName sets the value of LastName.
+func (s *PostV1DiningUserCreated) SetLastName(val string) {
+	s.LastName = val
+}
+
+// SetPhotoJpeg sets the value of PhotoJpeg.
+func (s *PostV1DiningUserCreated) SetPhotoJpeg(val []byte) {
+	s.PhotoJpeg = val
+}
+
+func (*PostV1DiningUserCreated) postV1DiningUserRes() {}
 
 // PostV1DiningUserUnauthorized is response for PostV1DiningUser operation.
 type PostV1DiningUserUnauthorized struct{}

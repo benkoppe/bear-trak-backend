@@ -174,7 +174,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DiningUser"
+                allOf:
+                  - $ref: "#/components/schemas/Success"
+                  - $ref: "#/components/schemas/DiningUser"
         "400":
           description: "Bad Request: device already exists"
           content: {}

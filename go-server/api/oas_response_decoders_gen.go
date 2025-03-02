@@ -1038,7 +1038,7 @@ func decodePostV1DiningUserResponse(resp *http.Response) (res PostV1DiningUserRe
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response DiningUser
+			var response PostV1DiningUserCreated
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
