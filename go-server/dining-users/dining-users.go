@@ -64,11 +64,13 @@ func CreateUser(ctx context.Context, externalBaseUrl string, params api.PostV1Di
 
 	if diningUser, ok := user.(*api.DiningUser); ok {
 		resp := api.PostV1DiningUserCreated{
-			Message:   "User created.",
-			ID:        diningUser.ID,
-			FirstName: diningUser.FirstName,
-			LastName:  diningUser.LastName,
-			PhotoJpeg: diningUser.PhotoJpeg,
+			Message:        "User created.",
+			ID:             diningUser.ID,
+			FirstName:      diningUser.FirstName,
+			LastName:       diningUser.LastName,
+			PhotoJpeg:      diningUser.PhotoJpeg,
+			BarcodeSeedHex: diningUser.BarcodeSeedHex,
+			CashlessKey:    diningUser.CashlessKey,
 		}
 		return &resp, nil
 	}
