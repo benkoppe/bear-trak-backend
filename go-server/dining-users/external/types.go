@@ -41,3 +41,19 @@ type userPhotoResponseBody struct {
 	MimeType string `json:"mimeType"`
 	Data     string `json:"data"`
 }
+
+type barcodeSeedResponse struct {
+	Response *barcodeSeedResponseBody `json:"response"`
+}
+
+type barcodeSeedResponseBody struct {
+	BarcodeSeed string `json:"barcodeSeed"`
+}
+
+type cashlessKeyResponse struct {
+	Response *cashlessKeyResponseBody `json:"response"`
+}
+
+type cashlessKeyResponseBody struct {
+	Value string `json:"value"`
+}

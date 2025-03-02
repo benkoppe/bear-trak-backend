@@ -862,13 +862,23 @@ func (s *DiningUser) encodeFields(e *jx.Encoder) {
 		e.FieldStart("photoJpeg")
 		e.Base64(s.PhotoJpeg)
 	}
+	{
+		e.FieldStart("barcodeSeedHex")
+		e.Str(s.BarcodeSeedHex)
+	}
+	{
+		e.FieldStart("cashlessKey")
+		e.Str(s.CashlessKey)
+	}
 }
 
-var jsonFieldsNameOfDiningUser = [4]string{
+var jsonFieldsNameOfDiningUser = [6]string{
 	0: "id",
 	1: "firstName",
 	2: "lastName",
 	3: "photoJpeg",
+	4: "barcodeSeedHex",
+	5: "cashlessKey",
 }
 
 // Decode decodes DiningUser from json.
@@ -927,6 +937,30 @@ func (s *DiningUser) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"photoJpeg\"")
 			}
+		case "barcodeSeedHex":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				v, err := d.Str()
+				s.BarcodeSeedHex = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"barcodeSeedHex\"")
+			}
+		case "cashlessKey":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Str()
+				s.CashlessKey = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"cashlessKey\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -937,7 +971,7 @@ func (s *DiningUser) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00110111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -3836,14 +3870,24 @@ func (s *PostV1DiningUserCreated) encodeFields(e *jx.Encoder) {
 		e.FieldStart("photoJpeg")
 		e.Base64(s.PhotoJpeg)
 	}
+	{
+		e.FieldStart("barcodeSeedHex")
+		e.Str(s.BarcodeSeedHex)
+	}
+	{
+		e.FieldStart("cashlessKey")
+		e.Str(s.CashlessKey)
+	}
 }
 
-var jsonFieldsNameOfPostV1DiningUserCreated = [5]string{
+var jsonFieldsNameOfPostV1DiningUserCreated = [7]string{
 	0: "message",
 	1: "id",
 	2: "firstName",
 	3: "lastName",
 	4: "photoJpeg",
+	5: "barcodeSeedHex",
+	6: "cashlessKey",
 }
 
 // Decode decodes PostV1DiningUserCreated from json.
@@ -3914,6 +3958,30 @@ func (s *PostV1DiningUserCreated) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"photoJpeg\"")
 			}
+		case "barcodeSeedHex":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Str()
+				s.BarcodeSeedHex = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"barcodeSeedHex\"")
+			}
+		case "cashlessKey":
+			requiredBitSet[0] |= 1 << 6
+			if err := func() error {
+				v, err := d.Str()
+				s.CashlessKey = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"cashlessKey\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -3924,7 +3992,7 @@ func (s *PostV1DiningUserCreated) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b01101111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

@@ -12,6 +12,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining-users/external"
+	"golang.org/x/sync/errgroup"
 )
 
 func hashUserId(userIdResp external.UserIDResponseBody) string {
@@ -125,20 +126,55 @@ func GetUser(externalBaseUrl string, params api.GetV1DiningUserParams) (api.GetV
 
 	res := convertExternalUser(*idResp)
 
-	photoResp, err := external.FetchUserPhoto(externalBaseUrl, params.SessionId, idResp.ID)
-	if photoResp != nil {
-		if photoResp.MimeType == "image/jpeg" && photoResp.Data != "" {
-			decodedBytes, err := base64.StdEncoding.DecodeString(photoResp.Data)
-			if err == nil {
-				res.PhotoJpeg = decodedBytes
+	// user errgroup to handle concurrent operations
+	var eg errgroup.Group
+
+	// fetch photo concurrently
+	eg.Go(func() error {
+		photoResp, err := external.FetchUserPhoto(externalBaseUrl, params.SessionId, idResp.ID)
+		if photoResp != nil {
+			if photoResp.MimeType == "image/jpeg" && photoResp.Data != "" {
+				decodedBytes, err := base64.StdEncoding.DecodeString(photoResp.Data)
+				if err == nil {
+					res.PhotoJpeg = decodedBytes
+				}
+			}
+		} else {
+			if err != nil {
+				fmt.Println("photoResp had non-breaking error: %w", err)
+			} else {
+				fmt.Println("photoResp is nil")
 			}
 		}
-	} else {
+		return nil // photo errors are non-breaking
+	})
+
+	// fetch barcode seed concurrently
+	eg.Go(func() error {
+		barcodeSeed, err := external.FetchBarcodeSeed(externalBaseUrl, params.SessionId)
 		if err != nil {
-			fmt.Println("photoResp had non-breaking error: %w", err)
-		} else {
-			fmt.Println("photoResp is nil")
+			return fmt.Errorf("failed to get barcode seed; %w", err)
 		}
+		if barcodeSeed != nil {
+			res.BarcodeSeedHex = *barcodeSeed
+		}
+		return nil
+	})
+
+	// fetch cashless key concurrently
+	eg.Go(func() error {
+		cashlessKey, err := external.FetchCashlessKey(externalBaseUrl, params.SessionId)
+		if err != nil {
+			return fmt.Errorf("failed to get cashless key; %w", err)
+		}
+		if cashlessKey != nil {
+			res.CashlessKey = *cashlessKey
+		}
+		return nil
+	})
+
+	if err := eg.Wait(); err != nil {
+		return nil, err
 	}
 
 	return &res, nil

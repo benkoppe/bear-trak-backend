@@ -1010,6 +1010,8 @@ components:
         - id
         - firstName
         - lastName
+        - barcodeSeedHex
+        - cashlessKey
       properties:
         id:
           type: string
@@ -1028,6 +1030,14 @@ components:
           x-stoplight:
             id: xw1yzgr6ga0f0
           format: byte
+        barcodeSeedHex:
+          type: string
+          x-stoplight:
+            id: sl9nntyg98gu0
+        cashlessKey:
+          type: string
+          x-stoplight:
+            id: g18cbc36q0stj
   parameters:
     DiningUserSession:
       name: sessionId

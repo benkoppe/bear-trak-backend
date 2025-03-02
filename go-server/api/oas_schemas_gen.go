@@ -292,10 +292,12 @@ func (*DeleteV1DiningUserUnauthorized) deleteV1DiningUserRes() {}
 
 // Ref: #/components/schemas/DiningUser
 type DiningUser struct {
-	ID        string `json:"id"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	PhotoJpeg []byte `json:"photoJpeg"`
+	ID             string `json:"id"`
+	FirstName      string `json:"firstName"`
+	LastName       string `json:"lastName"`
+	PhotoJpeg      []byte `json:"photoJpeg"`
+	BarcodeSeedHex string `json:"barcodeSeedHex"`
+	CashlessKey    string `json:"cashlessKey"`
 }
 
 // GetID returns the value of ID.
@@ -318,6 +320,16 @@ func (s *DiningUser) GetPhotoJpeg() []byte {
 	return s.PhotoJpeg
 }
 
+// GetBarcodeSeedHex returns the value of BarcodeSeedHex.
+func (s *DiningUser) GetBarcodeSeedHex() string {
+	return s.BarcodeSeedHex
+}
+
+// GetCashlessKey returns the value of CashlessKey.
+func (s *DiningUser) GetCashlessKey() string {
+	return s.CashlessKey
+}
+
 // SetID sets the value of ID.
 func (s *DiningUser) SetID(val string) {
 	s.ID = val
@@ -336,6 +348,16 @@ func (s *DiningUser) SetLastName(val string) {
 // SetPhotoJpeg sets the value of PhotoJpeg.
 func (s *DiningUser) SetPhotoJpeg(val []byte) {
 	s.PhotoJpeg = val
+}
+
+// SetBarcodeSeedHex sets the value of BarcodeSeedHex.
+func (s *DiningUser) SetBarcodeSeedHex(val string) {
+	s.BarcodeSeedHex = val
+}
+
+// SetCashlessKey sets the value of CashlessKey.
+func (s *DiningUser) SetCashlessKey(val string) {
+	s.CashlessKey = val
 }
 
 func (*DiningUser) getV1DiningUserRes() {}
@@ -1560,11 +1582,13 @@ func (*PostV1DiningUserBadRequest) postV1DiningUserRes() {}
 
 // Merged schema.
 type PostV1DiningUserCreated struct {
-	Message   string `json:"message"`
-	ID        string `json:"id"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	PhotoJpeg []byte `json:"photoJpeg"`
+	Message        string `json:"message"`
+	ID             string `json:"id"`
+	FirstName      string `json:"firstName"`
+	LastName       string `json:"lastName"`
+	PhotoJpeg      []byte `json:"photoJpeg"`
+	BarcodeSeedHex string `json:"barcodeSeedHex"`
+	CashlessKey    string `json:"cashlessKey"`
 }
 
 // GetMessage returns the value of Message.
@@ -1592,6 +1616,16 @@ func (s *PostV1DiningUserCreated) GetPhotoJpeg() []byte {
 	return s.PhotoJpeg
 }
 
+// GetBarcodeSeedHex returns the value of BarcodeSeedHex.
+func (s *PostV1DiningUserCreated) GetBarcodeSeedHex() string {
+	return s.BarcodeSeedHex
+}
+
+// GetCashlessKey returns the value of CashlessKey.
+func (s *PostV1DiningUserCreated) GetCashlessKey() string {
+	return s.CashlessKey
+}
+
 // SetMessage sets the value of Message.
 func (s *PostV1DiningUserCreated) SetMessage(val string) {
 	s.Message = val
@@ -1615,6 +1649,16 @@ func (s *PostV1DiningUserCreated) SetLastName(val string) {
 // SetPhotoJpeg sets the value of PhotoJpeg.
 func (s *PostV1DiningUserCreated) SetPhotoJpeg(val []byte) {
 	s.PhotoJpeg = val
+}
+
+// SetBarcodeSeedHex sets the value of BarcodeSeedHex.
+func (s *PostV1DiningUserCreated) SetBarcodeSeedHex(val string) {
+	s.BarcodeSeedHex = val
+}
+
+// SetCashlessKey sets the value of CashlessKey.
+func (s *PostV1DiningUserCreated) SetCashlessKey(val string) {
+	s.CashlessKey = val
 }
 
 func (*PostV1DiningUserCreated) postV1DiningUserRes() {}
