@@ -15,3 +15,10 @@ type DiningUser struct {
 	CreatedAt     pgtype.Timestamp
 	LastSessionAt pgtype.Timestamp
 }
+
+type GymCapacity struct {
+	ID            int32
+	LocationID    int32
+	Percentage    int32
+	LastUpdatedAt pgtype.Timestamptz
+}

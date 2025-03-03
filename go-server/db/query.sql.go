@@ -7,6 +7,8 @@ package db
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createDiningUser = `-- name: CreateDiningUser :one
@@ -36,6 +38,33 @@ func (q *Queries) CreateDiningUser(ctx context.Context, arg CreateDiningUserPara
 	return i, err
 }
 
+const createGymCapacity = `-- name: CreateGymCapacity :one
+INSERT INTO gym_capacities (
+  location_id, percentage, last_updated_at
+) VALUES (
+  $1, $2, $3
+) 
+RETURNING id, location_id, percentage, last_updated_at
+`
+
+type CreateGymCapacityParams struct {
+	LocationID    int32
+	Percentage    int32
+	LastUpdatedAt pgtype.Timestamptz
+}
+
+func (q *Queries) CreateGymCapacity(ctx context.Context, arg CreateGymCapacityParams) (GymCapacity, error) {
+	row := q.db.QueryRow(ctx, createGymCapacity, arg.LocationID, arg.Percentage, arg.LastUpdatedAt)
+	var i GymCapacity
+	err := row.Scan(
+		&i.ID,
+		&i.LocationID,
+		&i.Percentage,
+		&i.LastUpdatedAt,
+	)
+	return i, err
+}
+
 const deleteDiningUser = `-- name: DeleteDiningUser :exec
 DELETE FROM dining_users
 WHERE user_id = $1
@@ -47,10 +76,12 @@ func (q *Queries) DeleteDiningUser(ctx context.Context, userID string) error {
 }
 
 const getDiningUser = `-- name: GetDiningUser :one
+
 SELECT id, device_id, user_id, created_at, last_session_at FROM dining_users
 WHERE device_id = $1 LIMIT 1
 `
 
+// query file for sqlc
 func (q *Queries) GetDiningUser(ctx context.Context, deviceID string) (DiningUser, error) {
 	row := q.db.QueryRow(ctx, getDiningUser, deviceID)
 	var i DiningUser
@@ -93,6 +124,33 @@ func (q *Queries) GetDiningUserAll(ctx context.Context, userID string) ([]Dining
 		return nil, err
 	}
 	return items, nil
+}
+
+const getLatestCapacity = `-- name: GetLatestCapacity :one
+SELECT id, location_id, percentage, last_updated_at, last_updated_at AT TIME ZONE 'America/New_York'
+FROM gym_capacities
+WHERE location_id = $1 LIMIT 1
+`
+
+type GetLatestCapacityRow struct {
+	ID            int32
+	LocationID    int32
+	Percentage    int32
+	LastUpdatedAt pgtype.Timestamptz
+	Timezone      interface{}
+}
+
+func (q *Queries) GetLatestCapacity(ctx context.Context, locationID int32) (GetLatestCapacityRow, error) {
+	row := q.db.QueryRow(ctx, getLatestCapacity, locationID)
+	var i GetLatestCapacityRow
+	err := row.Scan(
+		&i.ID,
+		&i.LocationID,
+		&i.Percentage,
+		&i.LastUpdatedAt,
+		&i.Timezone,
+	)
+	return i, err
 }
 
 const updateDiningUserSession = `-- name: UpdateDiningUserSession :exec
