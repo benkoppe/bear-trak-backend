@@ -52,8 +52,8 @@ func main() {
 	fileServer := http.FileServer(http.FS(staticFS))
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
-	// start the hourly tasks in a separate goroutine
-	go runHourlyTasks()
+	// start the timed tasks in a separate goroutine
+	go runTimedTasks()
 
 	// start the server
 	if err := http.ListenAndServe(":3000", mux); err != nil {
@@ -61,12 +61,12 @@ func main() {
 	}
 }
 
-func runHourlyTasks() {
+func runTimedTasks() {
 	// initial run
 	executeHourlyTasks()
 
-	// create a ticker to run the tasks every hour
-	ticker := time.NewTicker(1 * time.Hour)
+	// create a ticker to run the tasks
+	ticker := time.NewTicker(5 * time.Minute)
 	defer ticker.Stop()
 
 	for range ticker.C {
@@ -76,5 +76,5 @@ func runHourlyTasks() {
 
 func executeHourlyTasks() {
 	est := utils.LoadEST()
-	log.Println("Executing hourly tasks at:", time.Now().In(est))
+	log.Println("Executing timed tasks at:", time.Now().In(est))
 }
