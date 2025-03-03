@@ -1,9 +1,9 @@
 [
   {
     "id": 0,
+    "locationId": 5636,
     "name": "Helen Newman",
     "imageName": "helenNewman",
-    "scrapeName": "Helen Newman Fitness Center",
     "location": {
       "latitude": 42.45293079085481,
       "longitude": -76.47735203967999
@@ -118,9 +118,9 @@
   },
   {
     "id": 1,
+    "locationId": 5876,
     "name": "Noyes",
     "imageName": "noyes",
-    "scrapeName": "Noyes Fitness Center",
     "location": {
       "latitude": 42.446436199200896,
       "longitude": -76.48799296950735
@@ -215,9 +215,9 @@
   },
   {
     "id": 2,
+    "locationId": 5872,
     "name": "Teagle Downstairs",
     "imageName": "teagleDown",
-    "scrapeName": "Teagle Down Fitness Center",
     "location": {
       "latitude": 42.44583592468322,
       "longitude": -76.47916897012868
@@ -316,9 +316,9 @@
   },
   {
     "id": 3,
+    "locationId": 5868,
     "name": "Teagle Upstairs",
     "imageName": "teagleUp",
-    "scrapeName": "Teagle Up Fitness Center",
     "location": {
       "latitude": 42.445900914312475,
       "longitude": -76.47864337954337
@@ -413,9 +413,9 @@
   },
   {
     "id": 4,
+    "locationId": 7428,
     "name": "Toni Morrison",
     "imageName": "toniMorrison",
-    "scrapeName": "Toni Morrison Fitness Center",
     "location": {
       "latitude": 42.45575458129762,
       "longitude": -76.47888291227578

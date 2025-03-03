@@ -57,7 +57,7 @@ func convertStatic(static static.Gym) api.Gym {
 
 func findCapacityData(static static.Gym, externalData []external.Gym) *external.Gym {
 	for _, capacityData := range externalData {
-		if capacityData.LocationName == static.ScrapeName {
+		if capacityData.LocationID == static.LocationID {
 			return &capacityData
 		}
 	}

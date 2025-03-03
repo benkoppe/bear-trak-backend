@@ -11,9 +11,9 @@ import (
 
 type Gym struct {
 	ID         int         `json:"id"`
+	LocationID int         `json:"locationId"`
 	Name       string      `json:"name"`
 	ImageName  string      `json:"imageName"`
-	ScrapeName string      `json:"scrapeName"`
 	Location   Location    `json:"location"`
 	Facilities []Facility  `json:"facilities"`
 	Equipment  []Equipment `json:"equipment"`
