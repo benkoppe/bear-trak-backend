@@ -5,7 +5,7 @@ const (
 
 	cbordBaseUrl = "https://services.get.cbord.com/GETServices/services/json"
 
-	gymCapacitiesUrl = "https://goboardapi.azurewebsites.net/api/FacilityCount/GetCountsByAccount?AccountAPIKey=355de24d-d0e4-4262-ae97-bc0c78b92839"
+	GymCapacitiesUrl = "https://goboardapi.azurewebsites.net/api/FacilityCount/GetCountsByAccount?AccountAPIKey=355de24d-d0e4-4262-ae97-bc0c78b92839"
 
 	availtecUrl = "https://realtimetcatbus.availtec.com/InfoPoint/rest"
 

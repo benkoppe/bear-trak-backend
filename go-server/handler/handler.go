@@ -25,7 +25,7 @@ func (bs *BackendService) GetV1Dining(ctx context.Context) ([]api.Eatery, error)
 }
 
 func (bs *BackendService) GetV1Gyms(ctx context.Context) ([]api.Gym, error) {
-	return gyms.Get(gymCapacitiesUrl)
+	return gyms.Get(GymCapacitiesUrl)
 }
 
 func (bs *BackendService) GetV1TransitRoutes(ctx context.Context) ([]api.BusRoute, error) {

@@ -12,6 +12,7 @@ import (
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms"
 	"github.com/benkoppe/bear-trak-backend/go-server/handler"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
@@ -27,9 +28,11 @@ func main() {
 	}
 	defer pool.Close()
 
+	dbQueries := db.New(pool)
+
 	// create main service
 	service := &handler.BackendService{
-		DB: db.New(pool),
+		DB: dbQueries,
 	}
 	srv, err := api.NewServer(service)
 	if err != nil {
@@ -53,7 +56,7 @@ func main() {
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
 	// start the timed tasks in a separate goroutine
-	go runTimedTasks()
+	go runTimedTasks(dbQueries)
 
 	// start the server
 	if err := http.ListenAndServe(":3000", mux); err != nil {
@@ -61,20 +64,29 @@ func main() {
 	}
 }
 
-func runTimedTasks() {
+func runTimedTasks(queries *db.Queries) {
 	// initial run
-	executeHourlyTasks()
+	executeHourlyTasks(queries)
 
 	// create a ticker to run the tasks
 	ticker := time.NewTicker(5 * time.Minute)
 	defer ticker.Stop()
 
 	for range ticker.C {
-		executeHourlyTasks()
+		executeHourlyTasks(queries)
 	}
 }
 
-func executeHourlyTasks() {
+func executeHourlyTasks(queries *db.Queries) {
 	est := utils.LoadEST()
 	log.Println("Executing timed tasks at:", time.Now().In(est))
+
+	// create a context with a timeout for the operation
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	err := gyms.LogCapacities(ctx, handler.GymCapacitiesUrl, queries)
+	if err != nil {
+		log.Printf("Error logging gym capacities: $v", err)
+	}
 }
