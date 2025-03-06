@@ -6,15 +6,14 @@ It consists of a Go server and [OpenTripPlanner](https://www.opentripplanner.org
 
 ## Todo
 
+### Planned features
+- [ ] gym capacity history
+- [ ] dining menu favorites
+- [ ] libraries
+### Backlog
 - [ ] write `go-server` tests & integrate into `Pipeline`.
-- [x] the codebase yearns for a database.
-  - log gym capacity history trends?
-  - log dining menu trends?
-  - social features?
 - [ ] centralize shared data like external transit URLs.
-- [x] create the `otp` graph in the build step.
 - [ ] figure out how to detect when the `otp` static GTFS data becomes invalid.
-- [x] figure out why the `Pipeline` sometimes doesn't create a replica for `otp`.
 - [ ] fix incorrect GTFS-RT vehicle positions being served to `otp` directly from availtec.
 
 ## How to deploy
