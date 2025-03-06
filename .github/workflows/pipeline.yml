@@ -1,12 +1,41 @@
 name: Pipeline
 on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: choice
+        options:
+          - production
+          - staging
+        default: staging
+
   push:
     branches:
       - "main"
+      - "dev"
 
 permissions:
   packages: write
   contents: read
+
+env:
+  COOLIFY_URL: >-
+    ${{ secrets.COOLIFY_URL }}
+  GO_RESOURCE_ID: >-
+    ${{ (github.event_name == 'workflow_dispatch' && inputs.environment == 'production')
+        || (github.event_name == 'push' && endsWith(github.ref, '/main'))
+        ? vars.GO_PRODUCTION_RESOURCE_ID
+        : vars.GO_STAGING_RESOURCE_ID
+    }}
+  OTP_RESOURCE_ID: >-
+    ${{ (github.event_name == 'workflow_dispatch' && inputs.environment == 'production')
+        || (github.event_name == 'push' && endsWith(github.ref, '/main'))
+        ? vars.OTP_PRODUCTION_RESOURCE_ID
+        : vars.OTP_STAGING_RESOURCE_ID
+    }}
+  COOLIFY_API_TOKEN: >-
+    ${{ secrets.COOLIFY_API_TOKEN }}
 
 jobs:
   build-and-push-images:
@@ -46,24 +75,33 @@ jobs:
           push: true
           tags: ${{ matrix.tags }}
 
-  deploy:
+  coolify-deploy:
     runs-on: ubuntu-latest
     needs:
       - build-and-push-images
+    strategy:
+      matrix:
+        service: [go-server, otp]
+        include:
+          - service: go-server
+            coolify_resource_id: ${{ env.GO_RESOURCE_ID }}
+          - service: otp
+            coolify_resource_id: ${{ env.OTP_RESOURCE_ID }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Docker Stack deploy
-        uses: serversideup/github-action-docker-swarm-deploy@v3
+      - name: Update source commit SHA in Coolify for ${{ matrix.service }}
+        uses: fjogeleit/http-request-action@v1
         with:
-          docker_compose_file_path: -c docker-stack.yml
-          ssh_deploy_private_key: "${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}"
-          ssh_remote_hostname: beartrakssh.thekoppe.com
-          registry: "ghcr.io"
-          registry-username: ${{ github.actor }}
-          registry-token: ${{ secrets.GITHUB_TOKEN }}
-          stack_name: bear-trak
-        env:
-          GIT_COMMIT_HASH: "${{ github.sha }}"
-          CLOUDFLARE_DNS_API_TOKEN: "${{ secrets.CLOUDFLARE_DNS_API_TOKEN }}"
+          url: ${{ env.COOLIFY_URL }}/api/v1/applications/${{ matrix.coolify_resource_id }}
+          method: PATCH
+          bearerToken: ${{ env.COOLIFY_API_TOKEN }}
+          data: >-
+            {
+            "GIT_COMMIT_HASH": "${{ github.sha }}"
+            }
+
+      - name: Trigger Coolify deployment via webhook for ${{ matrix.service }}
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: ${{ env.COOLIFY_URL }}/api/v1/deploy?uuid=${{ matrix.coolify_resource_id }}&force=false
+          method: GET
+          bearerToken: ${{ env.COOLIFY_API_TOKEN }}
