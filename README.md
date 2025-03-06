@@ -2,7 +2,7 @@
 
 This is the backend for BearTrak!
 
-It consists of a Go server and [OpenTripPlanner](https://www.opentripplanner.org/) (otp) instance. Each is individually deployed on [Coolify](https://www.coolify.io/).
+It consists of a Go server and [OpenTripPlanner](https://www.opentripplanner.org/) (otp) instance. Each is individually deployed with [Coolify](https://www.coolify.io/).
 
 ## Todo
 
