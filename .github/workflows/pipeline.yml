@@ -44,6 +44,9 @@ jobs:
             tags: |
               ghcr.io/benkoppe/bear-trak-otp:latest
               ghcr.io/benkoppe/bear-trak-otp:${{ github.sha }}
+    outputs:
+      GO_RESOURCE_ID: ${{ env.GO_RESOURCE_ID }}
+      OTP_RESOURCE_ID: ${{ env.OTP_RESOURCE_ID }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -72,9 +75,9 @@ jobs:
         service: [go-server, otp]
         include:
           - service: go-server
-            coolify_resource_id: ${{ env.GO_RESOURCE_ID }}
+            coolify_resource_id: ${{ needs.build-and-push-images.outputs.GO_RESOURCE_ID }}
           - service: otp
-            coolify_resource_id: ${{ env.OTP_RESOURCE_ID }}
+            coolify_resource_id: ${{ needs.build-and-push-images.outputs.OTP_RESOURCE_ID }}
     steps:
       - name: Update source commit SHA in Coolify for ${{ matrix.service }}
         uses: fjogeleit/http-request-action@v1
