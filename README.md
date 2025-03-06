@@ -1,8 +1,8 @@
 # bear-trak-backend
 
-This is the backend for BearTrak.
+This is the backend for BearTrak!
 
-It consists of a Go server and [OpenTripPlanner](https://www.opentripplanner.org/) (otp) instance.
+It consists of a Go server and [OpenTripPlanner](https://www.opentripplanner.org/) (otp) instance. Each is individually deployed on [Coolify](https://www.coolify.io/).
 
 ## Todo
 
@@ -23,30 +23,33 @@ It consists of a Go server and [OpenTripPlanner](https://www.opentripplanner.org
 
 Each piece of the backend has its own Dockerfile and is built into its own image. See each subdirectory for more information.
 
-**Pushes to the `main` branch trigger a GitHub action that builds & pushes both images, then updates the deployment with `docker stack`.**
+**Pushes to the `main` branch trigger a GitHub action that builds & pushes both images, then updates the deployment with a call to Coolify.**
 
 ### New server setup
 
-- On your own machine:
-  - Create a new SSH key pair with `ssh-keygen -t ed25519 -C "deploy@{serverIP}"`.
-- On the server:
-  - Install Docker.
-  - Create a new user `deploy`. Switch users with `su - deploy`.
-  - Modify `.ssh/authorized_keys`:
-    - On a single line, first type `command="docker system dial-stdio"` to restrict key access.
-    - On the same line, paste the contents of the `.pub` key file from your newly created SSH key pair.
-  - Run `docker swarm init`.
-- In this repository:
-  - Set the repository secret `DEPLOY_SSH_PRIVATE_KEY` to the private key file from your newly created SSH key pair.
-  - Also set secret `CLOUDFLARE_DNS_API_TOKEN` to an API key with permissions `DNS:Edit`.
-  - You're done! The `Pipeline` workflow will use `docker stack deploy` to deploy images on your server.
+- Run Coolify's server connection setup on your server
+- Create two `Docker Compose` resources -- one for the go-server, one for the otp instance. Set base folders accordingly.
+- In the resource for `go-server`, set the following env variable:
 
-Now that a server has been set up, the GitHub action will keep the server up-to-date with every push. :)
+| Name                         | Description                  | Example value |
+| ---------------------------- | ---------------------------  | ------------- |
+| POSTGRES_PASSWORD            | Password for the Postgres db | 123456...     |
 
-### Bypass the GitHub action
+- Then, in the GitHub repository, set the following secrets:
+  
+| Name                         | Description                  | Example value |
+| ---------------------------- | ---------------------------  | ------------- |
+| COOLIFY_API_TOKEN            | Write/Deploy API token for Coolify | uqpDqZK6...     |
+| COOLIFY_URL            | URL for your Coolify instance | coolify.yourdomain.com     |
 
-- Set up a docker context with `docker context create {name} --docker "host=ssh://{user}@{serverIP}`.
-- Use the context with `docker context use {name}`.
-  - NOTE: With this context active, your docker commands will be run on the server.
-- Make sure you've set a local `CLOUDFLARE_DNS_API_TOKEN`.
-- Run `docker stack deploy -c ./docker-stack.yml bear-trak`.
+  - As well as these variables:
+
+| Name                         | Description                  | Example value |
+| ---------------------------- | ---------------------------  | ------------- |
+| GO_PRODUCTION_RESOURCE_ID            | `go-server` production resource id in Coolify | Qv2BXOMteC3h...     |
+| OTP_PRODUCTION_RESOURCE_ID            | `otp` production resource id in Coolify | 2tuA1wlYex...     |
+| GO_STAGING_RESOURCE_ID            | `go-server` staging resource id in Coolify (optional) | 3sLCDmy6MAC...     |
+| GO_STAGING_RESOURCE_ID            | `otp` staging resource id in Coolify (optional) | LODIKoD9x...     |
+
+- You're done! The `Pipeline` workflow will use Coolify to deploy images on your server every time you push. :)
+  - NOTE: The workflow will fix the commit hash in Coolify, so if manually updating, make sure you reset to latest!
