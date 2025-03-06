@@ -87,7 +87,7 @@ jobs:
           bearerToken: ${{ env.COOLIFY_API_TOKEN }}
           data: >-
             {
-            "GIT_COMMIT_HASH": "${{ github.sha }}"
+            "git_commit_sha": "${{ github.sha }}"
             }
 
       - name: Trigger Coolify deployment via webhook for ${{ matrix.service }}
