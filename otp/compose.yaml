@@ -1,0 +1,11 @@
+services:
+  otp:
+    image: ghcr.io/benkoppe/bear-trak-otp:${GIT_COMMIT_HASH:-latest}
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      platforms:
+        - "linux/amd64"
+    ports:
+      - 8080:8080
