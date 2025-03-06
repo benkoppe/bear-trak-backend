@@ -1,5 +1,7 @@
 services:
-  server:
+  go-server:
+    image: ghcr.io/benkoppe/bear-trak-go:${GIT_COMMIT_HASH:-latest}
+    restart: always
     build:
       context: .
       target: final
