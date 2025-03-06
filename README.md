@@ -7,10 +7,13 @@ It consists of a Go server and [OpenTripPlanner](https://www.opentripplanner.org
 ## Todo
 
 ### Planned features
+
 - [ ] gym capacity history
 - [ ] dining menu favorites
 - [ ] libraries
+
 ### Backlog
+
 - [ ] write `go-server` tests & integrate into `Pipeline`.
 - [ ] centralize shared data like external transit URLs.
 - [ ] figure out how to detect when the `otp` static GTFS data becomes invalid.
@@ -18,7 +21,7 @@ It consists of a Go server and [OpenTripPlanner](https://www.opentripplanner.org
 
 ## How to deploy
 
-Each piece of the backend is containerized - latest images can be seen in the `Packages` section on the right. Images are pulled and reverse proxied with [traefik](https://github.com/traefik/traefik) in accordance to `docker-stack.yml`.
+Each piece of the backend has its own Dockerfile and is built into its own image. See each subdirectory for more information.
 
 **Pushes to the `main` branch trigger a GitHub action that builds & pushes both images, then updates the deployment with `docker stack`.**
 
@@ -38,9 +41,10 @@ Each piece of the backend is containerized - latest images can be seen in the `P
   - Also set secret `CLOUDFLARE_DNS_API_TOKEN` to an API key with permissions `DNS:Edit`.
   - You're done! The `Pipeline` workflow will use `docker stack deploy` to deploy images on your server.
 
-Now that a server has been set up, the GitHub action will keep the server up-to-date with every push.  :)
+Now that a server has been set up, the GitHub action will keep the server up-to-date with every push. :)
 
 ### Bypass the GitHub action
+
 - Set up a docker context with `docker context create {name} --docker "host=ssh://{user}@{serverIP}`.
 - Use the context with `docker context use {name}`.
   - NOTE: With this context active, your docker commands will be run on the server.
