@@ -26,9 +26,11 @@ DELETE FROM dining_users
 WHERE user_id = $1;
 
 -- name: GetLatestCapacity :one
-SELECT *, last_updated_at AT TIME ZONE 'America/New_York'
+SELECT *
 FROM gym_capacities
-WHERE location_id = $1 LIMIT 1;
+WHERE location_id = $1
+ORDER BY last_updated_at DESC
+LIMIT 1;
 
 -- name: CreateGymCapacity :one
 INSERT INTO gym_capacities (

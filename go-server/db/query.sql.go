@@ -127,17 +127,19 @@ func (q *Queries) GetDiningUserAll(ctx context.Context, userID string) ([]Dining
 }
 
 const getLatestCapacity = `-- name: GetLatestCapacity :one
-SELECT id, location_id, percentage, last_updated_at, last_updated_at AT TIME ZONE 'America/New_York'
+SELECT id, location_id, percentage, last_updated_at, last_updated_at AT TIME ZONE 'America/New_York' AS local_last_updated_at
 FROM gym_capacities
-WHERE location_id = $1 LIMIT 1
+WHERE location_id = $1
+ORDER BY last_updated_at DESC
+LIMIT 1
 `
 
 type GetLatestCapacityRow struct {
-	ID            int32
-	LocationID    int32
-	Percentage    int32
-	LastUpdatedAt pgtype.Timestamptz
-	Timezone      interface{}
+	ID                 int32
+	LocationID         int32
+	Percentage         int32
+	LastUpdatedAt      pgtype.Timestamptz
+	LocalLastUpdatedAt interface{}
 }
 
 func (q *Queries) GetLatestCapacity(ctx context.Context, locationID int32) (GetLatestCapacityRow, error) {
@@ -148,7 +150,7 @@ func (q *Queries) GetLatestCapacity(ctx context.Context, locationID int32) (GetL
 		&i.LocationID,
 		&i.Percentage,
 		&i.LastUpdatedAt,
-		&i.Timezone,
+		&i.LocalLastUpdatedAt,
 	)
 	return i, err
 }
