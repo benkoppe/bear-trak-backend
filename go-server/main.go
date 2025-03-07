@@ -87,6 +87,6 @@ func executeHourlyTasks(queries *db.Queries) {
 
 	err := gyms.LogCapacities(ctx, handler.GymCapacitiesUrl, queries)
 	if err != nil {
-		log.Printf("Error logging gym capacities: $v", err)
+		log.Printf("Error logging gym capacities: %v", err)
 	}
 }
