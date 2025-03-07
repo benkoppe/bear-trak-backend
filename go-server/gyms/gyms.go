@@ -2,32 +2,39 @@ package gyms
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/external"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/scrape"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
-func Get(url string) ([]api.Gym, error) {
+func Get(capacityUrl, hoursUrl string) ([]api.Gym, error) {
 	staticData := static.GetGyms()
 
 	if len(staticData) == 0 {
 		return nil, fmt.Errorf("loaded empty static gyms")
 	}
 
-	externalData, err := external.FetchData(url)
+	externalData, err := external.FetchData(capacityUrl)
 	if err != nil {
 		// don't break here - if capacities doesn't work, we still want to provide static data.
 		// instead, simply print an error.
 		fmt.Printf("error fetching external data: %v", err)
 	}
 
+	scrapedSchedules, err := scrape.FetchData(hoursUrl)
+	if err != nil {
+		fmt.Printf("error fetching scraped schedules: %v", err)
+	}
+
 	var gyms []api.Gym
 
 	for _, staticGym := range staticData {
-		gym := convertStatic(staticGym)
+		gym := convertStatic(staticGym, scrapedSchedules)
 
 		capacityData := findCapacityData(staticGym, externalData)
 		if capacityData != nil {
@@ -41,14 +48,14 @@ func Get(url string) ([]api.Gym, error) {
 	return gyms, nil
 }
 
-func convertStatic(static static.Gym) api.Gym {
+func convertStatic(static static.Gym, schedules []scrape.ParsedSchedule) api.Gym {
 	return api.Gym{
 		ID:                  static.ID,
 		Name:                static.Name,
 		ImagePath:           utils.ImageNameToPath("gyms", static.ImageName),
 		Latitude:            static.Location.Latitude,
 		Longitude:           static.Location.Longitude,
-		Hours:               createFutureHours(static.WeekHours),
+		Hours:               createFutureHours(static, schedules),
 		Facilities:          convertStaticFacilities(static),
 		EquipmentCategories: convertStaticEquipmentCategories(static),
 		Capacity:            api.NilGymCapacity{Null: true},
@@ -64,15 +71,33 @@ func findCapacityData(static static.Gym, externalData []external.Gym) *external.
 	return nil
 }
 
-func createFutureHours(staticHours static.WeekHours) []api.Hours {
+func createFutureHours(static static.Gym, schedules []scrape.ParsedSchedule) []api.Hours {
+	staticHours := static.WeekHours
 	est := utils.LoadEST()
 	now := time.Now().In(est)
 	var futureHours []api.Hours
 
 	for i := 0; i < 7; i++ {
 		date := now.AddDate(0, 0, i)
-		dayHours := staticHours.GetHours(date)
+		weekHours := staticHours
+		overrideStatic := false
 
+		// if a scraped schedule is found, override the static hours for this day
+		schedule := scrape.DetermineRelevantSchedule(schedules, date)
+		if schedule != nil {
+			gymSchedule := scrape.GetGymSchedule(*schedule, static)
+			if gymSchedule != nil {
+				weekHours = gymSchedule.WeekHours
+				overrideStatic = true
+			}
+		}
+
+		if !overrideStatic {
+			// log that static data was used for hours
+			log.Printf("FALLBACK: using static hours for gym %s on %s", static.Name, date)
+		}
+
+		dayHours := weekHours.GetHours(date)
 		for _, hours := range dayHours {
 			start, e1 := hours.Open.ToDate(date)
 			end, e2 := hours.Close.ToDate(date)

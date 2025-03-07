@@ -3,6 +3,7 @@
     "id": 0,
     "locationId": 5636,
     "name": "Helen Newman",
+    "scrapeName": "Helen Newman",
     "imageName": "helenNewman",
     "location": {
       "latitude": 42.45293079085481,
@@ -120,6 +121,7 @@
     "id": 1,
     "locationId": 5876,
     "name": "Noyes",
+    "scrapeName": "Noyes",
     "imageName": "noyes",
     "location": {
       "latitude": 42.446436199200896,
@@ -217,6 +219,7 @@
     "id": 2,
     "locationId": 5872,
     "name": "Teagle Downstairs",
+    "scrapeName": "Teagle Downstairs",
     "imageName": "teagleDown",
     "location": {
       "latitude": 42.44583592468322,
@@ -318,6 +321,7 @@
     "id": 3,
     "locationId": 5868,
     "name": "Teagle Upstairs",
+    "scrapeName": "Teagle Upstairs",
     "imageName": "teagleUp",
     "location": {
       "latitude": 42.445900914312475,
@@ -415,6 +419,7 @@
     "id": 4,
     "locationId": 7428,
     "name": "Toni Morrison",
+    "scrapeName": "Toni Morrison",
     "imageName": "toniMorrison",
     "location": {
       "latitude": 42.45575458129762,
