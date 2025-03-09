@@ -29,6 +29,7 @@ Each piece of the backend has its own Dockerfile and is built into its own image
 
 - Run Coolify's server connection setup on your server
 - Create two `Docker Compose` resources -- one for the go-server, one for the otp instance. Set base folders accordingly.
+  - On Coolify, set the Docker build command for both resources to `docker compose pull` to ensure that images are pulled, not built.
 - In the resource for `go-server`, set the following env variable:
 
 | Name                         | Description                  | Example value |
