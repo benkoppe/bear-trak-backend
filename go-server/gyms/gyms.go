@@ -12,7 +12,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
-type Caches = struct {
+type Caches struct {
 	capacityCache external.Cache
 	hoursCache    scrape.Cache
 }
