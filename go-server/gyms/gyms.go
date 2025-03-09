@@ -12,21 +12,33 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
-func Get(capacityUrl, hoursUrl string) ([]api.Gym, error) {
+type Caches = struct {
+	capacityCache external.Cache
+	hoursCache    scrape.Cache
+}
+
+func InitCaches(capacityUrl, hoursUrl string) Caches {
+	return Caches{
+		capacityCache: external.InitCache(capacityUrl),
+		hoursCache:    scrape.InitCache(hoursUrl),
+	}
+}
+
+func Get(caches Caches) ([]api.Gym, error) {
 	staticData := static.GetGyms()
 
 	if len(staticData) == 0 {
 		return nil, fmt.Errorf("loaded empty static gyms")
 	}
 
-	externalData, err := external.FetchData(capacityUrl)
+	externalData, err := caches.capacityCache.Get()
 	if err != nil {
 		// don't break here - if capacities doesn't work, we still want to provide static data.
 		// instead, simply print an error.
 		fmt.Printf("error fetching external data: %v", err)
 	}
 
-	scrapedSchedules, err := scrape.FetchData(hoursUrl)
+	scrapedSchedules, err := caches.hoursCache.Get()
 	if err != nil {
 		fmt.Printf("error fetching scraped schedules: %v", err)
 	}

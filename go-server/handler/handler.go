@@ -14,6 +14,23 @@ import (
 
 type BackendService struct {
 	DB *db.Queries
+
+	diningCache dining.Cache
+	gymsCaches  gyms.Caches
+}
+
+func NewBackendService(db *db.Queries) *BackendService {
+	bs := &BackendService{
+		DB: db,
+	}
+	bs.initCaches()
+
+	return bs
+}
+
+func (bs *BackendService) initCaches() {
+	bs.diningCache = dining.InitCache(eateriesUrl)
+	bs.gymsCaches = gyms.InitCaches(GymCapacitiesUrl, GymHoursUrl)
 }
 
 func (bs *BackendService) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
@@ -21,11 +38,11 @@ func (bs *BackendService) GetV1Alerts(ctx context.Context) ([]api.Alert, error) 
 }
 
 func (bs *BackendService) GetV1Dining(ctx context.Context) ([]api.Eatery, error) {
-	return dining.Get(eateriesUrl)
+	return dining.Get(bs.diningCache)
 }
 
 func (bs *BackendService) GetV1Gyms(ctx context.Context) ([]api.Gym, error) {
-	return gyms.Get(GymCapacitiesUrl, GymHoursUrl)
+	return gyms.Get(bs.gymsCaches)
 }
 
 func (bs *BackendService) GetV1TransitRoutes(ctx context.Context) ([]api.BusRoute, error) {

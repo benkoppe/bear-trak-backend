@@ -6,11 +6,23 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
-func FetchData(url string) ([]ParsedSchedule, error) {
+type Cache = *utils.Cache[[]ParsedSchedule]
+
+func InitCache(url string) Cache {
+	return utils.NewCache(
+		1*time.Minute,
+		func() ([]ParsedSchedule, error) {
+			return fetchData(url)
+		})
+}
+
+func fetchData(url string) ([]ParsedSchedule, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching external data: %w", err)

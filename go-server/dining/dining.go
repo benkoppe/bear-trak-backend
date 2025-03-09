@@ -16,8 +16,16 @@ import (
 	"golang.org/x/text/unicode/norm"
 )
 
-func Get(url string) ([]api.Eatery, error) {
-	externalResponse, err := external.FetchData(url)
+type Cache = external.Cache
+
+func InitCache(url string) Cache {
+	return external.InitCache(url)
+}
+
+func Get(
+	externalCache Cache,
+) ([]api.Eatery, error) {
+	externalResponse, err := externalCache.Get()
 	if err != nil {
 		return nil, fmt.Errorf("error fetching external data: %w", err)
 	}

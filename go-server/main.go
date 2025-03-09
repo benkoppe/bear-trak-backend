@@ -31,9 +31,7 @@ func main() {
 	dbQueries := db.New(pool)
 
 	// create main service
-	service := &handler.BackendService{
-		DB: dbQueries,
-	}
+	service := handler.NewBackendService(dbQueries)
 	srv, err := api.NewServer(service)
 	if err != nil {
 		log.Fatal(err)
