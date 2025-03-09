@@ -7,8 +7,8 @@ import (
 	availtec "github.com/benkoppe/bear-trak-backend/go-server/transit/external_availtec"
 )
 
-func GetVehicles(availtecUrl string) ([]api.Vehicle, error) {
-	availtecRoutes, err := availtec.FetchRoutes(availtecUrl)
+func GetVehicles(caches Caches) ([]api.Vehicle, error) {
+	availtecRoutes, err := caches.availtecCache.Get()
 	if err != nil {
 		return nil, fmt.Errorf("failed to load availtec routes: %v", err)
 	}

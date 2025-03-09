@@ -12,10 +12,25 @@ import (
 	"github.com/twpayne/go-polyline"
 )
 
-func GetRoutes(availtecUrl string, staticUrl string) ([]api.BusRoute, error) {
-	staticGtfs := external_gtfs.GetStaticGtfs(staticUrl)
+type Caches struct {
+	availtecCache availtec.Cache
+	staticCache   external_gtfs.Cache
+}
 
-	availtecRoutes, err := availtec.FetchRoutes(availtecUrl)
+func InitCaches(availtecUrl string, staticGtfsUrl string) Caches {
+	return Caches{
+		availtecCache: availtec.InitCache(availtecUrl),
+		staticCache:   external_gtfs.InitCache(staticGtfsUrl),
+	}
+}
+
+func GetRoutes(caches Caches) ([]api.BusRoute, error) {
+	staticGtfs, err := caches.staticCache.Get()
+	if err != nil {
+		return nil, fmt.Errorf("failed to load static data: %v", err)
+	}
+
+	availtecRoutes, err := caches.availtecCache.Get()
 	if err != nil {
 		return nil, fmt.Errorf("failed to load availtec routes: %v", err)
 	}
