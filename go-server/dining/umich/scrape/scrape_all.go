@@ -10,21 +10,21 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
-type Cache = *utils.Cache[map[static.Eatery][]Eatery]
+type Cache = *utils.Cache[map[*static.Eatery][]Eatery]
 
 func InitCache(baseUrl string) Cache {
 	return utils.NewCache(
 		"diningScrape",
 		time.Hour*3,
-		func() (map[static.Eatery][]Eatery, error) {
+		func() (map[*static.Eatery][]Eatery, error) {
 			staticEateries := static.GetEateries()
 			return fetchAll(baseUrl, staticEateries)
 		},
 	)
 }
 
-func fetchAll(baseUrl string, eateries []static.Eatery) (map[static.Eatery][]Eatery, error) {
-	fetchedEateries := make(map[static.Eatery][]Eatery)
+func fetchAll(baseUrl string, eateries []static.Eatery) (map[*static.Eatery][]Eatery, error) {
+	fetchedEateries := make(map[*static.Eatery][]Eatery)
 	var mu sync.Mutex
 	var wg sync.WaitGroup
 
@@ -48,7 +48,7 @@ func fetchAll(baseUrl string, eateries []static.Eatery) (map[static.Eatery][]Eat
 			}
 
 			mu.Lock()
-			fetchedEateries[e] = eateryWeek
+			fetchedEateries[&e] = eateryWeek
 			mu.Unlock()
 		}(eatery)
 	}

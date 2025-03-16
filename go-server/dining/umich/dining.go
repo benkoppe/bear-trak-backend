@@ -8,6 +8,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/dining/shared"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining/umich/scrape"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining/umich/static"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
 type Cache = scrape.Cache
@@ -31,7 +32,7 @@ func Get(
 			continue
 		}
 
-		newEatery := convertScraped(static, scraped)
+		newEatery := convertScraped(*static, scraped)
 		eateries = append(eateries, newEatery)
 	}
 
@@ -47,10 +48,58 @@ func convertScraped(static static.Eatery, scraped []scrape.Eatery) api.Eatery {
 		ID:             static.ID,
 		Name:           firstScraped.Name,
 		NameShort:      firstScraped.Name,
+		ImagePath:      utils.ImageNameToPath("dining", static.ImageName),
+		Latitude:       static.Location.Latitude,
+		Longitude:      static.Location.Longitude,
 		Location:       firstScraped.Address,
 		Hours:          convertScrapedHours(scraped),
+		Region:         static.Region,
+		PayMethods:     convertScrapedPayMethods(firstScraped),
+		Categories:     convertStaticCategories(static),
 		NextWeekEvents: shared.SelectNextWeekEvents(events),
 	}
+}
+
+func convertStaticCategories(static static.Eatery) []api.EateryCategoriesItem {
+	var categories []api.EateryCategoriesItem
+
+	for _, category := range static.Categories {
+		switch category {
+		case "Convenience Store":
+			categories = append(categories, api.EateryCategoriesItemConvenienceStore)
+		case "Cafe":
+			categories = append(categories, api.EateryCategoriesItemCafe)
+		case "Dining Room":
+			categories = append(categories, api.EateryCategoriesItemDiningRoom)
+		case "Coffee Shop":
+			categories = append(categories, api.EateryCategoriesItemCoffeeShop)
+		case "Cart":
+			categories = append(categories, api.EateryCategoriesItemCart)
+		case "Food Court":
+			categories = append(categories, api.EateryCategoriesItemFoodCourt)
+		default:
+			continue
+		}
+	}
+
+	return categories
+}
+
+func convertScrapedPayMethods(scraped scrape.Eatery) []string {
+	var payMethods []string
+
+	for _, payMethod := range scraped.PaymentMethods {
+		switch payMethod {
+		case "Blue Bucks":
+			payMethods = append(payMethods, "blueBucks")
+		case "Dining Dollars":
+			payMethods = append(payMethods, "diningDollars")
+		default:
+			continue
+		}
+	}
+
+	return payMethods
 }
 
 func convertScrapedHours(scraped []scrape.Eatery) []api.Hours {
