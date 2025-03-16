@@ -8,7 +8,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	dining_users "github.com/benkoppe/bear-trak-backend/go-server/dining-users"
 	dining "github.com/benkoppe/bear-trak-backend/go-server/dining/cornell"
-	"github.com/benkoppe/bear-trak-backend/go-server/gyms"
+	gyms "github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell"
 	"github.com/benkoppe/bear-trak-backend/go-server/transit"
 )
 

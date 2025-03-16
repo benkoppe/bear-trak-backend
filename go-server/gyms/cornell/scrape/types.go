@@ -3,7 +3,7 @@ package scrape
 import (
 	"time"
 
-	"github.com/benkoppe/bear-trak-backend/go-server/gyms/static"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
 )
 
 type tableData struct {

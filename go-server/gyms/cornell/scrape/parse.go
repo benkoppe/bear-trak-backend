@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/benkoppe/bear-trak-backend/go-server/gyms/static"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
 )
 
 // tries a few common date layouts

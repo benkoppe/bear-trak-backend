@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/benkoppe/bear-trak-backend/go-server/gyms/static"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
 )
 
 // functions used elsewhere in the package for working with fetched schedules

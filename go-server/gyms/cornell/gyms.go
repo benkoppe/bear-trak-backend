@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
-	"github.com/benkoppe/bear-trak-backend/go-server/gyms/external"
-	"github.com/benkoppe/bear-trak-backend/go-server/gyms/scrape"
-	"github.com/benkoppe/bear-trak-backend/go-server/gyms/static"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/external"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/scrape"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
