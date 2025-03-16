@@ -171,7 +171,8 @@ func parseCellHours(cell string) []static.Hours {
 		return hrs
 	}
 
-	ranges := strings.Split(cell, "/")
+	re := regexp.MustCompile("[/,]") // match either "/" or ","
+	ranges := re.Split(cell, -1)
 	for _, r := range ranges {
 		r = strings.TrimSpace(r)
 		// split by dash for open/close
