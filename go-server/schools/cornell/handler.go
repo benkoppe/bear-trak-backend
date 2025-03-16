@@ -31,7 +31,7 @@ func NewHandler(db *db.Queries) *Handler {
 
 func (h *Handler) initCaches() {
 	h.diningCache = dining.InitCache(eateriesUrl)
-	h.gymsCaches = gyms.InitCaches(GymCapacitiesUrl, GymHoursUrl)
+	h.gymsCaches = gyms.InitCaches(gymCapacitiesUrl, gymHoursUrl)
 	h.transitCaches = transit.InitCaches(availtecUrl, gtfsStaticUrl)
 }
 
