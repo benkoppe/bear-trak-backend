@@ -1,18 +1,14 @@
 package static
 
 import (
-	_ "embed"
 	"encoding/json"
 	"fmt"
 )
 
-//go:embed alerts.json
-var alertBytes []byte
-
-func GetAlerts() []Alert {
+func GetAlerts(data []byte) []Alert {
 	var alerts []Alert
 
-	err := json.Unmarshal(alertBytes, &alerts)
+	err := json.Unmarshal(data, &alerts)
 	if err != nil {
 		fmt.Printf("error unmarshalling alerts: %v", err)
 	}
