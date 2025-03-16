@@ -84,10 +84,9 @@ func scrape(htmlReader io.Reader, date time.Time) (*Eatery, error) {
 
 // removes extra whitespace and normalizes text
 func cleanText(s string) string {
-	// Replace multiple spaces with a single space
-	re := regexp.MustCompile(`\s+`)
-	s = re.ReplaceAllString(s, " ")
-	return strings.TrimSpace(s)
+	// Replace all whitespace (including non-breaking space) with a single space
+	whitespaceRegex := regexp.MustCompile(`[\s\p{Zs}]+`)
+	return strings.TrimSpace(whitespaceRegex.ReplaceAllString(s, " "))
 }
 
 func extractEateryInfo(doc *goquery.Document) *Eatery {
@@ -125,12 +124,12 @@ func extractHours(doc *goquery.Document, eatery *Eatery, date time.Time) *Eatery
 			return
 		}
 
-		start, err := utils.TimeString(parts[0]).ToDate(date)
+		start, err := utils.TimeString(cleanText(parts[0])).ToDate(date)
 		if err != nil {
 			log.Printf("error parsing start time: %v", err)
 			return
 		}
-		end, err := utils.TimeString(parts[1]).ToDate(date)
+		end, err := utils.TimeString(cleanText(parts[1])).ToDate(date)
 		if err != nil {
 			log.Printf("error parsing end time: %v", err)
 		}

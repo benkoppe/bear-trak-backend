@@ -10,6 +10,7 @@ type Cache = *utils.Cache[[]Gym]
 
 func InitCache(url string) Cache {
 	return utils.NewCache(
+		"gymExternal",
 		1*time.Minute,
 		func() ([]Gym, error) {
 			return FetchData(url)

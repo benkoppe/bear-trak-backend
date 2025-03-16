@@ -11,6 +11,7 @@ type Cache = *utils.Cache[[]Route]
 
 func InitCache(baseUrl string) Cache {
 	return utils.NewCache(
+		"transitExternalAvailtec",
 		time.Second*3,
 		func() ([]Route, error) {
 			return fetchRoutes(baseUrl)

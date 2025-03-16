@@ -16,6 +16,7 @@ type Cache = *utils.Cache[[]ParsedSchedule]
 
 func InitCache(url string) Cache {
 	return utils.NewCache(
+		"gymScrape",
 		1*time.Minute,
 		func() ([]ParsedSchedule, error) {
 			return fetchData(url)

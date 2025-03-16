@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/dining/shared"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining/umich/scrape"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining/umich/static"
 )
@@ -38,17 +39,21 @@ func Get(
 }
 
 func convertScraped(static static.Eatery, scraped []scrape.Eatery) api.Eatery {
+	events := convertScrapedEvents(scraped)
+
 	firstScraped := scraped[0]
 
 	return api.Eatery{
-		ID:        static.ID,
-		Name:      firstScraped.Name,
-		NameShort: firstScraped.Name,
-		Hours:     convertHours(scraped),
+		ID:             static.ID,
+		Name:           firstScraped.Name,
+		NameShort:      firstScraped.Name,
+		Location:       firstScraped.Address,
+		Hours:          convertScrapedHours(scraped),
+		NextWeekEvents: shared.SelectNextWeekEvents(events),
 	}
 }
 
-func convertHours(scraped []scrape.Eatery) []api.Hours {
+func convertScrapedHours(scraped []scrape.Eatery) []api.Hours {
 	var hours []api.Hours
 	for _, eatery := range scraped {
 		for _, scrapeHours := range eatery.Hours {
@@ -60,4 +65,59 @@ func convertHours(scraped []scrape.Eatery) []api.Hours {
 		}
 	}
 	return hours
+}
+
+func convertScrapedEvents(scraped []scrape.Eatery) []api.EateryEvent {
+	var events []api.EateryEvent
+
+	for _, eatery := range scraped {
+		for _, menu := range eatery.Menus {
+			hours := getHours(eatery, menu.Name)
+			if hours == nil {
+				log.Printf("no hours for menu %s", menu.Name)
+				continue
+			}
+
+			event := convertScrapedEvent(menu, *hours)
+			events = append(events, event)
+		}
+	}
+	return events
+}
+
+func convertScrapedEvent(menu scrape.Menu, hours scrape.Hours) api.EateryEvent {
+	var categories []api.EateryMenuCategory
+	for _, category := range menu.Categories {
+
+		var items []api.EateryMenuCategoryItemsItem
+		for _, item := range category.Items {
+
+			i := api.EateryMenuCategoryItemsItem{
+				Name:    item.Name,
+				Healthy: false,
+			}
+			items = append(items, i)
+
+		}
+		cat := api.EateryMenuCategory{
+			Name:  category.Title,
+			Items: items,
+		}
+		categories = append(categories, cat)
+	}
+
+	return api.EateryEvent{
+		Start:          hours.StartTime,
+		End:            hours.EndTime,
+		MenuCategories: categories,
+	}
+}
+
+func getHours(eatery scrape.Eatery, name string) *scrape.Hours {
+	for _, hours := range eatery.Hours {
+		if hours.Name == name {
+			return &hours
+		}
+	}
+	return nil
 }

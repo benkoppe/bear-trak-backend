@@ -10,6 +10,7 @@ type Cache = *utils.Cache[*EateryAPIResponse]
 
 func InitCache(url string) Cache {
 	return utils.NewCache(
+		"diningExternal",
 		1*time.Minute,
 		func() (*EateryAPIResponse, error) {
 			return fetchData(url)

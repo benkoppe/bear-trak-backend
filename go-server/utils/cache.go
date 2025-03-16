@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"log"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -14,31 +16,49 @@ type Cache[T any] struct {
 	expirationTime time.Duration
 	fetchFunc      func() (T, error)
 	mutex          sync.RWMutex
+	refreshing     atomic.Bool
 }
 
-func NewCache[T any](expiration time.Duration, fetchFunc func() (T, error)) *Cache[T] {
-	return &Cache[T]{
+func NewCache[T any](name string, expiration time.Duration, fetchFunc func() (T, error)) *Cache[T] {
+	c := &Cache[T]{
 		expirationTime: expiration,
 		fetchFunc:      fetchFunc,
 	}
+	// immediately load data after initialization
+	log.Printf("initializing cache: %s with expiration %s...", name, expiration)
+	c.refresh()
+	log.Printf("initialized cache: %s", name)
+	return c
 }
 
 func (c *Cache[T]) Get() (T, error) {
 	c.mutex.RLock()
-	if !c.lastFetch.IsZero() && (c.expirationTime < 0 || time.Since(c.lastFetch) < c.expirationTime) {
-		data := c.data
-		c.mutex.RUnlock()
+	isExpired := c.lastFetch.IsZero() || (c.expirationTime >= 0 && time.Since(c.lastFetch) > c.expirationTime)
+	hasData := !c.lastFetch.IsZero()
+	data := c.data
+	c.mutex.RUnlock()
+
+	// if expired but we have data, trigger a refresh in the background and return old data
+	if isExpired && hasData {
+		if !c.refreshing.Load() {
+			go c.refreshInBackground()
+		}
 		return data, nil
 	}
-	c.mutex.RUnlock()
-	// cache refresh needed
-	return c.refresh()
+
+	// if we have no data or we're expired without data, we must load synchronously
+	if !hasData || isExpired {
+		return c.refresh()
+	}
+
+	return data, nil
 }
 
 func (c *Cache[T]) refresh() (T, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
+	// double-check expiration to avoid duplicate work
 	if !c.lastFetch.IsZero() && (c.expirationTime < 0 || time.Since(c.lastFetch) < c.expirationTime) {
 		return c.data, nil
 	}
@@ -52,4 +72,28 @@ func (c *Cache[T]) refresh() (T, error) {
 	c.data = newData
 	c.lastFetch = time.Now()
 	return newData, nil
+}
+
+func (c *Cache[T]) refreshInBackground() {
+	// if already refreshing, don't start another
+	if !c.refreshing.CompareAndSwap(false, true) {
+		return
+	}
+	defer c.refreshing.Store(false)
+
+	newData, err := c.fetchFunc()
+	if err != nil {
+		return // fail silently in background refresh
+	}
+
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	c.data = newData
+	c.lastFetch = time.Now()
+}
+
+// forces a synchronous refresh
+func (c *Cache[T]) ForceRefresh() (T, error) {
+	return c.refresh()
 }

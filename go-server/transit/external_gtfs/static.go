@@ -13,6 +13,7 @@ type Cache = *utils.Cache[*gtfs.Static]
 
 func InitCache(url string) Cache {
 	return utils.NewCache(
+		"transitExternalGtfs",
 		utils.NoExpiration,
 		func() (*gtfs.Static, error) {
 			return loadData(url)

@@ -14,7 +14,8 @@ type Cache = *utils.Cache[map[static.Eatery][]Eatery]
 
 func InitCache(baseUrl string) Cache {
 	return utils.NewCache(
-		time.Hour*1,
+		"diningScrape",
+		time.Hour*3,
 		func() (map[static.Eatery][]Eatery, error) {
 			staticEateries := static.GetEateries()
 			return fetchAll(baseUrl, staticEateries)
