@@ -27,8 +27,11 @@ func main() {
 	if schoolCodeStr == "" {
 		schoolCodeStr = string(schools.Cornell)
 	}
-
 	schoolCode := schools.SchoolCode(schoolCodeStr)
+	config, err := schools.GetConfig(schoolCode)
+	if err != nil {
+		log.Fatalf("Error getting config for school %s: %v", schoolCode, err)
+	}
 
 	// connect to db
 	pool, err := connectToDbPool(context.Background())
@@ -66,7 +69,7 @@ func main() {
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
 	// start the timed tasks in a separate goroutine
-	go runTimedTasks(dbQueries, handler)
+	go runTimedTasks(dbQueries, handler, *config)
 
 	// start the server
 	if err := http.ListenAndServe(":3000", mux); err != nil {
@@ -74,20 +77,20 @@ func main() {
 	}
 }
 
-func runTimedTasks(queries *db.Queries, handler api.Handler) {
+func runTimedTasks(queries *db.Queries, handler api.Handler, config schools.Config) {
 	// initial run
-	executeHourlyTasks(queries, handler)
+	executeHourlyTasks(queries, handler, config)
 
 	// create a ticker to run the tasks
 	ticker := time.NewTicker(5 * time.Minute)
 	defer ticker.Stop()
 
 	for range ticker.C {
-		executeHourlyTasks(queries, handler)
+		executeHourlyTasks(queries, handler, config)
 	}
 }
 
-func executeHourlyTasks(queries *db.Queries, handler api.Handler) {
+func executeHourlyTasks(queries *db.Queries, handler api.Handler, config schools.Config) {
 	est := utils.LoadEST()
 	log.Println("Executing timed tasks at:", time.Now().In(est))
 
@@ -95,8 +98,10 @@ func executeHourlyTasks(queries *db.Queries, handler api.Handler) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	err := gyms.LogCapacities(ctx, handler, queries)
-	if err != nil {
-		log.Printf("Error logging gym capacities: %v", err)
+	if config.EnabledGymCapacities {
+		err := gyms.LogCapacities(ctx, handler, queries)
+		if err != nil {
+			log.Printf("Error logging gym capacities: %v", err)
+		}
 	}
 }

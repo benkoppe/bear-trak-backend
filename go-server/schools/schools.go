@@ -27,3 +27,22 @@ func NewHandler(code SchoolCode, db *db.Queries) (api.Handler, error) {
 		return nil, fmt.Errorf("unsupported school: %s", code)
 	}
 }
+
+type Config struct {
+	EnabledGymCapacities bool
+}
+
+func GetConfig(code SchoolCode) (*Config, error) {
+	switch code {
+	case Cornell:
+		return &Config{
+			EnabledGymCapacities: true,
+		}, nil
+	case UMich:
+		return &Config{
+			EnabledGymCapacities: false,
+		}, nil
+	}
+
+	return nil, fmt.Errorf("unsupported school: %s", code)
+}
