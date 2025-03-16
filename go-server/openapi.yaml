@@ -375,6 +375,10 @@ components:
               x-stoplight:
                 id: 9rhio1ewe055f
               format: uri
+        minutesSinceFirstDownload:
+          type: integer
+          x-stoplight:
+            id: meq2g0rg3k557
     Error:
       title: Error
       x-stoplight:
@@ -489,11 +493,6 @@ components:
           x-stoplight:
             id: g762nv65cuibu
           type: string
-          enum:
-            - central
-            - west
-            - north
-            - unknown
           example: central
         payMethods:
           type: array
@@ -503,13 +502,6 @@ components:
             x-stoplight:
               id: tj2iccdcf7xpp
             type: string
-            enum:
-              - swipes
-              - bigRedBucks
-              - cash
-              - digitalWallet
-              - creditCard
-              - cornellCard
             example: swipes
         categories:
           type: array

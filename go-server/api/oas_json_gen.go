@@ -50,9 +50,15 @@ func (s *Alert) encodeFields(e *jx.Encoder) {
 		e.FieldStart("button")
 		s.Button.Encode(e)
 	}
+	{
+		if s.MinutesSinceFirstDownload.Set {
+			e.FieldStart("minutesSinceFirstDownload")
+			s.MinutesSinceFirstDownload.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAlert = [7]string{
+var jsonFieldsNameOfAlert = [8]string{
 	0: "id",
 	1: "title",
 	2: "message",
@@ -60,6 +66,7 @@ var jsonFieldsNameOfAlert = [7]string{
 	4: "showOnce",
 	5: "maxBuild",
 	6: "button",
+	7: "minutesSinceFirstDownload",
 }
 
 // Decode decodes Alert from json.
@@ -150,6 +157,16 @@ func (s *Alert) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"button\"")
+			}
+		case "minutesSinceFirstDownload":
+			if err := func() error {
+				s.MinutesSinceFirstDownload.Reset()
+				if err := s.MinutesSinceFirstDownload.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"minutesSinceFirstDownload\"")
 			}
 		default:
 			return d.Skip()
@@ -1470,13 +1487,13 @@ func (s *Eatery) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("region")
-		s.Region.Encode(e)
+		e.Str(s.Region)
 	}
 	{
 		e.FieldStart("payMethods")
 		e.ArrStart()
 		for _, elem := range s.PayMethods {
-			elem.Encode(e)
+			e.Str(elem)
 		}
 		e.ArrEnd()
 	}
@@ -1636,7 +1653,9 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 		case "region":
 			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
-				if err := s.Region.Decode(d); err != nil {
+				v, err := d.Str()
+				s.Region = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -1646,10 +1665,12 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 		case "payMethods":
 			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
-				s.PayMethods = make([]EateryPayMethodsItem, 0)
+				s.PayMethods = make([]string, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem EateryPayMethodsItem
-					if err := elem.Decode(d); err != nil {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
 						return err
 					}
 					s.PayMethods = append(s.PayMethods, elem)
@@ -2536,98 +2557,6 @@ func (s *EateryNextWeekEvents) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *EateryNextWeekEvents) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes EateryPayMethodsItem as json.
-func (s EateryPayMethodsItem) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes EateryPayMethodsItem from json.
-func (s *EateryPayMethodsItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode EateryPayMethodsItem to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch EateryPayMethodsItem(v) {
-	case EateryPayMethodsItemSwipes:
-		*s = EateryPayMethodsItemSwipes
-	case EateryPayMethodsItemBigRedBucks:
-		*s = EateryPayMethodsItemBigRedBucks
-	case EateryPayMethodsItemCash:
-		*s = EateryPayMethodsItemCash
-	case EateryPayMethodsItemDigitalWallet:
-		*s = EateryPayMethodsItemDigitalWallet
-	case EateryPayMethodsItemCreditCard:
-		*s = EateryPayMethodsItemCreditCard
-	case EateryPayMethodsItemCornellCard:
-		*s = EateryPayMethodsItemCornellCard
-	default:
-		*s = EateryPayMethodsItem(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s EateryPayMethodsItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *EateryPayMethodsItem) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes EateryRegion as json.
-func (s EateryRegion) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes EateryRegion from json.
-func (s *EateryRegion) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode EateryRegion to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch EateryRegion(v) {
-	case EateryRegionCentral:
-		*s = EateryRegionCentral
-	case EateryRegionWest:
-		*s = EateryRegionWest
-	case EateryRegionNorth:
-		*s = EateryRegionNorth
-	case EateryRegionUnknown:
-		*s = EateryRegionUnknown
-	default:
-		*s = EateryRegion(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s EateryRegion) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *EateryRegion) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -3837,6 +3766,41 @@ func (s NilInt) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *NilInt) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes int as json.
+func (o OptInt) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Int(int(o.Value))
+}
+
+// Decode decodes int from json.
+func (o *OptInt) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptInt to nil")
+	}
+	o.Set = true
+	v, err := d.Int()
+	if err != nil {
+		return err
+	}
+	o.Value = int(v)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptInt) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptInt) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

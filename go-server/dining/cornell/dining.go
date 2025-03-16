@@ -113,36 +113,38 @@ func convertExternalMenu(externalEvent external.Event) []api.EateryMenuCategory 
 	return categories
 }
 
-func convertExternalRegion(external external.Eatery) api.EateryRegion {
+func convertExternalRegion(external external.Eatery) string {
 	switch external.CampusArea.Descrshort {
 	case "Central":
-		return api.EateryRegionCentral
+		return "central"
 	case "West":
-		return api.EateryRegionWest
+		return "west"
 	case "North":
-		return api.EateryRegionNorth
+		return "north"
+	case "East":
+		return "central"
 	default:
-		return api.EateryRegionUnknown
+		return "unknown"
 	}
 }
 
-func convertExternalPayMethods(external external.Eatery) []api.EateryPayMethodsItem {
-	var payMethods []api.EateryPayMethodsItem
+func convertExternalPayMethods(external external.Eatery) []string {
+	var payMethods []string
 
 	for _, payMethod := range external.PayMethods {
 		switch payMethod.DescrShort {
 		case "Meal Plan - Swipe":
-			payMethods = append(payMethods, api.EateryPayMethodsItemSwipes)
+			payMethods = append(payMethods, "swipes")
 		case "Meal Plan - Debit":
-			payMethods = append(payMethods, api.EateryPayMethodsItemBigRedBucks)
+			payMethods = append(payMethods, "bigRedBucks")
 		case "Cash":
-			payMethods = append(payMethods, api.EateryPayMethodsItemCash)
+			payMethods = append(payMethods, "cash")
 		case "Mobile Payments":
-			payMethods = append(payMethods, api.EateryPayMethodsItemDigitalWallet)
+			payMethods = append(payMethods, "digitalWallet")
 		case "Major Credit Cards":
-			payMethods = append(payMethods, api.EateryPayMethodsItemCreditCard)
+			payMethods = append(payMethods, "creditCard")
 		case "Cornell Card":
-			payMethods = append(payMethods, api.EateryPayMethodsItemCornellCard)
+			payMethods = append(payMethods, "cornellCard")
 		default:
 			continue
 		}

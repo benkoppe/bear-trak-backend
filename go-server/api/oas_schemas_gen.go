@@ -16,13 +16,14 @@ func (s *ErrorStatusCode) Error() string {
 
 // Ref: #/components/schemas/Alert
 type Alert struct {
-	ID       int            `json:"id"`
-	Title    string         `json:"title"`
-	Message  string         `json:"message"`
-	Enabled  bool           `json:"enabled"`
-	ShowOnce bool           `json:"showOnce"`
-	MaxBuild NilInt         `json:"maxBuild"`
-	Button   NilAlertButton `json:"button"`
+	ID                        int            `json:"id"`
+	Title                     string         `json:"title"`
+	Message                   string         `json:"message"`
+	Enabled                   bool           `json:"enabled"`
+	ShowOnce                  bool           `json:"showOnce"`
+	MaxBuild                  NilInt         `json:"maxBuild"`
+	Button                    NilAlertButton `json:"button"`
+	MinutesSinceFirstDownload OptInt         `json:"minutesSinceFirstDownload"`
 }
 
 // GetID returns the value of ID.
@@ -60,6 +61,11 @@ func (s *Alert) GetButton() NilAlertButton {
 	return s.Button
 }
 
+// GetMinutesSinceFirstDownload returns the value of MinutesSinceFirstDownload.
+func (s *Alert) GetMinutesSinceFirstDownload() OptInt {
+	return s.MinutesSinceFirstDownload
+}
+
 // SetID sets the value of ID.
 func (s *Alert) SetID(val int) {
 	s.ID = val
@@ -93,6 +99,11 @@ func (s *Alert) SetMaxBuild(val NilInt) {
 // SetButton sets the value of Button.
 func (s *Alert) SetButton(val NilAlertButton) {
 	s.Button = val
+}
+
+// SetMinutesSinceFirstDownload sets the value of MinutesSinceFirstDownload.
+func (s *Alert) SetMinutesSinceFirstDownload(val OptInt) {
+	s.MinutesSinceFirstDownload = val
 }
 
 type AlertButton struct {
@@ -505,8 +516,8 @@ type Eatery struct {
 	Longitude      float64                `json:"longitude"`
 	Location       string                 `json:"location"`
 	Hours          []Hours                `json:"hours"`
-	Region         EateryRegion           `json:"region"`
-	PayMethods     []EateryPayMethodsItem `json:"payMethods"`
+	Region         string                 `json:"region"`
+	PayMethods     []string               `json:"payMethods"`
 	Categories     []EateryCategoriesItem `json:"categories"`
 	NextWeekEvents EateryNextWeekEvents   `json:"nextWeekEvents"`
 	AllWeekMenu    []EateryMenuCategory   `json:"allWeekMenu"`
@@ -553,12 +564,12 @@ func (s *Eatery) GetHours() []Hours {
 }
 
 // GetRegion returns the value of Region.
-func (s *Eatery) GetRegion() EateryRegion {
+func (s *Eatery) GetRegion() string {
 	return s.Region
 }
 
 // GetPayMethods returns the value of PayMethods.
-func (s *Eatery) GetPayMethods() []EateryPayMethodsItem {
+func (s *Eatery) GetPayMethods() []string {
 	return s.PayMethods
 }
 
@@ -618,12 +629,12 @@ func (s *Eatery) SetHours(val []Hours) {
 }
 
 // SetRegion sets the value of Region.
-func (s *Eatery) SetRegion(val EateryRegion) {
+func (s *Eatery) SetRegion(val string) {
 	s.Region = val
 }
 
 // SetPayMethods sets the value of PayMethods.
-func (s *Eatery) SetPayMethods(val []EateryPayMethodsItem) {
+func (s *Eatery) SetPayMethods(val []string) {
 	s.PayMethods = val
 }
 
@@ -877,130 +888,6 @@ func (s *EateryNextWeekEvents) SetSaturday(val []EateryEvent) {
 // SetSunday sets the value of Sunday.
 func (s *EateryNextWeekEvents) SetSunday(val []EateryEvent) {
 	s.Sunday = val
-}
-
-type EateryPayMethodsItem string
-
-const (
-	EateryPayMethodsItemSwipes        EateryPayMethodsItem = "swipes"
-	EateryPayMethodsItemBigRedBucks   EateryPayMethodsItem = "bigRedBucks"
-	EateryPayMethodsItemCash          EateryPayMethodsItem = "cash"
-	EateryPayMethodsItemDigitalWallet EateryPayMethodsItem = "digitalWallet"
-	EateryPayMethodsItemCreditCard    EateryPayMethodsItem = "creditCard"
-	EateryPayMethodsItemCornellCard   EateryPayMethodsItem = "cornellCard"
-)
-
-// AllValues returns all EateryPayMethodsItem values.
-func (EateryPayMethodsItem) AllValues() []EateryPayMethodsItem {
-	return []EateryPayMethodsItem{
-		EateryPayMethodsItemSwipes,
-		EateryPayMethodsItemBigRedBucks,
-		EateryPayMethodsItemCash,
-		EateryPayMethodsItemDigitalWallet,
-		EateryPayMethodsItemCreditCard,
-		EateryPayMethodsItemCornellCard,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s EateryPayMethodsItem) MarshalText() ([]byte, error) {
-	switch s {
-	case EateryPayMethodsItemSwipes:
-		return []byte(s), nil
-	case EateryPayMethodsItemBigRedBucks:
-		return []byte(s), nil
-	case EateryPayMethodsItemCash:
-		return []byte(s), nil
-	case EateryPayMethodsItemDigitalWallet:
-		return []byte(s), nil
-	case EateryPayMethodsItemCreditCard:
-		return []byte(s), nil
-	case EateryPayMethodsItemCornellCard:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *EateryPayMethodsItem) UnmarshalText(data []byte) error {
-	switch EateryPayMethodsItem(data) {
-	case EateryPayMethodsItemSwipes:
-		*s = EateryPayMethodsItemSwipes
-		return nil
-	case EateryPayMethodsItemBigRedBucks:
-		*s = EateryPayMethodsItemBigRedBucks
-		return nil
-	case EateryPayMethodsItemCash:
-		*s = EateryPayMethodsItemCash
-		return nil
-	case EateryPayMethodsItemDigitalWallet:
-		*s = EateryPayMethodsItemDigitalWallet
-		return nil
-	case EateryPayMethodsItemCreditCard:
-		*s = EateryPayMethodsItemCreditCard
-		return nil
-	case EateryPayMethodsItemCornellCard:
-		*s = EateryPayMethodsItemCornellCard
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-type EateryRegion string
-
-const (
-	EateryRegionCentral EateryRegion = "central"
-	EateryRegionWest    EateryRegion = "west"
-	EateryRegionNorth   EateryRegion = "north"
-	EateryRegionUnknown EateryRegion = "unknown"
-)
-
-// AllValues returns all EateryRegion values.
-func (EateryRegion) AllValues() []EateryRegion {
-	return []EateryRegion{
-		EateryRegionCentral,
-		EateryRegionWest,
-		EateryRegionNorth,
-		EateryRegionUnknown,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s EateryRegion) MarshalText() ([]byte, error) {
-	switch s {
-	case EateryRegionCentral:
-		return []byte(s), nil
-	case EateryRegionWest:
-		return []byte(s), nil
-	case EateryRegionNorth:
-		return []byte(s), nil
-	case EateryRegionUnknown:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *EateryRegion) UnmarshalText(data []byte) error {
-	switch EateryRegion(data) {
-	case EateryRegionCentral:
-		*s = EateryRegionCentral
-		return nil
-	case EateryRegionWest:
-		*s = EateryRegionWest
-		return nil
-	case EateryRegionNorth:
-		*s = EateryRegionNorth
-		return nil
-	case EateryRegionUnknown:
-		*s = EateryRegionUnknown
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
 }
 
 // Ref: #/components/schemas/Error
@@ -1459,10 +1346,10 @@ func (o *NilAlertButton) SetTo(v AlertButton) {
 	o.Value = v
 }
 
-// IsSet returns true if value is Null.
+// IsNull returns true if value is Null.
 func (o NilAlertButton) IsNull() bool { return o.Null }
 
-// SetNull sets value to null.
+// SetToNull sets value to null.
 func (o *NilAlertButton) SetToNull() {
 	o.Null = true
 	var v AlertButton
@@ -1504,10 +1391,10 @@ func (o *NilGymCapacity) SetTo(v GymCapacity) {
 	o.Value = v
 }
 
-// IsSet returns true if value is Null.
+// IsNull returns true if value is Null.
 func (o NilGymCapacity) IsNull() bool { return o.Null }
 
-// SetNull sets value to null.
+// SetToNull sets value to null.
 func (o *NilGymCapacity) SetToNull() {
 	o.Null = true
 	var v GymCapacity
@@ -1549,10 +1436,10 @@ func (o *NilInt) SetTo(v int) {
 	o.Value = v
 }
 
-// IsSet returns true if value is Null.
+// IsNull returns true if value is Null.
 func (o NilInt) IsNull() bool { return o.Null }
 
-// SetNull sets value to null.
+// SetToNull sets value to null.
 func (o *NilInt) SetToNull() {
 	o.Null = true
 	var v int
@@ -1569,6 +1456,52 @@ func (o NilInt) Get() (v int, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o NilInt) Or(d int) int {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptInt returns new OptInt with value set to v.
+func NewOptInt(v int) OptInt {
+	return OptInt{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt is optional int.
+type OptInt struct {
+	Value int
+	Set   bool
+}
+
+// IsSet returns true if OptInt was set.
+func (o OptInt) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt) Reset() {
+	var v int
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt) SetTo(v int) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt) Get() (v int, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt) Or(d int) int {
 	if v, ok := o.Get(); ok {
 		return v
 	}
