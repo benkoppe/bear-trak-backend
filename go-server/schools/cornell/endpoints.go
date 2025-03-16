@@ -1,4 +1,4 @@
-package handler
+package cornell
 
 const (
 	eateriesUrl = "https://now.dining.cornell.edu/api/1.0/dining/eateries.json"

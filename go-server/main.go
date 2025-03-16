@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	_ "github.com/bmizerany/pq"
@@ -13,7 +14,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms"
-	"github.com/benkoppe/bear-trak-backend/go-server/handler"
+	"github.com/benkoppe/bear-trak-backend/go-server/schools"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
@@ -21,6 +22,14 @@ import (
 var embeddedStaticFiles embed.FS
 
 func main() {
+	// get school code from environment
+	schoolCodeStr := os.Getenv("SCHOOL_CODE")
+	if schoolCodeStr == "" {
+		schoolCodeStr = string(schools.Cornell)
+	}
+
+	schoolCode := schools.SchoolCode(schoolCodeStr)
+
 	// connect to db
 	pool, err := connectToDbPool(context.Background())
 	if err != nil {
@@ -31,8 +40,11 @@ func main() {
 	dbQueries := db.New(pool)
 
 	// create main service
-	service := handler.NewBackendService(dbQueries)
-	srv, err := api.NewServer(service)
+	handler, err := schools.NewHandler(schoolCode, dbQueries)
+	if err != nil {
+		log.Fatal(err)
+	}
+	srv, err := api.NewServer(handler)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,7 +66,7 @@ func main() {
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
 	// start the timed tasks in a separate goroutine
-	go runTimedTasks(dbQueries)
+	go runTimedTasks(dbQueries, handler)
 
 	// start the server
 	if err := http.ListenAndServe(":3000", mux); err != nil {
@@ -62,20 +74,20 @@ func main() {
 	}
 }
 
-func runTimedTasks(queries *db.Queries) {
+func runTimedTasks(queries *db.Queries, handler api.Handler) {
 	// initial run
-	executeHourlyTasks(queries)
+	executeHourlyTasks(queries, handler)
 
 	// create a ticker to run the tasks
 	ticker := time.NewTicker(5 * time.Minute)
 	defer ticker.Stop()
 
 	for range ticker.C {
-		executeHourlyTasks(queries)
+		executeHourlyTasks(queries, handler)
 	}
 }
 
-func executeHourlyTasks(queries *db.Queries) {
+func executeHourlyTasks(queries *db.Queries, handler api.Handler) {
 	est := utils.LoadEST()
 	log.Println("Executing timed tasks at:", time.Now().In(est))
 
@@ -83,7 +95,7 @@ func executeHourlyTasks(queries *db.Queries) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	err := gyms.LogCapacities(ctx, handler.GymCapacitiesUrl, queries)
+	err := gyms.LogCapacities(ctx, handler, queries)
 	if err != nil {
 		log.Printf("Error logging gym capacities: %v", err)
 	}

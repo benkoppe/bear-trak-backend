@@ -10,8 +10,8 @@ import (
 	"unicode"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
-	"github.com/benkoppe/bear-trak-backend/go-server/dining/external"
-	"github.com/benkoppe/bear-trak-backend/go-server/dining/static"
+	"github.com/benkoppe/bear-trak-backend/go-server/dining/cornell/external"
+	"github.com/benkoppe/bear-trak-backend/go-server/dining/cornell/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 	"golang.org/x/text/unicode/norm"
 )
