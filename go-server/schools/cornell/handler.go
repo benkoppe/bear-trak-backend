@@ -9,7 +9,7 @@ import (
 	dining_users "github.com/benkoppe/bear-trak-backend/go-server/dining-users"
 	dining "github.com/benkoppe/bear-trak-backend/go-server/dining/cornell"
 	gyms "github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell"
-	"github.com/benkoppe/bear-trak-backend/go-server/transit"
+	transit "github.com/benkoppe/bear-trak-backend/go-server/transit/cornell"
 )
 
 type Handler struct {
