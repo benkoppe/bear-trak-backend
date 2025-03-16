@@ -2,7 +2,6 @@ package static
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 	"time"
 
@@ -36,11 +35,9 @@ type Equipment struct {
 	Items []string `json:"items"`
 }
 
-type TimeString string
-
 type Hours struct {
-	Open  TimeString `json:"open"`
-	Close TimeString `json:"close"`
+	Open  utils.TimeString `json:"open"`
+	Close utils.TimeString `json:"close"`
 }
 
 type WeekHours struct {
@@ -115,85 +112,4 @@ func (w WeekHours) IsOpen(date time.Time) bool {
 	}
 
 	return false
-}
-
-func (t TimeString) parseTime() (struct {
-	Hour   int
-	Minute int
-}, error,
-) {
-	emptyTime := struct {
-		Hour   int
-		Minute int
-	}{Hour: 0, Minute: 0}
-	s := strings.ToLower(string(t))
-
-	hasAM := strings.HasSuffix(s, "am")
-	hasPM := strings.HasSuffix(s, "pm")
-
-	// remove suffix
-	if hasAM {
-		s = strings.TrimSuffix(s, "am")
-	}
-	if hasPM {
-		s = strings.TrimSuffix(s, "pm")
-	}
-
-	var hours, minutes int
-	var err error
-
-	if strings.Contains(s, ":") {
-		parts := strings.Split(s, ":")
-		if len(parts) != 2 {
-			return emptyTime, fmt.Errorf("invalid time format: %s", t)
-		}
-
-		hours, err = strconv.Atoi(parts[0])
-		if err != nil {
-			return emptyTime, fmt.Errorf("invalid hours: %s", parts[0])
-		}
-
-		minutes, err = strconv.Atoi(parts[1])
-		if err != nil {
-			return emptyTime, fmt.Errorf("invalid minutes: %s", parts[1])
-		}
-	} else {
-		hours, err = strconv.Atoi(s)
-		if err != nil {
-			return emptyTime, fmt.Errorf("invalid hours: %s", s)
-		}
-		minutes = 0
-	}
-
-	// validate hours and minutes
-	if hours < 0 || hours > 12 && (hasAM || hasPM) || hours > 23 {
-		return emptyTime, fmt.Errorf("invalid hours: %d", hours)
-	}
-	if minutes < 0 || minutes > 59 {
-		return emptyTime, fmt.Errorf("invalid minutes: %d", minutes)
-	}
-
-	// adjust hours for PM
-	if hasPM && hours < 12 {
-		hours += 12
-	}
-
-	// adjust for 12am (midnight)
-	if hasAM && hours == 12 {
-		hours = 0
-	}
-
-	return struct {
-		Hour   int
-		Minute int
-	}{Hour: hours, Minute: minutes}, nil
-}
-
-func (t TimeString) ToDate(date time.Time) (time.Time, error) {
-	parsed, err := t.parseTime()
-	if err != nil {
-		return time.Time{}, err
-	}
-	est := utils.LoadEST()
-	return time.Date(date.Year(), date.Month(), date.Day(), parsed.Hour, parsed.Minute, 0, 0, est), nil
 }

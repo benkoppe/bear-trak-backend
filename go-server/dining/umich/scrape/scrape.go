@@ -1,0 +1,191 @@
+package scrape
+
+import (
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"net/url"
+	"regexp"
+	"strings"
+	"time"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils"
+)
+
+// unused -- a concurrent verion is in scrape_all
+func fetchEateryWeek(eateryUrl string) ([]Eatery, error) {
+	now := time.Now()
+	var eateryWeek []Eatery
+
+	for i := 0; i < 7; i++ {
+		date := now.AddDate(0, 0, i)
+		eatery, err := fetchEatery(eateryUrl, date)
+		if err != nil {
+			return nil, fmt.Errorf("failed to fetch eatery for date %s: %w", date.Format("2006-01-02"), err)
+		}
+		eateryWeek = append(eateryWeek, *eatery)
+	}
+
+	return eateryWeek, nil
+}
+
+func fetchEatery(eateryUrl string, date time.Time) (*Eatery, error) {
+	fullUrl, err := appendDateSearchParam(eateryUrl, date)
+	if err != nil {
+		return nil, fmt.Errorf("failed to append date search param: %w", err)
+	}
+
+	resp, err := http.Get(fullUrl)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching external data: %w", err)
+	}
+	defer resp.Body.Close()
+
+	eatery, err := scrape(resp.Body, date)
+	if err != nil {
+		return nil, fmt.Errorf("error scraping page: %w", err)
+	}
+
+	return eatery, nil
+}
+
+func appendDateSearchParam(eateryUrl string, date time.Time) (string, error) {
+	parsedUrl, err := url.Parse(eateryUrl)
+	if err != nil {
+		return "", fmt.Errorf("failed to parse base URL: %w", err)
+	}
+
+	formattedDate := date.Format("2006-01-02")
+
+	// query parameters
+	query := parsedUrl.Query()
+	query.Set("menuDate", formattedDate)
+
+	parsedUrl.RawQuery = query.Encode()
+	return parsedUrl.String(), nil
+}
+
+func scrape(htmlReader io.Reader, date time.Time) (*Eatery, error) {
+	doc, err := goquery.NewDocumentFromReader(htmlReader)
+	if err != nil {
+		return nil, err
+	}
+
+	eatery := extractEateryInfo(doc)
+
+	eatery = extractHours(doc, eatery, date)
+
+	eatery = extractMenu(doc, eatery)
+
+	return eatery, nil
+}
+
+// removes extra whitespace and normalizes text
+func cleanText(s string) string {
+	// Replace multiple spaces with a single space
+	re := regexp.MustCompile(`\s+`)
+	s = re.ReplaceAllString(s, " ")
+	return strings.TrimSpace(s)
+}
+
+func extractEateryInfo(doc *goquery.Document) *Eatery {
+	name := doc.Find("h2.postTitle .titleText").Text()
+	address := doc.Find(".location-details .address").Text()
+	phone := doc.Find(".location-details .phone").Text()
+	email := doc.Find(".location-details .email").Text()
+
+	eatery := NewEatery(cleanText(name), cleanText(address), cleanText(phone), cleanText(email))
+
+	// Parse payment methods
+	doc.Find(".payment-methods li").Each(func(i int, s *goquery.Selection) {
+		paymentMethod := cleanText(s.Text())
+		eatery.addPaymentMethod(paymentMethod)
+	})
+
+	return eatery
+}
+
+func extractHours(doc *goquery.Document, eatery *Eatery, date time.Time) *Eatery {
+	// Find all meal periods and their times
+	doc.Find(".calhours li").Each(func(i int, s *goquery.Selection) {
+		mealName := cleanText(s.Find(".calhours-title").Text())
+		mealTime := cleanText(s.Find(".calhours-times").Text())
+		// Clean up the string
+		mealTime = strings.ReplaceAll(mealTime, "‑", "-")      // Replace unicode dash with regular dash
+		mealTime = strings.ReplaceAll(mealTime, "&nbsp;", " ") // Replace HTML spaces
+		if mealTime == "" {
+			return
+		}
+
+		parts := strings.Split(mealTime, "-")
+		if len(parts) != 2 {
+			log.Printf("invalid meal time format: %s", mealTime)
+			return
+		}
+
+		start, err := utils.TimeString(parts[0]).ToDate(date)
+		if err != nil {
+			log.Printf("error parsing start time: %v", err)
+			return
+		}
+		end, err := utils.TimeString(parts[1]).ToDate(date)
+		if err != nil {
+			log.Printf("error parsing end time: %v", err)
+		}
+
+		eatery.addHours(mealName, start, end)
+	})
+
+	return eatery
+}
+
+func extractMenu(doc *goquery.Document, eatery *Eatery) *Eatery {
+	// Find all meal periods (Breakfast, Lunch, Dinner)
+	doc.Find("#mdining-items h3").Each(func(i int, mealPeriod *goquery.Selection) {
+		// Extract meal period name (removing the plus/minus icon)
+		mealName := cleanText(mealPeriod.Text())
+		// Remove +/- signs
+		mealName = strings.ReplaceAll(mealName, "+", "")
+		mealName = strings.ReplaceAll(mealName, "-", "")
+		mealName = cleanText(mealName)
+
+		mealMenu := eatery.addMenu(mealName)
+
+		// Find the corresponding content div that follows this h3
+		contentDiv := mealPeriod.Next()
+
+		// Find all stations (categories) within this meal period
+		contentDiv.Find("li > h4").Each(func(j int, station *goquery.Selection) {
+			categoryName := cleanText(station.Text())
+			category := mealMenu.addCategory(categoryName)
+
+			// Find all food items within this station
+			station.Parent().Find("ul.items > li").Each(func(k int, item *goquery.Selection) {
+				// Extract item name
+				itemName := cleanText(item.Find(".item-name").Text())
+
+				// Extract dietary traits
+				var traits []string
+				item.Find("ul.traits li").Each(func(l int, trait *goquery.Selection) {
+					traitName := trait.AttrOr("title", "")
+					if traitName != "" {
+						traits = append(traits, traitName)
+					}
+				})
+
+				// Create menu item
+				menuItem := category.AddMenuItem(itemName, traits)
+
+				// Extract allergens (if available)
+				item.Find(".allergens li").Each(func(m int, allergenSel *goquery.Selection) {
+					allergen := cleanText(allergenSel.Text())
+					menuItem.AddAllergen(allergen)
+				})
+			})
+		})
+	})
+
+	return eatery
+}

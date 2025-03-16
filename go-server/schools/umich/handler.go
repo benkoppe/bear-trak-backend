@@ -7,17 +7,26 @@ import (
 	alerts "github.com/benkoppe/bear-trak-backend/go-server/alerts/umich"
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
+	dining "github.com/benkoppe/bear-trak-backend/go-server/dining/umich"
 )
 
 type Handler struct {
 	DB *db.Queries
+
+	diningCache dining.Cache
 }
 
 func NewHandler(db *db.Queries) *Handler {
 	h := &Handler{
 		DB: db,
 	}
+	h.initCaches()
+
 	return h
+}
+
+func (h *Handler) initCaches() {
+	h.diningCache = dining.InitCache(eateriesBaseUrl)
 }
 
 func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
@@ -25,7 +34,7 @@ func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
 }
 
 func (h *Handler) GetV1Dining(ctx context.Context) ([]api.Eatery, error) {
-	return nil, fmt.Errorf("not implemented")
+	return dining.Get(h.diningCache)
 }
 
 func (h *Handler) GetV1Gyms(ctx context.Context) ([]api.Gym, error) {

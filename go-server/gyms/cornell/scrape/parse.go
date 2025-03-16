@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
 // tries a few common date layouts
@@ -27,15 +28,7 @@ func parseDate(s string) (time.Time, error) {
 		"01/02/06",
 	}
 
-	var err error
-	for _, layout := range layouts {
-		if t, err2 := time.Parse(layout, s); err2 == nil {
-			return t, nil
-		} else {
-			err = err2
-		}
-	}
-	return time.Time{}, fmt.Errorf("unable to parse date %q: %v", s, err)
+	return utils.ParseDateTime(s, layouts)
 }
 
 // parseCaption will try multiple patterns to extract title, start and/or end dates.
@@ -184,8 +177,8 @@ func parseCellHours(cell string) []static.Hours {
 		open := strings.TrimSpace(parts[0])
 		close := strings.TrimSpace(parts[1])
 		hrs = append(hrs, static.Hours{
-			Open:  static.TimeString(open),
-			Close: static.TimeString(close),
+			Open:  utils.TimeString(open),
+			Close: utils.TimeString(close),
 		})
 	}
 	return hrs
