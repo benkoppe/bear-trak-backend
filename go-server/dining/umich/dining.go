@@ -48,7 +48,7 @@ func convertScraped(static static.Eatery, scraped []scrape.Eatery) api.Eatery {
 		ID:             static.ID,
 		Name:           firstScraped.Name,
 		NameShort:      firstScraped.Name,
-		ImagePath:      utils.ImageNameToPath("dining", static.ImageName),
+		ImagePath:      utils.ImageNameToPath("dining/umich", static.ImageName),
 		Latitude:       static.Location.Latitude,
 		Longitude:      static.Location.Longitude,
 		Location:       firstScraped.Address,

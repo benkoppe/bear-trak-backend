@@ -2,7 +2,7 @@
   {
     "id": 0,
     "scrapePath": "cafes/berts-cafe/",
-    "imageName": "",
+    "imageName": "berts-cafe",
     "region": "",
     "location": {
       "latitude": 42.27560652541414,
@@ -12,7 +12,7 @@
   {
     "id": 1,
     "scrapePath": "markets/blue-market-and-cafe/mosher-jordan/",
-    "imageName": "",
+    "imageName": "mosher-jordan-blue",
     "region": "",
     "location": {
       "latitude": 42.2799904953988,
@@ -22,7 +22,7 @@
   {
     "id": 2,
     "scrapePath": "cafes/blue-cafe/east-quad/",
-    "imageName": "",
+    "imageName": "east-quad-blue",
     "region": "",
     "location": {
       "latitude": 42.27292559395478,
@@ -32,7 +32,7 @@
   {
     "id": 3,
     "scrapePath": "cafes/blue-cafe/south-quad/",
-    "imageName": "",
+    "imageName": "south-quad-blue",
     "region": "",
     "location": {
       "latitude": 42.273676109386656,
@@ -42,7 +42,7 @@
   {
     "id": 4,
     "scrapePath": "markets/blue-market/bursley/",
-    "imageName": "",
+    "imageName": "bursley-blue",
     "region": "north",
     "location": {
       "latitude": 42.293672567623545,
@@ -52,7 +52,7 @@
   {
     "id": 5,
     "scrapePath": "markets/blue-market/michigan-union/",
-    "imageName": "",
+    "imageName": "union-blue",
     "region": "",
     "location": {
       "latitude": 42.27504802562766,
@@ -62,7 +62,7 @@
   {
     "id": 6,
     "scrapePath": "markets/blue-market/munger/",
-    "imageName": "",
+    "imageName": "munger-blue",
     "region": "",
     "location": {
       "latitude": 42.274582935467684,
@@ -72,7 +72,7 @@
   {
     "id": 7,
     "scrapePath": "markets/blue-market/pierpont-commons/",
-    "imageName": "",
+    "imageName": "pierpont-blue",
     "region": "",
     "location": {
       "latitude": 42.2914383059329,
@@ -82,7 +82,7 @@
   {
     "id": 8,
     "scrapePath": "dining-halls/bursley/",
-    "imageName": "",
+    "imageName": "bursley-dining",
     "region": "",
     "location": {
       "latitude": 42.29368280185505,
@@ -92,7 +92,7 @@
   {
     "id": 9,
     "scrapePath": "cafes/cafe-32/",
-    "imageName": "",
+    "imageName": "cafe32",
     "region": "",
     "location": {
       "latitude": 42.279111673359566,
@@ -102,7 +102,7 @@
   {
     "id": 10,
     "scrapePath": "cafes/darwins/",
-    "imageName": "",
+    "imageName": "darwins",
     "region": "",
     "location": {
       "latitude": 42.278866981795055,
@@ -112,7 +112,7 @@
   {
     "id": 11,
     "scrapePath": "dining-halls/east-quad/",
-    "imageName": "",
+    "imageName": "east-quad-dining",
     "region": "",
     "location": {
       "latitude": 42.272922959034155,
@@ -122,7 +122,7 @@
   {
     "id": 12,
     "scrapePath": "cafes/eigen-cafe/",
-    "imageName": "",
+    "imageName": "eigen-cafe",
     "region": "",
     "location": {
       "latitude": 42.29463867817704,
@@ -132,7 +132,7 @@
   {
     "id": 13,
     "scrapePath": "cafes/fireside-cafe/",
-    "imageName": "",
+    "imageName": "fireside-cafe",
     "region": "",
     "location": {
       "latitude": 42.29115659675143,
@@ -142,7 +142,7 @@
   {
     "id": 14,
     "scrapePath": "cafes/taubman-health-sciences-library/",
-    "imageName": "",
+    "imageName": "taubman",
     "region": "",
     "location": {
       "latitude": 42.28355635724683,
@@ -152,7 +152,7 @@
   {
     "id": 16,
     "scrapePath": "markets/maizies/",
-    "imageName": "",
+    "imageName": "maizies",
     "region": "",
     "location": {
       "latitude": 42.27930578922795,
@@ -162,7 +162,7 @@
   {
     "id": 17,
     "scrapePath": "dining-halls/markley/",
-    "imageName": "",
+    "imageName": "markley-dining",
     "region": "",
     "location": {
       "latitude": 42.28087799384013,
@@ -172,7 +172,7 @@
   {
     "id": 19,
     "scrapePath": "dining-halls/mosher-jordan/",
-    "imageName": "",
+    "imageName": "mosher-jordan-dining",
     "region": "",
     "location": {
       "latitude": 42.28000348681529,
@@ -182,7 +182,7 @@
   {
     "id": 20,
     "scrapePath": "cafes/mujo-cafe/",
-    "imageName": "",
+    "imageName": "mujo-cafe",
     "region": "",
     "location": {
       "latitude": 42.29140686780664,
@@ -192,7 +192,7 @@
   {
     "id": 21,
     "scrapePath": "dining-halls/north-quad/",
-    "imageName": "",
+    "imageName": "north-quad-dining",
     "region": "",
     "location": {
       "latitude": 42.280515965755114,
@@ -202,7 +202,7 @@
   {
     "id": 22,
     "scrapePath": "dining-halls/south-quad/",
-    "imageName": "",
+    "imageName": "south-quad-dining",
     "region": "",
     "location": {
       "latitude": 42.273666041850895,
@@ -212,7 +212,7 @@
   {
     "id": 23,
     "scrapePath": "dining-halls/twigs-at-oxford/",
-    "imageName": "",
+    "imageName": "twigs-at-oxford",
     "region": "",
     "location": {
       "latitude": 42.2749442265507,
@@ -222,7 +222,7 @@
   {
     "id": 24,
     "scrapePath": "cafes/umma-cafe/",
-    "imageName": "",
+    "imageName": "umma-cafe",
     "region": "",
     "location": {
       "latitude": 42.27539716025096,

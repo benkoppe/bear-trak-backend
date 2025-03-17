@@ -295,7 +295,7 @@ func getImagePath(external external.Eatery) string {
 
 	// replace all whitespace with underscores
 	imageName := re.ReplaceAllString(stripped, "_")
-	return utils.ImageNameToPath("dining", imageName)
+	return utils.ImageNameToPath("dining/cornell", imageName)
 }
 
 func appendStaticMenus(eateries []api.Eatery, staticEateries []static.Eatery) []api.Eatery {
