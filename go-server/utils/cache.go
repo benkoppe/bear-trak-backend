@@ -26,8 +26,12 @@ func NewCache[T any](name string, expiration time.Duration, fetchFunc func() (T,
 	}
 	// immediately load data after initialization
 	log.Printf("initializing cache: %s with expiration %s...", name, expiration)
-	c.refresh()
-	log.Printf("initialized cache: %s", name)
+	_, err := c.refresh()
+	if err != nil {
+		log.Fatalf("error initializing cache: %s: %v", name, err)
+	}
+	log.Printf("successfully initialized cache: %s", name)
+
 	return c
 }
 
