@@ -23,7 +23,7 @@ type Vehicle struct {
 	Id              string        `json:"vid"`
 	LastUpdated     TransitTime   `json:"tmstmp"`
 	Latitude        Float64String `json:"lat"`
-	Longitude       Float64String `json:"long"`
+	Longitude       Float64String `json:"lon"`
 	Heading         IntString     `json:"hdg"`
 	RouteId         string        `json:"rt"`
 	Destination     string        `json:"des"`
