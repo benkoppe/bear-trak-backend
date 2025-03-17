@@ -31,8 +31,8 @@ func getVehicles(availtecVehicles []availtec.Vehicle) ([]api.Vehicle, error) {
 
 	for _, vehicle := range availtecVehicles {
 		vehicles = append(vehicles, api.Vehicle{
-			ID:            vehicle.VehicleId,
-			RouteId:       vehicle.RouteId,
+			ID:            api.NewIntVehicleID(vehicle.VehicleId),
+			RouteId:       api.NewIntVehicleRouteId(vehicle.RouteId),
 			Direction:     vehicle.Direction,
 			Heading:       vehicle.Heading,
 			Latitude:      vehicle.Latitude,

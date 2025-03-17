@@ -909,13 +909,23 @@ components:
         - lastUpdated
       properties:
         id:
-          type: integer
           x-stoplight:
             id: uhfjn6hkr952f
+          anyOf:
+            - type: string
+              x-stoplight:
+                id: nsex3b6b03oyl
+            - type: integer
+              x-stoplight:
+                id: 95pnffy83h3mi
         routeId:
-          type: integer
-          x-stoplight:
-            id: 6m19093vr3ruc
+          anyOf:
+            - type: string
+              x-stoplight:
+                id: 409axdtbnb0v2
+            - type: integer
+              x-stoplight:
+                id: cz5emu2dahk8n
         direction:
           type: string
           x-stoplight:

@@ -4157,11 +4157,11 @@ func (s *Vehicle) Encode(e *jx.Encoder) {
 func (s *Vehicle) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
-		e.Int(s.ID)
+		s.ID.Encode(e)
 	}
 	{
 		e.FieldStart("routeId")
-		e.Int(s.RouteId)
+		s.RouteId.Encode(e)
 	}
 	{
 		e.FieldStart("direction")
@@ -4222,9 +4222,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Int()
-				s.ID = int(v)
-				if err != nil {
+				if err := s.ID.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -4234,9 +4232,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 		case "routeId":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				v, err := d.Int()
-				s.RouteId = int(v)
-				if err != nil {
+				if err := s.RouteId.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -4392,6 +4388,106 @@ func (s *Vehicle) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *Vehicle) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes VehicleID as json.
+func (s VehicleID) Encode(e *jx.Encoder) {
+	switch s.Type {
+	case StringVehicleID:
+		e.Str(s.String)
+	case IntVehicleID:
+		e.Int(s.Int)
+	}
+}
+
+// Decode decodes VehicleID from json.
+func (s *VehicleID) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode VehicleID to nil")
+	}
+	// Sum type type_discriminator.
+	switch t := d.Next(); t {
+	case jx.Number:
+		v, err := d.Int()
+		s.Int = int(v)
+		if err != nil {
+			return err
+		}
+		s.Type = IntVehicleID
+	case jx.String:
+		v, err := d.Str()
+		s.String = string(v)
+		if err != nil {
+			return err
+		}
+		s.Type = StringVehicleID
+	default:
+		return errors.Errorf("unexpected json type %q", t)
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s VehicleID) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *VehicleID) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes VehicleRouteId as json.
+func (s VehicleRouteId) Encode(e *jx.Encoder) {
+	switch s.Type {
+	case StringVehicleRouteId:
+		e.Str(s.String)
+	case IntVehicleRouteId:
+		e.Int(s.Int)
+	}
+}
+
+// Decode decodes VehicleRouteId from json.
+func (s *VehicleRouteId) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode VehicleRouteId to nil")
+	}
+	// Sum type type_discriminator.
+	switch t := d.Next(); t {
+	case jx.Number:
+		v, err := d.Int()
+		s.Int = int(v)
+		if err != nil {
+			return err
+		}
+		s.Type = IntVehicleRouteId
+	case jx.String:
+		v, err := d.Str()
+		s.String = string(v)
+		if err != nil {
+			return err
+		}
+		s.Type = StringVehicleRouteId
+	default:
+		return errors.Errorf("unexpected json type %q", t)
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s VehicleRouteId) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *VehicleRouteId) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

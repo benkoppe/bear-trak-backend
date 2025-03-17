@@ -1684,25 +1684,25 @@ func (*Success) deleteV1DiningUserRes() {}
 
 // Ref: #/components/schemas/Vehicle
 type Vehicle struct {
-	ID            int       `json:"id"`
-	RouteId       int       `json:"routeId"`
-	Direction     string    `json:"direction"`
-	Heading       int       `json:"heading"`
-	Latitude      float64   `json:"latitude"`
-	Longitude     float64   `json:"longitude"`
-	DisplayStatus string    `json:"displayStatus"`
-	Destination   string    `json:"destination"`
-	LastStop      string    `json:"lastStop"`
-	LastUpdated   time.Time `json:"lastUpdated"`
+	ID            VehicleID      `json:"id"`
+	RouteId       VehicleRouteId `json:"routeId"`
+	Direction     string         `json:"direction"`
+	Heading       int            `json:"heading"`
+	Latitude      float64        `json:"latitude"`
+	Longitude     float64        `json:"longitude"`
+	DisplayStatus string         `json:"displayStatus"`
+	Destination   string         `json:"destination"`
+	LastStop      string         `json:"lastStop"`
+	LastUpdated   time.Time      `json:"lastUpdated"`
 }
 
 // GetID returns the value of ID.
-func (s *Vehicle) GetID() int {
+func (s *Vehicle) GetID() VehicleID {
 	return s.ID
 }
 
 // GetRouteId returns the value of RouteId.
-func (s *Vehicle) GetRouteId() int {
+func (s *Vehicle) GetRouteId() VehicleRouteId {
 	return s.RouteId
 }
 
@@ -1747,12 +1747,12 @@ func (s *Vehicle) GetLastUpdated() time.Time {
 }
 
 // SetID sets the value of ID.
-func (s *Vehicle) SetID(val int) {
+func (s *Vehicle) SetID(val VehicleID) {
 	s.ID = val
 }
 
 // SetRouteId sets the value of RouteId.
-func (s *Vehicle) SetRouteId(val int) {
+func (s *Vehicle) SetRouteId(val VehicleRouteId) {
 	s.RouteId = val
 }
 
@@ -1794,4 +1794,132 @@ func (s *Vehicle) SetLastStop(val string) {
 // SetLastUpdated sets the value of LastUpdated.
 func (s *Vehicle) SetLastUpdated(val time.Time) {
 	s.LastUpdated = val
+}
+
+// VehicleID represents sum type.
+type VehicleID struct {
+	Type   VehicleIDType // switch on this field
+	String string
+	Int    int
+}
+
+// VehicleIDType is oneOf type of VehicleID.
+type VehicleIDType string
+
+// Possible values for VehicleIDType.
+const (
+	StringVehicleID VehicleIDType = "string"
+	IntVehicleID    VehicleIDType = "int"
+)
+
+// IsString reports whether VehicleID is string.
+func (s VehicleID) IsString() bool { return s.Type == StringVehicleID }
+
+// IsInt reports whether VehicleID is int.
+func (s VehicleID) IsInt() bool { return s.Type == IntVehicleID }
+
+// SetString sets VehicleID to string.
+func (s *VehicleID) SetString(v string) {
+	s.Type = StringVehicleID
+	s.String = v
+}
+
+// GetString returns string and true boolean if VehicleID is string.
+func (s VehicleID) GetString() (v string, ok bool) {
+	if !s.IsString() {
+		return v, false
+	}
+	return s.String, true
+}
+
+// NewStringVehicleID returns new VehicleID from string.
+func NewStringVehicleID(v string) VehicleID {
+	var s VehicleID
+	s.SetString(v)
+	return s
+}
+
+// SetInt sets VehicleID to int.
+func (s *VehicleID) SetInt(v int) {
+	s.Type = IntVehicleID
+	s.Int = v
+}
+
+// GetInt returns int and true boolean if VehicleID is int.
+func (s VehicleID) GetInt() (v int, ok bool) {
+	if !s.IsInt() {
+		return v, false
+	}
+	return s.Int, true
+}
+
+// NewIntVehicleID returns new VehicleID from int.
+func NewIntVehicleID(v int) VehicleID {
+	var s VehicleID
+	s.SetInt(v)
+	return s
+}
+
+// VehicleRouteId represents sum type.
+type VehicleRouteId struct {
+	Type   VehicleRouteIdType // switch on this field
+	String string
+	Int    int
+}
+
+// VehicleRouteIdType is oneOf type of VehicleRouteId.
+type VehicleRouteIdType string
+
+// Possible values for VehicleRouteIdType.
+const (
+	StringVehicleRouteId VehicleRouteIdType = "string"
+	IntVehicleRouteId    VehicleRouteIdType = "int"
+)
+
+// IsString reports whether VehicleRouteId is string.
+func (s VehicleRouteId) IsString() bool { return s.Type == StringVehicleRouteId }
+
+// IsInt reports whether VehicleRouteId is int.
+func (s VehicleRouteId) IsInt() bool { return s.Type == IntVehicleRouteId }
+
+// SetString sets VehicleRouteId to string.
+func (s *VehicleRouteId) SetString(v string) {
+	s.Type = StringVehicleRouteId
+	s.String = v
+}
+
+// GetString returns string and true boolean if VehicleRouteId is string.
+func (s VehicleRouteId) GetString() (v string, ok bool) {
+	if !s.IsString() {
+		return v, false
+	}
+	return s.String, true
+}
+
+// NewStringVehicleRouteId returns new VehicleRouteId from string.
+func NewStringVehicleRouteId(v string) VehicleRouteId {
+	var s VehicleRouteId
+	s.SetString(v)
+	return s
+}
+
+// SetInt sets VehicleRouteId to int.
+func (s *VehicleRouteId) SetInt(v int) {
+	s.Type = IntVehicleRouteId
+	s.Int = v
+}
+
+// GetInt returns int and true boolean if VehicleRouteId is int.
+func (s VehicleRouteId) GetInt() (v int, ok bool) {
+	if !s.IsInt() {
+		return v, false
+	}
+	return s.Int, true
+}
+
+// NewIntVehicleRouteId returns new VehicleRouteId from int.
+func NewIntVehicleRouteId(v int) VehicleRouteId {
+	var s VehicleRouteId
+	s.SetInt(v)
+	return s
 }

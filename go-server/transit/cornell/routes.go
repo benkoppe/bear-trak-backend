@@ -43,13 +43,13 @@ func GetRoutes(caches Caches) ([]api.BusRoute, error) {
 		return nil, fmt.Errorf("failed to load vehicles: %v", err)
 	}
 
-	routeIdVehicles := make(map[int]([]api.Vehicle))
+	routeIdVehicles := make(map[interface{}]([]api.Vehicle))
 	for _, vehicle := range vehicles {
 		routeIdVehicles[vehicle.RouteId] = append(routeIdVehicles[vehicle.RouteId], vehicle)
 	}
 
 	for i := range routes {
-		routes[i].Vehicles = routeIdVehicles[routes[i].ID.Int]
+		routes[i].Vehicles = routeIdVehicles[routes[i].ID]
 	}
 
 	return routes, nil
