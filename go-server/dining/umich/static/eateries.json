@@ -7,7 +7,8 @@
     "location": {
       "latitude": 42.27560652541414,
       "longitude": -83.7371715355508
-    }
+    },
+    "categories": ["Cafe"]
   },
   {
     "id": 1,
@@ -17,7 +18,8 @@
     "location": {
       "latitude": 42.2799904953988,
       "longitude": -83.7315440141161
-    }
+    },
+    "categories": ["Convenience Store", "Cafe"]
   },
   {
     "id": 2,
@@ -27,7 +29,8 @@
     "location": {
       "latitude": 42.27292559395478,
       "longitude": -83.73513715382714
-    }
+    },
+    "categories": ["Cafe"]
   },
   {
     "id": 3,
@@ -37,7 +40,8 @@
     "location": {
       "latitude": 42.273676109386656,
       "longitude": -83.74210578484987
-    }
+    },
+    "categories": ["Cafe"]
   },
   {
     "id": 4,
@@ -47,7 +51,8 @@
     "location": {
       "latitude": 42.293672567623545,
       "longitude": -83.72096386512726
-    }
+    },
+    "categories": ["Convenience Store"]
   },
   {
     "id": 5,
@@ -57,7 +62,8 @@
     "location": {
       "latitude": 42.27504802562766,
       "longitude": -83.74166193823883
-    }
+    },
+    "categories": ["Convenience Store"]
   },
   {
     "id": 6,
@@ -67,7 +73,8 @@
     "location": {
       "latitude": 42.274582935467684,
       "longitude": -83.74344237365486
-    }
+    },
+    "categories": ["Convenience Store"]
   },
   {
     "id": 7,
@@ -77,7 +84,8 @@
     "location": {
       "latitude": 42.2914383059329,
       "longitude": -83.71722681645342
-    }
+    },
+    "categories": ["Convenience Store"]
   },
   {
     "id": 8,
@@ -87,7 +95,8 @@
     "location": {
       "latitude": 42.29368280185505,
       "longitude": -83.72096321407858
-    }
+    },
+    "categories": ["Dining Room"]
   },
   {
     "id": 9,
@@ -97,7 +106,8 @@
     "location": {
       "latitude": 42.279111673359566,
       "longitude": -83.73637550938253
-    }
+    },
+    "categories": ["Cafe"]
   },
   {
     "id": 10,
@@ -107,7 +117,8 @@
     "location": {
       "latitude": 42.278866981795055,
       "longitude": -83.73452167405695
-    }
+    },
+    "categories": ["Cafe"]
   },
   {
     "id": 11,
@@ -117,7 +128,8 @@
     "location": {
       "latitude": 42.272922959034155,
       "longitude": -83.73514601347468
-    }
+    },
+    "categories": ["Dining Room"]
   },
   {
     "id": 12,
@@ -127,7 +139,8 @@
     "location": {
       "latitude": 42.29463867817704,
       "longitude": -83.7094741363139
-    }
+    },
+    "categories": ["Cafe"]
   },
   {
     "id": 13,
@@ -137,7 +150,8 @@
     "location": {
       "latitude": 42.29115659675143,
       "longitude": -83.71749021080689
-    }
+    },
+    "categories": ["Cafe"]
   },
   {
     "id": 14,
@@ -147,7 +161,8 @@
     "location": {
       "latitude": 42.28355635724683,
       "longitude": -83.73445022063117
-    }
+    },
+    "categories": ["Cafe"]
   },
   {
     "id": 16,
@@ -157,7 +172,8 @@
     "location": {
       "latitude": 42.27930578922795,
       "longitude": -83.73755214049726
-    }
+    },
+    "categories": ["Convenience Store"]
   },
   {
     "id": 17,
@@ -167,7 +183,8 @@
     "location": {
       "latitude": 42.28087799384013,
       "longitude": -83.72887849299278
-    }
+    },
+    "categories": ["Dining Room"]
   },
   {
     "id": 19,
@@ -177,7 +194,8 @@
     "location": {
       "latitude": 42.28000348681529,
       "longitude": -83.73155552450878
-    }
+    },
+    "categories": ["Dining Room"]
   },
   {
     "id": 20,
@@ -187,7 +205,8 @@
     "location": {
       "latitude": 42.29140686780664,
       "longitude": -83.7158003860773
-    }
+    },
+    "categories": ["Cafe"]
   },
   {
     "id": 21,
@@ -197,7 +216,8 @@
     "location": {
       "latitude": 42.280515965755114,
       "longitude": -83.74017017028285
-    }
+    },
+    "categories": ["Dining Room"]
   },
   {
     "id": 22,
@@ -207,7 +227,8 @@
     "location": {
       "latitude": 42.273666041850895,
       "longitude": -83.74209899857368
-    }
+    },
+    "categories": ["Dining Room"]
   },
   {
     "id": 23,
@@ -217,7 +238,8 @@
     "location": {
       "latitude": 42.2749442265507,
       "longitude": -83.72582537083439
-    }
+    },
+    "categories": ["Dining Room"]
   },
   {
     "id": 24,
@@ -227,6 +249,7 @@
     "location": {
       "latitude": 42.27539716025096,
       "longitude": -83.73984990232881
-    }
+    },
+    "categories": ["Cafe"]
   }
 ]
