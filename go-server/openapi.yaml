@@ -905,8 +905,8 @@ components:
         - longitude
         - displayStatus
         - destination
-        - lastStop
         - lastUpdated
+        - lastStop
       properties:
         id:
           x-stoplight:
@@ -952,15 +952,16 @@ components:
           type: string
           x-stoplight:
             id: zw8pf118dz5f5
-        lastStop:
-          type: string
-          x-stoplight:
-            id: f9na87dt9fa28
         lastUpdated:
           type: string
           x-stoplight:
             id: npwbh2swyuu70
           format: date-time
+        lastStop:
+          type: string
+          x-stoplight:
+            id: f9na87dt9fa28
+          nullable: true
     DiningUserAccount:
       title: DiningUserAccount
       x-stoplight:

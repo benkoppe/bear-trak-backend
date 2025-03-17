@@ -1526,6 +1526,51 @@ func (o NilInt) Or(d int) int {
 	return d
 }
 
+// NewNilString returns new NilString with value set to v.
+func NewNilString(v string) NilString {
+	return NilString{
+		Value: v,
+	}
+}
+
+// NilString is nullable string.
+type NilString struct {
+	Value string
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilString) SetTo(v string) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o NilString) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *NilString) SetToNull() {
+	o.Null = true
+	var v string
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilString) Get() (v string, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
 	return OptInt{
@@ -1692,8 +1737,8 @@ type Vehicle struct {
 	Longitude     float64        `json:"longitude"`
 	DisplayStatus string         `json:"displayStatus"`
 	Destination   string         `json:"destination"`
-	LastStop      string         `json:"lastStop"`
 	LastUpdated   time.Time      `json:"lastUpdated"`
+	LastStop      NilString      `json:"lastStop"`
 }
 
 // GetID returns the value of ID.
@@ -1736,14 +1781,14 @@ func (s *Vehicle) GetDestination() string {
 	return s.Destination
 }
 
-// GetLastStop returns the value of LastStop.
-func (s *Vehicle) GetLastStop() string {
-	return s.LastStop
-}
-
 // GetLastUpdated returns the value of LastUpdated.
 func (s *Vehicle) GetLastUpdated() time.Time {
 	return s.LastUpdated
+}
+
+// GetLastStop returns the value of LastStop.
+func (s *Vehicle) GetLastStop() NilString {
+	return s.LastStop
 }
 
 // SetID sets the value of ID.
@@ -1786,14 +1831,14 @@ func (s *Vehicle) SetDestination(val string) {
 	s.Destination = val
 }
 
-// SetLastStop sets the value of LastStop.
-func (s *Vehicle) SetLastStop(val string) {
-	s.LastStop = val
-}
-
 // SetLastUpdated sets the value of LastUpdated.
 func (s *Vehicle) SetLastUpdated(val time.Time) {
 	s.LastUpdated = val
+}
+
+// SetLastStop sets the value of LastStop.
+func (s *Vehicle) SetLastStop(val NilString) {
+	s.LastStop = val
 }
 
 // VehicleID represents sum type.

@@ -3818,6 +3818,52 @@ func (s *NilInt) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes string as json.
+func (o NilString) Encode(e *jx.Encoder) {
+	if o.Null {
+		e.Null()
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes string from json.
+func (o *NilString) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode NilString to nil")
+	}
+	if d.Next() == jx.Null {
+		if err := d.Null(); err != nil {
+			return err
+		}
+
+		var v string
+		o.Value = v
+		o.Null = true
+		return nil
+	}
+	o.Null = false
+	v, err := d.Str()
+	if err != nil {
+		return err
+	}
+	o.Value = string(v)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s NilString) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *NilString) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes int as json.
 func (o OptInt) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -4188,12 +4234,12 @@ func (s *Vehicle) encodeFields(e *jx.Encoder) {
 		e.Str(s.Destination)
 	}
 	{
-		e.FieldStart("lastStop")
-		e.Str(s.LastStop)
-	}
-	{
 		e.FieldStart("lastUpdated")
 		json.EncodeDateTime(e, s.LastUpdated)
+	}
+	{
+		e.FieldStart("lastStop")
+		s.LastStop.Encode(e)
 	}
 }
 
@@ -4206,8 +4252,8 @@ var jsonFieldsNameOfVehicle = [10]string{
 	5: "longitude",
 	6: "displayStatus",
 	7: "destination",
-	8: "lastStop",
-	9: "lastUpdated",
+	8: "lastUpdated",
+	9: "lastStop",
 }
 
 // Decode decodes Vehicle from json.
@@ -4311,20 +4357,8 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"destination\"")
 			}
-		case "lastStop":
-			requiredBitSet[1] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.LastStop = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"lastStop\"")
-			}
 		case "lastUpdated":
-			requiredBitSet[1] |= 1 << 1
+			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.LastUpdated = v
@@ -4334,6 +4368,16 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"lastUpdated\"")
+			}
+		case "lastStop":
+			requiredBitSet[1] |= 1 << 1
+			if err := func() error {
+				if err := s.LastStop.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"lastStop\"")
 			}
 		default:
 			return d.Skip()
