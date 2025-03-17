@@ -5,17 +5,18 @@ import (
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/transit/shared/bustime"
-	external_gtfs "github.com/benkoppe/bear-trak-backend/go-server/transit/shared/gtfs"
+	shared_gtfs "github.com/benkoppe/bear-trak-backend/go-server/transit/shared/gtfs"
+	"github.com/jamespfennell/gtfs"
 )
 
 type Caches struct {
 	bustimeCaches bustime.Caches
-	staticCache   external_gtfs.Cache
+	staticCache   shared_gtfs.Cache
 }
 
 func InitCaches(bustimeUrl, staticGtfsUrl string) Caches {
 	return Caches{
-		staticCache:   external_gtfs.InitCache(staticGtfsUrl),
+		staticCache:   shared_gtfs.InitCache(staticGtfsUrl),
 		bustimeCaches: bustime.InitCaches(bustimeUrl),
 	}
 }
@@ -26,14 +27,37 @@ func GetRoutes(caches Caches) ([]api.BusRoute, error) {
 		return nil, fmt.Errorf("failed to load static data: %v", err)
 	}
 
-	_, err = caches.bustimeCaches.RoutesCache.Get()
+	bustimeRoutes, err := caches.bustimeCaches.RoutesCache.Get()
 	if err != nil {
 		return nil, fmt.Errorf("failed to load bustime routes: %v", err)
 	}
 
-	for _, route := range staticGtfs.Routes {
-		fmt.Printf("route: %v \n", route.Id)
+	routes, err := getRoutes(bustimeRoutes, *staticGtfs)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse routes: %v", err)
 	}
 
-	return nil, fmt.Errorf("not implemented yet")
+	return routes, nil
+}
+
+func getRoutes(bustimeRoutes []bustime.Route, staticGtfs gtfs.Static) ([]api.BusRoute, error) {
+	var routes []api.BusRoute
+
+	for _, route := range bustimeRoutes {
+		var gtfsRoute *gtfs.Route
+		for _, gtfsRouteOption := range staticGtfs.Routes {
+			if gtfsRouteOption.Id == route.Id {
+				gtfsRoute = &gtfsRouteOption
+				break
+			}
+		}
+
+		if gtfsRoute == nil {
+			return nil, fmt.Errorf("failed to find GTFS route for route ID: %v", route.Id)
+		}
+
+		routes = append(routes, shared_gtfs.ConvertRoute(*gtfsRoute, staticGtfs))
+	}
+
+	return routes, nil
 }

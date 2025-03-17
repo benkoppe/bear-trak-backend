@@ -40,11 +40,11 @@ func fetchVehicles(baseUrl string, routeIds []string) ([]Vehicle, error) {
 		return []Vehicle{}, fmt.Errorf("failed to build url: %w", err)
 	}
 
-	vehicles, err := utils.DoGetRequest[[]Vehicle](fullUrl)
+	vehicles, err := utils.DoGetRequest[bustimeResponse[vehiclesResponse]](fullUrl)
 	if err != nil {
 		return []Vehicle{}, fmt.Errorf("failed to fetch vehicles: %w", err)
 	}
-	return *vehicles, nil
+	return vehicles.Response.Vehicles, nil
 }
 
 func fetchRoutes(baseUrl string) ([]Route, error) {
@@ -53,11 +53,11 @@ func fetchRoutes(baseUrl string) ([]Route, error) {
 		return []Route{}, fmt.Errorf("failed to build url: %w", err)
 	}
 
-	routes, err := utils.DoGetRequest[[]Route](fullUrl)
+	routes, err := utils.DoGetRequest[bustimeResponse[routesResponse]](fullUrl)
 	if err != nil {
 		return []Route{}, fmt.Errorf("failed to fetch routes: %w", err)
 	}
-	return *routes, nil
+	return routes.Response.Routes, nil
 }
 
 func buildUrl(baseUrl string, route string, params map[string]string) (string, error) {
