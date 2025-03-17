@@ -12,6 +12,8 @@ services:
       - POSTGRES_DB=app
       - POSTGRES_PORT=5432
       - POSTGRES_SSLMODE=disable
+      - SCHOOL_CODE=${SCHOOL_CODE}
+      - BUSTIME_API_KEY
     ports:
       - 3000:3000
     depends_on:
