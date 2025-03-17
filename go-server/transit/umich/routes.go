@@ -16,10 +16,10 @@ type Caches struct {
 	staticCache   shared_gtfs.Cache
 }
 
-func InitCaches(bustimeUrl, staticGtfsUrl string) Caches {
+func InitCaches(bustimeUrl, bustimeApiKey, staticGtfsUrl string) Caches {
 	return Caches{
 		staticCache:   shared_gtfs.InitCache(staticGtfsUrl),
-		bustimeCaches: bustime.InitCaches(bustimeUrl),
+		bustimeCaches: bustime.InitCaches(bustimeUrl, bustimeApiKey),
 	}
 }
 

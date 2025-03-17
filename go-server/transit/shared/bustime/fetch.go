@@ -3,18 +3,15 @@ package bustime
 import (
 	"fmt"
 	"net/url"
-	"os"
 	"strings"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
-const API_KEY_ENV_VAR = "BUSTIME_API_KEY"
-
-func chunkFetchVehicles(baseUrl string, routeIds []string) ([]Vehicle, error) {
+func chunkFetchVehicles(baseUrl, apiKey string, routeIds []string) ([]Vehicle, error) {
 	vehicles := []Vehicle{}
 	for i, chunk := range utils.ChunkArray(routeIds, 10) {
-		chunkVehicles, err := fetchVehicles(baseUrl, chunk)
+		chunkVehicles, err := fetchVehicles(baseUrl, apiKey, chunk)
 		if err != nil {
 			return []Vehicle{}, fmt.Errorf("failed on chunk %d: %w", i, err)
 		}
@@ -23,7 +20,7 @@ func chunkFetchVehicles(baseUrl string, routeIds []string) ([]Vehicle, error) {
 	return vehicles, nil
 }
 
-func fetchVehicles(baseUrl string, routeIds []string) ([]Vehicle, error) {
+func fetchVehicles(baseUrl, apiKey string, routeIds []string) ([]Vehicle, error) {
 	if len(routeIds) == 0 {
 		return []Vehicle{}, nil
 	}
@@ -33,7 +30,7 @@ func fetchVehicles(baseUrl string, routeIds []string) ([]Vehicle, error) {
 
 	routeIdsStr := strings.Join(routeIds, ",")
 
-	fullUrl, err := buildUrl(baseUrl, "getvehicles", map[string]string{
+	fullUrl, err := buildUrl(baseUrl, apiKey, "getvehicles", map[string]string{
 		"rt": routeIdsStr,
 	})
 	if err != nil {
@@ -47,8 +44,8 @@ func fetchVehicles(baseUrl string, routeIds []string) ([]Vehicle, error) {
 	return vehicles.Response.Vehicles, nil
 }
 
-func fetchRoutes(baseUrl string) ([]Route, error) {
-	fullUrl, err := buildUrl(baseUrl, "getroutes", map[string]string{})
+func fetchRoutes(baseUrl, apiKey string) ([]Route, error) {
+	fullUrl, err := buildUrl(baseUrl, apiKey, "getroutes", map[string]string{})
 	if err != nil {
 		return []Route{}, fmt.Errorf("failed to build url: %w", err)
 	}
@@ -60,13 +57,7 @@ func fetchRoutes(baseUrl string) ([]Route, error) {
 	return routes.Response.Routes, nil
 }
 
-func buildUrl(baseUrl string, route string, params map[string]string) (string, error) {
-	// get API key from environment variables
-	apiKey := os.Getenv(API_KEY_ENV_VAR)
-	if apiKey == "" {
-		return "", fmt.Errorf("API key not found in environment variables")
-	}
-
+func buildUrl(baseUrl, apiKey, route string, params map[string]string) (string, error) {
 	extendedUrl, err := utils.ExtendUrl(baseUrl, route)
 	if err != nil {
 		return "", fmt.Errorf("failed to extend url: %w", err)

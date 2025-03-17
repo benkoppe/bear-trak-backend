@@ -3,6 +3,8 @@ package umich
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
 
 	alerts "github.com/benkoppe/bear-trak-backend/go-server/alerts/umich"
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
@@ -27,9 +29,17 @@ func NewHandler(db *db.Queries) *Handler {
 	return h
 }
 
+const API_KEY_ENV_VAR = "BUSTIME_API_KEY"
+
 func (h *Handler) initCaches() {
 	// h.diningCache = dining.InitCache(eateriesBaseUrl)
-	h.transitCaches = transit.InitCaches(bustimeUrl, gtfsStaticUrl)
+
+	// get API key from environment variables
+	bustimeApiKey := os.Getenv(API_KEY_ENV_VAR)
+	if bustimeApiKey == "" {
+		log.Fatalf("API key not found in environment variables")
+	}
+	h.transitCaches = transit.InitCaches(bustimeUrl, bustimeApiKey, gtfsStaticUrl)
 }
 
 func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
