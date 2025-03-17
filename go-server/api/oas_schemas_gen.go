@@ -133,7 +133,7 @@ func (s *AlertButton) SetURL(val url.URL) {
 
 // Ref: #/components/schemas/BusRoute
 type BusRoute struct {
-	ID         int                 `json:"id"`
+	ID         BusRouteID          `json:"id"`
 	SortIdx    int                 `json:"sortIdx"`
 	Name       string              `json:"name"`
 	Code       string              `json:"code"`
@@ -144,7 +144,7 @@ type BusRoute struct {
 }
 
 // GetID returns the value of ID.
-func (s *BusRoute) GetID() int {
+func (s *BusRoute) GetID() BusRouteID {
 	return s.ID
 }
 
@@ -184,7 +184,7 @@ func (s *BusRoute) GetPolylines() []string {
 }
 
 // SetID sets the value of ID.
-func (s *BusRoute) SetID(val int) {
+func (s *BusRoute) SetID(val BusRouteID) {
 	s.ID = val
 }
 
@@ -294,6 +294,70 @@ func (s *BusRouteDirectionStopsItem) SetLongitude(val float64) {
 // SetLatitude sets the value of Latitude.
 func (s *BusRouteDirectionStopsItem) SetLatitude(val float64) {
 	s.Latitude = val
+}
+
+// BusRouteID represents sum type.
+type BusRouteID struct {
+	Type   BusRouteIDType // switch on this field
+	String string
+	Int    int
+}
+
+// BusRouteIDType is oneOf type of BusRouteID.
+type BusRouteIDType string
+
+// Possible values for BusRouteIDType.
+const (
+	StringBusRouteID BusRouteIDType = "string"
+	IntBusRouteID    BusRouteIDType = "int"
+)
+
+// IsString reports whether BusRouteID is string.
+func (s BusRouteID) IsString() bool { return s.Type == StringBusRouteID }
+
+// IsInt reports whether BusRouteID is int.
+func (s BusRouteID) IsInt() bool { return s.Type == IntBusRouteID }
+
+// SetString sets BusRouteID to string.
+func (s *BusRouteID) SetString(v string) {
+	s.Type = StringBusRouteID
+	s.String = v
+}
+
+// GetString returns string and true boolean if BusRouteID is string.
+func (s BusRouteID) GetString() (v string, ok bool) {
+	if !s.IsString() {
+		return v, false
+	}
+	return s.String, true
+}
+
+// NewStringBusRouteID returns new BusRouteID from string.
+func NewStringBusRouteID(v string) BusRouteID {
+	var s BusRouteID
+	s.SetString(v)
+	return s
+}
+
+// SetInt sets BusRouteID to int.
+func (s *BusRouteID) SetInt(v int) {
+	s.Type = IntBusRouteID
+	s.Int = v
+}
+
+// GetInt returns int and true boolean if BusRouteID is int.
+func (s BusRouteID) GetInt() (v int, ok bool) {
+	if !s.IsInt() {
+		return v, false
+	}
+	return s.Int, true
+}
+
+// NewIntBusRouteID returns new BusRouteID from int.
+func NewIntBusRouteID(v int) BusRouteID {
+	var s BusRouteID
+	s.SetInt(v)
+	return s
 }
 
 // DeleteV1DiningUserUnauthorized is response for DeleteV1DiningUser operation.

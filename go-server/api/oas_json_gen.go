@@ -348,7 +348,7 @@ func (s *BusRoute) Encode(e *jx.Encoder) {
 func (s *BusRoute) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
-		e.Int(s.ID)
+		s.ID.Encode(e)
 	}
 	{
 		e.FieldStart("sortIdx")
@@ -415,9 +415,7 @@ func (s *BusRoute) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Int()
-				s.ID = int(v)
-				if err != nil {
+				if err := s.ID.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -850,6 +848,56 @@ func (s *BusRouteDirectionStopsItem) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *BusRouteDirectionStopsItem) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes BusRouteID as json.
+func (s BusRouteID) Encode(e *jx.Encoder) {
+	switch s.Type {
+	case StringBusRouteID:
+		e.Str(s.String)
+	case IntBusRouteID:
+		e.Int(s.Int)
+	}
+}
+
+// Decode decodes BusRouteID from json.
+func (s *BusRouteID) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode BusRouteID to nil")
+	}
+	// Sum type type_discriminator.
+	switch t := d.Next(); t {
+	case jx.Number:
+		v, err := d.Int()
+		s.Int = int(v)
+		if err != nil {
+			return err
+		}
+		s.Type = IntBusRouteID
+	case jx.String:
+		v, err := d.Str()
+		s.String = string(v)
+		if err != nil {
+			return err
+		}
+		s.Type = StringBusRouteID
+	default:
+		return errors.Errorf("unexpected json type %q", t)
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s BusRouteID) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *BusRouteID) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

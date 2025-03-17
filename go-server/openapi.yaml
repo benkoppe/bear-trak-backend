@@ -797,9 +797,15 @@ components:
         - polylines
       properties:
         id:
-          type: integer
           x-stoplight:
             id: 3vfevaxf6xjbk
+          anyOf:
+            - type: string
+              x-stoplight:
+                id: gqq22myl6vdf7
+            - type: integer
+              x-stoplight:
+                id: ijvh6fzqoo6xp
         sortIdx:
           type: integer
           x-stoplight:
