@@ -5,8 +5,8 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 )
 
-func Get() ([]api.Alert, error) {
-	staticAlerts := static.GetAlerts()
+func Get(data []byte) ([]api.Alert, error) {
+	staticAlerts := static.GetAlerts(data)
 	var alerts []api.Alert
 
 	for _, staticAlert := range staticAlerts {

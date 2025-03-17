@@ -375,6 +375,10 @@ components:
               x-stoplight:
                 id: 9rhio1ewe055f
               format: uri
+        minutesSinceFirstDownload:
+          type: integer
+          x-stoplight:
+            id: meq2g0rg3k557
     Error:
       title: Error
       x-stoplight:
@@ -489,11 +493,6 @@ components:
           x-stoplight:
             id: g762nv65cuibu
           type: string
-          enum:
-            - central
-            - west
-            - north
-            - unknown
           example: central
         payMethods:
           type: array
@@ -503,13 +502,6 @@ components:
             x-stoplight:
               id: tj2iccdcf7xpp
             type: string
-            enum:
-              - swipes
-              - bigRedBucks
-              - cash
-              - digitalWallet
-              - creditCard
-              - cornellCard
             example: swipes
         categories:
           type: array
@@ -805,9 +797,15 @@ components:
         - polylines
       properties:
         id:
-          type: integer
           x-stoplight:
             id: 3vfevaxf6xjbk
+          anyOf:
+            - type: string
+              x-stoplight:
+                id: gqq22myl6vdf7
+            - type: integer
+              x-stoplight:
+                id: ijvh6fzqoo6xp
         sortIdx:
           type: integer
           x-stoplight:
@@ -907,17 +905,27 @@ components:
         - longitude
         - displayStatus
         - destination
-        - lastStop
         - lastUpdated
+        - lastStop
       properties:
         id:
-          type: integer
           x-stoplight:
             id: uhfjn6hkr952f
+          anyOf:
+            - type: string
+              x-stoplight:
+                id: nsex3b6b03oyl
+            - type: integer
+              x-stoplight:
+                id: 95pnffy83h3mi
         routeId:
-          type: integer
-          x-stoplight:
-            id: 6m19093vr3ruc
+          anyOf:
+            - type: string
+              x-stoplight:
+                id: 409axdtbnb0v2
+            - type: integer
+              x-stoplight:
+                id: cz5emu2dahk8n
         direction:
           type: string
           x-stoplight:
@@ -944,15 +952,16 @@ components:
           type: string
           x-stoplight:
             id: zw8pf118dz5f5
-        lastStop:
-          type: string
-          x-stoplight:
-            id: f9na87dt9fa28
         lastUpdated:
           type: string
           x-stoplight:
             id: npwbh2swyuu70
           format: date-time
+        lastStop:
+          type: string
+          x-stoplight:
+            id: f9na87dt9fa28
+          nullable: true
     DiningUserAccount:
       title: DiningUserAccount
       x-stoplight:

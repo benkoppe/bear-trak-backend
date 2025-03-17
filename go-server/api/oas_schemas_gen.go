@@ -16,13 +16,14 @@ func (s *ErrorStatusCode) Error() string {
 
 // Ref: #/components/schemas/Alert
 type Alert struct {
-	ID       int            `json:"id"`
-	Title    string         `json:"title"`
-	Message  string         `json:"message"`
-	Enabled  bool           `json:"enabled"`
-	ShowOnce bool           `json:"showOnce"`
-	MaxBuild NilInt         `json:"maxBuild"`
-	Button   NilAlertButton `json:"button"`
+	ID                        int            `json:"id"`
+	Title                     string         `json:"title"`
+	Message                   string         `json:"message"`
+	Enabled                   bool           `json:"enabled"`
+	ShowOnce                  bool           `json:"showOnce"`
+	MaxBuild                  NilInt         `json:"maxBuild"`
+	Button                    NilAlertButton `json:"button"`
+	MinutesSinceFirstDownload OptInt         `json:"minutesSinceFirstDownload"`
 }
 
 // GetID returns the value of ID.
@@ -60,6 +61,11 @@ func (s *Alert) GetButton() NilAlertButton {
 	return s.Button
 }
 
+// GetMinutesSinceFirstDownload returns the value of MinutesSinceFirstDownload.
+func (s *Alert) GetMinutesSinceFirstDownload() OptInt {
+	return s.MinutesSinceFirstDownload
+}
+
 // SetID sets the value of ID.
 func (s *Alert) SetID(val int) {
 	s.ID = val
@@ -95,6 +101,11 @@ func (s *Alert) SetButton(val NilAlertButton) {
 	s.Button = val
 }
 
+// SetMinutesSinceFirstDownload sets the value of MinutesSinceFirstDownload.
+func (s *Alert) SetMinutesSinceFirstDownload(val OptInt) {
+	s.MinutesSinceFirstDownload = val
+}
+
 type AlertButton struct {
 	Title string  `json:"title"`
 	URL   url.URL `json:"url"`
@@ -122,7 +133,7 @@ func (s *AlertButton) SetURL(val url.URL) {
 
 // Ref: #/components/schemas/BusRoute
 type BusRoute struct {
-	ID         int                 `json:"id"`
+	ID         BusRouteID          `json:"id"`
 	SortIdx    int                 `json:"sortIdx"`
 	Name       string              `json:"name"`
 	Code       string              `json:"code"`
@@ -133,7 +144,7 @@ type BusRoute struct {
 }
 
 // GetID returns the value of ID.
-func (s *BusRoute) GetID() int {
+func (s *BusRoute) GetID() BusRouteID {
 	return s.ID
 }
 
@@ -173,7 +184,7 @@ func (s *BusRoute) GetPolylines() []string {
 }
 
 // SetID sets the value of ID.
-func (s *BusRoute) SetID(val int) {
+func (s *BusRoute) SetID(val BusRouteID) {
 	s.ID = val
 }
 
@@ -283,6 +294,70 @@ func (s *BusRouteDirectionStopsItem) SetLongitude(val float64) {
 // SetLatitude sets the value of Latitude.
 func (s *BusRouteDirectionStopsItem) SetLatitude(val float64) {
 	s.Latitude = val
+}
+
+// BusRouteID represents sum type.
+type BusRouteID struct {
+	Type   BusRouteIDType // switch on this field
+	String string
+	Int    int
+}
+
+// BusRouteIDType is oneOf type of BusRouteID.
+type BusRouteIDType string
+
+// Possible values for BusRouteIDType.
+const (
+	StringBusRouteID BusRouteIDType = "string"
+	IntBusRouteID    BusRouteIDType = "int"
+)
+
+// IsString reports whether BusRouteID is string.
+func (s BusRouteID) IsString() bool { return s.Type == StringBusRouteID }
+
+// IsInt reports whether BusRouteID is int.
+func (s BusRouteID) IsInt() bool { return s.Type == IntBusRouteID }
+
+// SetString sets BusRouteID to string.
+func (s *BusRouteID) SetString(v string) {
+	s.Type = StringBusRouteID
+	s.String = v
+}
+
+// GetString returns string and true boolean if BusRouteID is string.
+func (s BusRouteID) GetString() (v string, ok bool) {
+	if !s.IsString() {
+		return v, false
+	}
+	return s.String, true
+}
+
+// NewStringBusRouteID returns new BusRouteID from string.
+func NewStringBusRouteID(v string) BusRouteID {
+	var s BusRouteID
+	s.SetString(v)
+	return s
+}
+
+// SetInt sets BusRouteID to int.
+func (s *BusRouteID) SetInt(v int) {
+	s.Type = IntBusRouteID
+	s.Int = v
+}
+
+// GetInt returns int and true boolean if BusRouteID is int.
+func (s BusRouteID) GetInt() (v int, ok bool) {
+	if !s.IsInt() {
+		return v, false
+	}
+	return s.Int, true
+}
+
+// NewIntBusRouteID returns new BusRouteID from int.
+func NewIntBusRouteID(v int) BusRouteID {
+	var s BusRouteID
+	s.SetInt(v)
+	return s
 }
 
 // DeleteV1DiningUserUnauthorized is response for DeleteV1DiningUser operation.
@@ -505,8 +580,8 @@ type Eatery struct {
 	Longitude      float64                `json:"longitude"`
 	Location       string                 `json:"location"`
 	Hours          []Hours                `json:"hours"`
-	Region         EateryRegion           `json:"region"`
-	PayMethods     []EateryPayMethodsItem `json:"payMethods"`
+	Region         string                 `json:"region"`
+	PayMethods     []string               `json:"payMethods"`
 	Categories     []EateryCategoriesItem `json:"categories"`
 	NextWeekEvents EateryNextWeekEvents   `json:"nextWeekEvents"`
 	AllWeekMenu    []EateryMenuCategory   `json:"allWeekMenu"`
@@ -553,12 +628,12 @@ func (s *Eatery) GetHours() []Hours {
 }
 
 // GetRegion returns the value of Region.
-func (s *Eatery) GetRegion() EateryRegion {
+func (s *Eatery) GetRegion() string {
 	return s.Region
 }
 
 // GetPayMethods returns the value of PayMethods.
-func (s *Eatery) GetPayMethods() []EateryPayMethodsItem {
+func (s *Eatery) GetPayMethods() []string {
 	return s.PayMethods
 }
 
@@ -618,12 +693,12 @@ func (s *Eatery) SetHours(val []Hours) {
 }
 
 // SetRegion sets the value of Region.
-func (s *Eatery) SetRegion(val EateryRegion) {
+func (s *Eatery) SetRegion(val string) {
 	s.Region = val
 }
 
 // SetPayMethods sets the value of PayMethods.
-func (s *Eatery) SetPayMethods(val []EateryPayMethodsItem) {
+func (s *Eatery) SetPayMethods(val []string) {
 	s.PayMethods = val
 }
 
@@ -877,130 +952,6 @@ func (s *EateryNextWeekEvents) SetSaturday(val []EateryEvent) {
 // SetSunday sets the value of Sunday.
 func (s *EateryNextWeekEvents) SetSunday(val []EateryEvent) {
 	s.Sunday = val
-}
-
-type EateryPayMethodsItem string
-
-const (
-	EateryPayMethodsItemSwipes        EateryPayMethodsItem = "swipes"
-	EateryPayMethodsItemBigRedBucks   EateryPayMethodsItem = "bigRedBucks"
-	EateryPayMethodsItemCash          EateryPayMethodsItem = "cash"
-	EateryPayMethodsItemDigitalWallet EateryPayMethodsItem = "digitalWallet"
-	EateryPayMethodsItemCreditCard    EateryPayMethodsItem = "creditCard"
-	EateryPayMethodsItemCornellCard   EateryPayMethodsItem = "cornellCard"
-)
-
-// AllValues returns all EateryPayMethodsItem values.
-func (EateryPayMethodsItem) AllValues() []EateryPayMethodsItem {
-	return []EateryPayMethodsItem{
-		EateryPayMethodsItemSwipes,
-		EateryPayMethodsItemBigRedBucks,
-		EateryPayMethodsItemCash,
-		EateryPayMethodsItemDigitalWallet,
-		EateryPayMethodsItemCreditCard,
-		EateryPayMethodsItemCornellCard,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s EateryPayMethodsItem) MarshalText() ([]byte, error) {
-	switch s {
-	case EateryPayMethodsItemSwipes:
-		return []byte(s), nil
-	case EateryPayMethodsItemBigRedBucks:
-		return []byte(s), nil
-	case EateryPayMethodsItemCash:
-		return []byte(s), nil
-	case EateryPayMethodsItemDigitalWallet:
-		return []byte(s), nil
-	case EateryPayMethodsItemCreditCard:
-		return []byte(s), nil
-	case EateryPayMethodsItemCornellCard:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *EateryPayMethodsItem) UnmarshalText(data []byte) error {
-	switch EateryPayMethodsItem(data) {
-	case EateryPayMethodsItemSwipes:
-		*s = EateryPayMethodsItemSwipes
-		return nil
-	case EateryPayMethodsItemBigRedBucks:
-		*s = EateryPayMethodsItemBigRedBucks
-		return nil
-	case EateryPayMethodsItemCash:
-		*s = EateryPayMethodsItemCash
-		return nil
-	case EateryPayMethodsItemDigitalWallet:
-		*s = EateryPayMethodsItemDigitalWallet
-		return nil
-	case EateryPayMethodsItemCreditCard:
-		*s = EateryPayMethodsItemCreditCard
-		return nil
-	case EateryPayMethodsItemCornellCard:
-		*s = EateryPayMethodsItemCornellCard
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-type EateryRegion string
-
-const (
-	EateryRegionCentral EateryRegion = "central"
-	EateryRegionWest    EateryRegion = "west"
-	EateryRegionNorth   EateryRegion = "north"
-	EateryRegionUnknown EateryRegion = "unknown"
-)
-
-// AllValues returns all EateryRegion values.
-func (EateryRegion) AllValues() []EateryRegion {
-	return []EateryRegion{
-		EateryRegionCentral,
-		EateryRegionWest,
-		EateryRegionNorth,
-		EateryRegionUnknown,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s EateryRegion) MarshalText() ([]byte, error) {
-	switch s {
-	case EateryRegionCentral:
-		return []byte(s), nil
-	case EateryRegionWest:
-		return []byte(s), nil
-	case EateryRegionNorth:
-		return []byte(s), nil
-	case EateryRegionUnknown:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *EateryRegion) UnmarshalText(data []byte) error {
-	switch EateryRegion(data) {
-	case EateryRegionCentral:
-		*s = EateryRegionCentral
-		return nil
-	case EateryRegionWest:
-		*s = EateryRegionWest
-		return nil
-	case EateryRegionNorth:
-		*s = EateryRegionNorth
-		return nil
-	case EateryRegionUnknown:
-		*s = EateryRegionUnknown
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
 }
 
 // Ref: #/components/schemas/Error
@@ -1459,10 +1410,10 @@ func (o *NilAlertButton) SetTo(v AlertButton) {
 	o.Value = v
 }
 
-// IsSet returns true if value is Null.
+// IsNull returns true if value is Null.
 func (o NilAlertButton) IsNull() bool { return o.Null }
 
-// SetNull sets value to null.
+// SetToNull sets value to null.
 func (o *NilAlertButton) SetToNull() {
 	o.Null = true
 	var v AlertButton
@@ -1504,10 +1455,10 @@ func (o *NilGymCapacity) SetTo(v GymCapacity) {
 	o.Value = v
 }
 
-// IsSet returns true if value is Null.
+// IsNull returns true if value is Null.
 func (o NilGymCapacity) IsNull() bool { return o.Null }
 
-// SetNull sets value to null.
+// SetToNull sets value to null.
 func (o *NilGymCapacity) SetToNull() {
 	o.Null = true
 	var v GymCapacity
@@ -1549,10 +1500,10 @@ func (o *NilInt) SetTo(v int) {
 	o.Value = v
 }
 
-// IsSet returns true if value is Null.
+// IsNull returns true if value is Null.
 func (o NilInt) IsNull() bool { return o.Null }
 
-// SetNull sets value to null.
+// SetToNull sets value to null.
 func (o *NilInt) SetToNull() {
 	o.Null = true
 	var v int
@@ -1569,6 +1520,97 @@ func (o NilInt) Get() (v int, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o NilInt) Or(d int) int {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewNilString returns new NilString with value set to v.
+func NewNilString(v string) NilString {
+	return NilString{
+		Value: v,
+	}
+}
+
+// NilString is nullable string.
+type NilString struct {
+	Value string
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilString) SetTo(v string) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o NilString) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *NilString) SetToNull() {
+	o.Null = true
+	var v string
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilString) Get() (v string, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptInt returns new OptInt with value set to v.
+func NewOptInt(v int) OptInt {
+	return OptInt{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt is optional int.
+type OptInt struct {
+	Value int
+	Set   bool
+}
+
+// IsSet returns true if OptInt was set.
+func (o OptInt) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt) Reset() {
+	var v int
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt) SetTo(v int) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt) Get() (v int, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt) Or(d int) int {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -1687,25 +1729,25 @@ func (*Success) deleteV1DiningUserRes() {}
 
 // Ref: #/components/schemas/Vehicle
 type Vehicle struct {
-	ID            int       `json:"id"`
-	RouteId       int       `json:"routeId"`
-	Direction     string    `json:"direction"`
-	Heading       int       `json:"heading"`
-	Latitude      float64   `json:"latitude"`
-	Longitude     float64   `json:"longitude"`
-	DisplayStatus string    `json:"displayStatus"`
-	Destination   string    `json:"destination"`
-	LastStop      string    `json:"lastStop"`
-	LastUpdated   time.Time `json:"lastUpdated"`
+	ID            VehicleID      `json:"id"`
+	RouteId       VehicleRouteId `json:"routeId"`
+	Direction     string         `json:"direction"`
+	Heading       int            `json:"heading"`
+	Latitude      float64        `json:"latitude"`
+	Longitude     float64        `json:"longitude"`
+	DisplayStatus string         `json:"displayStatus"`
+	Destination   string         `json:"destination"`
+	LastUpdated   time.Time      `json:"lastUpdated"`
+	LastStop      NilString      `json:"lastStop"`
 }
 
 // GetID returns the value of ID.
-func (s *Vehicle) GetID() int {
+func (s *Vehicle) GetID() VehicleID {
 	return s.ID
 }
 
 // GetRouteId returns the value of RouteId.
-func (s *Vehicle) GetRouteId() int {
+func (s *Vehicle) GetRouteId() VehicleRouteId {
 	return s.RouteId
 }
 
@@ -1739,23 +1781,23 @@ func (s *Vehicle) GetDestination() string {
 	return s.Destination
 }
 
-// GetLastStop returns the value of LastStop.
-func (s *Vehicle) GetLastStop() string {
-	return s.LastStop
-}
-
 // GetLastUpdated returns the value of LastUpdated.
 func (s *Vehicle) GetLastUpdated() time.Time {
 	return s.LastUpdated
 }
 
+// GetLastStop returns the value of LastStop.
+func (s *Vehicle) GetLastStop() NilString {
+	return s.LastStop
+}
+
 // SetID sets the value of ID.
-func (s *Vehicle) SetID(val int) {
+func (s *Vehicle) SetID(val VehicleID) {
 	s.ID = val
 }
 
 // SetRouteId sets the value of RouteId.
-func (s *Vehicle) SetRouteId(val int) {
+func (s *Vehicle) SetRouteId(val VehicleRouteId) {
 	s.RouteId = val
 }
 
@@ -1789,12 +1831,140 @@ func (s *Vehicle) SetDestination(val string) {
 	s.Destination = val
 }
 
-// SetLastStop sets the value of LastStop.
-func (s *Vehicle) SetLastStop(val string) {
-	s.LastStop = val
-}
-
 // SetLastUpdated sets the value of LastUpdated.
 func (s *Vehicle) SetLastUpdated(val time.Time) {
 	s.LastUpdated = val
+}
+
+// SetLastStop sets the value of LastStop.
+func (s *Vehicle) SetLastStop(val NilString) {
+	s.LastStop = val
+}
+
+// VehicleID represents sum type.
+type VehicleID struct {
+	Type   VehicleIDType // switch on this field
+	String string
+	Int    int
+}
+
+// VehicleIDType is oneOf type of VehicleID.
+type VehicleIDType string
+
+// Possible values for VehicleIDType.
+const (
+	StringVehicleID VehicleIDType = "string"
+	IntVehicleID    VehicleIDType = "int"
+)
+
+// IsString reports whether VehicleID is string.
+func (s VehicleID) IsString() bool { return s.Type == StringVehicleID }
+
+// IsInt reports whether VehicleID is int.
+func (s VehicleID) IsInt() bool { return s.Type == IntVehicleID }
+
+// SetString sets VehicleID to string.
+func (s *VehicleID) SetString(v string) {
+	s.Type = StringVehicleID
+	s.String = v
+}
+
+// GetString returns string and true boolean if VehicleID is string.
+func (s VehicleID) GetString() (v string, ok bool) {
+	if !s.IsString() {
+		return v, false
+	}
+	return s.String, true
+}
+
+// NewStringVehicleID returns new VehicleID from string.
+func NewStringVehicleID(v string) VehicleID {
+	var s VehicleID
+	s.SetString(v)
+	return s
+}
+
+// SetInt sets VehicleID to int.
+func (s *VehicleID) SetInt(v int) {
+	s.Type = IntVehicleID
+	s.Int = v
+}
+
+// GetInt returns int and true boolean if VehicleID is int.
+func (s VehicleID) GetInt() (v int, ok bool) {
+	if !s.IsInt() {
+		return v, false
+	}
+	return s.Int, true
+}
+
+// NewIntVehicleID returns new VehicleID from int.
+func NewIntVehicleID(v int) VehicleID {
+	var s VehicleID
+	s.SetInt(v)
+	return s
+}
+
+// VehicleRouteId represents sum type.
+type VehicleRouteId struct {
+	Type   VehicleRouteIdType // switch on this field
+	String string
+	Int    int
+}
+
+// VehicleRouteIdType is oneOf type of VehicleRouteId.
+type VehicleRouteIdType string
+
+// Possible values for VehicleRouteIdType.
+const (
+	StringVehicleRouteId VehicleRouteIdType = "string"
+	IntVehicleRouteId    VehicleRouteIdType = "int"
+)
+
+// IsString reports whether VehicleRouteId is string.
+func (s VehicleRouteId) IsString() bool { return s.Type == StringVehicleRouteId }
+
+// IsInt reports whether VehicleRouteId is int.
+func (s VehicleRouteId) IsInt() bool { return s.Type == IntVehicleRouteId }
+
+// SetString sets VehicleRouteId to string.
+func (s *VehicleRouteId) SetString(v string) {
+	s.Type = StringVehicleRouteId
+	s.String = v
+}
+
+// GetString returns string and true boolean if VehicleRouteId is string.
+func (s VehicleRouteId) GetString() (v string, ok bool) {
+	if !s.IsString() {
+		return v, false
+	}
+	return s.String, true
+}
+
+// NewStringVehicleRouteId returns new VehicleRouteId from string.
+func NewStringVehicleRouteId(v string) VehicleRouteId {
+	var s VehicleRouteId
+	s.SetString(v)
+	return s
+}
+
+// SetInt sets VehicleRouteId to int.
+func (s *VehicleRouteId) SetInt(v int) {
+	s.Type = IntVehicleRouteId
+	s.Int = v
+}
+
+// GetInt returns int and true boolean if VehicleRouteId is int.
+func (s VehicleRouteId) GetInt() (v int, ok bool) {
+	if !s.IsInt() {
+		return v, false
+	}
+	return s.Int, true
+}
+
+// NewIntVehicleRouteId returns new VehicleRouteId from int.
+func NewIntVehicleRouteId(v int) VehicleRouteId {
+	var s VehicleRouteId
+	s.SetInt(v)
+	return s
 }

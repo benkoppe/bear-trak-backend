@@ -263,36 +263,8 @@ func (s *Eatery) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := s.Region.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "region",
-			Error: err,
-		})
-	}
-	if err := func() error {
 		if s.PayMethods == nil {
 			return errors.New("nil is invalid value")
-		}
-		var failures []validate.FieldError
-		for i, elem := range s.PayMethods {
-			if err := func() error {
-				if err := elem.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				failures = append(failures, validate.FieldError{
-					Name:  fmt.Sprintf("[%d]", i),
-					Error: err,
-				})
-			}
-		}
-		if len(failures) > 0 {
-			return &validate.Error{Fields: failures}
 		}
 		return nil
 	}(); err != nil {
@@ -638,40 +610,6 @@ func (s *EateryNextWeekEvents) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
-}
-
-func (s EateryPayMethodsItem) Validate() error {
-	switch s {
-	case "swipes":
-		return nil
-	case "bigRedBucks":
-		return nil
-	case "cash":
-		return nil
-	case "digitalWallet":
-		return nil
-	case "creditCard":
-		return nil
-	case "cornellCard":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
-func (s EateryRegion) Validate() error {
-	switch s {
-	case "central":
-		return nil
-	case "west":
-		return nil
-	case "north":
-		return nil
-	case "unknown":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
 }
 
 func (s GetV1DiningUserAccountsOKApplicationJSON) Validate() error {

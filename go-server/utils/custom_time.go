@@ -9,6 +9,9 @@ import (
 	"time"
 )
 
+// lots of definitions for custom date types
+// these are mostly useful for parsing JSON
+
 // Defines a UnixTime
 // this is encoded in the dining API as
 // an integer number of seconds since 1970.

@@ -50,9 +50,15 @@ func (s *Alert) encodeFields(e *jx.Encoder) {
 		e.FieldStart("button")
 		s.Button.Encode(e)
 	}
+	{
+		if s.MinutesSinceFirstDownload.Set {
+			e.FieldStart("minutesSinceFirstDownload")
+			s.MinutesSinceFirstDownload.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAlert = [7]string{
+var jsonFieldsNameOfAlert = [8]string{
 	0: "id",
 	1: "title",
 	2: "message",
@@ -60,6 +66,7 @@ var jsonFieldsNameOfAlert = [7]string{
 	4: "showOnce",
 	5: "maxBuild",
 	6: "button",
+	7: "minutesSinceFirstDownload",
 }
 
 // Decode decodes Alert from json.
@@ -150,6 +157,16 @@ func (s *Alert) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"button\"")
+			}
+		case "minutesSinceFirstDownload":
+			if err := func() error {
+				s.MinutesSinceFirstDownload.Reset()
+				if err := s.MinutesSinceFirstDownload.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"minutesSinceFirstDownload\"")
 			}
 		default:
 			return d.Skip()
@@ -331,7 +348,7 @@ func (s *BusRoute) Encode(e *jx.Encoder) {
 func (s *BusRoute) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
-		e.Int(s.ID)
+		s.ID.Encode(e)
 	}
 	{
 		e.FieldStart("sortIdx")
@@ -398,9 +415,7 @@ func (s *BusRoute) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Int()
-				s.ID = int(v)
-				if err != nil {
+				if err := s.ID.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -833,6 +848,56 @@ func (s *BusRouteDirectionStopsItem) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *BusRouteDirectionStopsItem) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes BusRouteID as json.
+func (s BusRouteID) Encode(e *jx.Encoder) {
+	switch s.Type {
+	case StringBusRouteID:
+		e.Str(s.String)
+	case IntBusRouteID:
+		e.Int(s.Int)
+	}
+}
+
+// Decode decodes BusRouteID from json.
+func (s *BusRouteID) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode BusRouteID to nil")
+	}
+	// Sum type type_discriminator.
+	switch t := d.Next(); t {
+	case jx.Number:
+		v, err := d.Int()
+		s.Int = int(v)
+		if err != nil {
+			return err
+		}
+		s.Type = IntBusRouteID
+	case jx.String:
+		v, err := d.Str()
+		s.String = string(v)
+		if err != nil {
+			return err
+		}
+		s.Type = StringBusRouteID
+	default:
+		return errors.Errorf("unexpected json type %q", t)
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s BusRouteID) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *BusRouteID) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -1470,13 +1535,13 @@ func (s *Eatery) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("region")
-		s.Region.Encode(e)
+		e.Str(s.Region)
 	}
 	{
 		e.FieldStart("payMethods")
 		e.ArrStart()
 		for _, elem := range s.PayMethods {
-			elem.Encode(e)
+			e.Str(elem)
 		}
 		e.ArrEnd()
 	}
@@ -1636,7 +1701,9 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 		case "region":
 			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
-				if err := s.Region.Decode(d); err != nil {
+				v, err := d.Str()
+				s.Region = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -1646,10 +1713,12 @@ func (s *Eatery) Decode(d *jx.Decoder) error {
 		case "payMethods":
 			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
-				s.PayMethods = make([]EateryPayMethodsItem, 0)
+				s.PayMethods = make([]string, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem EateryPayMethodsItem
-					if err := elem.Decode(d); err != nil {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
 						return err
 					}
 					s.PayMethods = append(s.PayMethods, elem)
@@ -2536,98 +2605,6 @@ func (s *EateryNextWeekEvents) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *EateryNextWeekEvents) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes EateryPayMethodsItem as json.
-func (s EateryPayMethodsItem) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes EateryPayMethodsItem from json.
-func (s *EateryPayMethodsItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode EateryPayMethodsItem to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch EateryPayMethodsItem(v) {
-	case EateryPayMethodsItemSwipes:
-		*s = EateryPayMethodsItemSwipes
-	case EateryPayMethodsItemBigRedBucks:
-		*s = EateryPayMethodsItemBigRedBucks
-	case EateryPayMethodsItemCash:
-		*s = EateryPayMethodsItemCash
-	case EateryPayMethodsItemDigitalWallet:
-		*s = EateryPayMethodsItemDigitalWallet
-	case EateryPayMethodsItemCreditCard:
-		*s = EateryPayMethodsItemCreditCard
-	case EateryPayMethodsItemCornellCard:
-		*s = EateryPayMethodsItemCornellCard
-	default:
-		*s = EateryPayMethodsItem(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s EateryPayMethodsItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *EateryPayMethodsItem) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes EateryRegion as json.
-func (s EateryRegion) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes EateryRegion from json.
-func (s *EateryRegion) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode EateryRegion to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch EateryRegion(v) {
-	case EateryRegionCentral:
-		*s = EateryRegionCentral
-	case EateryRegionWest:
-		*s = EateryRegionWest
-	case EateryRegionNorth:
-		*s = EateryRegionNorth
-	case EateryRegionUnknown:
-		*s = EateryRegionUnknown
-	default:
-		*s = EateryRegion(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s EateryRegion) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *EateryRegion) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -3841,6 +3818,87 @@ func (s *NilInt) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes string as json.
+func (o NilString) Encode(e *jx.Encoder) {
+	if o.Null {
+		e.Null()
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes string from json.
+func (o *NilString) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode NilString to nil")
+	}
+	if d.Next() == jx.Null {
+		if err := d.Null(); err != nil {
+			return err
+		}
+
+		var v string
+		o.Value = v
+		o.Null = true
+		return nil
+	}
+	o.Null = false
+	v, err := d.Str()
+	if err != nil {
+		return err
+	}
+	o.Value = string(v)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s NilString) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *NilString) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes int as json.
+func (o OptInt) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Int(int(o.Value))
+}
+
+// Decode decodes int from json.
+func (o *OptInt) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptInt to nil")
+	}
+	o.Set = true
+	v, err := d.Int()
+	if err != nil {
+		return err
+	}
+	o.Value = int(v)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptInt) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptInt) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode implements json.Marshaler.
 func (s *PostV1DiningUserCreated) Encode(e *jx.Encoder) {
 	e.ObjStart()
@@ -4145,11 +4203,11 @@ func (s *Vehicle) Encode(e *jx.Encoder) {
 func (s *Vehicle) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
-		e.Int(s.ID)
+		s.ID.Encode(e)
 	}
 	{
 		e.FieldStart("routeId")
-		e.Int(s.RouteId)
+		s.RouteId.Encode(e)
 	}
 	{
 		e.FieldStart("direction")
@@ -4176,12 +4234,12 @@ func (s *Vehicle) encodeFields(e *jx.Encoder) {
 		e.Str(s.Destination)
 	}
 	{
-		e.FieldStart("lastStop")
-		e.Str(s.LastStop)
-	}
-	{
 		e.FieldStart("lastUpdated")
 		json.EncodeDateTime(e, s.LastUpdated)
+	}
+	{
+		e.FieldStart("lastStop")
+		s.LastStop.Encode(e)
 	}
 }
 
@@ -4194,8 +4252,8 @@ var jsonFieldsNameOfVehicle = [10]string{
 	5: "longitude",
 	6: "displayStatus",
 	7: "destination",
-	8: "lastStop",
-	9: "lastUpdated",
+	8: "lastUpdated",
+	9: "lastStop",
 }
 
 // Decode decodes Vehicle from json.
@@ -4210,9 +4268,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Int()
-				s.ID = int(v)
-				if err != nil {
+				if err := s.ID.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -4222,9 +4278,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 		case "routeId":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				v, err := d.Int()
-				s.RouteId = int(v)
-				if err != nil {
+				if err := s.RouteId.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -4303,20 +4357,8 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"destination\"")
 			}
-		case "lastStop":
-			requiredBitSet[1] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.LastStop = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"lastStop\"")
-			}
 		case "lastUpdated":
-			requiredBitSet[1] |= 1 << 1
+			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.LastUpdated = v
@@ -4326,6 +4368,16 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"lastUpdated\"")
+			}
+		case "lastStop":
+			requiredBitSet[1] |= 1 << 1
+			if err := func() error {
+				if err := s.LastStop.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"lastStop\"")
 			}
 		default:
 			return d.Skip()
@@ -4380,6 +4432,106 @@ func (s *Vehicle) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *Vehicle) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes VehicleID as json.
+func (s VehicleID) Encode(e *jx.Encoder) {
+	switch s.Type {
+	case StringVehicleID:
+		e.Str(s.String)
+	case IntVehicleID:
+		e.Int(s.Int)
+	}
+}
+
+// Decode decodes VehicleID from json.
+func (s *VehicleID) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode VehicleID to nil")
+	}
+	// Sum type type_discriminator.
+	switch t := d.Next(); t {
+	case jx.Number:
+		v, err := d.Int()
+		s.Int = int(v)
+		if err != nil {
+			return err
+		}
+		s.Type = IntVehicleID
+	case jx.String:
+		v, err := d.Str()
+		s.String = string(v)
+		if err != nil {
+			return err
+		}
+		s.Type = StringVehicleID
+	default:
+		return errors.Errorf("unexpected json type %q", t)
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s VehicleID) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *VehicleID) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes VehicleRouteId as json.
+func (s VehicleRouteId) Encode(e *jx.Encoder) {
+	switch s.Type {
+	case StringVehicleRouteId:
+		e.Str(s.String)
+	case IntVehicleRouteId:
+		e.Int(s.Int)
+	}
+}
+
+// Decode decodes VehicleRouteId from json.
+func (s *VehicleRouteId) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode VehicleRouteId to nil")
+	}
+	// Sum type type_discriminator.
+	switch t := d.Next(); t {
+	case jx.Number:
+		v, err := d.Int()
+		s.Int = int(v)
+		if err != nil {
+			return err
+		}
+		s.Type = IntVehicleRouteId
+	case jx.String:
+		v, err := d.Str()
+		s.String = string(v)
+		if err != nil {
+			return err
+		}
+		s.Type = StringVehicleRouteId
+	default:
+		return errors.Errorf("unexpected json type %q", t)
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s VehicleRouteId) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *VehicleRouteId) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
