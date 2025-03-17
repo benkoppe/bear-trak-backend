@@ -1,4 +1,4 @@
-package external_gtfs
+package gtfs
 
 import (
 	"fmt"

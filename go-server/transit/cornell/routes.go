@@ -6,8 +6,8 @@ import (
 
 	"github.com/amit7itz/goset"
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
-	availtec "github.com/benkoppe/bear-trak-backend/go-server/transit/external_availtec"
-	"github.com/benkoppe/bear-trak-backend/go-server/transit/external_gtfs"
+	"github.com/benkoppe/bear-trak-backend/go-server/transit/shared/availtec"
+	external_gtfs "github.com/benkoppe/bear-trak-backend/go-server/transit/shared/gtfs"
 	"github.com/jamespfennell/gtfs"
 	"github.com/twpayne/go-polyline"
 )

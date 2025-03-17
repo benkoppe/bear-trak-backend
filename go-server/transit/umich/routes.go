@@ -4,19 +4,19 @@ import (
 	"fmt"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
-	"github.com/benkoppe/bear-trak-backend/go-server/transit/external_bustime"
-	"github.com/benkoppe/bear-trak-backend/go-server/transit/external_gtfs"
+	"github.com/benkoppe/bear-trak-backend/go-server/transit/shared/bustime"
+	external_gtfs "github.com/benkoppe/bear-trak-backend/go-server/transit/shared/gtfs"
 )
 
 type Caches struct {
-	bustimeCaches external_bustime.Caches
+	bustimeCaches bustime.Caches
 	staticCache   external_gtfs.Cache
 }
 
 func InitCaches(bustimeUrl, staticGtfsUrl string) Caches {
 	return Caches{
 		staticCache:   external_gtfs.InitCache(staticGtfsUrl),
-		bustimeCaches: external_bustime.InitCaches(bustimeUrl),
+		bustimeCaches: bustime.InitCaches(bustimeUrl),
 	}
 }
 

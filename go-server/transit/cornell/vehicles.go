@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
-	availtec "github.com/benkoppe/bear-trak-backend/go-server/transit/external_availtec"
+	"github.com/benkoppe/bear-trak-backend/go-server/transit/shared/availtec"
 )
 
 func GetVehicles(caches Caches) ([]api.Vehicle, error) {

@@ -1,4 +1,4 @@
-package external_availtec
+package availtec
 
 import (
 	"fmt"

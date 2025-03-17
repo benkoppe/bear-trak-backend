@@ -1,4 +1,4 @@
-package external_bustime
+package bustime
 
 import (
 	"time"

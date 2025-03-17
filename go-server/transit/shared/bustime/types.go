@@ -1,4 +1,4 @@
-package external_bustime
+package bustime
 
 type Route struct {
 	ID    string `json:"rt"`
