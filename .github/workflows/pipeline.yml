@@ -21,7 +21,8 @@ permissions:
 
 env:
   COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
-  GO_RESOURCE_ID: ${{ ((github.event_name == 'workflow_dispatch' && inputs.environment == 'production') || (github.event_name == 'push' && endsWith(github.ref, '/main'))) && vars.GO_PRODUCTION_RESOURCE_ID || vars.GO_STAGING_RESOURCE_ID }}
+  GO_BEARTRAK_RESOURCE_ID: ${{ ((github.event_name == 'workflow_dispatch' && inputs.environment == 'production') || (github.event_name == 'push' && endsWith(github.ref, '/main'))) && vars.GO_BEARTRAK_PRODUCTION_RESOURCE_ID || vars.GO_BEARTRAK_STAGING_RESOURCE_ID }}
+  GO_BLUETRAK_RESOURCE_ID: ${{ ((github.event_name == 'workflow_dispatch' && inputs.environment == 'production') || (github.event_name == 'push' && endsWith(github.ref, '/main'))) && vars.GO_BLUETRAK_PRODUCTION_RESOURCE_ID || vars.GO_BLUETRAK_STAGING_RESOURCE_ID }}
   OTP_RESOURCE_ID: ${{ ((github.event_name == 'workflow_dispatch' && inputs.environment == 'production') || (github.event_name == 'push' && endsWith(github.ref, '/main'))) && vars.OTP_PRODUCTION_RESOURCE_ID || vars.OTP_STAGING_RESOURCE_ID }}
   COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
 
@@ -45,7 +46,8 @@ jobs:
               ghcr.io/benkoppe/bear-trak-otp:latest
               ghcr.io/benkoppe/bear-trak-otp:${{ github.sha }}
     outputs:
-      GO_RESOURCE_ID: ${{ env.GO_RESOURCE_ID }}
+      GO_BEARTRAK_RESOURCE_ID: ${{ env.GO_BEARTRAK_RESOURCE_ID }}
+      GO_BLUETRAK_RESOURCE_ID: ${{ env.GO_BLUETRAK_RESOURCE_ID }}
       OTP_RESOURCE_ID: ${{ env.OTP_RESOURCE_ID }}
     steps:
       - name: Checkout repository
@@ -72,10 +74,11 @@ jobs:
       - build-and-push-images
     strategy:
       matrix:
-        service: [go-server, otp]
         include:
-          - service: go-server
-            coolify_resource_id: ${{ needs.build-and-push-images.outputs.GO_RESOURCE_ID }}
+          - service: go-server-beartrak
+            coolify_resource_id: ${{ needs.build-and-push-images.outputs.GO_BEARTRAK_RESOURCE_ID }}
+          - service: go-server-bluetrak
+            coolify_resource_id: ${{ needs.build-and-push-images.outputs.GO_BLUETRAK_RESOURCE_ID }}
           - service: otp
             coolify_resource_id: ${{ needs.build-and-push-images.outputs.OTP_RESOURCE_ID }}
     steps:
