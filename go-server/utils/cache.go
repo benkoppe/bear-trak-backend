@@ -38,6 +38,12 @@ func (c *Cache[T]) Get() (T, error) {
 	data := c.data
 	c.mutex.RUnlock()
 
+	isVeryExpired := isExpired && time.Since(c.lastFetch) > 5*c.expirationTime
+	// if very expired, block the thread
+	if isVeryExpired {
+		return c.refresh()
+	}
+
 	// if expired but we have data, trigger a refresh in the background and return old data
 	if isExpired && hasData {
 		if !c.refreshing.Load() {
