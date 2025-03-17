@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/transit/shared"
 	"github.com/benkoppe/bear-trak-backend/go-server/transit/shared/availtec"
 	shared_gtfs "github.com/benkoppe/bear-trak-backend/go-server/transit/shared/gtfs"
 	"github.com/jamespfennell/gtfs"
@@ -43,14 +44,7 @@ func GetRoutes(caches Caches) ([]api.BusRoute, error) {
 		return nil, fmt.Errorf("failed to load vehicles: %v", err)
 	}
 
-	routeIdVehicles := make(map[interface{}]([]api.Vehicle))
-	for _, vehicle := range vehicles {
-		routeIdVehicles[vehicle.RouteId] = append(routeIdVehicles[vehicle.RouteId], vehicle)
-	}
-
-	for i := range routes {
-		routes[i].Vehicles = routeIdVehicles[routes[i].ID]
-	}
+	routes = shared.AppendVehicles(routes, vehicles)
 
 	return routes, nil
 }

@@ -49,7 +49,7 @@ func (h *Handler) GetV1TransitRoutes(ctx context.Context) ([]api.BusRoute, error
 }
 
 func (h *Handler) GetV1TransitVehicles(ctx context.Context) ([]api.Vehicle, error) {
-	return nil, fmt.Errorf("not implemented")
+	return transit.GetVehicles(h.transitCaches)
 }
 
 func (h *Handler) GetV1DiningUser(ctx context.Context, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {

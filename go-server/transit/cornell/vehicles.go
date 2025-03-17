@@ -39,7 +39,7 @@ func getVehicles(availtecVehicles []availtec.Vehicle) ([]api.Vehicle, error) {
 			Longitude:     vehicle.Longitude,
 			DisplayStatus: vehicle.OccupancyStatusReportLabel,
 			Destination:   vehicle.Destination,
-			LastStop:      vehicle.LastStop,
+			LastStop:      api.NewNilString(vehicle.LastStop),
 			LastUpdated:   vehicle.LastUpdated.ToTime(),
 		})
 	}

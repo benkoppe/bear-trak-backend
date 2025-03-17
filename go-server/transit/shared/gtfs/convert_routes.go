@@ -19,7 +19,7 @@ func ConvertRoute(route gtfs.Route, staticGtfs gtfs.Static) api.BusRoute {
 		stops := getStops(trips)
 
 		directions = append(directions, api.BusRouteDirection{
-			Name:  convertDirectionId(directionId),
+			Name:  ConvertDirectionId(directionId),
 			Stops: convertStops(stops),
 		})
 	}
@@ -40,7 +40,7 @@ func ConvertRoute(route gtfs.Route, staticGtfs gtfs.Static) api.BusRoute {
 	return apiRoute
 }
 
-func convertDirectionId(id gtfs.DirectionID) string {
+func ConvertDirectionId(id gtfs.DirectionID) string {
 	switch id {
 	case gtfs.DirectionID_True:
 		return "O"

@@ -2,8 +2,10 @@ package umich
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/transit/shared"
 	"github.com/benkoppe/bear-trak-backend/go-server/transit/shared/bustime"
 	shared_gtfs "github.com/benkoppe/bear-trak-backend/go-server/transit/shared/gtfs"
 	"github.com/jamespfennell/gtfs"
@@ -35,6 +37,13 @@ func GetRoutes(caches Caches) ([]api.BusRoute, error) {
 	routes, err := getRoutes(bustimeRoutes, *staticGtfs)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse routes: %v", err)
+	}
+
+	vehicles, err := GetVehicles(caches)
+	if err != nil {
+		log.Printf("failed to load vehicles: %v", err)
+	} else {
+		routes = shared.AppendVehicles(routes, vehicles)
 	}
 
 	return routes, nil
