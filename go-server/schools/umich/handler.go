@@ -8,12 +8,14 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	dining "github.com/benkoppe/bear-trak-backend/go-server/dining/umich"
+	transit "github.com/benkoppe/bear-trak-backend/go-server/transit/umich"
 )
 
 type Handler struct {
 	DB *db.Queries
 
-	diningCache dining.Cache
+	diningCache   dining.Cache
+	transitCaches transit.Caches
 }
 
 func NewHandler(db *db.Queries) *Handler {
@@ -26,7 +28,8 @@ func NewHandler(db *db.Queries) *Handler {
 }
 
 func (h *Handler) initCaches() {
-	h.diningCache = dining.InitCache(eateriesBaseUrl)
+	// h.diningCache = dining.InitCache(eateriesBaseUrl)
+	h.transitCaches = transit.InitCaches(bustimeUrl, gtfsStaticUrl)
 }
 
 func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
@@ -42,7 +45,7 @@ func (h *Handler) GetV1Gyms(ctx context.Context) ([]api.Gym, error) {
 }
 
 func (h *Handler) GetV1TransitRoutes(ctx context.Context) ([]api.BusRoute, error) {
-	return nil, fmt.Errorf("not implemented")
+	return transit.GetRoutes(h.transitCaches)
 }
 
 func (h *Handler) GetV1TransitVehicles(ctx context.Context) ([]api.Vehicle, error) {
