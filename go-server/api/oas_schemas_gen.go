@@ -16,14 +16,14 @@ func (s *ErrorStatusCode) Error() string {
 
 // Ref: #/components/schemas/Alert
 type Alert struct {
-	ID                        int            `json:"id"`
-	Title                     string         `json:"title"`
-	Message                   string         `json:"message"`
-	Enabled                   bool           `json:"enabled"`
-	ShowOnce                  bool           `json:"showOnce"`
-	MaxBuild                  NilInt         `json:"maxBuild"`
-	Button                    NilAlertButton `json:"button"`
-	MinutesSinceFirstDownload OptInt         `json:"minutesSinceFirstDownload"`
+	ID                      int            `json:"id"`
+	Title                   string         `json:"title"`
+	Message                 string         `json:"message"`
+	Enabled                 bool           `json:"enabled"`
+	ShowOnce                bool           `json:"showOnce"`
+	MaxBuild                NilInt         `json:"maxBuild"`
+	Button                  NilAlertButton `json:"button"`
+	MinMinutesSinceDownload OptInt         `json:"minMinutesSinceDownload"`
 }
 
 // GetID returns the value of ID.
@@ -61,9 +61,9 @@ func (s *Alert) GetButton() NilAlertButton {
 	return s.Button
 }
 
-// GetMinutesSinceFirstDownload returns the value of MinutesSinceFirstDownload.
-func (s *Alert) GetMinutesSinceFirstDownload() OptInt {
-	return s.MinutesSinceFirstDownload
+// GetMinMinutesSinceDownload returns the value of MinMinutesSinceDownload.
+func (s *Alert) GetMinMinutesSinceDownload() OptInt {
+	return s.MinMinutesSinceDownload
 }
 
 // SetID sets the value of ID.
@@ -101,9 +101,9 @@ func (s *Alert) SetButton(val NilAlertButton) {
 	s.Button = val
 }
 
-// SetMinutesSinceFirstDownload sets the value of MinutesSinceFirstDownload.
-func (s *Alert) SetMinutesSinceFirstDownload(val OptInt) {
-	s.MinutesSinceFirstDownload = val
+// SetMinMinutesSinceDownload sets the value of MinMinutesSinceDownload.
+func (s *Alert) SetMinMinutesSinceDownload(val OptInt) {
+	s.MinMinutesSinceDownload = val
 }
 
 type AlertButton struct {

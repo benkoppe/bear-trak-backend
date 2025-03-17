@@ -375,7 +375,7 @@ components:
               x-stoplight:
                 id: 9rhio1ewe055f
               format: uri
-        minutesSinceFirstDownload:
+        minMinutesSinceDownload:
           type: integer
           x-stoplight:
             id: meq2g0rg3k557

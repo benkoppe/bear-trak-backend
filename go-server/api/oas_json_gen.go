@@ -51,9 +51,9 @@ func (s *Alert) encodeFields(e *jx.Encoder) {
 		s.Button.Encode(e)
 	}
 	{
-		if s.MinutesSinceFirstDownload.Set {
-			e.FieldStart("minutesSinceFirstDownload")
-			s.MinutesSinceFirstDownload.Encode(e)
+		if s.MinMinutesSinceDownload.Set {
+			e.FieldStart("minMinutesSinceDownload")
+			s.MinMinutesSinceDownload.Encode(e)
 		}
 	}
 }
@@ -66,7 +66,7 @@ var jsonFieldsNameOfAlert = [8]string{
 	4: "showOnce",
 	5: "maxBuild",
 	6: "button",
-	7: "minutesSinceFirstDownload",
+	7: "minMinutesSinceDownload",
 }
 
 // Decode decodes Alert from json.
@@ -158,15 +158,15 @@ func (s *Alert) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"button\"")
 			}
-		case "minutesSinceFirstDownload":
+		case "minMinutesSinceDownload":
 			if err := func() error {
-				s.MinutesSinceFirstDownload.Reset()
-				if err := s.MinutesSinceFirstDownload.Decode(d); err != nil {
+				s.MinMinutesSinceDownload.Reset()
+				if err := s.MinMinutesSinceDownload.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"minutesSinceFirstDownload\"")
+				return errors.Wrap(err, "decode field \"minMinutesSinceDownload\"")
 			}
 		default:
 			return d.Skip()
