@@ -65,7 +65,10 @@ func getRoutes(bustimeRoutes []bustime.Route, staticGtfs gtfs.Static) ([]api.Bus
 			return nil, fmt.Errorf("failed to find GTFS route for route ID: %v", route.Id)
 		}
 
-		routes = append(routes, shared_gtfs.ConvertRoute(*gtfsRoute, staticGtfs))
+		apiRoute := shared_gtfs.ConvertRoute(*gtfsRoute, staticGtfs)
+		apiRoute.Name = route.Name
+
+		routes = append(routes, apiRoute)
 	}
 
 	return routes, nil
