@@ -32,7 +32,7 @@ func NewHandler(db *db.Queries) *Handler {
 const API_KEY_ENV_VAR = "BUSTIME_API_KEY"
 
 func (h *Handler) initCaches() {
-	// h.diningCache = dining.InitCache(eateriesBaseUrl)
+	h.diningCache = dining.InitCache(eateriesBaseUrl)
 
 	// get API key from environment variables
 	bustimeApiKey := os.Getenv(API_KEY_ENV_VAR)
