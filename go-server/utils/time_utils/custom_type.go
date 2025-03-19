@@ -27,15 +27,15 @@ func (t TimeString) parseTime() (struct {
 		Hour   int
 		Minute int
 	}{Hour: 0, Minute: 0}
-	time, err2 := ParseDateTime(string(t), []string{
+	time, err := ParseDateTime(string(t), []string{
 		"3:04pm",
 		"3:04 pm",
 		"3 pm",
 		"3pm",
 		"15:04",
 	})
-	if err2 != nil {
-		return emptyTime, fmt.Errorf("invalid time: %d", err2)
+	if err != nil {
+		return emptyTime, fmt.Errorf("invalid time: %d", err)
 	}
 
 	return struct {
@@ -51,6 +51,28 @@ func (t TimeString) ToDate(date time.Time) (time.Time, error) {
 	}
 	est := LoadEST()
 	return time.Date(date.Year(), date.Month(), date.Day(), parsed.Hour, parsed.Minute, 0, 0, est), nil
+}
+
+// Defines a DateTimeString
+// a typical string representation of datetime
+
+type DateTimeString time.Time
+
+func (dt *DateTimeString) UnmarshalJSON(data []byte) error {
+	s := strings.Trim(string(data), `"`)
+
+	time, err := ParseCommonDateTime(s)
+	if err != nil {
+		return err
+	}
+
+	*dt = DateTimeString(time)
+	return nil
+}
+
+func (dt DateTimeString) ToTime() time.Time {
+	est := LoadEST()
+	return time.Time(dt).In(est)
 }
 
 // Defines a UnixTime
