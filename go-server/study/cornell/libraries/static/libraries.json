@@ -1,0 +1,177 @@
+[
+  {
+    "id": 0,
+    "name": "Adelson Library",
+    "imageName": "",
+    "lid": 3329,
+    "externalMapNote": "Adelson Library"
+  },
+  {
+    "id": 1,
+    "name": "Catherwood Library",
+    "imageName": "",
+    "lid": 3323,
+    "externalMapNote": "Catherwood Library"
+  },
+  {
+    "id": 2,
+    "name": "Clark Physical Sciences Library",
+    "imageName": "",
+    "lid": null,
+    "externalMapNote": "Edna McConnell Clark Library",
+    "weekHours": {
+      "monday": [
+        {
+          "open": "00:00",
+          "close": "23:59"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "00:00",
+          "close": "23:59"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "00:00",
+          "close": "23:59"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "00:00",
+          "close": "23:59"
+        }
+      ],
+      "friday": [
+        {
+          "open": "00:00",
+          "close": "23:59"
+        }
+      ],
+      "saturday": [
+        {
+          "open": "00:00",
+          "close": "23:59"
+        }
+      ],
+      "sunday": [
+        {
+          "open": "00:00",
+          "close": "23:59"
+        }
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "name": "John Henrik Clarke Africana Library",
+    "imageName": "",
+    "lid": 3319,
+    "externalMapNote": "Clarke Africana Library"
+  },
+  {
+    "id": 4,
+    "name": "Sidney Cox Library of Music and Dance",
+    "imageName": "",
+    "lid": 3328,
+    "externalMapNote": "Music Library"
+  },
+  {
+    "id": 5,
+    "name": "Engineering Library",
+    "imageName": "",
+    "lid": null,
+    "lid_card_access": 7862,
+    "externalMapNote": "Engineering Library",
+    "weekHours": {
+      "monday": [],
+      "tuesday": [],
+      "wednesday": [],
+      "thursday": [],
+      "friday": [],
+      "saturday": [],
+      "sunday": []
+    }
+  },
+  {
+    "id": 6,
+    "name": "Flower-Sprecher Veterinary Library",
+    "imageName": "",
+    "lid": 3331,
+    "lid_card_access": 20340,
+    "externalMapNote": "Veterinary Library"
+  },
+  {
+    "id": 7,
+    "name": "Law Library",
+    "imageName": "",
+    "lid": null,
+    "lid_card_access": 3476,
+    "externalMapNote": "Law Library",
+    "weekHours": {
+      "monday": [],
+      "tuesday": [],
+      "wednesday": [],
+      "thursday": [],
+      "friday": [],
+      "saturday": [],
+      "sunday": []
+    }
+  },
+  {
+    "id": 8,
+    "name": "Management Library",
+    "imageName": "",
+    "lid": 3340,
+    "lid_card_access": 18500,
+    "externalMapNote": "Management Library"
+  },
+  {
+    "id": 9,
+    "name": "Mann Library",
+    "imageName": "",
+    "lid": 1707,
+    "externalMapNote": "Albert R. Mann Library"
+  },
+  {
+    "id": 10,
+    "name": "Mathematics Library",
+    "imageName": "",
+    "lid": 3327,
+    "externalMapNote": "Mathematics Library"
+  },
+  {
+    "id": 11,
+    "name": "Mui Ho Fine Arts Library",
+    "imageName": "",
+    "lid": 3321,
+    "externalMapNote": "Fine Arts Library"
+  },
+  {
+    "id": 12,
+    "name": "Nestlé Library",
+    "imageName": "",
+    "lid": 3322,
+    "externalMapNote": "Nestle Hotel Library"
+  },
+  {
+    "id": 13,
+    "name": "Olin Library",
+    "imageName": "",
+    "lid": 2818,
+    "externalMapNote": "John M. Olin Library"
+  },
+  {
+    "id": 14,
+    "name": "Uris Library",
+    "imageName": "",
+    "lid": 2830,
+    "externalMapNote": null,
+    "location": {
+      "latitude": 42.44771028750129,
+      "longitude": -76.48529017363418
+    }
+  }
+]
