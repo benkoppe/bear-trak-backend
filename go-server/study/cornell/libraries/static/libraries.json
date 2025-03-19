@@ -2,21 +2,21 @@
   {
     "id": 0,
     "name": "Adelson Library",
-    "imageName": "",
+    "imageName": "adelson",
     "lid": 3329,
     "externalMapNote": "Adelson Library"
   },
   {
     "id": 1,
     "name": "Catherwood Library",
-    "imageName": "",
+    "imageName": "catherwood",
     "lid": 3323,
     "externalMapNote": "Catherwood Library"
   },
   {
     "id": 2,
     "name": "Clark Physical Sciences Library",
-    "imageName": "",
+    "imageName": "clark",
     "lid": null,
     "externalMapNote": "Edna McConnell Clark Library",
     "weekHours": {
@@ -67,21 +67,21 @@
   {
     "id": 3,
     "name": "John Henrik Clarke Africana Library",
-    "imageName": "",
+    "imageName": "africana",
     "lid": 3319,
     "externalMapNote": "Clarke Africana Library"
   },
   {
     "id": 4,
     "name": "Sidney Cox Library of Music and Dance",
-    "imageName": "",
+    "imageName": "cox",
     "lid": 3328,
     "externalMapNote": "Music Library"
   },
   {
     "id": 5,
     "name": "Engineering Library",
-    "imageName": "",
+    "imageName": "engineering",
     "lid": null,
     "lid_card_access": 7862,
     "externalMapNote": "Engineering Library",
@@ -98,7 +98,7 @@
   {
     "id": 6,
     "name": "Flower-Sprecher Veterinary Library",
-    "imageName": "",
+    "imageName": "veterinary",
     "lid": 3331,
     "lid_card_access": 20340,
     "externalMapNote": "Veterinary Library"
@@ -106,7 +106,7 @@
   {
     "id": 7,
     "name": "Law Library",
-    "imageName": "",
+    "imageName": "law",
     "lid": null,
     "lid_card_access": 3476,
     "externalMapNote": "Law Library",
@@ -123,7 +123,7 @@
   {
     "id": 8,
     "name": "Management Library",
-    "imageName": "",
+    "imageName": "management",
     "lid": 3340,
     "lid_card_access": 18500,
     "externalMapNote": "Management Library"
@@ -131,42 +131,42 @@
   {
     "id": 9,
     "name": "Mann Library",
-    "imageName": "",
+    "imageName": "mann",
     "lid": 1707,
     "externalMapNote": "Albert R. Mann Library"
   },
   {
     "id": 10,
     "name": "Mathematics Library",
-    "imageName": "",
+    "imageName": "math",
     "lid": 3327,
     "externalMapNote": "Mathematics Library"
   },
   {
     "id": 11,
     "name": "Mui Ho Fine Arts Library",
-    "imageName": "",
+    "imageName": "fine-arts",
     "lid": 3321,
     "externalMapNote": "Fine Arts Library"
   },
   {
     "id": 12,
     "name": "Nestlé Library",
-    "imageName": "",
+    "imageName": "nestle",
     "lid": 3322,
     "externalMapNote": "Nestle Hotel Library"
   },
   {
     "id": 13,
     "name": "Olin Library",
-    "imageName": "",
+    "imageName": "olin",
     "lid": 2818,
     "externalMapNote": "John M. Olin Library"
   },
   {
     "id": 14,
     "name": "Uris Library",
-    "imageName": "",
+    "imageName": "uris",
     "lid": 2830,
     "externalMapNote": null,
     "location": {
