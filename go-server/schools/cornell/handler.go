@@ -2,7 +2,6 @@ package cornell
 
 import (
 	"context"
-	"fmt"
 
 	alerts "github.com/benkoppe/bear-trak-backend/go-server/alerts/cornell"
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
@@ -10,7 +9,9 @@ import (
 	dining_users "github.com/benkoppe/bear-trak-backend/go-server/dining-users"
 	dining "github.com/benkoppe/bear-trak-backend/go-server/dining/cornell"
 	gyms "github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell"
+	"github.com/benkoppe/bear-trak-backend/go-server/schools/cornell/external_map"
 	"github.com/benkoppe/bear-trak-backend/go-server/schools/shared"
+	study "github.com/benkoppe/bear-trak-backend/go-server/study/cornell"
 	transit "github.com/benkoppe/bear-trak-backend/go-server/transit/cornell"
 )
 
@@ -20,6 +21,8 @@ type Handler struct {
 	diningCache   dining.Cache
 	gymsCaches    gyms.Caches
 	transitCaches transit.Caches
+	studyCache    study.Cache
+	mapCache      external_map.Cache
 }
 
 func NewHandler(db *db.Queries) *Handler {
@@ -35,6 +38,8 @@ func (h *Handler) initCaches() {
 	h.diningCache = dining.InitCache(eateriesUrl)
 	h.gymsCaches = gyms.InitCaches(gymCapacitiesUrl, gymHoursUrl)
 	h.transitCaches = transit.InitCaches(availtecUrl, gtfsStaticUrl)
+	h.studyCache = study.InitCache(librariesUrl)
+	h.mapCache = external_map.InitCache(mapOverlaysUrl)
 }
 
 func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
@@ -58,7 +63,7 @@ func (h *Handler) GetV1TransitVehicles(ctx context.Context) ([]api.Vehicle, erro
 }
 
 func (h *Handler) GetV1Study(ctx context.Context) (*api.StudyData, error) {
-	return nil, fmt.Errorf("not implemented")
+	return study.Get(h.studyCache, h.mapCache)
 }
 
 func (h *Handler) GetV1DiningUser(ctx context.Context, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {

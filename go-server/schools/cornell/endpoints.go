@@ -9,4 +9,8 @@ const (
 	availtecUrl = "https://realtimetcatbus.availtec.com/InfoPoint/rest"
 
 	gtfsStaticUrl = "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-zip.ashx"
+
+	librariesUrl = "https://api3.libcal.com/widget/hours/grid?iid=973&format=json"
+
+	mapOverlaysUrl = "https://www.cornell.edu/about/maps/data.cfm?action=getOverlays"
 )
