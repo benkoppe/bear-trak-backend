@@ -110,17 +110,7 @@ func createFutureHours(static static.Gym, schedules []scrape.ParsedSchedule) []a
 			log.Printf("FALLBACK: using static hours for gym %s on %s", static.Name, date)
 		}
 
-		dayHours := weekHours.GetHours(date)
-		for _, hours := range dayHours {
-
-			futureHour, err := hours.Convert(date)
-			if err != nil {
-				fmt.Printf("error converting hours: %v", err)
-				continue
-			}
-			futureHours = append(futureHours, *futureHour)
-
-		}
+		futureHours = append(futureHours, weekHours.GetConvertedHours(date)...)
 	}
 
 	return futureHours

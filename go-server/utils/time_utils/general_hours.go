@@ -41,6 +41,34 @@ func (w WeekHours) GetHours(date time.Time) []Hours {
 	}
 }
 
+func (w WeekHours) GetConvertedHours(date time.Time) []api.Hours {
+	var convertedHours []api.Hours
+	dayHours := w.GetHours(date)
+	for _, hours := range dayHours {
+
+		futureHour, err := hours.Convert(date)
+		if err != nil {
+			fmt.Printf("error converting hours: %v", err)
+			continue
+		}
+		convertedHours = append(convertedHours, *futureHour)
+	}
+	return convertedHours
+}
+
+func (w WeekHours) CreateFutureHours() []api.Hours {
+	est := LoadEST()
+	now := time.Now().In(est)
+	var futureHours []api.Hours
+
+	for i := 0; i < 7; i++ {
+		date := now.AddDate(0, 0, i)
+		futureHours = append(futureHours, w.GetConvertedHours(date)...)
+	}
+
+	return futureHours
+}
+
 func (w *WeekHours) AddHours(day string, hours []Hours) error {
 	switch strings.ToLower(day) {
 	case "monday":
