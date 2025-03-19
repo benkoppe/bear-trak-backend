@@ -12,26 +12,6 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
 )
 
-// tries a few common date layouts
-func parseDate(s string) (time.Time, error) {
-	// Remove any weekday prefix, for example "Tues, Jan 21" -> "Jan 21"
-	if strings.Contains(s, ",") {
-		parts := strings.SplitN(s, ",", 2)
-		s = strings.TrimSpace(parts[1])
-	} else {
-		s = strings.TrimSpace(s)
-	}
-
-	// Try several layouts
-	layouts := []string{
-		"Jan 2",
-		"1/2/06",
-		"01/02/06",
-	}
-
-	return time_utils.ParseDateTime(s, layouts)
-}
-
 // parseCaption will try multiple patterns to extract title, start and/or end dates.
 func parseCaption(caption string) captionData {
 	// Pattern 1: Parenthesized date range.
@@ -42,8 +22,8 @@ func parseCaption(caption string) captionData {
 		startStr := matches[2]
 		endStr := matches[3]
 
-		startDate, err1 := parseDate(startStr)
-		endDate, err2 := parseDate(endStr)
+		startDate, err1 := time_utils.ParseCommonDateTimeYearOptional(startStr)
+		endDate, err2 := time_utils.ParseCommonDateTimeYearOptional(endStr)
 
 		var startPtr, endPtr *time.Time
 		if err1 == nil && err2 == nil {
@@ -65,8 +45,8 @@ func parseCaption(caption string) captionData {
 		startStr := matches[2]
 		endStr := matches[3]
 
-		startDate, err1 := parseDate(startStr)
-		endDate, err2 := parseDate(endStr)
+		startDate, err1 := time_utils.ParseCommonDateTimeYearOptional(startStr)
+		endDate, err2 := time_utils.ParseCommonDateTimeYearOptional(endStr)
 
 		var startPtr, endPtr *time.Time
 		if err1 == nil && err2 == nil {
@@ -86,7 +66,7 @@ func parseCaption(caption string) captionData {
 	if matches := reStarting.FindStringSubmatch(caption); len(matches) == 3 {
 		title := strings.TrimSpace(matches[1])
 		dateStr := matches[2]
-		startDate, err := parseDate(dateStr)
+		startDate, err := time_utils.ParseCommonDateTimeYearOptional(dateStr)
 		var startPtr *time.Time
 		if err == nil {
 			startPtr = &startDate

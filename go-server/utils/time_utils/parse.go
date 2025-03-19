@@ -19,3 +19,60 @@ func ParseDateTime(s string, layouts []string) (time.Time, error) {
 	}
 	return time.Time{}, fmt.Errorf("unable to parse datetime %q: %v", s, err)
 }
+
+// wrapper around `ParseDateTime` with a list of common formats
+func ParseCommonDateTime(s string) (time.Time, error) {
+	commonLayouts := []string{
+		time.RFC3339,                  // "2006-01-02T15:04:05Z07:00"
+		time.RFC1123Z,                 // "Mon, 02 Jan 2006 15:04:05 -0700"
+		time.RFC1123,                  // "Mon, 02 Jan 2006 15:04:05 MST"
+		time.RFC822,                   // "02 Jan 06 15:04 MST"
+		time.RFC822Z,                  // "02 Jan 06 15:04 -0700"
+		"2006-01-02 15:04:05",         // Common datetime format
+		"2006-01-02",                  // ISO date format
+		"01/02/2006",                  // US date format (MM/DD/YYYY)
+		"2 Jan 2006",                  // Day Month Year without leading zeros
+		"January 2, 2006",             // Long month name format
+		"Mon, Jan 2, 2006",            // Abbreviated weekday with date
+		"Mon Jan 2 15:04:05 MST 2006", // Full date with weekday
+	}
+	return ParseDateTime(s, commonLayouts)
+}
+
+// parses common datetimes, including formats without a year
+// sets the year to the current year if it isn't provided
+func ParseCommonDateTimeYearOptional(s string) (time.Time, error) {
+	// Layouts that include a year.
+	layouts := []string{
+		time.RFC3339,
+		time.RFC1123Z,
+		time.RFC1123,
+		time.RFC822,
+		time.RFC822Z,
+		"2006-01-02 15:04:05",
+		"2006-01-02",
+		"01/02/2006",
+		"2 Jan 2006",
+		"January 2, 2006",
+		"Mon, Jan 2, 2006",
+		"Mon Jan 2 15:04:05 MST 2006",
+		"Jan 2",
+		"January 2",
+		"Mon, Jan 2",
+		"Mon Jan 2",
+	}
+
+	// Next, try layouts without a year.
+	t, err := ParseDateTime(s, layouts)
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	// If the parsed time has a zero year, update it with the current year.
+	if t.Year() == 0 {
+		now := time.Now()
+		t = time.Date(now.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), t.Nanosecond(), t.Location())
+	}
+
+	return t, nil
+}
