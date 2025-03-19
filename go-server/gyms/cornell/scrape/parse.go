@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
 )
@@ -141,7 +140,7 @@ func parseHeaderDays(header string) []string {
 func parseGymSchedule(headers, values []string) GymSchedule {
 	schedule := GymSchedule{
 		GymName:   values[0],
-		WeekHours: static.WeekHours{},
+		WeekHours: time_utils.WeekHours{},
 	}
 	// process remaining headers
 	for i := 1; i < len(headers) && i < len(values); i++ {

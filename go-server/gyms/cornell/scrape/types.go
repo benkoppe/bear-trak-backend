@@ -3,7 +3,7 @@ package scrape
 import (
 	"time"
 
-	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
 )
 
 type ParsedSchedule struct {
@@ -19,5 +19,5 @@ type captionData struct {
 
 type GymSchedule struct {
 	GymName   string
-	WeekHours static.WeekHours
+	WeekHours time_utils.WeekHours
 }
