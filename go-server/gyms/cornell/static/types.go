@@ -35,22 +35,17 @@ type Equipment struct {
 	Items []string `json:"items"`
 }
 
-type Hours struct {
-	Open  time_utils.TimeString `json:"open"`
-	Close time_utils.TimeString `json:"close"`
-}
-
 type WeekHours struct {
-	Monday    []Hours `json:"monday"`
-	Tuesday   []Hours `json:"tuesday"`
-	Wednesday []Hours `json:"wednesday"`
-	Thursday  []Hours `json:"thursday"`
-	Friday    []Hours `json:"friday"`
-	Saturday  []Hours `json:"saturday"`
-	Sunday    []Hours `json:"sunday"`
+	Monday    []time_utils.Hours `json:"monday"`
+	Tuesday   []time_utils.Hours `json:"tuesday"`
+	Wednesday []time_utils.Hours `json:"wednesday"`
+	Thursday  []time_utils.Hours `json:"thursday"`
+	Friday    []time_utils.Hours `json:"friday"`
+	Saturday  []time_utils.Hours `json:"saturday"`
+	Sunday    []time_utils.Hours `json:"sunday"`
 }
 
-func (w WeekHours) GetHours(date time.Time) []Hours {
+func (w WeekHours) GetHours(date time.Time) []time_utils.Hours {
 	switch date.Weekday() {
 	case time.Monday:
 		return w.Monday
@@ -71,7 +66,7 @@ func (w WeekHours) GetHours(date time.Time) []Hours {
 	}
 }
 
-func (w *WeekHours) AddHours(day string, hours []Hours) error {
+func (w *WeekHours) AddHours(day string, hours []time_utils.Hours) error {
 	switch strings.ToLower(day) {
 	case "monday":
 		w.Monday = append(w.Monday, hours...)

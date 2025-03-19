@@ -136,35 +136,6 @@ func parseHeaderDays(header string) []string {
 	return extractDayName(header)
 }
 
-// parseCellHours splits a cell value into one or more Hours.
-// It handles values like "6am - 9pm" or "7am - 8:30am / 10am - 10:45pm".
-func parseCellHours(cell string) []static.Hours {
-	var hrs []static.Hours
-
-	if strings.Contains(cell, "Closed") {
-		return hrs
-	}
-
-	re := regexp.MustCompile("[/,]") // match either "/" or ","
-	ranges := re.Split(cell, -1)
-	for _, r := range ranges {
-		r = strings.TrimSpace(r)
-		// split by dash for open/close
-		parts := strings.Split(r, "-")
-		if len(parts) != 2 {
-			log.Printf("Couldn't format a static gym cell: %s", r)
-			continue // doesn't match expected pattern
-		}
-		open := strings.TrimSpace(parts[0])
-		close := strings.TrimSpace(parts[1])
-		hrs = append(hrs, static.Hours{
-			Open:  time_utils.TimeString(open),
-			Close: time_utils.TimeString(close),
-		})
-	}
-	return hrs
-}
-
 // parseGymSchedule takes a headers slice and corresponding values slice and builds a GymSchedule.
 // Assumes the first header/value is the gym name.
 func parseGymSchedule(headers, values []string) GymSchedule {
@@ -178,7 +149,7 @@ func parseGymSchedule(headers, values []string) GymSchedule {
 		cell := values[i]
 
 		days := parseHeaderDays(header)
-		hrs := parseCellHours(cell)
+		hrs := time_utils.ParseHours(cell, nil)
 		for _, day := range days {
 			err := schedule.WeekHours.AddHours(day, hrs)
 			if err != nil {
