@@ -3713,14 +3713,23 @@ func (s *Library) encodeFields(e *jx.Encoder) {
 		e.FieldStart("longitude")
 		e.Float64(s.Longitude)
 	}
+	{
+		e.FieldStart("hours")
+		e.ArrStart()
+		for _, elem := range s.Hours {
+			elem.Encode(e)
+		}
+		e.ArrEnd()
+	}
 }
 
-var jsonFieldsNameOfLibrary = [5]string{
+var jsonFieldsNameOfLibrary = [6]string{
 	0: "id",
 	1: "name",
 	2: "imagePath",
 	3: "latitude",
 	4: "longitude",
+	5: "hours",
 }
 
 // Decode decodes Library from json.
@@ -3792,6 +3801,24 @@ func (s *Library) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"longitude\"")
 			}
+		case "hours":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				s.Hours = make([]Hours, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem Hours
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Hours = append(s.Hours, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"hours\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -3802,7 +3829,7 @@ func (s *Library) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00011111,
+		0b00111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

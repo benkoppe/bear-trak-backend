@@ -1398,6 +1398,7 @@ type Library struct {
 	ImagePath string  `json:"imagePath"`
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
+	Hours     []Hours `json:"hours"`
 }
 
 // GetID returns the value of ID.
@@ -1425,6 +1426,11 @@ func (s *Library) GetLongitude() float64 {
 	return s.Longitude
 }
 
+// GetHours returns the value of Hours.
+func (s *Library) GetHours() []Hours {
+	return s.Hours
+}
+
 // SetID sets the value of ID.
 func (s *Library) SetID(val int) {
 	s.ID = val
@@ -1448,6 +1454,11 @@ func (s *Library) SetLatitude(val float64) {
 // SetLongitude sets the value of Longitude.
 func (s *Library) SetLongitude(val float64) {
 	s.Longitude = val
+}
+
+// SetHours sets the value of Hours.
+func (s *Library) SetHours(val []Hours) {
+	s.Hours = val
 }
 
 // NewNilAlertButton returns new NilAlertButton with value set to v.

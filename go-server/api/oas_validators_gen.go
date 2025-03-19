@@ -861,6 +861,17 @@ func (s *Library) Validate() error {
 			Error: err,
 		})
 	}
+	if err := func() error {
+		if s.Hours == nil {
+			return errors.New("nil is invalid value")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "hours",
+			Error: err,
+		})
+	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
 	}

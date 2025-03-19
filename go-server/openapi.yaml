@@ -1081,6 +1081,7 @@ components:
         - imagePath
         - latitude
         - longitude
+        - hours
       properties:
         id:
           type: integer
@@ -1104,6 +1105,12 @@ components:
           x-stoplight:
             id: bco3kbkdm67py
           format: double
+        hours:
+          type: array
+          x-stoplight:
+            id: ay4172st1mac5
+          items:
+            $ref: "#/components/schemas/Hours"
     Printer:
       title: Printer
       x-stoplight:
