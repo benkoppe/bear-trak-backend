@@ -112,22 +112,14 @@ func createFutureHours(static static.Gym, schedules []scrape.ParsedSchedule) []a
 
 		dayHours := weekHours.GetHours(date)
 		for _, hours := range dayHours {
-			start, e1 := hours.Open.ToDate(date)
-			end, e2 := hours.Close.ToDate(date)
 
-			if e1 != nil {
-				fmt.Printf("error parsing hours: %v", e1)
+			futureHour, err := hours.Convert(date)
+			if err != nil {
+				fmt.Printf("error converting hours: %v", err)
 				continue
 			}
-			if e2 != nil {
-				fmt.Printf("error parsing hours: %v", e2)
-				continue
-			}
+			futureHours = append(futureHours, *futureHour)
 
-			futureHours = append(futureHours, api.Hours{
-				Start: start,
-				End:   end,
-			})
 		}
 	}
 

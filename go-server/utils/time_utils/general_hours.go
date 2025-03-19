@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/benkoppe/bear-trak-backend/go-server/api"
 )
 
 type WeekHours struct {
@@ -85,6 +87,23 @@ func (w WeekHours) IsOpen(date time.Time) bool {
 type Hours struct {
 	Open  TimeString `json:"open"`
 	Close TimeString `json:"close"`
+}
+
+func (h *Hours) Convert(date time.Time) (*api.Hours, error) {
+	start, e1 := h.Open.ToDate(date)
+	end, e2 := h.Close.ToDate(date)
+
+	if e1 != nil {
+		return nil, fmt.Errorf("error parsing hours: %v", e1)
+	}
+	if e2 != nil {
+		return nil, fmt.Errorf("error parsing hours: %v", e2)
+	}
+
+	return &api.Hours{
+		Start: start,
+		End:   end,
+	}, nil
 }
 
 type HoursParserOptions struct {
