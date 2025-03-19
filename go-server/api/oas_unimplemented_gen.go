@@ -85,6 +85,15 @@ func (UnimplementedHandler) GetV1Gyms(ctx context.Context) (r []Gym, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
+// GetV1Study implements getV1Study operation.
+//
+// Returns all necessary data for BearTrak's study section.
+//
+// GET /v1/study
+func (UnimplementedHandler) GetV1Study(ctx context.Context) (r *StudyData, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // GetV1TransitRoutes implements getV1TransitRoutes operation.
 //
 // Returns non time-sensitive, route-related data for BearTrak's transit section.

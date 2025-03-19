@@ -1391,6 +1391,65 @@ func (s *Hours) SetEnd(val time.Time) {
 	s.End = val
 }
 
+// Ref: #/components/schemas/Library
+type Library struct {
+	ID        int     `json:"id"`
+	Name      string  `json:"name"`
+	ImagePath string  `json:"imagePath"`
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+}
+
+// GetID returns the value of ID.
+func (s *Library) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *Library) GetName() string {
+	return s.Name
+}
+
+// GetImagePath returns the value of ImagePath.
+func (s *Library) GetImagePath() string {
+	return s.ImagePath
+}
+
+// GetLatitude returns the value of Latitude.
+func (s *Library) GetLatitude() float64 {
+	return s.Latitude
+}
+
+// GetLongitude returns the value of Longitude.
+func (s *Library) GetLongitude() float64 {
+	return s.Longitude
+}
+
+// SetID sets the value of ID.
+func (s *Library) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *Library) SetName(val string) {
+	s.Name = val
+}
+
+// SetImagePath sets the value of ImagePath.
+func (s *Library) SetImagePath(val string) {
+	s.ImagePath = val
+}
+
+// SetLatitude sets the value of Latitude.
+func (s *Library) SetLatitude(val float64) {
+	s.Latitude = val
+}
+
+// SetLongitude sets the value of Longitude.
+func (s *Library) SetLongitude(val float64) {
+	s.Longitude = val
+}
+
 // NewNilAlertButton returns new NilAlertButton with value set to v.
 func NewNilAlertButton(v AlertButton) NilAlertButton {
 	return NilAlertButton{
@@ -1709,6 +1768,21 @@ func (*PostV1DiningUserCreated) postV1DiningUserRes() {}
 type PostV1DiningUserUnauthorized struct{}
 
 func (*PostV1DiningUserUnauthorized) postV1DiningUserRes() {}
+
+// Ref: #/components/schemas/StudyData
+type StudyData struct {
+	Libraries []Library `json:"libraries"`
+}
+
+// GetLibraries returns the value of Libraries.
+func (s *StudyData) GetLibraries() []Library {
+	return s.Libraries
+}
+
+// SetLibraries sets the value of Libraries.
+func (s *StudyData) SetLibraries(val []Library) {
+	s.Libraries = val
+}
 
 // Ref: #/components/schemas/Success
 type Success struct {

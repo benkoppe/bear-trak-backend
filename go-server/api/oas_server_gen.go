@@ -56,6 +56,12 @@ type Handler interface {
 	//
 	// GET /v1/gyms
 	GetV1Gyms(ctx context.Context) ([]Gym, error)
+	// GetV1Study implements getV1Study operation.
+	//
+	// Returns all necessary data for BearTrak's study section.
+	//
+	// GET /v1/study
+	GetV1Study(ctx context.Context) (*StudyData, error)
 	// GetV1TransitRoutes implements getV1TransitRoutes operation.
 	//
 	// Returns non time-sensitive, route-related data for BearTrak's transit section.

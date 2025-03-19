@@ -90,6 +90,29 @@ paths:
       x-stoplight:
         id: bgkkzgl4exihm
       description: Returns all necessary data for BearTrak's gym section.
+  /v1/study:
+    get:
+      summary: Study
+      tags:
+        - study
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudyData"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: getV1Study
+      x-stoplight:
+        id: 4ahnm07h1tk19
+      description: Returns all necessary data for BearTrak's study section.
+    parameters: []
   /v1/transit/routes:
     get:
       summary: Routes
@@ -1047,6 +1070,78 @@ components:
           type: string
           x-stoplight:
             id: g18cbc36q0stj
+    Library:
+      title: Library
+      x-stoplight:
+        id: 7t8ifco2m65cu
+      type: object
+      required:
+        - id
+        - name
+        - imagePath
+        - latitude
+        - longitude
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: mrdy7lqd94nwv
+        name:
+          type: string
+          x-stoplight:
+            id: o7iuu3nhnrkvb
+        imagePath:
+          type: string
+          x-stoplight:
+            id: qd8qbuchudtll
+        latitude:
+          type: number
+          x-stoplight:
+            id: 0csppowzkzejo
+          format: double
+        longitude:
+          type: number
+          x-stoplight:
+            id: bco3kbkdm67py
+          format: double
+    Printer:
+      title: Printer
+      x-stoplight:
+        id: zhineg35qiesd
+      type: object
+      required:
+        - id
+        - latitude
+        - longitude
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: 7bv6625syx24t
+        latitude:
+          type: number
+          x-stoplight:
+            id: uhcii240zyz53
+          format: double
+        longitude:
+          type: number
+          x-stoplight:
+            id: zj4skzm4qv5v9
+          format: double
+    StudyData:
+      title: StudyData
+      x-stoplight:
+        id: zcjl7qhlb8be6
+      type: object
+      required:
+        - libraries
+      properties:
+        libraries:
+          type: array
+          x-stoplight:
+            id: wcisinknutgyw
+          items:
+            $ref: "#/components/schemas/Library"
   parameters:
     DiningUserSession:
       name: sessionId

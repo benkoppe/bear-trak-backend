@@ -220,6 +220,26 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 
+			case 's': // Prefix: "study"
+
+				if l := len("study"); len(elem) >= l && elem[0:l] == "study" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "GET":
+						s.handleGetV1StudyRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
+					}
+
+					return
+				}
+
 			case 't': // Prefix: "transit/"
 
 				if l := len("transit/"); len(elem) >= l && elem[0:l] == "transit/" {
@@ -560,6 +580,30 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.summary = "Gyms"
 						r.operationID = "getV1Gyms"
 						r.pathPattern = "/v1/gyms"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+
+			case 's': // Prefix: "study"
+
+				if l := len("study"); len(elem) >= l && elem[0:l] == "study" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "GET":
+						r.name = GetV1StudyOperation
+						r.summary = "Study"
+						r.operationID = "getV1Study"
+						r.pathPattern = "/v1/study"
 						r.args = args
 						r.count = 0
 						return r, true

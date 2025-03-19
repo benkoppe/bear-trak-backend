@@ -14,6 +14,7 @@ const (
 	GetV1DiningUserBarcodeOperation  OperationName = "GetV1DiningUserBarcode"
 	GetV1DiningUserSessionOperation  OperationName = "GetV1DiningUserSession"
 	GetV1GymsOperation               OperationName = "GetV1Gyms"
+	GetV1StudyOperation              OperationName = "GetV1Study"
 	GetV1TransitRoutesOperation      OperationName = "GetV1TransitRoutes"
 	GetV1TransitVehiclesOperation    OperationName = "GetV1TransitVehicles"
 	PostV1DiningUserOperation        OperationName = "PostV1DiningUser"
