@@ -10,10 +10,12 @@ type itemCategory struct {
 }
 
 type Item struct {
-	Notes   string `json:"NOTES"`
-	Name    string `json:"NAME"`
-	Address string `json:"ADDRESS"`
-	LatLng  LatLng `json:"LatLng"`
+	Notes       string `json:"NOTES"`
+	Name        string `json:"NAME"`
+	Address     string `json:"ADDRESS"`
+	Description string `json:"DESCRIPTION"`
+	Location    string `json:"LOCATION"`
+	LatLng      LatLng `json:"LatLng"`
 }
 
 type LatLng struct {

@@ -1117,20 +1117,22 @@ components:
             id: lxxj4dsse4exy
           items:
             $ref: "#/components/schemas/Hours"
+      x-tags:
+        - study
     Printer:
       title: Printer
       x-stoplight:
         id: zhineg35qiesd
       type: object
+      x-tags:
+        - study
       required:
-        - id
         - latitude
         - longitude
+        - location
+        - room
+        - type
       properties:
-        id:
-          type: integer
-          x-stoplight:
-            id: 7bv6625syx24t
         latitude:
           type: number
           x-stoplight:
@@ -1141,13 +1143,35 @@ components:
           x-stoplight:
             id: zj4skzm4qv5v9
           format: double
+        location:
+          type: string
+          x-stoplight:
+            id: q1k04rq5wimi5
+          nullable: true
+        room:
+          type: string
+          x-stoplight:
+            id: partqsvii7feg
+          nullable: true
+        type:
+          type: string
+          x-stoplight:
+            id: 38u4y92l5k61p
+          enum:
+            - blackAndWhite
+            - color
+            - colorScanCopy
+            - unknown
     StudyData:
       title: StudyData
       x-stoplight:
         id: zcjl7qhlb8be6
       type: object
+      x-tags:
+        - study
       required:
         - libraries
+        - printers
       properties:
         libraries:
           type: array
@@ -1155,6 +1179,12 @@ components:
             id: wcisinknutgyw
           items:
             $ref: "#/components/schemas/Library"
+        printers:
+          type: array
+          x-stoplight:
+            id: jcwvolwde4ydo
+          items:
+            $ref: "#/components/schemas/Printer"
   parameters:
     DiningUserSession:
       name: sessionId

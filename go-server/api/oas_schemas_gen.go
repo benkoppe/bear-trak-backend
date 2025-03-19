@@ -1791,9 +1791,124 @@ type PostV1DiningUserUnauthorized struct{}
 
 func (*PostV1DiningUserUnauthorized) postV1DiningUserRes() {}
 
+// Ref: #/components/schemas/Printer
+type Printer struct {
+	Latitude  float64     `json:"latitude"`
+	Longitude float64     `json:"longitude"`
+	Location  NilString   `json:"location"`
+	Room      NilString   `json:"room"`
+	Type      PrinterType `json:"type"`
+}
+
+// GetLatitude returns the value of Latitude.
+func (s *Printer) GetLatitude() float64 {
+	return s.Latitude
+}
+
+// GetLongitude returns the value of Longitude.
+func (s *Printer) GetLongitude() float64 {
+	return s.Longitude
+}
+
+// GetLocation returns the value of Location.
+func (s *Printer) GetLocation() NilString {
+	return s.Location
+}
+
+// GetRoom returns the value of Room.
+func (s *Printer) GetRoom() NilString {
+	return s.Room
+}
+
+// GetType returns the value of Type.
+func (s *Printer) GetType() PrinterType {
+	return s.Type
+}
+
+// SetLatitude sets the value of Latitude.
+func (s *Printer) SetLatitude(val float64) {
+	s.Latitude = val
+}
+
+// SetLongitude sets the value of Longitude.
+func (s *Printer) SetLongitude(val float64) {
+	s.Longitude = val
+}
+
+// SetLocation sets the value of Location.
+func (s *Printer) SetLocation(val NilString) {
+	s.Location = val
+}
+
+// SetRoom sets the value of Room.
+func (s *Printer) SetRoom(val NilString) {
+	s.Room = val
+}
+
+// SetType sets the value of Type.
+func (s *Printer) SetType(val PrinterType) {
+	s.Type = val
+}
+
+type PrinterType string
+
+const (
+	PrinterTypeBlackAndWhite PrinterType = "blackAndWhite"
+	PrinterTypeColor         PrinterType = "color"
+	PrinterTypeColorScanCopy PrinterType = "colorScanCopy"
+	PrinterTypeUnknown       PrinterType = "unknown"
+)
+
+// AllValues returns all PrinterType values.
+func (PrinterType) AllValues() []PrinterType {
+	return []PrinterType{
+		PrinterTypeBlackAndWhite,
+		PrinterTypeColor,
+		PrinterTypeColorScanCopy,
+		PrinterTypeUnknown,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s PrinterType) MarshalText() ([]byte, error) {
+	switch s {
+	case PrinterTypeBlackAndWhite:
+		return []byte(s), nil
+	case PrinterTypeColor:
+		return []byte(s), nil
+	case PrinterTypeColorScanCopy:
+		return []byte(s), nil
+	case PrinterTypeUnknown:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PrinterType) UnmarshalText(data []byte) error {
+	switch PrinterType(data) {
+	case PrinterTypeBlackAndWhite:
+		*s = PrinterTypeBlackAndWhite
+		return nil
+	case PrinterTypeColor:
+		*s = PrinterTypeColor
+		return nil
+	case PrinterTypeColorScanCopy:
+		*s = PrinterTypeColorScanCopy
+		return nil
+	case PrinterTypeUnknown:
+		*s = PrinterTypeUnknown
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/StudyData
 type StudyData struct {
 	Libraries []Library `json:"libraries"`
+	Printers  []Printer `json:"printers"`
 }
 
 // GetLibraries returns the value of Libraries.
@@ -1801,9 +1916,19 @@ func (s *StudyData) GetLibraries() []Library {
 	return s.Libraries
 }
 
+// GetPrinters returns the value of Printers.
+func (s *StudyData) GetPrinters() []Printer {
+	return s.Printers
+}
+
 // SetLibraries sets the value of Libraries.
 func (s *StudyData) SetLibraries(val []Library) {
 	s.Libraries = val
+}
+
+// SetPrinters sets the value of Printers.
+func (s *StudyData) SetPrinters(val []Printer) {
+	s.Printers = val
 }
 
 // Ref: #/components/schemas/Success
