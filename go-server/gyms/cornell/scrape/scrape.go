@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strconv"
-	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
@@ -44,62 +42,17 @@ func fetchData(url string) ([]ParsedSchedule, error) {
 	return schedules, nil
 }
 
-func scrapeTables(htmlReader io.Reader) ([]tableData, error) {
+func scrapeTables(htmlReader io.Reader) ([]utils.TableData, error) {
 	doc, err := goquery.NewDocumentFromReader(htmlReader)
 	if err != nil {
 		return nil, err
 	}
 
-	var results []tableData
+	var results []utils.TableData
 	doc.Find("table.striped").Each(func(i int, tableSel *goquery.Selection) {
-		tableData := parseTable(tableSel)
+		tableData := utils.ScrapeTable(tableSel)
 		results = append(results, tableData)
 	})
 
 	return results, nil
-}
-
-// will parse a table and return as TableData
-// for rows that span multiple columns, the same value is copied to each column
-func parseTable(tableSel *goquery.Selection) tableData {
-	var data tableData
-
-	captionSel := tableSel.Find("caption")
-	data.Caption = strings.TrimSpace(captionSel.Text())
-
-	headers := make([]string, 0)
-	tableSel.Find("thead tr").Each(func(_ int, tr *goquery.Selection) {
-		tr.Find("th").Each(func(_ int, th *goquery.Selection) {
-			headers = append(headers, strings.TrimSpace(th.Text()))
-		})
-	})
-	data.Headers = headers
-
-	// parse rows
-	tableSel.Find("tbody tr").Each(func(_ int, rowSel *goquery.Selection) {
-		rowColumns := make([]string, len(headers))
-		nextCol := 0
-
-		rowSel.Find("td").Each(func(_ int, td *goquery.Selection) {
-			cellText := strings.TrimSpace(td.Text())
-			colspanAttr, _ := td.Attr("colspan")
-			colspan := 1
-			if colspanAttr != "" {
-				if c, err := strconv.Atoi(colspanAttr); err == nil {
-					colspan = c
-				}
-			}
-			for i := 0; i < colspan; i++ {
-				if nextCol >= len(headers) {
-					break
-				}
-				rowColumns[nextCol] = cellText
-				nextCol++
-			}
-		})
-
-		data.Rows = append(data.Rows, rowData{Columns: rowColumns})
-	})
-
-	return data
 }

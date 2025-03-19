@@ -208,7 +208,7 @@ func parseGymSchedule(headers, values []string) GymSchedule {
 	return schedule
 }
 
-func parseSchedule(table tableData) ParsedSchedule {
+func parseSchedule(table utils.TableData) ParsedSchedule {
 	schedule := ParsedSchedule{
 		Caption:      parseCaption(table.Caption),
 		GymSchedules: make([]GymSchedule, 0),

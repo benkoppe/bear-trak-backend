@@ -6,16 +6,6 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
 )
 
-type tableData struct {
-	Caption string
-	Headers []string
-	Rows    []rowData
-}
-
-type rowData struct {
-	Columns []string
-}
-
 type ParsedSchedule struct {
 	Caption      captionData
 	GymSchedules []GymSchedule
