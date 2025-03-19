@@ -3721,15 +3721,26 @@ func (s *Library) encodeFields(e *jx.Encoder) {
 		}
 		e.ArrEnd()
 	}
+	{
+		if s.CardAccessHours != nil {
+			e.FieldStart("cardAccessHours")
+			e.ArrStart()
+			for _, elem := range s.CardAccessHours {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
 }
 
-var jsonFieldsNameOfLibrary = [6]string{
+var jsonFieldsNameOfLibrary = [7]string{
 	0: "id",
 	1: "name",
 	2: "imagePath",
 	3: "latitude",
 	4: "longitude",
 	5: "hours",
+	6: "cardAccessHours",
 }
 
 // Decode decodes Library from json.
@@ -3818,6 +3829,23 @@ func (s *Library) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"hours\"")
+			}
+		case "cardAccessHours":
+			if err := func() error {
+				s.CardAccessHours = make([]Hours, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem Hours
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.CardAccessHours = append(s.CardAccessHours, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"cardAccessHours\"")
 			}
 		default:
 			return d.Skip()

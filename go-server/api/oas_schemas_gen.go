@@ -1393,12 +1393,13 @@ func (s *Hours) SetEnd(val time.Time) {
 
 // Ref: #/components/schemas/Library
 type Library struct {
-	ID        int     `json:"id"`
-	Name      string  `json:"name"`
-	ImagePath string  `json:"imagePath"`
-	Latitude  float64 `json:"latitude"`
-	Longitude float64 `json:"longitude"`
-	Hours     []Hours `json:"hours"`
+	ID              int     `json:"id"`
+	Name            string  `json:"name"`
+	ImagePath       string  `json:"imagePath"`
+	Latitude        float64 `json:"latitude"`
+	Longitude       float64 `json:"longitude"`
+	Hours           []Hours `json:"hours"`
+	CardAccessHours []Hours `json:"cardAccessHours"`
 }
 
 // GetID returns the value of ID.
@@ -1431,6 +1432,11 @@ func (s *Library) GetHours() []Hours {
 	return s.Hours
 }
 
+// GetCardAccessHours returns the value of CardAccessHours.
+func (s *Library) GetCardAccessHours() []Hours {
+	return s.CardAccessHours
+}
+
 // SetID sets the value of ID.
 func (s *Library) SetID(val int) {
 	s.ID = val
@@ -1459,6 +1465,11 @@ func (s *Library) SetLongitude(val float64) {
 // SetHours sets the value of Hours.
 func (s *Library) SetHours(val []Hours) {
 	s.Hours = val
+}
+
+// SetCardAccessHours sets the value of CardAccessHours.
+func (s *Library) SetCardAccessHours(val []Hours) {
+	s.CardAccessHours = val
 }
 
 // NewNilAlertButton returns new NilAlertButton with value set to v.

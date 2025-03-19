@@ -1111,6 +1111,12 @@ components:
             id: ay4172st1mac5
           items:
             $ref: "#/components/schemas/Hours"
+        cardAccessHours:
+          type: array
+          x-stoplight:
+            id: lxxj4dsse4exy
+          items:
+            $ref: "#/components/schemas/Hours"
     Printer:
       title: Printer
       x-stoplight:
