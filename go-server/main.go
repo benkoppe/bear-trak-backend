@@ -15,7 +15,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms"
 	"github.com/benkoppe/bear-trak-backend/go-server/schools"
-	"github.com/benkoppe/bear-trak-backend/go-server/utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
 )
 
 //go:embed static/*
@@ -91,7 +91,7 @@ func runTimedTasks(queries *db.Queries, handler api.Handler, config schools.Conf
 }
 
 func executeHourlyTasks(queries *db.Queries, handler api.Handler, config schools.Config) {
-	est := utils.LoadEST()
+	est := time_utils.LoadEST()
 	log.Println("Executing timed tasks at:", time.Now().In(est))
 
 	// create a context with a timeout for the operation

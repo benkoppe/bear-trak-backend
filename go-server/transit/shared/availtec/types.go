@@ -1,6 +1,6 @@
 package availtec
 
-import "github.com/benkoppe/bear-trak-backend/go-server/utils"
+import "github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
 
 type Route struct {
 	Color                    string    `json:"Color"`
@@ -17,22 +17,22 @@ type Route struct {
 }
 
 type Vehicle struct {
-	Destination                string              `json:"Destination"`
-	Deviation                  int                 `json:"Deviation"`
-	Direction                  string              `json:"Direction"`
-	DirectionLong              string              `json:"DirectionLong"`
-	DisplayStatus              string              `json:"DisplayStatus"`
-	StopId                     int                 `json:"StopId"`
-	Heading                    int                 `json:"Heading"`
-	LastStop                   string              `json:"LastStop"`
-	LastUpdated                utils.MicrosoftTime `json:"LastUpdated"`
-	Latitude                   float64             `json:"Latitude"`
-	Longitude                  float64             `json:"Longitude"`
-	RouteId                    int                 `json:"RouteId"`
-	Speed                      int                 `json:"Speed"`
-	TripId                     int                 `json:"TripId"`
-	VehicleId                  int                 `json:"VehicleId"`
-	SeatingCapacity            *int                `json:"SeatingCapacity"`
-	TotalCapacity              *int                `json:"TotalCapacity"`
-	OccupancyStatusReportLabel string              `json:"OccupancyStatusReportLabel"`
+	Destination                string                   `json:"Destination"`
+	Deviation                  int                      `json:"Deviation"`
+	Direction                  string                   `json:"Direction"`
+	DirectionLong              string                   `json:"DirectionLong"`
+	DisplayStatus              string                   `json:"DisplayStatus"`
+	StopId                     int                      `json:"StopId"`
+	Heading                    int                      `json:"Heading"`
+	LastStop                   string                   `json:"LastStop"`
+	LastUpdated                time_utils.MicrosoftTime `json:"LastUpdated"`
+	Latitude                   float64                  `json:"Latitude"`
+	Longitude                  float64                  `json:"Longitude"`
+	RouteId                    int                      `json:"RouteId"`
+	Speed                      int                      `json:"Speed"`
+	TripId                     int                      `json:"TripId"`
+	VehicleId                  int                      `json:"VehicleId"`
+	SeatingCapacity            *int                     `json:"SeatingCapacity"`
+	TotalCapacity              *int                     `json:"TotalCapacity"`
+	OccupancyStatusReportLabel string                   `json:"OccupancyStatusReportLabel"`
 }

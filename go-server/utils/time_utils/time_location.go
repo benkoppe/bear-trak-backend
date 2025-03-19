@@ -1,4 +1,4 @@
-package utils
+package time_utils
 
 import (
 	"fmt"

@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/benkoppe/bear-trak-backend/go-server/utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
 )
 
 // unused -- a concurrent verion is in scrape_all
@@ -124,12 +124,12 @@ func extractHours(doc *goquery.Document, eatery *Eatery, date time.Time) *Eatery
 			return
 		}
 
-		start, err := utils.TimeString(cleanText(parts[0])).ToDate(date)
+		start, err := time_utils.TimeString(cleanText(parts[0])).ToDate(date)
 		if err != nil {
 			log.Printf("error parsing start time: %v", err)
 			return
 		}
-		end, err := utils.TimeString(cleanText(parts[1])).ToDate(date)
+		end, err := time_utils.TimeString(cleanText(parts[1])).ToDate(date)
 		if err != nil {
 			log.Printf("error parsing end time: %v", err)
 		}

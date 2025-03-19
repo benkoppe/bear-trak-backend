@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/benkoppe/bear-trak-backend/go-server/utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
 )
 
 type Gym struct {
@@ -36,8 +36,8 @@ type Equipment struct {
 }
 
 type Hours struct {
-	Open  utils.TimeString `json:"open"`
-	Close utils.TimeString `json:"close"`
+	Open  time_utils.TimeString `json:"open"`
+	Close time_utils.TimeString `json:"close"`
 }
 
 type WeekHours struct {
