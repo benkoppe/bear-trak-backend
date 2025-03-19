@@ -22,7 +22,7 @@ func DefaultHoursParserOptions() *HoursParserOptions {
 	return &HoursParserOptions{
 		RangeSeparators:     []string{"/", ","},
 		OpenCloseSeparators: []string{"-", "to", "–", "—"}, // includes en/em dashes
-		ClosedKeywords:      []string{"Closed"},
+		ClosedKeywords:      []string{"Closed", "Open by Appointment"},
 		Open24HoursKeywords: []string{"24 hours", "24/7", "All day", "Open 24 hours"},
 	}
 }

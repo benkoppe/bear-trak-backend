@@ -60,6 +60,7 @@ func ParseCommonDateTimeYearOptional(s string) (time.Time, error) {
 		"January 2",
 		"Mon, Jan 2",
 		"Mon Jan 2",
+		"Jan 2 Monday",
 	}
 
 	// Next, try layouts without a year.
