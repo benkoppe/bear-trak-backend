@@ -132,6 +132,11 @@ func convertExternalHours(date time.Time, externalHours []external.Hours) []api.
 			continue
 		}
 
+		// if end is before the start (ie 12am was parsed as the wrong day, add a day)
+		if end.Before(start) {
+			end = end.AddDate(0, 0, 1)
+		}
+
 		hours = append(hours, api.Hours{
 			Start: start,
 			End:   end,
