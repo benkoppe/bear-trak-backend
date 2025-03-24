@@ -98,7 +98,7 @@ func getExternalHours(externalData []external.Library, lid int) ([]api.Hours, er
 	}
 
 	today := time.Now().Truncate(24 * time.Hour)
-	weekAhead := today.AddDate(0, 0, 7)
+	weekAhead := today.AddDate(0, 0, 8)
 
 	var hours []api.Hours
 	for _, day := range externalLibrary.GetAllDays() {
