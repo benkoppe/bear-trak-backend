@@ -36,7 +36,20 @@ func ParseCommonDateTime(s string) (time.Time, error) {
 		"Mon, Jan 2, 2006",            // Abbreviated weekday with date
 		"Mon Jan 2 15:04:05 MST 2006", // Full date with weekday
 	}
-	return ParseDateTime(s, commonLayouts)
+
+	t, err := ParseDateTime(s, commonLayouts)
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	// Check if time components are zero, if so set to midnight EST
+	if t.Hour() == 0 && t.Minute() == 0 && t.Second() == 0 {
+		est := LoadEST()
+		// Create new time at midnight EST while preserving the date
+		t = time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, est)
+	}
+
+	return t, nil
 }
 
 // parses common datetimes, including formats without a year
@@ -73,6 +86,13 @@ func ParseCommonDateTimeYearOptional(s string) (time.Time, error) {
 	if t.Year() == 0 {
 		now := time.Now()
 		t = time.Date(now.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), t.Nanosecond(), t.Location())
+	}
+
+	// Check if time components are zero, if so set to midnight EST
+	if t.Hour() == 0 && t.Minute() == 0 && t.Second() == 0 {
+		est := LoadEST()
+		// Create new time at midnight EST while preserving the date
+		t = time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, est)
 	}
 
 	return t, nil
