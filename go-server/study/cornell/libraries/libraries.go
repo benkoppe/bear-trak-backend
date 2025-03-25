@@ -10,6 +10,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/study/cornell/libraries/external"
 	"github.com/benkoppe/bear-trak-backend/go-server/study/cornell/libraries/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
 )
 
 func Get(cache external.Cache, mapCache external_map.Cache) ([]api.Library, error) {
@@ -97,12 +98,19 @@ func getExternalHours(externalData []external.Library, lid int) ([]api.Hours, er
 		return nil, fmt.Errorf("no external data for library %d", lid)
 	}
 
-	today := time.Now().Truncate(24 * time.Hour)
-	weekAhead := today.AddDate(0, 0, 8)
+	est := time_utils.LoadEST()
+	now := time.Now().In(est)
+	today := time.Date(
+		now.Year(),
+		now.Month(),
+		now.Day(),
+		0, 0, 0, 0, est,
+	)
+	weekAhead := today.AddDate(0, 0, 7)
 
 	var hours []api.Hours
 	for _, day := range externalLibrary.GetAllDays() {
-		if day.Date.ToTime().After(today) && day.Date.ToTime().Before(weekAhead) {
+		if !day.Date.ToTime().Before(today) && day.Date.ToTime().Before(weekAhead) {
 			if day.Times.Status == "24hours" {
 				hours = append(hours, api.Hours{
 					Start: day.Date.ToTime(),
