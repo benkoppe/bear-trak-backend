@@ -84,9 +84,10 @@ func Get(cache external.Cache, mapCache external_map.Cache) ([]api.Library, erro
 
 func convertStaticLibrary(static static.Library) api.Library {
 	return api.Library{
-		ID:        static.ID,
-		Name:      static.Name,
-		ImagePath: utils.ImageNameToPath("study", static.ImageName),
+		ID:               static.ID,
+		Name:             static.Name,
+		ImagePath:        utils.ImageNameToPath("study", static.ImageName),
+		PrinterLocations: static.PrinterLocations,
 	}
 }
 

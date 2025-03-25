@@ -4,14 +4,16 @@
     "name": "Adelson Library",
     "imageName": "adelson",
     "lid": 3329,
-    "externalMapNote": "Adelson Library"
+    "externalMapNote": "Adelson Library",
+    "printerLocations": []
   },
   {
     "id": 1,
     "name": "Catherwood Library",
     "imageName": "catherwood",
     "lid": 3323,
-    "externalMapNote": "Catherwood Library"
+    "externalMapNote": "Catherwood Library",
+    "printerLocations": ["Catherwood Library"]
   },
   {
     "id": 2,
@@ -19,6 +21,7 @@
     "imageName": "clark",
     "lid": null,
     "externalMapNote": "Edna McConnell Clark Library",
+    "printerLocations": [],
     "weekHours": {
       "monday": [
         {
@@ -69,14 +72,16 @@
     "name": "John Henrik Clarke Africana Library",
     "imageName": "africana",
     "lid": 3319,
-    "externalMapNote": "Clarke Africana Library"
+    "externalMapNote": "Clarke Africana Library",
+    "printerLocations": ["John Henrik Clarke Africana Library"]
   },
   {
     "id": 4,
     "name": "Sidney Cox Library of Music and Dance",
     "imageName": "cox",
     "lid": 3328,
-    "externalMapNote": "Music Library"
+    "externalMapNote": "Music Library",
+    "printerLocations": []
   },
   {
     "id": 5,
@@ -85,6 +90,7 @@
     "lid": null,
     "lid_card_access": 7862,
     "externalMapNote": "Engineering Library",
+    "printerLocations": [],
     "weekHours": {
       "monday": [],
       "tuesday": [],
@@ -101,7 +107,8 @@
     "imageName": "veterinary",
     "lid": 3331,
     "lid_card_access": 20340,
-    "externalMapNote": "Veterinary Library"
+    "externalMapNote": "Veterinary Library",
+    "printerLocations": ["Vet Library"]
   },
   {
     "id": 7,
@@ -110,6 +117,7 @@
     "lid": null,
     "lid_card_access": 3476,
     "externalMapNote": "Law Library",
+    "printerLocations": ["Law Library"],
     "weekHours": {
       "monday": [],
       "tuesday": [],
@@ -126,21 +134,24 @@
     "imageName": "management",
     "lid": 3340,
     "lid_card_access": 18500,
-    "externalMapNote": "Management Library"
+    "externalMapNote": "Management Library",
+    "printerLocations": []
   },
   {
     "id": 9,
     "name": "Mann Library",
     "imageName": "mann",
     "lid": 1707,
-    "externalMapNote": "Albert R. Mann Library"
+    "externalMapNote": "Albert R. Mann Library",
+    "printerLocations": ["Mann Library"]
   },
   {
     "id": 10,
     "name": "Mathematics Library",
     "imageName": "math",
     "lid": 3327,
-    "externalMapNote": "Mathematics Library"
+    "externalMapNote": "Mathematics Library",
+    "printerLocations": ["Math Library"]
   },
   {
     "id": 11,
@@ -161,7 +172,8 @@
     "name": "Olin Library",
     "imageName": "olin",
     "lid": 2818,
-    "externalMapNote": "John M. Olin Library"
+    "externalMapNote": "John M. Olin Library",
+    "printerLocations": ["Olin Library", "Kroch Library"]
   },
   {
     "id": 14,
@@ -169,6 +181,7 @@
     "imageName": "uris",
     "lid": 2830,
     "externalMapNote": null,
+    "printerLocations": ["Uris Library"],
     "location": {
       "latitude": 42.44771028750129,
       "longitude": -76.48529017363418

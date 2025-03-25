@@ -3,14 +3,15 @@ package static
 import "github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
 
 type Library struct {
-	ID              int                   `json:"id"`
-	Name            string                `json:"name"`
-	ImageName       string                `json:"imageName"`
-	LID             *int                  `json:"lid"`
-	LIDCardAccess   *int                  `json:"lid_card_access,omitempty"`
-	ExternalMapNote *string               `json:"externalMapNote,omitempty"`
-	Location        *Location             `json:"location,omitempty"`
-	WeekHours       *time_utils.WeekHours `json:"weekHours,omitempty"`
+	ID               int                   `json:"id"`
+	Name             string                `json:"name"`
+	ImageName        string                `json:"imageName"`
+	LID              *int                  `json:"lid"`
+	LIDCardAccess    *int                  `json:"lid_card_access,omitempty"`
+	ExternalMapNote  *string               `json:"externalMapNote,omitempty"`
+	PrinterLocations []string              `json:"printerLocations"`
+	Location         *Location             `json:"location,omitempty"`
+	WeekHours        *time_utils.WeekHours `json:"weekHours,omitempty"`
 }
 
 type Location struct {

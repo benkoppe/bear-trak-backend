@@ -1393,13 +1393,14 @@ func (s *Hours) SetEnd(val time.Time) {
 
 // Ref: #/components/schemas/Library
 type Library struct {
-	ID              int     `json:"id"`
-	Name            string  `json:"name"`
-	ImagePath       string  `json:"imagePath"`
-	Latitude        float64 `json:"latitude"`
-	Longitude       float64 `json:"longitude"`
-	Hours           []Hours `json:"hours"`
-	CardAccessHours []Hours `json:"cardAccessHours"`
+	ID               int      `json:"id"`
+	Name             string   `json:"name"`
+	ImagePath        string   `json:"imagePath"`
+	Latitude         float64  `json:"latitude"`
+	Longitude        float64  `json:"longitude"`
+	Hours            []Hours  `json:"hours"`
+	CardAccessHours  []Hours  `json:"cardAccessHours"`
+	PrinterLocations []string `json:"printerLocations"`
 }
 
 // GetID returns the value of ID.
@@ -1437,6 +1438,11 @@ func (s *Library) GetCardAccessHours() []Hours {
 	return s.CardAccessHours
 }
 
+// GetPrinterLocations returns the value of PrinterLocations.
+func (s *Library) GetPrinterLocations() []string {
+	return s.PrinterLocations
+}
+
 // SetID sets the value of ID.
 func (s *Library) SetID(val int) {
 	s.ID = val
@@ -1470,6 +1476,11 @@ func (s *Library) SetHours(val []Hours) {
 // SetCardAccessHours sets the value of CardAccessHours.
 func (s *Library) SetCardAccessHours(val []Hours) {
 	s.CardAccessHours = val
+}
+
+// SetPrinterLocations sets the value of PrinterLocations.
+func (s *Library) SetPrinterLocations(val []string) {
+	s.PrinterLocations = val
 }
 
 // NewNilAlertButton returns new NilAlertButton with value set to v.

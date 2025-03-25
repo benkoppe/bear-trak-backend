@@ -1075,6 +1075,8 @@ components:
       x-stoplight:
         id: 7t8ifco2m65cu
       type: object
+      x-tags:
+        - study
       required:
         - id
         - name
@@ -1082,6 +1084,7 @@ components:
         - latitude
         - longitude
         - hours
+        - printerLocations
       properties:
         id:
           type: integer
@@ -1117,8 +1120,14 @@ components:
             id: lxxj4dsse4exy
           items:
             $ref: "#/components/schemas/Hours"
-      x-tags:
-        - study
+        printerLocations:
+          type: array
+          x-stoplight:
+            id: y7z6w7c51w53o
+          items:
+            x-stoplight:
+              id: 5lnt3uffoc6zq
+            type: string
     Printer:
       title: Printer
       x-stoplight:

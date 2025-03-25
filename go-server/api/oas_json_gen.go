@@ -3731,9 +3731,17 @@ func (s *Library) encodeFields(e *jx.Encoder) {
 			e.ArrEnd()
 		}
 	}
+	{
+		e.FieldStart("printerLocations")
+		e.ArrStart()
+		for _, elem := range s.PrinterLocations {
+			e.Str(elem)
+		}
+		e.ArrEnd()
+	}
 }
 
-var jsonFieldsNameOfLibrary = [7]string{
+var jsonFieldsNameOfLibrary = [8]string{
 	0: "id",
 	1: "name",
 	2: "imagePath",
@@ -3741,6 +3749,7 @@ var jsonFieldsNameOfLibrary = [7]string{
 	4: "longitude",
 	5: "hours",
 	6: "cardAccessHours",
+	7: "printerLocations",
 }
 
 // Decode decodes Library from json.
@@ -3847,6 +3856,26 @@ func (s *Library) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"cardAccessHours\"")
 			}
+		case "printerLocations":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				s.PrinterLocations = make([]string, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
+						return err
+					}
+					s.PrinterLocations = append(s.PrinterLocations, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"printerLocations\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -3857,7 +3886,7 @@ func (s *Library) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00111111,
+		0b10111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
