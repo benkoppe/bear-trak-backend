@@ -32,6 +32,7 @@ type Account struct {
 	Name     string  `json:"accountDisplayName"`
 	Tender   string  `json:"accountTender"`
 	Balance  float64 `json:"balance"`
+	Type     int     `json:"accountType"`
 }
 
 type userPhotoResponse struct {

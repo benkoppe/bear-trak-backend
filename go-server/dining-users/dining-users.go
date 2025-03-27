@@ -257,7 +257,12 @@ func GetUserAccounts(externalBaseUrl, institutionId string, params api.GetV1Dini
 			continue
 		}
 
-		response = append(response, convertExternalAccount(account, false))
+		moneyBalance := true
+		if account.Type == 1 {
+			moneyBalance = false
+		}
+
+		response = append(response, convertExternalAccount(account, moneyBalance))
 	}
 
 	res := api.GetV1DiningUserAccountsOKApplicationJSON(response)
