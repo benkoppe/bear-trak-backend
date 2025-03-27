@@ -30,6 +30,7 @@ type Account struct {
 	ID       string  `json:"id"`
 	IsActive bool    `json:"isActive"`
 	Name     string  `json:"accountDisplayName"`
+	Tender   string  `json:"accountTender"`
 	Balance  float64 `json:"balance"`
 }
 
@@ -55,5 +56,15 @@ type cashlessKeyResponse struct {
 }
 
 type cashlessKeyResponseBody struct {
+	Value string `json:"value"`
+}
+
+type retrieveSettingResponse struct {
+	Response retrieveSettingResponseBody `json:"response"`
+}
+
+type retrieveSettingResponseBody struct {
+	ID    string `json:"id"`
+	Name  string `json:"name"`
 	Value string `json:"value"`
 }

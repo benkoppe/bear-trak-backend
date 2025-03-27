@@ -67,11 +67,11 @@ func (h *Handler) GetV1Study(ctx context.Context) (*api.StudyData, error) {
 }
 
 func (h *Handler) GetV1DiningUser(ctx context.Context, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {
-	return dining_users.GetUser(shared.CbordBaseUrl, params)
+	return dining_users.GetUser(shared.CbordBaseUrl, cbordInstitutionId, params)
 }
 
 func (h *Handler) PostV1DiningUser(ctx context.Context, params api.PostV1DiningUserParams) (api.PostV1DiningUserRes, error) {
-	return dining_users.CreateUser(ctx, shared.CbordBaseUrl, params, h.DB)
+	return dining_users.CreateUser(ctx, shared.CbordBaseUrl, cbordInstitutionId, params, h.DB)
 }
 
 func (h *Handler) DeleteV1DiningUser(ctx context.Context, params api.DeleteV1DiningUserParams) (api.DeleteV1DiningUserRes, error) {
@@ -83,7 +83,7 @@ func (h *Handler) GetV1DiningUserSession(ctx context.Context, params api.GetV1Di
 }
 
 func (h *Handler) GetV1DiningUserAccounts(ctx context.Context, params api.GetV1DiningUserAccountsParams) (api.GetV1DiningUserAccountsRes, error) {
-	return dining_users.GetUserAccounts(shared.CbordBaseUrl, params)
+	return dining_users.GetUserAccounts(shared.CbordBaseUrl, cbordInstitutionId, params)
 }
 
 func (h *Handler) GetV1DiningUserBarcode(ctx context.Context, params api.GetV1DiningUserBarcodeParams) (api.GetV1DiningUserBarcodeRes, error) {

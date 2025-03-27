@@ -12,6 +12,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining-users/external"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -21,7 +22,7 @@ func hashUserId(userIdResp external.UserIDResponseBody) string {
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
-func CreateUser(ctx context.Context, externalBaseUrl string, params api.PostV1DiningUserParams, queries *db.Queries) (api.PostV1DiningUserRes, error) {
+func CreateUser(ctx context.Context, externalBaseUrl, institutionId string, params api.PostV1DiningUserParams, queries *db.Queries) (api.PostV1DiningUserRes, error) {
 	idResp, err := external.FetchUserID(externalBaseUrl, params.SessionId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch user info: %w", err)
@@ -57,7 +58,7 @@ func CreateUser(ctx context.Context, externalBaseUrl string, params api.PostV1Di
 		return nil, fmt.Errorf("failed to create user in database: %w", err)
 	}
 
-	user, err := GetUser(externalBaseUrl, api.GetV1DiningUserParams{SessionId: params.SessionId})
+	user, err := GetUser(externalBaseUrl, institutionId, api.GetV1DiningUserParams{SessionId: params.SessionId})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
@@ -117,7 +118,7 @@ func RefreshUserToken(ctx context.Context, externalBaseUrl string, params api.Ge
 	return &res, nil
 }
 
-func GetUser(externalBaseUrl string, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {
+func GetUser(externalBaseUrl, institutionId string, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {
 	idResp, err := external.FetchUserID(externalBaseUrl, params.SessionId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user id: %w", err)
@@ -153,7 +154,7 @@ func GetUser(externalBaseUrl string, params api.GetV1DiningUserParams) (api.GetV
 
 	// fetch barcode seed concurrently
 	eg.Go(func() error {
-		barcodeSeed, err := external.FetchBarcodeSeed(externalBaseUrl, params.SessionId)
+		barcodeSeed, err := external.FetchBarcodeSeed(externalBaseUrl, params.SessionId, institutionId)
 		if err != nil {
 			return fmt.Errorf("failed to get barcode seed; %w", err)
 		}
@@ -222,7 +223,7 @@ func GetUserBarcode(externalBaseUrl string, params api.GetV1DiningUserBarcodePar
 	return &res, nil
 }
 
-func GetUserAccounts(externalBaseUrl string, params api.GetV1DiningUserAccountsParams) (api.GetV1DiningUserAccountsRes, error) {
+func GetUserAccounts(externalBaseUrl, institutionId string, params api.GetV1DiningUserAccountsParams) (api.GetV1DiningUserAccountsRes, error) {
 	idResp, err := external.FetchUserID(externalBaseUrl, params.SessionId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user id: %w", err)
@@ -240,18 +241,19 @@ func GetUserAccounts(externalBaseUrl string, params api.GetV1DiningUserAccountsP
 		return &api.GetV1DiningUserAccountsUnauthorized{}, nil
 	}
 
+	displayTenders, err := external.FetchDisplayTenders(externalBaseUrl, params.SessionId, institutionId)
+	if err != nil {
+		fmt.Printf("failed to get display tenders: %v\n", err)
+	}
+
 	// extract account type (first word) and filter
 	var response []api.DiningUserAccount
 	for _, account := range resp.Accounts {
-		accountType, shortName := splitAccountName(account)
+		_, shortName := splitAccountName(account)
 		account.Name = shortName
 
-		if strings.HasPrefix(accountType, "CC1") || strings.HasPrefix(accountType, "GET") || strings.HasPrefix(accountType, "01n") {
-			continue
-		}
-
-		if strings.HasPrefix(accountType, "CB") || strings.HasPrefix(accountType, "BRB") {
-			response = append(response, convertExternalAccount(account, true))
+		// we should only display account tenders in displayTenders
+		if !utils.Contains(displayTenders, account.Tender) {
 			continue
 		}
 

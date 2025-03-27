@@ -1,6 +1,7 @@
 package external
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
@@ -49,7 +50,7 @@ func FetchBarcode(baseUrl string, sessionId string) (*string, error) {
 	return resp.Response, err
 }
 
-func FetchBarcodeSeed(baseUrl string, sessionId string) (*string, error) {
+func FetchBarcodeSeed(baseUrl string, sessionId string, institutionId string) (*string, error) {
 	fullUrl, err := utils.ExtendUrl(baseUrl, "configuration")
 	if fullUrl == nil {
 		return nil, fmt.Errorf("failed to extend url: %w", err)
@@ -60,7 +61,7 @@ func FetchBarcodeSeed(baseUrl string, sessionId string) (*string, error) {
 		"params": map[string]string{
 			"clientType":    "ios",
 			"clientVersion": "4.33.23",
-			"institutionId": "73116ae4-22ad-4c71-8ffd-11ba015407b1",
+			"institutionId": institutionId,
 			"sessionId":     sessionId,
 		},
 	}
@@ -137,4 +138,36 @@ func FetchUserPhoto(baseUrl string, sessionId string, userId string) (*userPhoto
 	}
 
 	return resp.Response, nil
+}
+
+func FetchDisplayTenders(baseUrl string, sessionId string, institutionId string) ([]string, error) {
+	fullUrl, err := utils.ExtendUrl(baseUrl, "configuration")
+	if fullUrl == nil {
+		return nil, fmt.Errorf("failed to extend url: %w", err)
+	}
+
+	requestBody := map[string]interface{}{
+		"method": "retrieveSetting",
+		"params": map[string]string{
+			"domain":        "get",
+			"category":      "feature",
+			"name":          "display_tenders",
+			"institutionId": institutionId,
+			"sessionId":     sessionId,
+		},
+	}
+
+	resp, err := utils.DoPostRequest[retrieveSettingResponse](*fullUrl, requestBody)
+	if resp == nil {
+		return nil, err
+	}
+
+	// decode tender IDs from json
+	var tenderIDs []string
+	err = json.Unmarshal([]byte(resp.Response.Value), &tenderIDs)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshaling tender IDs: %w", err)
+	}
+
+	return tenderIDs, nil
 }
