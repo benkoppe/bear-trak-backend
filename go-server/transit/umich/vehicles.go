@@ -27,6 +27,7 @@ func convertVehicle(vehicle bustime.Vehicle) api.Vehicle {
 		RouteId:       api.NewStringVehicleRouteId(vehicle.RouteId),
 		Direction:     "",
 		Heading:       int(vehicle.Heading),
+		Speed:         float64(vehicle.Speed),
 		Latitude:      float64(vehicle.Latitude),
 		Longitude:     float64(vehicle.Longitude),
 		DisplayStatus: vehicle.OccupancyStatus,

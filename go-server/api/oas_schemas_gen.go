@@ -1961,16 +1961,18 @@ func (*Success) deleteV1DiningUserRes() {}
 
 // Ref: #/components/schemas/Vehicle
 type Vehicle struct {
-	ID            VehicleID      `json:"id"`
-	RouteId       VehicleRouteId `json:"routeId"`
-	Direction     string         `json:"direction"`
-	Heading       int            `json:"heading"`
-	Latitude      float64        `json:"latitude"`
-	Longitude     float64        `json:"longitude"`
-	DisplayStatus string         `json:"displayStatus"`
-	Destination   string         `json:"destination"`
-	LastUpdated   time.Time      `json:"lastUpdated"`
-	LastStop      NilString      `json:"lastStop"`
+	ID        VehicleID      `json:"id"`
+	RouteId   VehicleRouteId `json:"routeId"`
+	Direction string         `json:"direction"`
+	Heading   int            `json:"heading"`
+	// Speed in mph.
+	Speed         float64   `json:"speed"`
+	Latitude      float64   `json:"latitude"`
+	Longitude     float64   `json:"longitude"`
+	DisplayStatus string    `json:"displayStatus"`
+	Destination   string    `json:"destination"`
+	LastUpdated   time.Time `json:"lastUpdated"`
+	LastStop      NilString `json:"lastStop"`
 }
 
 // GetID returns the value of ID.
@@ -1991,6 +1993,11 @@ func (s *Vehicle) GetDirection() string {
 // GetHeading returns the value of Heading.
 func (s *Vehicle) GetHeading() int {
 	return s.Heading
+}
+
+// GetSpeed returns the value of Speed.
+func (s *Vehicle) GetSpeed() float64 {
+	return s.Speed
 }
 
 // GetLatitude returns the value of Latitude.
@@ -2041,6 +2048,11 @@ func (s *Vehicle) SetDirection(val string) {
 // SetHeading sets the value of Heading.
 func (s *Vehicle) SetHeading(val int) {
 	s.Heading = val
+}
+
+// SetSpeed sets the value of Speed.
+func (s *Vehicle) SetSpeed(val float64) {
+	s.Speed = val
 }
 
 // SetLatitude sets the value of Latitude.

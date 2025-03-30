@@ -35,6 +35,7 @@ func getVehicles(availtecVehicles []availtec.Vehicle) ([]api.Vehicle, error) {
 			RouteId:       api.NewIntVehicleRouteId(vehicle.RouteId),
 			Direction:     vehicle.Direction,
 			Heading:       vehicle.Heading,
+			Speed:         float64(vehicle.Speed),
 			Latitude:      vehicle.Latitude,
 			Longitude:     vehicle.Longitude,
 			DisplayStatus: vehicle.OccupancyStatusReportLabel,

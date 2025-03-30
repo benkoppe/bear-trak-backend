@@ -4801,6 +4801,10 @@ func (s *Vehicle) encodeFields(e *jx.Encoder) {
 		e.Int(s.Heading)
 	}
 	{
+		e.FieldStart("speed")
+		e.Float64(s.Speed)
+	}
+	{
 		e.FieldStart("latitude")
 		e.Float64(s.Latitude)
 	}
@@ -4826,17 +4830,18 @@ func (s *Vehicle) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfVehicle = [10]string{
-	0: "id",
-	1: "routeId",
-	2: "direction",
-	3: "heading",
-	4: "latitude",
-	5: "longitude",
-	6: "displayStatus",
-	7: "destination",
-	8: "lastUpdated",
-	9: "lastStop",
+var jsonFieldsNameOfVehicle = [11]string{
+	0:  "id",
+	1:  "routeId",
+	2:  "direction",
+	3:  "heading",
+	4:  "speed",
+	5:  "latitude",
+	6:  "longitude",
+	7:  "displayStatus",
+	8:  "destination",
+	9:  "lastUpdated",
+	10: "lastStop",
 }
 
 // Decode decodes Vehicle from json.
@@ -4892,8 +4897,20 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"heading\"")
 			}
-		case "latitude":
+		case "speed":
 			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				v, err := d.Float64()
+				s.Speed = float64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"speed\"")
+			}
+		case "latitude":
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				v, err := d.Float64()
 				s.Latitude = float64(v)
@@ -4905,7 +4922,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"latitude\"")
 			}
 		case "longitude":
-			requiredBitSet[0] |= 1 << 5
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				v, err := d.Float64()
 				s.Longitude = float64(v)
@@ -4917,7 +4934,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"longitude\"")
 			}
 		case "displayStatus":
-			requiredBitSet[0] |= 1 << 6
+			requiredBitSet[0] |= 1 << 7
 			if err := func() error {
 				v, err := d.Str()
 				s.DisplayStatus = string(v)
@@ -4929,7 +4946,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"displayStatus\"")
 			}
 		case "destination":
-			requiredBitSet[0] |= 1 << 7
+			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
 				v, err := d.Str()
 				s.Destination = string(v)
@@ -4941,7 +4958,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"destination\"")
 			}
 		case "lastUpdated":
-			requiredBitSet[1] |= 1 << 0
+			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.LastUpdated = v
@@ -4953,7 +4970,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"lastUpdated\"")
 			}
 		case "lastStop":
-			requiredBitSet[1] |= 1 << 1
+			requiredBitSet[1] |= 1 << 2
 			if err := func() error {
 				if err := s.LastStop.Decode(d); err != nil {
 					return err
@@ -4973,7 +4990,7 @@ func (s *Vehicle) Decode(d *jx.Decoder) error {
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
 		0b11111111,
-		0b00000011,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

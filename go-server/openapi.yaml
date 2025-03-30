@@ -924,6 +924,7 @@ components:
         - routeId
         - direction
         - heading
+        - speed
         - latitude
         - longitude
         - displayStatus
@@ -957,6 +958,12 @@ components:
           type: integer
           x-stoplight:
             id: jzsp7ano0smnx
+        speed:
+          type: number
+          x-stoplight:
+            id: jr0651bul9pw3
+          format: double
+          description: Speed in mph
         latitude:
           type: number
           x-stoplight:
