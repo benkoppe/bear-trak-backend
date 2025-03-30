@@ -3,21 +3,18 @@ FROM opentripplanner/opentripplanner:latest
 # OTP uses /var/opentripplanner as its working directory
 WORKDIR /var/opentripplanner
 
-# Copy static files into the container
-COPY ithaca.pbf /var/opentripplanner/ithaca.pbf
-COPY router-config.json /var/opentripplanner/router-config.json
+# Set Java memory limit (can still be overridden at runtime)
+ENV JAVA_TOOL_OPTIONS="-Xmx500m"
 
 # Download the GTFS zip
-RUN curl -L -o /var/opentripplanner/tcat.gtfs.zip "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-zip.ashx"
-
-# Expose the OTP server port
-EXPOSE 8080
-
-# Set java options
-ENV JAVA_TOOL_OPTIONS="-Xmx500m"
+RUN --mount=type=bind,source=./data,target=/var/opentripplanner \
+  curl -L -o /var/opentripplanner/gtfs.zip "$(cat /var/opentripplanner/gtfs-url.txt)"
 
 # Build the OTP graph
 RUN /docker-entrypoint.sh --build --save
+
+# Expose the OTP server port
+EXPOSE 8080
 
 # Start OTP
 CMD [ "--load", "--serve"]

@@ -7,5 +7,9 @@ services:
       dockerfile: ./Dockerfile
       platforms:
         - "linux/amd64"
+    volumes:
+      - ./data/${SCHOOL:-cornell}/graph.pbf:/var/opentripplanner/graph.pbf
+      - ./data/${SCHOOL:-cornell}/router-config.json:/var/opentripplanner/router-config.json
+      - ./data/${SCHOOL:-cornell}/gtfs-url.txt:/var/opentripplanner/gtfs-url.txt
     ports:
       - 8888:8080
