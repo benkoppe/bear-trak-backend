@@ -61,10 +61,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Export SCHOOL if set
-        if: matrix.school != ''
-        run: echo "SCHOOL=${{ matrix.school }}" >> $GITHUB_ENV
-
       - name: Build and push ${{ matrix.service }} image
         uses: docker/build-push-action@v6
         with:
@@ -72,6 +68,8 @@ jobs:
           file: ${{ matrix.dockerfile }}
           push: true
           tags: ${{ matrix.tags }}
+          build-args:
+            ${{ matrix.school != '' && format('SCHOOL={0}', matrix.school) || '' }}
 
   coolify-deploy:
     runs-on: ubuntu-latest
