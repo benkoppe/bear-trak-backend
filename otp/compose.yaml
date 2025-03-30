@@ -10,4 +10,4 @@ services:
       args:
         SCHOOL: ${SCHOOL}
     ports:
-      - 8888:8080
+      - ${SERVER_PORT:-8888}:8080
