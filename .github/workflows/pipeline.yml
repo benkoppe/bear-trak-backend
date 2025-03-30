@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [go-server, otp]
+        service: [go-server, otp-cornell, otp-umich]
         include:
           - service: go-server
             context: ./go-server
@@ -39,13 +39,20 @@ jobs:
             tags: |
               ghcr.io/benkoppe/bear-trak-go:latest
               ghcr.io/benkoppe/bear-trak-go:${{ github.sha }}
-          - service: otp
+          - service: otp-cornell
             context: ./otp
             dockerfile: otp/Dockerfile
             school: cornell
             tags: |
               ghcr.io/benkoppe/bear-trak-otp-cornell:latest
               ghcr.io/benkoppe/bear-trak-otp-cornell:${{ github.sha }}
+          - service: otp-umich
+            context: ./otp
+            dockerfile: otp/Dockerfile
+            school: umich
+            tags: |
+              ghcr.io/benkoppe/bear-trak-otp-umich:latest
+              ghcr.io/benkoppe/bear-trak-otp-umich:${{ github.sha }}
     outputs:
       GO_BEARTRAK_RESOURCE_ID: ${{ env.GO_BEARTRAK_RESOURCE_ID }}
       GO_BLUETRAK_RESOURCE_ID: ${{ env.GO_BLUETRAK_RESOURCE_ID }}
@@ -82,8 +89,10 @@ jobs:
             coolify_resource_id: ${{ needs.build-and-push-images.outputs.GO_BEARTRAK_RESOURCE_ID }}
           - service: go-server-bluetrak
             coolify_resource_id: ${{ needs.build-and-push-images.outputs.GO_BLUETRAK_RESOURCE_ID }}
-          - service: otp
-            coolify_resource_id: ${{ needs.build-and-push-images.outputs.OTP_RESOURCE_ID }}
+          - service: otp-cornell
+            coolify_resource_id: ${{ needs.build-and-push-images.outputs.OTP_CORNELL_RESOURCE_ID }}
+          - service: otp-umich
+            coolify_resource_id: ${{ needs.build-and-push-images.outputs.OTP_UMICH_RESOURCE_ID }}
     steps:
       - name: Update source commit SHA in Coolify for ${{ matrix.service }}
         uses: fjogeleit/http-request-action@v1
