@@ -1,15 +1,13 @@
 services:
   otp:
-    image: ghcr.io/benkoppe/bear-trak-otp:${SOURCE_COMMIT:-latest}
+    image: ghcr.io/benkoppe/bear-trak-otp-{$SCHOOL}:${SOURCE_COMMIT:-latest}
     restart: always
     build:
       context: .
       dockerfile: ./Dockerfile
       platforms:
         - "linux/amd64"
-    volumes:
-      - ./data/${SCHOOL:-cornell}/graph.pbf:/var/opentripplanner/graph.pbf
-      - ./data/${SCHOOL:-cornell}/router-config.json:/var/opentripplanner/router-config.json
-      - ./data/${SCHOOL:-cornell}/gtfs-url.txt:/var/opentripplanner/gtfs-url.txt
+      args:
+        SCHOOL: ${SCHOOL}
     ports:
       - 8888:8080
