@@ -42,9 +42,10 @@ jobs:
           - service: otp
             context: ./otp
             dockerfile: otp/Dockerfile
+            school: cornell
             tags: |
-              ghcr.io/benkoppe/bear-trak-otp:latest
-              ghcr.io/benkoppe/bear-trak-otp:${{ github.sha }}
+              ghcr.io/benkoppe/bear-trak-otp-cornell:latest
+              ghcr.io/benkoppe/bear-trak-otp-cornell:${{ github.sha }}
     outputs:
       GO_BEARTRAK_RESOURCE_ID: ${{ env.GO_BEARTRAK_RESOURCE_ID }}
       GO_BLUETRAK_RESOURCE_ID: ${{ env.GO_BLUETRAK_RESOURCE_ID }}
@@ -59,6 +60,10 @@ jobs:
           registry: https://ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Export SCHOOL if set
+        if: matrix.school != ''
+        run: echo "SCHOOL=${{ matrix.school }}" >> $GITHUB_ENV
 
       - name: Build and push ${{ matrix.service }} image
         uses: docker/build-push-action@v6
