@@ -56,7 +56,8 @@ jobs:
     outputs:
       GO_BEARTRAK_RESOURCE_ID: ${{ env.GO_BEARTRAK_RESOURCE_ID }}
       GO_BLUETRAK_RESOURCE_ID: ${{ env.GO_BLUETRAK_RESOURCE_ID }}
-      OTP_RESOURCE_ID: ${{ env.OTP_RESOURCE_ID }}
+      OTP_CORNELL_RESOURCE_ID: ${{ env.OTP_CORNELL_RESOURCE_ID }}
+      OTP_UMICH_RESOURCE_ID: ${{ env.OTP_UMICH_RESOURCE_ID }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
