@@ -1,6 +1,6 @@
 services:
   otp:
-    image: ghcr.io/benkoppe/bear-trak-otp-{$SCHOOL}:${SOURCE_COMMIT:-latest}
+    image: ghcr.io/benkoppe/bear-trak-otp-${SCHOOL}:${SOURCE_COMMIT:-latest}
     restart: always
     build:
       context: .
