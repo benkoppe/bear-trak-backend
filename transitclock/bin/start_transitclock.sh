@@ -21,7 +21,7 @@ echo JAVA_OPTS $JAVA_OPTS
 
 /usr/local/tomcat/bin/startup.sh
 
-java -Xss12m -Xms16g -Xmx32g \
+java -Xss512k -Xms512m -Xmx1024m \
   -Duser.timezone=EST \
   -Dtransitclock.configFiles=/usr/local/transitclock/config/transitclock.properties \
   -Dtransitclock.core.agencyId=$AGENCYID \
