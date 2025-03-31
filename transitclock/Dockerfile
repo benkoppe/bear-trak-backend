@@ -7,8 +7,8 @@ RUN apt-get update \
   && apt-get install -y vim
 
 ARG AGENCYID="1"
-ARG AGENCYNAME="GOHART"
-ARG GTFS_URL="http://gohart.org/google/google_transit.zip"
+ARG AGENCYNAME="TCAT"
+ARG GTFS_URL="https://realtimetcatbus.availtec.com/InfoPoint/GTFS-zip.ashx"
 ARG TRAK_URL="https://beartrakapi.thekoppe.com"
 ARG TRANSITCLOCK_PROPERTIES="config/transitclock.properties"
 
