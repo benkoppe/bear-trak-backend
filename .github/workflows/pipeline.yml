@@ -21,11 +21,20 @@ permissions:
 
 env:
   COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
-  GO_BEARTRAK_RESOURCE_ID: ${{ ((github.event_name == 'workflow_dispatch' && inputs.environment == 'production') || (github.event_name == 'push' && endsWith(github.ref, '/main'))) && vars.GO_BEARTRAK_PRODUCTION_RESOURCE_ID || vars.GO_BEARTRAK_STAGING_RESOURCE_ID }}
-  GO_BLUETRAK_RESOURCE_ID: ${{ ((github.event_name == 'workflow_dispatch' && inputs.environment == 'production') || (github.event_name == 'push' && endsWith(github.ref, '/main'))) && vars.GO_BLUETRAK_PRODUCTION_RESOURCE_ID || vars.GO_BLUETRAK_STAGING_RESOURCE_ID }}
-  OTP_CORNELL_RESOURCE_ID: ${{ ((github.event_name == 'workflow_dispatch' && inputs.environment == 'production') || (github.event_name == 'push' && endsWith(github.ref, '/main'))) && vars.OTP_CORNELL_PRODUCTION_RESOURCE_ID || vars.OTP_CORNELL_STAGING_RESOURCE_ID }}
-  OTP_UMICH_RESOURCE_ID: ${{ ((github.event_name == 'workflow_dispatch' && inputs.environment == 'production') || (github.event_name == 'push' && endsWith(github.ref, '/main'))) && vars.OTP_UMICH_PRODUCTION_RESOURCE_ID || vars.OTP_UMICH_STAGING_RESOURCE_ID }}
   COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+  COOLIFY_RESOURCE_IDS: >-
+    ${{ ((github.event_name == 'workflow_dispatch' && inputs.environment == 'production') || (github.event_name == 'push' && endsWith(github.ref, '/main')))
+        && format('{0}\n{1}\n{2}\n{3}',
+          vars.GO_BEARTRAK_PRODUCTION_RESOURCE_ID,
+          vars.GO_BLUETRAK_PRODUCTION_RESOURCE_ID,
+          vars.OTP_CORNELL_PRODUCTION_RESOURCE_ID,
+          vars.OTP_UMICH_PRODUCTION_RESOURCE_ID)
+        || format('{0}\n{1}\n{2}\n{3}',
+          vars.GO_BEARTRAK_STAGING_RESOURCE_ID,
+          vars.GO_BLUETRAK_STAGING_RESOURCE_ID,
+          vars.OTP_CORNELL_STAGING_RESOURCE_ID,
+          vars.OTP_UMICH_STAGING_RESOURCE_ID)
+    }}
 
 jobs:
   build-and-push-images:
@@ -54,11 +63,6 @@ jobs:
             tags: |
               ghcr.io/benkoppe/bear-trak-otp-umich:latest
               ghcr.io/benkoppe/bear-trak-otp-umich:${{ github.sha }}
-    outputs:
-      GO_BEARTRAK_RESOURCE_ID: ${{ env.GO_BEARTRAK_RESOURCE_ID }}
-      GO_BLUETRAK_RESOURCE_ID: ${{ env.GO_BLUETRAK_RESOURCE_ID }}
-      OTP_CORNELL_RESOURCE_ID: ${{ env.OTP_CORNELL_RESOURCE_ID }}
-      OTP_UMICH_RESOURCE_ID: ${{ env.OTP_UMICH_RESOURCE_ID }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -84,32 +88,16 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build-and-push-images
-    strategy:
-      matrix:
-        include:
-          - service: go-server-beartrak
-            coolify_resource_id: ${{ needs.build-and-push-images.outputs.GO_BEARTRAK_RESOURCE_ID }}
-          - service: go-server-bluetrak
-            coolify_resource_id: ${{ needs.build-and-push-images.outputs.GO_BLUETRAK_RESOURCE_ID }}
-          - service: otp-cornell
-            coolify_resource_id: ${{ needs.build-and-push-images.outputs.OTP_CORNELL_RESOURCE_ID }}
-          - service: otp-umich
-            coolify_resource_id: ${{ needs.build-and-push-images.outputs.OTP_UMICH_RESOURCE_ID }}
     steps:
-      - name: Update source commit SHA in Coolify for ${{ matrix.service }}
-        uses: fjogeleit/http-request-action@v1
-        with:
-          url: ${{ env.COOLIFY_URL }}/api/v1/applications/${{ matrix.coolify_resource_id }}
-          method: PATCH
-          bearerToken: ${{ env.COOLIFY_API_TOKEN }}
-          data: >-
-            {
-            "git_commit_sha": "${{ github.sha }}"
-            }
-
-      - name: Trigger Coolify deployment via webhook for ${{ matrix.service }}
-        uses: fjogeleit/http-request-action@v1
-        with:
-          url: ${{ env.COOLIFY_URL }}/api/v1/deploy?uuid=${{ matrix.coolify_resource_id }}&force=false
-          method: GET
-          bearerToken: ${{ env.COOLIFY_API_TOKEN }}
+      - name: Deploy all Coolify services
+        run: |
+          echo "$COOLIFY_RESOURCE_IDS" | while IFS= read -r id; do
+            echo "Deploying Coolify resource ID: $id"
+            curl -X PATCH "$COOLIFY_URL/api/v1/applications/$id" \
+              -H "Authorization: Bearer $COOLIFY_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "{\"git_commit_sha\": \"${GITHUB_SHA}\"}"
+      
+            curl -X GET "$COOLIFY_URL/api/v1/deploy?uuid=$id&force=false" \
+              -H "Authorization: Bearer $COOLIFY_API_TOKEN"
+          done
