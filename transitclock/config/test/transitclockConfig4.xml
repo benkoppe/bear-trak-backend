@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transitclock>
+    <modules>
+    	<optionalModulesList>org.transitime.avl.PlaybackModule;org.transitime.core.predAccuracy.PlaybackPredictionAccuracyModule</optionalModulesList>
+    </modules>
+    <gtfs>
+    	<routeIdFilterRegEx>2</routeIdFilterRegEx>
+    </gtfs>
+    <autoBlockAssigner>
+                <autoAssignerEnabled>true</autoAssignerEnabled>
+                <ignoreAvlAssignments>true</ignoreAvlAssignments>
+                <allowableEarlySeconds>1200</allowableEarlySeconds>
+                <allowableLateSeconds>1200</allowableLateSeconds>
+    </autoBlockAssigner>
+       <core>
+         <predictionGeneratorClass>org.transitime.core.PredictionGeneratorDefaultImpl</predictionGeneratorClass>
+
+		<holdingTimeGeneratorClass></holdingTimeGeneratorClass>
+        <maxDistanceFromSegment>100</maxDistanceFromSegment>
+        <storeTravelTimeStopPathPredictions>true</storeTravelTimeStopPathPredictions>
+        <storeDwellTimeStopPathPredictions>true</storeDwellTimeStopPathPredictions>
+        <!-- This setting allow more than one vehicle assigned to the same block. This should be set to true for scheduled services and false f
+or fre
+quency based services. -->
+        <exclusiveBlockAssignments>false</exclusiveBlockAssignments>
+        <maxPredictionsTimeSecs>4800</maxPredictionsTimeSecs>
+        <beforeStopDistance>100</beforeStopDistance>
+        <afterStopDistance>100</afterStopDistance>
+        <layoverDistance>25</layoverDistance>
+        <allowableNumberOfBadMatches>15</allowableNumberOfBadMatches>
+        <timeForDeterminingNoProgress>0</timeForDeterminingNoProgress>
+        <timeForDeterminingDelayedSecs>0</timeForDeterminingDelayedSecs>
+        <frequency>
+                <cacheIncrementsForFrequencyService>10800</cacheIncrementsForFrequencyService>
+        </frequency>
+        <pauseIfDbQueueFilling>true</pauseIfDbQueueFilling>
+        <maxHeadingOffsetFromSegment>120</maxHeadingOffsetFromSegment>
+        <!--<cacheReloadStartTimeStr>02-01-2017 10:45:00</cacheReloadStartTimeStr>
+        <cacheReloadEndTimeStr>02-01-2017 14:15:00</cacheReloadEndTimeStr>-->
+
+    </core>
+
+    <predAccuracy><maxPredTimeMinutes>30</maxPredTimeMinutes></predAccuracy>
+
+    <avl>
+        <gtfsRealtimeFeedURI>http://realtime.prod.obahart.org:8088/vehicle-positions</gtfsRealtimeFeedURI>
+        <url>http://realtime.prod.obahart.org:8088/vehicle-positions</url>
+        <feedPollingRateSecs>10</feedPollingRateSecs>
+         <playbackStartTime>07-13-2017 10:00:00</playbackStartTime>
+        <playbackEndTime>07-13-2017 14:00:00</playbackEndTime>
+        <!-- <playbackVehicleId>1611</playbackVehicleId> -->
+        <playbackRealtime>false</playbackRealtime>
+    </avl>
+    <cache>
+        <daysPopulateHistoricalCache>0</daysPopulateHistoricalCache>
+    </cache>
+	 <db>
+        <dbName>AGENCYNAME</dbName>
+        <dbHost>POSTGRES_PORT_5432_TCP_ADDR:POSTGRES_PORT_5432_TCP_PORT</dbHost>
+        <dbType>postgresql</dbType>
+        <dbUserName>postgres</dbUserName>
+        <dbPassword>PGPASSWORD</dbPassword>
+    </db>
+	<hibernate>
+		<!-- <configFile>C:/cygwin64/home/SeanOg/workspace/transitime-historical/core/transitimeWebapp/src/main/resources/postgres_hibernate.cfg.xml</configFile> -->
+		<configFile>/usr/local/transitclock/config/hibernate.cfg.xml
+		</configFile>
+	</hibernate>
+	<web>
+		<mapTileUrl>http://tile.openstreetmap.org/{z}/{x}/{y}.png</mapTileUrl>
+	</web>
+</transitclock>
