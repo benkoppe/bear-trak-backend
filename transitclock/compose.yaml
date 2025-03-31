@@ -8,8 +8,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
       POSTGRES_PASSWORD: ${PGPASSWORD}
-    volumes:
-      - transitclock-db-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
@@ -47,6 +45,5 @@ services:
     command: ["sh", "/usr/local/transitclock/bin/entrypoint.sh"]
 
 volumes:
-  transitclock-db-data:
   transitclock-logs:
   transitclock-cache:
