@@ -91,7 +91,7 @@ jobs:
     steps:
       - name: Deploy all Coolify services
         run: |
-          echo "$COOLIFY_RESOURCE_IDS" | while IFS= read -r id; do
+          printf '%s\n' "$COOLIFY_RESOURCE_IDS" | while IFS= read -r id; do
             echo "Deploying Coolify resource ID: $id"
             curl -X PATCH "$COOLIFY_URL/api/v1/applications/$id" \
               -H "Authorization: Bearer $COOLIFY_API_TOKEN" \
