@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:9.6.3
+    container_name: transitclock-db
+    platform: linux/amd64
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+    volumes:
+      - transitclock-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build:
+      context: .
+      args:
+        TRANSITCLOCK_PROPERTIES: "config/transitclock.properties"
+        AGENCYID: "1"
+        AGENCYNAME: "UMICH"
+        GTFS_URL: "https://webapps.fo.umich.edu/transit_uploads/google_transit.zip"
+        TRAK_URL: "https://bluetrakapi.thekoppe.com"
+      no_cache: true
+    platform: linux/amd64
+    container_name: transitclock-server-instance
+    depends_on:
+      db:
+        condition: service_healthy # Wait for db healthcheck to pass
+    environment:
+      PGPASSWORD: ${PGPASSWORD}
+      PGHOST: db
+      PGUSER: postgres
+      PGDATABASE: postgres
+      POSTGRES_PORT_5432_TCP_ADDR: db
+      POSTGRES_PORT_5432_TCP_PORT: 5432
+    volumes:
+      - transitclock-logs:/usr/local/transitclock/logs/
+      - transitclock-cache:/usr/local/transitclock/cache/
+    ports:
+      - 8080:8080
+    command: ["sh", "/usr/local/transitclock/bin/entrypoint.sh"]
+
+volumes:
+  transitclock-db-data:
+  transitclock-logs:
+  transitclock-cache:
