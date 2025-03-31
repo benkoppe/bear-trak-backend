@@ -24,16 +24,16 @@ env:
   COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
   COOLIFY_RESOURCE_IDS: >-
     ${{ ((github.event_name == 'workflow_dispatch' && inputs.environment == 'production') || (github.event_name == 'push' && endsWith(github.ref, '/main')))
-        && format('{0}\n{1}\n{2}\n{3}',
+        && toJSON(fromJSON(format('["{}","{}","{}","{}"]',
           vars.GO_BEARTRAK_PRODUCTION_RESOURCE_ID,
           vars.GO_BLUETRAK_PRODUCTION_RESOURCE_ID,
           vars.OTP_CORNELL_PRODUCTION_RESOURCE_ID,
-          vars.OTP_UMICH_PRODUCTION_RESOURCE_ID)
-        || format('{0}\n{1}\n{2}\n{3}',
+          vars.OTP_UMICH_PRODUCTION_RESOURCE_ID)))
+        || toJSON(fromJSON(format('["{}","{}","{}","{}"]',
           vars.GO_BEARTRAK_STAGING_RESOURCE_ID,
           vars.GO_BLUETRAK_STAGING_RESOURCE_ID,
           vars.OTP_CORNELL_STAGING_RESOURCE_ID,
-          vars.OTP_UMICH_STAGING_RESOURCE_ID)
+          vars.OTP_UMICH_STAGING_RESOURCE_ID)))
     }}
 
 jobs:
@@ -91,7 +91,7 @@ jobs:
     steps:
       - name: Deploy all Coolify services
         run: |
-          echo "$COOLIFY_RESOURCE_IDS" | grep -v '^$' | while IFS= read -r id; do
+          echo "$COOLIFY_RESOURCE_IDS" | jq -r '.[]' | while IFS= read -r id; do
             echo "Deploying Coolify resource ID: $id"
             curl -X PATCH "$COOLIFY_URL/api/v1/applications/$id" \
               -H "Authorization: Bearer $COOLIFY_API_TOKEN" \
