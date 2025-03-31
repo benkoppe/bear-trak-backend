@@ -22,10 +22,10 @@ services:
     build:
       context: .
       args:
-        AGENCYID: "1"
-        AGENCYNAME: "UMICH"
-        GTFS_URL: "https://webapps.fo.umich.edu/transit_uploads/google_transit.zip"
-        TRAK_URL: "https://bluetrakapi.thekoppe.com"
+        AGENCYID: "${AGENCYID-1}"
+        AGENCYNAME: "${AGENCYNAME-UMICH}"
+        GTFS_URL: "${GTFS_URL-https://webapps.fo.umich.edu/transit_uploads/google_transit.zip}"
+        TRAK_URL: "${TRAK_URL-https://bluetrakapi.thekoppe.com}"
       no_cache: true
     platform: linux/amd64
     container_name: transitclock-server-instance
