@@ -91,13 +91,13 @@ jobs:
     steps:
       - name: Deploy all Coolify services
         run: |
-          printf '%s\n' "$COOLIFY_RESOURCE_IDS" | while IFS= read -r id; do
+          echo "$COOLIFY_RESOURCE_IDS" | grep -v '^$' | while IFS= read -r id; do
             echo "Deploying Coolify resource ID: $id"
             curl -X PATCH "$COOLIFY_URL/api/v1/applications/$id" \
               -H "Authorization: Bearer $COOLIFY_API_TOKEN" \
               -H "Content-Type: application/json" \
               -d "{\"git_commit_sha\": \"${GITHUB_SHA}\"}"
-      
+          
             curl -X GET "$COOLIFY_URL/api/v1/deploy?uuid=$id&force=false" \
               -H "Authorization: Bearer $COOLIFY_API_TOKEN"
           done
