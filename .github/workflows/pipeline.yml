@@ -24,16 +24,18 @@ env:
   COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
   COOLIFY_RESOURCE_IDS: >-
     ${{ ((github.event_name == 'workflow_dispatch' && inputs.environment == 'production') || (github.event_name == 'push' && endsWith(github.ref, '/main')))
-        && format('{0},{1},{2},{3}',
+        && format('{0},{1},{2},{3},{4}',
           vars.GO_BEARTRAK_PRODUCTION_RESOURCE_ID,
           vars.GO_BLUETRAK_PRODUCTION_RESOURCE_ID,
           vars.OTP_CORNELL_PRODUCTION_RESOURCE_ID,
-          vars.OTP_UMICH_PRODUCTION_RESOURCE_ID)
-        || format('{0},{1},{2},{3}',
+          vars.OTP_UMICH_PRODUCTION_RESOURCE_ID,
+          vars.TRANSITCLOCK_UMICH_PRODUCTION_RESOURCE_ID)
+        || format('{0},{1},{2},{3},{4}',
           vars.GO_BEARTRAK_STAGING_RESOURCE_ID,
           vars.GO_BLUETRAK_STAGING_RESOURCE_ID,
           vars.OTP_CORNELL_STAGING_RESOURCE_ID,
-          vars.OTP_UMICH_STAGING_RESOURCE_ID)
+          vars.OTP_UMICH_STAGING_RESOURCE_ID,
+          vars.TRANSITCLOCK_UMICH_STAGING_RESOURCE_ID)
     }}
 
 jobs:
@@ -41,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [go-server, otp-cornell, otp-umich]
+        service: [go-server, otp-cornell, otp-umich, transitclock-umich]
         include:
           - service: go-server
             context: ./go-server
@@ -63,6 +65,17 @@ jobs:
             tags: |
               ghcr.io/benkoppe/bear-trak-otp-umich:latest
               ghcr.io/benkoppe/bear-trak-otp-umich:${{ github.sha }}
+          - service: transitclock-umich
+            context: ./transitclock
+            dockerfile: transitclock/Dockerfile
+            school: umich
+            agency_id: 1
+            agency_name: UMICH
+            gtfs_url: https://webapps.fo.umich.edu/transit_uploads/google_transit.zip
+            trak_url: https://bluetrakapi.thekoppe.com
+            tags: |
+              ghcr.io/benkoppe/trak-transitclock-umich:latest
+              ghcr.io/benkoppe/trak-transitclock-umich:${{ github.sha }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -83,6 +96,10 @@ jobs:
           tags: ${{ matrix.tags }}
           build-args:
             ${{ matrix.school != '' && format('SCHOOL={0}', matrix.school) || '' }}
+            ${{ matrix.agency_id != '' && format('AGENCYID={0}', matrix.agency_id) || '' }}
+            ${{ matrix.agency_name != '' && format('AGENCYNAME={0}', matrix.agency_name) || '' }}
+            ${{ matrix.gtfs_url != '' && format('GTFS_URL={0}', matrix.gtfs_url) || '' }}
+            ${{ matrix.trak_url != '' && format('TRAK_URL={0}', matrix.trak_url) || '' }}
 
   coolify-deploy:
     runs-on: ubuntu-latest
