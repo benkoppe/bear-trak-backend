@@ -37,12 +37,12 @@ services:
       GTFS_URL: "${GTFS_URL:-https://webapps.fo.umich.edu/transit_uploads/google_transit.zip}"
       TRAK_URL: "${TRAK_URL:-https://bluetrakapi.thekoppe.com}"
     volumes:
-      - transitclock-logs:/usr/local/transitclock/logs/
-      - transitclock-cache:/usr/local/transitclock/cache/
+      - logs:/usr/local/transitclock/logs/
+      - cache:/usr/local/transitclock/cache/
     ports:
       - ${SERVER_PORT:-8080}:8080
     command: ["sh", "/usr/local/transitclock/bin/entrypoint.sh"]
 
 volumes:
-  transitclock-logs:
-  transitclock-cache:
+  logs:
+  cache:
