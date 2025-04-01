@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [go-server, otp-cornell, otp-umich, transitclock-umich]
+        service: [go-server, otp-cornell, otp-umich, transitclock]
         include:
           - service: go-server
             context: ./go-server
