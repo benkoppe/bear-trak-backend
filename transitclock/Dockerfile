@@ -7,9 +7,9 @@ RUN apt-get update \
   && apt-get install -y vim
 
 ARG AGENCYID="1"
-ARG AGENCYNAME="TCAT"
-ARG GTFS_URL="https://realtimetcatbus.availtec.com/InfoPoint/GTFS-zip.ashx"
-ARG TRAK_URL="https://beartrakapi.thekoppe.com"
+ARG AGENCYNAME="UMICH"
+ARG GTFS_URL="https://webapps.fo.umich.edu/transit_uploads/google_transit.zip}"
+ARG TRAK_URL="https://bluetrakapi.thekoppe.com"
 ARG TRANSITCLOCK_PROPERTIES="config/transitclock.properties"
 
 ENV AGENCYID="${AGENCYID}"
