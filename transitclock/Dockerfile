@@ -6,16 +6,7 @@ RUN apt-get update \
   && apt-get install -y git-core \
   && apt-get install -y vim
 
-ARG AGENCYID="1"
-ARG AGENCYNAME="UMICH"
-ARG GTFS_URL="https://webapps.fo.umich.edu/transit_uploads/google_transit.zip}"
-ARG TRAK_URL="https://bluetrakapi.thekoppe.com"
 ARG TRANSITCLOCK_PROPERTIES="config/transitclock.properties"
-
-ENV AGENCYID="${AGENCYID}"
-ENV AGENCYNAME="${AGENCYNAME}"
-ENV GTFS_URL="${GTFS_URL}"
-ENV TRAK_URL="${TRAK_URL}"
 ENV TRANSITCLOCK_PROPERTIES="${TRANSITCLOCK_PROPERTIES}"
 
 ENV TRANSITCLOCK_CORE="/transitclock-core"

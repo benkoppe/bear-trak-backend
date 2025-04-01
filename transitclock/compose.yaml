@@ -15,15 +15,10 @@ services:
       retries: 5
 
   server:
-    image: ghcr.io/benkoppe/trak-transitclock-${SCHOOL}:${SOURCE_COMMIT:-latest}
+    image: ghcr.io/benkoppe/trak-transitclock:${SOURCE_COMMIT:-latest}
     restart: always
     build:
       context: .
-      args:
-        AGENCYID: "${AGENCYID-1}"
-        AGENCYNAME: "${AGENCYNAME-UMICH}"
-        GTFS_URL: "${GTFS_URL-https://webapps.fo.umich.edu/transit_uploads/google_transit.zip}"
-        TRAK_URL: "${TRAK_URL-https://bluetrakapi.thekoppe.com}"
       no_cache: true
     platform: linux/amd64
     container_name: transitclock-server-instance
@@ -37,6 +32,10 @@ services:
       PGDATABASE: postgres
       POSTGRES_PORT_5432_TCP_ADDR: db
       POSTGRES_PORT_5432_TCP_PORT: 5432
+      AGENCYID: "${AGENCYID-1}"
+      AGENCYNAME: "${AGENCYNAME-UMICH}"
+      GTFS_URL: "${GTFS_URL:-https://webapps.fo.umich.edu/transit_uploads/google_transit.zip}"
+      TRAK_URL: "${TRAK_URL:-https://bluetrakapi.thekoppe.com}"
     volumes:
       - transitclock-logs:/usr/local/transitclock/logs/
       - transitclock-cache:/usr/local/transitclock/cache/
