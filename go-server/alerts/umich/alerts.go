@@ -1,4 +1,4 @@
-package cornell
+package umich
 
 import (
 	_ "embed"
