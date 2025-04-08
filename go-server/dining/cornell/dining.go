@@ -1,4 +1,4 @@
-package dining
+package cornell
 
 import (
 	"fmt"
