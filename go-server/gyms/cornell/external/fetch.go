@@ -18,7 +18,7 @@ func InitCache(url string) Cache {
 }
 
 func FetchData(url string) ([]Gym, error) {
-	gyms, err := utils.DoGetRequest[[]Gym](url)
+	gyms, err := utils.DoGetRequest[[]Gym](url, nil)
 	if gyms == nil {
 		return []Gym{}, err
 	}

@@ -18,7 +18,7 @@ func InitCache(url string) Cache {
 }
 
 func FetchData(url string) ([]Library, error) {
-	library, err := utils.DoGetRequest[librariesResponse](url)
+	library, err := utils.DoGetRequest[librariesResponse](url, nil)
 	if library == nil {
 		return []Library{}, err
 	}

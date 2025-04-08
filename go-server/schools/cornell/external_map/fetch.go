@@ -45,7 +45,7 @@ func initCache(url string) cache {
 }
 
 func FetchData(url string) ([]itemCategory, error) {
-	response, err := utils.DoGetRequest[overlayResponse](url)
+	response, err := utils.DoGetRequest[overlayResponse](url, nil)
 	if response == nil {
 		return []itemCategory{}, err
 	}

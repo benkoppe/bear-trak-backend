@@ -24,7 +24,7 @@ func fetchRoutes(baseUrl string) ([]Route, error) {
 		return []Route{}, fmt.Errorf("failed to extend url: %w", err)
 	}
 
-	routes, err := utils.DoGetRequest[[]Route](*fullUrl)
+	routes, err := utils.DoGetRequest[[]Route](*fullUrl, nil)
 	if routes == nil {
 		return []Route{}, err
 	}

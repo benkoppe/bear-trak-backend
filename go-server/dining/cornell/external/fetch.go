@@ -18,5 +18,5 @@ func InitCache(url string) Cache {
 }
 
 func fetchData(url string) (*EateryAPIResponse, error) {
-	return utils.DoGetRequest[EateryAPIResponse](url)
+	return utils.DoGetRequest[EateryAPIResponse](url, nil)
 }

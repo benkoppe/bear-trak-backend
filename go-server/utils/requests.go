@@ -8,8 +8,18 @@ import (
 	"net/http"
 )
 
-func DoGetRequest[T any](url string) (*T, error) {
-	resp, err := http.Get(url)
+func DoGetRequest[T any](url string, headers map[string]string) (*T, error) {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+
+	for key, value := range headers {
+		req.Header.Set(key, value)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to make the request: %w", err)
 	}
