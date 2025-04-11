@@ -3,15 +3,15 @@ package availtec
 import "github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
 
 type Route struct {
-	Color                    string    `json:"Color"`
-	GoogleDescription        string    `json:"GoogleDescription"`
-	IsVisible                bool      `json:"IsVisible"`
-	RouteAbbreviation        string    `json:"RouteAbbreviation"`
-	RouteId                  int       `json:"RouteId"`
-	SortOrder                int       `json:"SortOrder"`
-	Vehicles                 []Vehicle `json:"Vehicles"`
-	Messages                 []string  `json:"Messages"`
-	DetourActiveMessageCount int       `json:"DetourActiveMessageCount"`
+	Color             string    `json:"Color"`
+	GoogleDescription string    `json:"GoogleDescription"`
+	IsVisible         bool      `json:"IsVisible"`
+	RouteAbbreviation string    `json:"RouteAbbreviation"`
+	RouteId           int       `json:"RouteId"`
+	SortOrder         int       `json:"SortOrder"`
+	Vehicles          []Vehicle `json:"Vehicles"`
+	// Messages                 []string  `json:"Messages"`
+	DetourActiveMessageCount int `json:"DetourActiveMessageCount"`
 	// Stops                    *string   `json:"Stops"`
 	// RouteStops               *string   `json:"RouteStops"`
 }
