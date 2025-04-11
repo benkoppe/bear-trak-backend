@@ -1,0 +1,193 @@
+[
+  {
+    "id": 0,
+    "apiNumber": "36",
+    "name": "Barker Cafe",
+    "region": "Yard",
+    "allWeekMenu": [
+      {
+        "category": "All week",
+        "items": [
+          {
+            "item": "Baked goods & pastries",
+            "healthy": false
+          },
+          {
+            "item": "Espresso-based coffee drinks",
+            "healthy": false
+          },
+          {
+            "item": "Grab n' go yogurt & fruits",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Cafe Gato Rojo",
+    "region": "Square",
+    "allWeekMenu": [
+      {
+        "category": "All week",
+        "items": [
+          {
+            "item": "Baked goods & pastries",
+            "healthy": false
+          },
+          {
+            "item": "Espresso-based coffee drinks",
+            "healthy": false
+          },
+          {
+            "item": "Grab n' go salads / sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Grab n' go yogurt & fruits",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "apiNumber": "41",
+    "name": "Chauhaus at GSD",
+    "region": "Square"
+  },
+  {
+    "id": 3,
+    "apiNumber": "60",
+    "name": "HDS Commons",
+    "region": "NorthYard"
+  },
+  {
+    "id": 4,
+    "name": "HKS Café",
+    "region": "Square"
+  },
+  {
+    "id": 5,
+    "apiNumber": "70",
+    "name": "HLS Harkness Dining Room"
+  },
+  {
+    "id": 6,
+    "name": "HLS Pub"
+  },
+  {
+    "id": 7,
+    "name": "LISE Café"
+  },
+  {
+    "id": 8,
+    "apiNumber": "49",
+    "name": "Lamont Library Cafe",
+    "region": "Yard",
+    "allWeekMenu": [
+      {
+        "category": "All week",
+        "items": [
+          {
+            "item": "Baked goods & pastries",
+            "healthy": false
+          },
+          {
+            "item": "Espresso-based coffee drinks",
+            "healthy": false
+          },
+          {
+            "item": "Grab n' go salads / sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Grab n' go yogurt & fruits",
+            "healthy": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Northwest Café"
+  },
+  {
+    "name": "SEC Café",
+    "apiNumber": "57"
+  },
+  {
+    "id": 9,
+    "apiNumber": "04",
+    "name": "The Commons at Lehman Hall",
+    "region": "Yard"
+  },
+
+  {
+    "id": "51",
+    "staticMenu": []
+  },
+  {
+    "id": "31",
+    "staticMenu": []
+  },
+
+  {
+    "id": "03",
+    "staticMenu": []
+  },
+  {
+    "id": "25",
+    "staticMenu": []
+  },
+  {
+    "id": "77",
+    "staticMenu": []
+  },
+
+  {
+    "id": "54"
+  },
+  {
+    "id": "23",
+    "staticMenu": []
+  },
+  {
+    "id": "55",
+    "staticMenu": []
+  },
+  {
+    "id": "09",
+    "staticMenu": []
+  },
+  {
+    "id": "30"
+  },
+  {
+    "id": "05"
+  },
+  {
+    "id": "38"
+  },
+  {
+    "id": "07"
+  },
+  {
+    "id": "14"
+  },
+  {
+    "id": "16"
+  },
+  {
+    "id": "15",
+    "staticMenu": []
+  },
+  {
+    "id": "08"
+  },
+  {
+    "id": "29"
+  }
+]
