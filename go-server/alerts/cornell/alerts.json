@@ -38,5 +38,18 @@
     "enabled": false,
     "showOnce": false,
     "maxBuild": 19
+  },
+  {
+    "id": 5,
+    "title": "Live on West Campus?",
+    "message": "If you live in Cook, Rose, or Bethe house, your help could bring house dinners to BearTrak! :)\n\nPlease let us know if you're interested on our Instagram.",
+    "enabled": true,
+    "showOnce": true,
+    "button": {
+      "title": "Instagram",
+      "url": "instagram://user?username=bear.trak"
+    },
+    "minMinutesSinceDownload": 5,
+    "maxBuild": 40
   }
 ]
