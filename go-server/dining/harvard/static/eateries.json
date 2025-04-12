@@ -112,82 +112,93 @@
     ]
   },
   {
+    "id": 9,
     "name": "Northwest Café"
   },
   {
+    "id": 10,
     "name": "SEC Café",
     "apiNumber": "57"
   },
   {
-    "id": 9,
+    "id": 11,
     "apiNumber": "04",
     "name": "The Commons at Lehman Hall",
     "region": "Yard"
   },
-
   {
-    "id": "51",
-    "staticMenu": []
+    "id": 12,
+    "name": "Adams House",
+    "apiNumber": "14"
   },
   {
-    "id": "31",
-    "staticMenu": []
-  },
-
-  {
-    "id": "03",
-    "staticMenu": []
+    "id": 13,
+    "name": "Annenberg Hall",
+    "apiNumber": "30"
   },
   {
-    "id": "25",
-    "staticMenu": []
+    "id": 14,
+    "name": "Cabot House",
+    "apiNumber": "14"
   },
   {
-    "id": "77",
-    "staticMenu": []
-  },
-
-  {
-    "id": "54"
+    "id": 15,
+    "name": "Cronkhite Center",
+    "apiNumber": "14"
   },
   {
-    "id": "23",
-    "staticMenu": []
+    "id": 16,
+    "name": "Currier House",
+    "apiNumber": "14"
   },
   {
-    "id": "55",
-    "staticMenu": []
+    "id": 17,
+    "name": "Dunster House",
+    "apiNumber": "14"
   },
   {
-    "id": "09",
-    "staticMenu": []
+    "id": 18,
+    "name": "Eliot House",
+    "apiNumber": "14"
   },
   {
-    "id": "30"
+    "id": 19,
+    "name": "Kirkland House",
+    "apiNumber": "14"
   },
   {
-    "id": "05"
+    "id": 20,
+    "name": "Leverett House",
+    "apiNumber": "14"
   },
   {
-    "id": "38"
+    "id": 21,
+    "name": "Lowell House",
+    "apiNumber": "14"
   },
   {
-    "id": "07"
+    "id": 22,
+    "name": "Mather House",
+    "apiNumber": "14"
   },
   {
-    "id": "14"
+    "id": 23,
+    "name": "Pforzheimer House",
+    "apiNumber": "14"
   },
   {
-    "id": "16"
+    "id": 24,
+    "name": "Quincy House",
+    "apiNumber": "08"
   },
   {
-    "id": "15",
-    "staticMenu": []
+    "id": 25,
+    "name": "Winthrop House",
+    "apiNumber": "14"
   },
   {
-    "id": "08"
-  },
-  {
-    "id": "29"
+    "id": 26,
+    "name": "FlyBy at Memorial Hall",
+    "apiNumber": "29"
   }
 ]
