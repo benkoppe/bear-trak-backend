@@ -34,14 +34,14 @@ func NewHandler(db *db.Queries) *Handler {
 const API_KEY_ENV_VAR = "BUSTIME_API_KEY"
 
 func (h *Handler) initCaches() {
-	h.diningCache = dining.InitCache(eateriesBaseUrl)
-
 	// get API key from environment variables
 	bustimeApiKey := os.Getenv(API_KEY_ENV_VAR)
 	if bustimeApiKey == "" {
 		log.Fatalf("API key not found in environment variables")
 	}
 	h.transitCaches = transit.InitCaches(bustimeUrl, bustimeApiKey, gtfsStaticUrl)
+
+	h.diningCache = dining.InitCache(eateriesBaseUrl)
 }
 
 func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
