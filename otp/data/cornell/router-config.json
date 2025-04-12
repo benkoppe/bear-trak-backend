@@ -4,7 +4,7 @@
       "type": "vehicle-positions",
       "url": "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-Realtime.ashx?&Type=VehiclePosition",
       "feedId": "1",
-      "frequency": "1m",
+      "frequency": "30s",
       "fuzzyTripMatching": true,
       "features": ["position"]
     },
@@ -18,7 +18,7 @@
       "type": "stop-time-updater",
       "url": "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-Realtime.ashx?&Type=TripUpdate",
       "feedId": "1",
-      "frequency": "1m"
+      "frequency": "30s"
     }
   ]
 }
