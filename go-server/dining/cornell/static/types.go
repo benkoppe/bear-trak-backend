@@ -1,8 +1,9 @@
 package static
 
 type Eatery struct {
-	ID          int             `json:"id"`
-	AllWeekMenu *[]MenuCategory `json:"allWeekMenu,omitempty"`
+	ID                 int             `json:"id"`
+	HouseDinnerSubject *string         `json:"houseDinnerSubject,omitempty"`
+	AllWeekMenu        *[]MenuCategory `json:"allWeekMenu,omitempty"`
 }
 
 type MenuCategory struct {
