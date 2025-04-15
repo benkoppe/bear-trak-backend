@@ -105,5 +105,16 @@ func (c *Cache[T]) refreshInBackground() {
 
 // forces a synchronous refresh
 func (c *Cache[T]) ForceRefresh() (T, error) {
-	return c.refresh()
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	newData, err := c.fetchFunc()
+	if err != nil {
+		var zero T
+		return zero, err
+	}
+
+	c.data = newData
+	c.lastFetch = time.Now()
+	return newData, nil
 }
