@@ -45,9 +45,9 @@ RUN --mount=type=cache,target=/var/cache/apt \
 
 # Create a non-privileged user that the server will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
-ARG UID=10001
-RUN useradd -u ${UID} -M -s /usr/sbin/nologin appuser
-USER appuser
+# ARG UID=10001
+# RUN useradd -u ${UID} -M -s /usr/sbin/nologin appuser
+# USER appuser
 
 # Copy the executable from the "build" stage.
 COPY --from=build /bin/server /bin/
