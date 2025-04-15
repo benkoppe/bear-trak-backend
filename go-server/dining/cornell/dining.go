@@ -393,8 +393,13 @@ func appendHouseDinnerMenus(eateries []api.Eatery, staticEateries []static.Eater
 func convertHouseDinnerMenu(menu *email.DatedResult) []api.EateryMenuCategory {
 	var categories []api.EateryMenuCategory
 	categories = append(categories, api.EateryMenuCategory{
-		Name:  "House Dinner: " + menu.Menu.DinnerName,
-		Items: []api.EateryMenuCategoryItemsItem{},
+		Name: "House Dinner",
+		Items: []api.EateryMenuCategoryItemsItem{
+			{
+				Name:    menu.Menu.DinnerName,
+				Healthy: false,
+			},
+		},
 	})
 	for _, category := range menu.Menu.Categories {
 		var items []api.EateryMenuCategoryItemsItem
