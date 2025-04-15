@@ -30,28 +30,23 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
 ################################################################################
 # Create a stage for running the application that contains the minimal
 # runtime dependencies for the application. 
-FROM chromedp/headless-shell AS final
+FROM chromedp/headless-shell:latest AS final
 
 # Install any runtime dependencies.
 # Leverage a cache mount to /var/cache/apk/ to speed up subsequent builds.
-RUN --mount=type=cache,target=/var/cache/apk \
-  apk --update add \
+RUN --mount=type=cache,target=/var/cache/apt \
+  apt-get update && \
+  apt-get install -y --no-install-recommends \
   ca-certificates \
   tzdata \
-  && \
-  update-ca-certificates
+  && rm -rf /var/lib/apt/lists/* \
+  && update-ca-certificates
+
 
 # Create a non-privileged user that the server will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
 ARG UID=10001
-RUN adduser \
-  --disabled-password \
-  --gecos "" \
-  --home "/nonexistent" \
-  --shell "/sbin/nologin" \
-  --no-create-home \
-  --uid "${UID}" \
-  appuser
+RUN useradd -u ${UID} -M -s /usr/sbin/nologin appuser
 USER appuser
 
 # Copy the executable from the "build" stage.
