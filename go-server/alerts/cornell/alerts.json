@@ -43,7 +43,7 @@
     "id": 5,
     "title": "Live on West Campus?",
     "message": "If you live in Cook, Rose, or Bethe house, your help could bring house dinners to BearTrak! :)\n\nPlease let us know if you're interested on our Instagram.",
-    "enabled": true,
+    "enabled": false,
     "showOnce": true,
     "button": {
       "title": "Instagram",
