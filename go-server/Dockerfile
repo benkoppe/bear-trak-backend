@@ -30,7 +30,7 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
 ################################################################################
 # Create a stage for running the application that contains the minimal
 # runtime dependencies for the application. 
-FROM alpine:latest AS final
+FROM chromedp/headless-shell AS final
 
 # Install any runtime dependencies.
 # Leverage a cache mount to /var/cache/apk/ to speed up subsequent builds.
