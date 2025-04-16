@@ -134,6 +134,10 @@ func extractHours(doc *goquery.Document, eatery *Eatery, date time.Time) *Eatery
 			log.Printf("error parsing end time: %v", err)
 		}
 
+		if mealName == "24/7 Kiosk" {
+			return
+		}
+
 		eatery.addHours(mealName, start, end)
 	})
 
@@ -141,50 +145,48 @@ func extractHours(doc *goquery.Document, eatery *Eatery, date time.Time) *Eatery
 }
 
 func extractMenu(doc *goquery.Document, eatery *Eatery) *Eatery {
-	// Find all meal periods (Breakfast, Lunch, Dinner)
-	doc.Find("#mdining-items h3").Each(func(i int, mealPeriod *goquery.Selection) {
-		// Extract meal period name (removing the plus/minus icon)
-		mealName := cleanText(mealPeriod.Text())
-		// Remove +/- signs
-		mealName = strings.ReplaceAll(mealName, "+", "")
-		mealName = strings.ReplaceAll(mealName, "-", "")
-		mealName = cleanText(mealName)
+	container := doc.Find("#mdining-items")
 
-		mealMenu := eatery.addMenu(mealName)
+	mealHeaders := container.Find("h3")
+	if mealHeaders.Length() == 0 {
+		parseMenu(container, "Menu", eatery)
+		return eatery
+	}
 
-		// Find the corresponding content div that follows this h3
-		contentDiv := mealPeriod.Next()
-
-		// Find all stations (categories) within this meal period
-		contentDiv.Find("li > h4").Each(func(j int, station *goquery.Selection) {
-			categoryName := cleanText(station.Text())
-			category := mealMenu.addCategory(categoryName)
-
-			// Find all food items within this station
-			station.Parent().Find("ul.items > li").Each(func(k int, item *goquery.Selection) {
-				// Extract item name
-				itemName := cleanText(item.Find(".item-name").Text())
-
-				// Extract dietary traits
-				var traits []string
-				item.Find("ul.traits li").Each(func(l int, trait *goquery.Selection) {
-					traitName := trait.AttrOr("title", "")
-					if traitName != "" {
-						traits = append(traits, traitName)
-					}
-				})
-
-				// Create menu item
-				menuItem := category.AddMenuItem(itemName, traits)
-
-				// Extract allergens (if available)
-				item.Find(".allergens li").Each(func(m int, allergenSel *goquery.Selection) {
-					allergen := cleanText(allergenSel.Text())
-					menuItem.AddAllergen(allergen)
-				})
-			})
-		})
+	mealHeaders.Each(func(_ int, hdr *goquery.Selection) {
+		name := cleanText(
+			strings.NewReplacer("+", "", "-", "").Replace(hdr.Text()),
+		)
+		parseMenu(hdr.Next(), name, eatery)
 	})
 
 	return eatery
+}
+
+func parseMenu(contentSel *goquery.Selection, mealName string, eatery *Eatery) {
+	if contentSel == nil || contentSel.Length() == 0 {
+		return
+	}
+	mealMenu := eatery.addMenu(mealName)
+
+	contentSel.Find("li > h4").Each(func(_ int, station *goquery.Selection) {
+		category := mealMenu.addCategory(cleanText(station.Text()))
+
+		station.Parent().Find("ul.items > li").Each(func(_ int, item *goquery.Selection) {
+			itemName := cleanText(item.Find(".item-name").Text())
+
+			var traits []string
+			item.Find("ul.traits li").Each(func(_ int, t *goquery.Selection) {
+				if title := t.AttrOr("title", ""); title != "" {
+					traits = append(traits, title)
+				}
+			})
+
+			menuItem := category.AddMenuItem(itemName, traits)
+
+			item.Find(".allergens li").Each(func(_ int, a *goquery.Selection) {
+				menuItem.AddAllergen(cleanText(a.Text()))
+			})
+		})
+	})
 }
