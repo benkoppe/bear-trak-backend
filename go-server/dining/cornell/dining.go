@@ -382,6 +382,11 @@ func appendHouseDinnerMenus(eateries []api.Eatery, staticEateries []static.Eater
 		event := utils.Find(events, func(e api.EateryEvent) bool {
 			return e.Start.Before(houseDinnerMenu.Wednesday) && e.End.After(houseDinnerMenu.Wednesday)
 		})
+		if event == nil {
+			log.Printf("No event found for house dinner menu on %s", houseDinnerMenu.Wednesday)
+			converted = append(converted, eatery)
+			continue
+		}
 
 		event.MenuCategories = convertHouseDinnerMenu(houseDinnerMenu)
 		converted = append(converted, eatery)
