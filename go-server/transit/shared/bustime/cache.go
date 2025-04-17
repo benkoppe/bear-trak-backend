@@ -36,7 +36,7 @@ type VehiclesCache = *utils.Cache[[]Vehicle]
 func initVehiclesCache(baseUrl, apiKey string, routesCache RoutesCache) VehiclesCache {
 	return utils.NewCache(
 		"busTimeVehiclesCache",
-		10*time.Second,
+		20*time.Second,
 		func() ([]Vehicle, error) {
 			routes, err := routesCache.Get()
 			if err != nil {

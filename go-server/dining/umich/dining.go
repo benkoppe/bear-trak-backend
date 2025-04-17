@@ -123,7 +123,10 @@ func convertScrapedEvents(scraped []scrape.Eatery) []api.EateryEvent {
 		for _, menu := range eatery.Menus {
 			hours := getHours(eatery, menu.Name)
 			if hours == nil {
-				log.Printf("no hours for menu %s", menu.Name)
+				hours = getHours(eatery, "Open")
+			}
+			if hours == nil {
+				log.Printf("no hours for menu %s - eatery %s", menu.Name, eatery.Name)
 				continue
 			}
 

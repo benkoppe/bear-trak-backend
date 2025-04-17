@@ -9,7 +9,9 @@ import (
 	alerts "github.com/benkoppe/bear-trak-backend/go-server/alerts/umich"
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
+	dining_users "github.com/benkoppe/bear-trak-backend/go-server/dining-users"
 	dining "github.com/benkoppe/bear-trak-backend/go-server/dining/umich"
+	"github.com/benkoppe/bear-trak-backend/go-server/schools/shared"
 	transit "github.com/benkoppe/bear-trak-backend/go-server/transit/umich"
 )
 
@@ -32,14 +34,14 @@ func NewHandler(db *db.Queries) *Handler {
 const API_KEY_ENV_VAR = "BUSTIME_API_KEY"
 
 func (h *Handler) initCaches() {
-	h.diningCache = dining.InitCache(eateriesBaseUrl)
-
 	// get API key from environment variables
 	bustimeApiKey := os.Getenv(API_KEY_ENV_VAR)
 	if bustimeApiKey == "" {
 		log.Fatalf("API key not found in environment variables")
 	}
 	h.transitCaches = transit.InitCaches(bustimeUrl, bustimeApiKey, gtfsStaticUrl)
+
+	h.diningCache = dining.InitCache(eateriesBaseUrl)
 }
 
 func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
@@ -67,27 +69,27 @@ func (h *Handler) GetV1Study(ctx context.Context) (*api.StudyData, error) {
 }
 
 func (h *Handler) GetV1DiningUser(ctx context.Context, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {
-	return nil, fmt.Errorf("not implemented")
+	return dining_users.GetUser(shared.CbordBaseUrl, cbordInstitutionId, params)
 }
 
 func (h *Handler) PostV1DiningUser(ctx context.Context, params api.PostV1DiningUserParams) (api.PostV1DiningUserRes, error) {
-	return nil, fmt.Errorf("not implemented")
+	return dining_users.CreateUser(ctx, shared.CbordBaseUrl, cbordInstitutionId, params, h.DB)
 }
 
 func (h *Handler) DeleteV1DiningUser(ctx context.Context, params api.DeleteV1DiningUserParams) (api.DeleteV1DiningUserRes, error) {
-	return nil, fmt.Errorf("not implemented")
+	return dining_users.DeleteUser(ctx, shared.CbordBaseUrl, params, h.DB)
 }
 
 func (h *Handler) GetV1DiningUserSession(ctx context.Context, params api.GetV1DiningUserSessionParams) (api.GetV1DiningUserSessionRes, error) {
-	return nil, fmt.Errorf("not implemented")
+	return dining_users.RefreshUserToken(ctx, shared.CbordBaseUrl, params, h.DB)
 }
 
 func (h *Handler) GetV1DiningUserAccounts(ctx context.Context, params api.GetV1DiningUserAccountsParams) (api.GetV1DiningUserAccountsRes, error) {
-	return nil, fmt.Errorf("not implemented")
+	return dining_users.GetUserAccounts(shared.CbordBaseUrl, cbordInstitutionId, params)
 }
 
 func (h *Handler) GetV1DiningUserBarcode(ctx context.Context, params api.GetV1DiningUserBarcodeParams) (api.GetV1DiningUserBarcodeRes, error) {
-	return nil, fmt.Errorf("not implemented")
+	return dining_users.GetUserBarcode(shared.CbordBaseUrl, params)
 }
 
 func (h *Handler) NewError(ctx context.Context, err error) *api.ErrorStatusCode {

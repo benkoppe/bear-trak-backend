@@ -2,6 +2,7 @@ package cornell
 
 import (
 	"fmt"
+	"log"
 	"regexp"
 	"slices"
 	"sort"
@@ -10,6 +11,7 @@ import (
 	"unicode"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/dining/cornell/email"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining/cornell/external"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining/shared"
 
@@ -27,6 +29,7 @@ func InitCache(url string) Cache {
 
 func Get(
 	externalCache Cache,
+	houseDinnerCache email.Cache,
 ) ([]api.Eatery, error) {
 	externalResponse, err := externalCache.Get()
 	if err != nil {
@@ -48,6 +51,14 @@ func Get(
 	staticEateries := static.GetEateries()
 	eateries = appendStaticMenus(eateries, staticEateries)
 
+	houseDinnerMenus, err := houseDinnerCache.Get()
+	if err != nil {
+		log.Printf("error fetching house dinner menus: %v", err)
+		// return normally, but without house dinner menus
+		return eateries, nil
+	}
+
+	eateries = appendHouseDinnerMenus(eateries, staticEateries, houseDinnerMenus)
 	return eateries, nil
 }
 
@@ -339,6 +350,75 @@ func convertStaticMenu(staticCategories []static.MenuCategory) []api.EateryMenuC
 		})
 	}
 
+	return categories
+}
+
+func appendHouseDinnerMenus(eateries []api.Eatery, staticEateries []static.Eatery, houseDinners []email.DatedResult) []api.Eatery {
+	var converted []api.Eatery
+
+	for _, eatery := range eateries {
+		staticEatery := matchingStaticEatery(eatery, staticEateries)
+
+		if staticEatery == nil {
+			converted = append(converted, eatery)
+			continue
+		}
+
+		if staticEatery.HouseDinnerSubject == nil {
+			converted = append(converted, eatery)
+			continue
+		}
+
+		houseDinnerMenu := utils.Find(houseDinners, func(d email.DatedResult) bool {
+			return d.Subject == *staticEatery.HouseDinnerSubject
+		})
+		if houseDinnerMenu == nil {
+			log.Printf("No house dinner menu found for subject: %s", *staticEatery.HouseDinnerSubject)
+			converted = append(converted, eatery)
+			continue
+		}
+
+		events := eatery.NextWeekEvents.Wednesday
+		event := utils.Find(events, func(e api.EateryEvent) bool {
+			return e.Start.Before(houseDinnerMenu.Wednesday) && e.End.After(houseDinnerMenu.Wednesday)
+		})
+		if event == nil {
+			log.Printf("No event found for house dinner menu on %s", houseDinnerMenu.Wednesday)
+			converted = append(converted, eatery)
+			continue
+		}
+
+		event.MenuCategories = convertHouseDinnerMenu(houseDinnerMenu)
+		converted = append(converted, eatery)
+	}
+
+	return converted
+}
+
+func convertHouseDinnerMenu(menu *email.DatedResult) []api.EateryMenuCategory {
+	var categories []api.EateryMenuCategory
+	categories = append(categories, api.EateryMenuCategory{
+		Name: "House Dinner",
+		Items: []api.EateryMenuCategoryItemsItem{
+			{
+				Name:    menu.Menu.DinnerName,
+				Healthy: false,
+			},
+		},
+	})
+	for _, category := range menu.Menu.Categories {
+		var items []api.EateryMenuCategoryItemsItem
+		for _, item := range category.Items {
+			items = append(items, api.EateryMenuCategoryItemsItem{
+				Name:    item.ItemName,
+				Healthy: false,
+			})
+		}
+		categories = append(categories, api.EateryMenuCategory{
+			Name:  category.CategoryName,
+			Items: items,
+		})
+	}
 	return categories
 }
 

@@ -43,7 +43,7 @@ func main() {
 	dbQueries := db.New(pool)
 
 	// create main service
-	handler, err := schools.NewHandler(schoolCode, dbQueries)
+	handler, err := schools.NewHandler(schoolCode, dbQueries, config)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -102,6 +102,13 @@ func executeHourlyTasks(queries *db.Queries, handler api.Handler, config schools
 		err := gyms.LogCapacities(ctx, handler, queries)
 		if err != nil {
 			log.Printf("Error logging gym capacities: %v", err)
+		}
+	}
+
+	if config.HouseDinnerCache != nil {
+		_, err := config.HouseDinnerCache.ForceRefresh()
+		if err != nil {
+			log.Printf("Error fetching house dinner data: %v", err)
 		}
 	}
 }
