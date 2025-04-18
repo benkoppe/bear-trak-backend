@@ -48,7 +48,7 @@ func (h *Handler) GetV1Dining(ctx context.Context) ([]api.Eatery, error) {
 }
 
 func (h *Handler) GetV1Gyms(ctx context.Context) ([]api.Gym, error) {
-	return nil, fmt.Errorf("umich doesn't implement the gyms feature")
+	return nil, fmt.Errorf("harvard doesn't implement the gyms feature")
 }
 
 func (h *Handler) GetV1TransitRoutes(ctx context.Context) ([]api.BusRoute, error) {
