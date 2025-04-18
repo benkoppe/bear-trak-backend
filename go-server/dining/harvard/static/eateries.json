@@ -1,9 +1,14 @@
 [
   {
     "id": 0,
-    "apiNumber": "36",
     "name": "Barker Cafe",
     "region": "Yard",
+    "categories": ["Cafe"],
+    "imageName": "barkerCafe",
+    "location": {
+      "latitude": 42.372596260481934,
+      "longitude": -71.1146087441354
+    },
     "allWeekMenu": [
       {
         "category": "All week",
@@ -22,12 +27,53 @@
           }
         ]
       }
-    ]
+    ],
+    "weekHours": {
+      "lastDate": "05-01-2025",
+      "monday": [
+        {
+          "open": "09:00",
+          "close": "14:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "09:00",
+          "close": "14:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "09:00",
+          "close": "14:00"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "09:00",
+          "close": "14:00"
+        }
+      ],
+      "friday": [
+        {
+          "open": "09:00",
+          "close": "14:00"
+        }
+      ],
+      "saturday": [],
+      "sunday": []
+    }
   },
   {
     "id": 1,
     "name": "Cafe Gato Rojo",
     "region": "Square",
+    "categories": ["Cafe"],
+    "imageName": "cafeGatoRojo",
+    "location": {
+      "latitude": 42.373519189639744,
+      "longitude": -71.1183608878355
+    },
     "allWeekMenu": [
       {
         "category": "All week",
@@ -50,43 +96,558 @@
           }
         ]
       }
-    ]
+    ],
+    "weekHours": {
+      "lastDate": "05-07-2025",
+      "monday": [
+        {
+          "open": "08:00",
+          "close": "17:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "08:00",
+          "close": "17:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "08:00",
+          "close": "17:00"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "08:00",
+          "close": "17:00"
+        }
+      ],
+      "friday": [
+        {
+          "open": "08:00",
+          "close": "17:00"
+        }
+      ],
+      "saturday": [],
+      "sunday": []
+    }
   },
   {
     "id": 2,
     "apiNumber": "41",
     "name": "Chauhaus at GSD",
-    "region": "Square"
+    "region": "Square",
+    "categories": ["Cafe"],
+    "imageName": "chauhaus",
+    "location": {
+      "latitude": 42.375919999297516,
+      "longitude": -71.11397960398976
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "08:00",
+          "close": "11:00"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:00",
+          "close": "15:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "08:00",
+          "close": "11:00"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:00",
+          "close": "15:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "08:00",
+          "close": "11:00"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:00",
+          "close": "15:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "08:00",
+          "close": "11:00"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:00",
+          "close": "15:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "08:00",
+          "close": "11:00"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:00",
+          "close": "14:30"
+        }
+      ],
+      "saturday": [],
+      "sunday": []
+    }
   },
   {
     "id": 3,
-    "apiNumber": "60",
     "name": "HDS Commons",
-    "region": "NorthYard"
+    "region": "NorthYard",
+    "categories": ["Dining Room"],
+    "imageName": "hdsCommons",
+    "location": {
+      "latitude": 42.38020360119462,
+      "longitude": -71.11303251377007
+    },
+    "allWeekMenu": [
+      {
+        "category": "All week",
+        "items": [
+          {
+            "item": "Baked goods & pastries",
+            "healthy": false
+          },
+          {
+            "item": "Espresso-based coffee drinks",
+            "healthy": false
+          },
+          {
+            "item": "Grab n' go salads / sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Grab n' go yogurt & fruits",
+            "healthy": false
+          },
+          {
+            "item": "Hot breakfast / oatmeal",
+            "healthy": false
+          },
+          {
+            "item": "Made-to-order sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Soups & chilis",
+            "healthy": false
+          }
+        ]
+      }
+    ],
+    "weekHours": {
+      "monday": [
+        {
+          "open": "08:00",
+          "close": "18:30"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "08:00",
+          "close": "18:30"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "08:00",
+          "close": "18:30"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "08:00",
+          "close": "18:30"
+        }
+      ],
+      "friday": [
+        {
+          "open": "08:00",
+          "close": "14:00"
+        }
+      ],
+      "saturday": [],
+      "sunday": []
+    }
   },
   {
     "id": 4,
     "name": "HKS Café",
-    "region": "Square"
+    "apiNumber": "56",
+    "region": "Square",
+    "categories": ["Cafe"],
+    "imageName": "hksCafe",
+    "location": {
+      "latitude": 42.371325994867234,
+      "longitude": -71.12203272743662
+    },
+    "allWeekMenu": [
+      {
+        "category": "All week",
+        "items": [
+          {
+            "item": "Baked goods & pastries",
+            "healthy": false
+          },
+          {
+            "item": "Grab n' go salads / sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Hot breakfast / oatmeal",
+            "healthy": false
+          },
+          {
+            "item": "Made-to-order sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Pizza",
+            "healthy": false
+          },
+          {
+            "item": "Soups & chilis",
+            "healthy": false
+          }
+        ]
+      }
+    ],
+    "weekHours": {
+      "monday": [
+        {
+          "open": "08:00",
+          "close": "11:30"
+        },
+        {
+          "open": "11:30",
+          "close": "14:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "08:00",
+          "close": "11:30"
+        },
+        {
+          "open": "11:30",
+          "close": "14:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "08:00",
+          "close": "11:30"
+        },
+        {
+          "open": "11:30",
+          "close": "14:00"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "08:00",
+          "close": "11:30"
+        },
+        {
+          "open": "11:30",
+          "close": "14:00"
+        }
+      ],
+      "friday": [
+        {
+          "open": "08:00",
+          "close": "11:30"
+        },
+        {
+          "open": "11:30",
+          "close": "14:00"
+        }
+      ],
+      "saturday": [],
+      "sunday": []
+    }
   },
   {
     "id": 5,
     "apiNumber": "70",
-    "name": "HLS Harkness Dining Room"
+    "name": "HLS Harkness Dining Room",
+    "region": "NorthYard",
+    "categories": ["Dining Room"],
+    "imageName": "harknessDining",
+    "location": {
+      "latitude": 42.37843046924294,
+      "longitude": -71.11921747363698
+    },
+    "allWeekMenu": [
+      {
+        "category": "All week",
+        "items": [
+          {
+            "item": "Baked goods & pastries",
+            "healthy": false
+          },
+          {
+            "item": "Espresso-based coffee drinks",
+            "healthy": false
+          },
+          {
+            "item": "Grab n' go salads / sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Grab n' go yogurt & fruits",
+            "healthy": false
+          },
+          {
+            "item": "Hot breakfast / oatmeal",
+            "healthy": false
+          },
+          {
+            "item": "Hot entrees",
+            "healthy": false
+          },
+          {
+            "item": "Made-to-order sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Pizza",
+            "healthy": false
+          },
+          {
+            "item": "Salad bar",
+            "healthy": false
+          },
+          {
+            "item": "Soups & chilis",
+            "healthy": false
+          },
+          {
+            "item": "World cuisines",
+            "healthy": false
+          }
+        ]
+      }
+    ],
+    "weekHours": {
+      "monday": [
+        {
+          "open": "07:30",
+          "close": "11:00"
+        },
+        {
+          "open": "11:00",
+          "close": "14:00"
+        },
+        {
+          "open": "14:00",
+          "close": "17:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "07:30",
+          "close": "11:00"
+        },
+        {
+          "open": "11:00",
+          "close": "14:00"
+        },
+        {
+          "open": "14:00",
+          "close": "17:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "07:30",
+          "close": "11:00"
+        },
+        {
+          "open": "11:00",
+          "close": "14:00"
+        },
+        {
+          "open": "14:00",
+          "close": "17:00"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "07:30",
+          "close": "11:00"
+        },
+        {
+          "open": "11:00",
+          "close": "14:00"
+        },
+        {
+          "open": "14:00",
+          "close": "17:00"
+        }
+      ],
+      "friday": [
+        {
+          "open": "07:30",
+          "close": "11:00"
+        },
+        {
+          "open": "11:00",
+          "close": "14:00"
+        },
+        {
+          "open": "14:00",
+          "close": "17:00"
+        }
+      ],
+      "saturday": [],
+      "sunday": []
+    }
   },
   {
     "id": 6,
-    "name": "HLS Pub"
+    "name": "HLS Pub",
+    "region": "NorthYard",
+    "categories": ["Dining Room"],
+    "imageName": "hlsPub",
+    "location": {
+      "latitude": 42.378220727788154,
+      "longitude": -71.11909048603619
+    },
+    "allWeekMenu": [
+      {
+        "category": "All week",
+        "items": [
+          {
+            "item": "Hot entrees",
+            "healthy": false
+          }
+        ]
+      }
+    ],
+    "weekHours": {
+      "monday": [
+        {
+          "open": "17:00",
+          "close": "22:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "17:00",
+          "close": "22:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "17:00",
+          "close": "22:00"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "17:00",
+          "close": "22:00"
+        }
+      ],
+      "friday": [],
+      "saturday": [],
+      "sunday": []
+    }
   },
   {
     "id": 7,
-    "name": "LISE Café"
+    "name": "LISE Café",
+    "region": "NorthYard",
+    "categories": ["Cafe"],
+    "imageName": "liseCafe",
+    "location": {
+      "latitude": 42.3772636286301,
+      "longitude": -71.11639040994719
+    },
+    "allWeekMenu": [
+      {
+        "category": "All week",
+        "items": [
+          {
+            "item": "Baked goods & pastries",
+            "healthy": false
+          },
+          {
+            "item": "Espresso-based coffee drinks",
+            "healthy": false
+          },
+          {
+            "item": "Grab n' go salads / sandwiches / snacks",
+            "healthy": false
+          }
+        ]
+      }
+    ],
+    "weekHours": {
+      "monday": [
+        {
+          "open": "08:00",
+          "close": "15:30"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "08:00",
+          "close": "15:30"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "08:00",
+          "close": "15:30"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "08:00",
+          "close": "15:30"
+        }
+      ],
+      "friday": [
+        {
+          "open": "08:00",
+          "close": "15:00"
+        }
+      ],
+      "saturday": [],
+      "sunday": []
+    }
   },
   {
     "id": 8,
-    "apiNumber": "49",
     "name": "Lamont Library Cafe",
     "region": "Yard",
+    "categories": ["Cafe"],
+    "imageName": "lamontCafe",
+    "location": {
+      "latitude": 42.37275928417658,
+      "longitude": -71.11561895776656
+    },
     "allWeekMenu": [
       {
         "category": "All week",
@@ -109,96 +670,2418 @@
           }
         ]
       }
-    ]
+    ],
+    "weekHours": {
+      "lastDate": "05-01-2025",
+      "monday": [
+        {
+          "open": "15:00",
+          "close": "23:59"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "15:00",
+          "close": "23:59"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "15:00",
+          "close": "23:59"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "15:00",
+          "close": "23:59"
+        }
+      ],
+      "friday": [],
+      "saturday": [],
+      "sunday": [
+        {
+          "open": "15:00",
+          "close": "23:59"
+        }
+      ]
+    }
   },
   {
     "id": 9,
-    "name": "Northwest Café"
+    "name": "Northwest Café",
+    "region": "NorthYard",
+    "categories": ["Cafe"],
+    "imageName": "northwesetCafe",
+    "apiNumber": "54",
+    "location": {
+      "latitude": 42.380097994265505,
+      "longitude": -71.11527481781732
+    },
+    "weekHours": {
+      "lastDate": "05-01-2025",
+      "monday": [
+        {
+          "mealNumber": 2,
+          "open": "08:00",
+          "close": "15:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 2,
+          "open": "08:00",
+          "close": "15:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 2,
+          "open": "08:00",
+          "close": "15:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 2,
+          "open": "08:00",
+          "close": "15:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 2,
+          "open": "08:00",
+          "close": "15:00"
+        }
+      ],
+      "saturday": [
+        {
+          "mealNumber": 2,
+          "open": "08:00",
+          "close": "15:00"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 2,
+          "open": "08:00",
+          "close": "15:00"
+        }
+      ]
+    }
   },
   {
     "id": 10,
     "name": "SEC Café",
-    "apiNumber": "57"
+    "region": "Allston",
+    "categories": ["Cafe"],
+    "imageName": "secCafe",
+    "apiNumber": "57",
+    "location": {
+      "latitude": 42.40597340208378,
+      "longitude": -71.11703519909645
+    },
+    "allWeekMenu": [
+      {
+        "category": "All week",
+        "items": [
+          {
+            "item": "Baked goods & pastries",
+            "healthy": false
+          },
+          {
+            "item": "Espresso-based coffee drinks",
+            "healthy": false
+          },
+          {
+            "item": "Grab n' go salads / sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Grab n' go yogurt & fruits",
+            "healthy": false
+          },
+          {
+            "item": "Hot breakfast / oatmeal",
+            "healthy": false
+          },
+          {
+            "item": "Made-to-order sandwiches",
+            "healthy": false
+          },
+          {
+            "item": "Pizza",
+            "healthy": false
+          },
+          {
+            "item": "Salad bar",
+            "healthy": false
+          },
+          {
+            "item": "Soups & chilis",
+            "healthy": false
+          }
+        ]
+      }
+    ],
+    "weekHours": {
+      "monday": [
+        {
+          "open": "08:00",
+          "close": "15:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "08:00",
+          "close": "15:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "08:00",
+          "close": "15:00"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "08:00",
+          "close": "15:00"
+        }
+      ],
+      "friday": [
+        {
+          "open": "08:00",
+          "close": "15:00"
+        }
+      ],
+      "saturday": [],
+      "sunday": []
+    }
   },
   {
     "id": 11,
     "apiNumber": "04",
     "name": "The Commons at Lehman Hall",
-    "region": "Yard"
+    "region": "Yard",
+    "categories": ["Dining Room"],
+    "imageName": "theCommons",
+    "location": {
+      "latitude": 42.37354970403511,
+      "longitude": -71.11844686818017
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:30"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "20:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:30"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "20:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:30"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "20:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:30"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "20:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:30"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "20:00"
+        }
+      ],
+      "saturday": [],
+      "sunday": []
+    }
   },
   {
     "id": 12,
     "name": "Adams House",
-    "apiNumber": "14"
+    "region": "River",
+    "categories": ["Dining Room"],
+    "apiNumber": "14",
+    "imageName": "adamsHouse",
+    "location": {
+      "latitude": 42.37168199903364,
+      "longitude": -71.11667007139798
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 13,
     "name": "Annenberg Hall",
-    "apiNumber": "30"
+    "region": "Yard",
+    "categories": ["Dining Room"],
+    "apiNumber": "30",
+    "imageName": "annenbergHall",
+    "location": {
+      "latitude": 42.37595730550892,
+      "longitude": -71.11545111276796
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 14,
     "name": "Cabot House",
-    "apiNumber": "14"
+    "region": "Quad",
+    "categories": ["Dining Room"],
+    "imageName": "cabotHouse",
+    "apiNumber": "05",
+    "location": {
+      "latitude": 42.38114323497788,
+      "longitude": -71.12471711305975
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 1,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 2,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 15,
     "name": "Cronkhite Center",
-    "apiNumber": "14"
+    "region": "Quad",
+    "categories": ["Dining Room"],
+    "imageName": "cronkhiteCenter",
+    "apiNumber": "14",
+    "location": {
+      "latitude": 42.375429954744455,
+      "longitude": -71.12449613282922
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 16,
     "name": "Currier House",
-    "apiNumber": "14"
+    "region": "Quad",
+    "categories": ["Dining Room"],
+    "imageName": "currierHouse",
+    "apiNumber": "38",
+    "location": {
+      "latitude": 42.381763676139826,
+      "longitude": -71.12553033039428
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 1,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 2,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 17,
     "name": "Dunster House",
-    "apiNumber": "14"
+    "region": "River",
+    "categories": ["Dining Room"],
+    "imageName": "dunsterHouse",
+    "apiNumber": "07",
+    "location": {
+      "latitude": 42.368828821274036,
+      "longitude": -71.11598533169027
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 18,
     "name": "Eliot House",
-    "apiNumber": "14"
+    "region": "River",
+    "categories": ["Dining Room"],
+    "imageName": "eliotHouse",
+    "apiNumber": "14",
+    "location": {
+      "latitude": 42.370408416844334,
+      "longitude": -71.12165672702167
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealnumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 19,
     "name": "Kirkland House",
-    "apiNumber": "14"
+    "region": "River",
+    "categories": ["Dining Room"],
+    "imageName": "kirklandHouse",
+    "apiNumber": "14",
+    "location": {
+      "latitude": 42.37078373155921,
+      "longitude": -71.12048390186085
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealnumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 20,
     "name": "Leverett House",
-    "apiNumber": "14"
+    "region": "River",
+    "categories": ["Dining Room"],
+    "imageName": "leverettHouse",
+    "apiNumber": "16",
+    "location": {
+      "latitude": 42.37006992088389,
+      "longitude": -71.11740521742459
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 21,
     "name": "Lowell House",
-    "apiNumber": "14"
+    "region": "River",
+    "categories": ["Dining Room"],
+    "imageName": "lowellHouse",
+    "apiNumber": "14",
+    "location": {
+      "latitude": 42.371123026483104,
+      "longitude": -71.11820966536547
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 22,
     "name": "Mather House",
-    "apiNumber": "14"
+    "region": "River",
+    "categories": ["Dining Room"],
+    "imageName": "matherHouse",
+    "apiNumber": "07",
+    "location": {
+      "latitude": 42.368669713508176,
+      "longitude": -71.11532241368731
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 23,
     "name": "Pforzheimer House",
-    "apiNumber": "14"
+    "region": "Quad",
+    "categories": ["Dining Room"],
+    "imageName": "pforzheimerHouse",
+    "apiNumber": "05",
+    "location": {
+      "latitude": 42.38246149674582,
+      "longitude": -71.12465005740815
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 24,
     "name": "Quincy House",
-    "apiNumber": "08"
+    "region": "River",
+    "categories": ["Dining Room"],
+    "imageName": "quincyHouse",
+    "apiNumber": "08",
+    "location": {
+      "latitude": 42.37052936582993,
+      "longitude": -71.1173846782931
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 25,
     "name": "Winthrop House",
-    "apiNumber": "14"
+    "region": "River",
+    "categories": ["Dining Room"],
+    "imageName": "winthropHouse",
+    "apiNumber": "14",
+    "location": {
+      "latitude": 42.370132643591575,
+      "longitude": -71.11914559928387
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "saturday": [
+        {
+          "mealNumber": 1,
+          "open": "07:30",
+          "close": "10:30"
+        },
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        }
+      ],
+      "sunday": [
+        {
+          "mealNumber": 2,
+          "open": "11:30",
+          "close": "14:00"
+        },
+        {
+          "mealNumber": 3,
+          "open": "17:00",
+          "close": "19:30"
+        },
+        {
+          "open": "21:00",
+          "close": "23:00"
+        }
+      ]
+    }
   },
   {
     "id": 26,
     "name": "FlyBy at Memorial Hall",
-    "apiNumber": "29"
+    "region": "Yard",
+    "categories": ["Convenience Store"],
+    "imageName": "memorialHall",
+    "apiNumber": "29",
+    "location": {
+      "latitude": 42.375926438967824,
+      "longitude": -71.11511165330917
+    },
+    "weekHours": {
+      "monday": [
+        {
+          "mealNumber": 1,
+          "open": "11:00",
+          "close": "14:30"
+        }
+      ],
+      "tuesday": [
+        {
+          "mealNumber": 1,
+          "open": "11:00",
+          "close": "14:30"
+        }
+      ],
+      "wednesday": [
+        {
+          "mealNumber": 1,
+          "open": "11:00",
+          "close": "14:30"
+        }
+      ],
+      "thursday": [
+        {
+          "mealNumber": 1,
+          "open": "11:00",
+          "close": "14:30"
+        }
+      ],
+      "friday": [
+        {
+          "mealNumber": 1,
+          "open": "11:00",
+          "close": "14:30"
+        }
+      ],
+      "saturday": [],
+      "sunday": []
+    }
   }
 ]
