@@ -24,14 +24,16 @@ env:
   COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
   COOLIFY_RESOURCE_IDS: >-
     ${{ ((github.event_name == 'workflow_dispatch' && inputs.environment == 'production') || (github.event_name == 'push' && endsWith(github.ref, '/main')))
-        && format('{0},{1},{2},{3}',
+        && format('{0},{1},{2},{3},{4}',
           vars.GO_BEARTRAK_PRODUCTION_RESOURCE_ID,
           vars.GO_BLUETRAK_PRODUCTION_RESOURCE_ID,
+          vars.GO_CRIMSONTRAK_PRODUCTION_RESOURCE_ID,
           vars.OTP_CORNELL_PRODUCTION_RESOURCE_ID,
           vars.OTP_UMICH_PRODUCTION_RESOURCE_ID)
-        || format('{0},{1},{2},{3}',
+        || format('{0},{1},{2},{3},{4}',
           vars.GO_BEARTRAK_STAGING_RESOURCE_ID,
           vars.GO_BLUETRAK_STAGING_RESOURCE_ID,
+          vars.GO_CRIMSONTRAK_STAGING_RESOURCE_ID,
           vars.OTP_CORNELL_STAGING_RESOURCE_ID,
           vars.OTP_UMICH_STAGING_RESOURCE_ID)
     }}
