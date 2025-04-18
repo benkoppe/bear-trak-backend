@@ -38,3 +38,28 @@ func SelectNextWeekEvents(events []api.EateryEvent) api.EateryNextWeekEvents {
 
 	return result
 }
+
+func ConvertStaticCategories(staticCategories []string) []api.EateryCategoriesItem {
+	var categories []api.EateryCategoriesItem
+
+	for _, category := range staticCategories {
+		switch category {
+		case "Convenience Store":
+			categories = append(categories, api.EateryCategoriesItemConvenienceStore)
+		case "Cafe":
+			categories = append(categories, api.EateryCategoriesItemCafe)
+		case "Dining Room":
+			categories = append(categories, api.EateryCategoriesItemDiningRoom)
+		case "Coffee Shop":
+			categories = append(categories, api.EateryCategoriesItemCoffeeShop)
+		case "Cart":
+			categories = append(categories, api.EateryCategoriesItemCart)
+		case "Food Court":
+			categories = append(categories, api.EateryCategoriesItemFoodCourt)
+		default:
+			continue
+		}
+	}
+
+	return categories
+}

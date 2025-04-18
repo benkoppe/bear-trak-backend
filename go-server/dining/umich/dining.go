@@ -55,34 +55,9 @@ func convertScraped(static static.Eatery, scraped []scrape.Eatery) api.Eatery {
 		Hours:          convertScrapedHours(scraped),
 		Region:         static.Region,
 		PayMethods:     convertScrapedPayMethods(firstScraped),
-		Categories:     convertStaticCategories(static),
+		Categories:     shared.ConvertStaticCategories(static.Categories),
 		NextWeekEvents: shared.SelectNextWeekEvents(events),
 	}
-}
-
-func convertStaticCategories(static static.Eatery) []api.EateryCategoriesItem {
-	var categories []api.EateryCategoriesItem
-
-	for _, category := range static.Categories {
-		switch category {
-		case "Convenience Store":
-			categories = append(categories, api.EateryCategoriesItemConvenienceStore)
-		case "Cafe":
-			categories = append(categories, api.EateryCategoriesItemCafe)
-		case "Dining Room":
-			categories = append(categories, api.EateryCategoriesItemDiningRoom)
-		case "Coffee Shop":
-			categories = append(categories, api.EateryCategoriesItemCoffeeShop)
-		case "Cart":
-			categories = append(categories, api.EateryCategoriesItemCart)
-		case "Food Court":
-			categories = append(categories, api.EateryCategoriesItemFoodCourt)
-		default:
-			continue
-		}
-	}
-
-	return categories
 }
 
 func convertScrapedPayMethods(scraped scrape.Eatery) []string {
