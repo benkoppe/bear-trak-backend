@@ -8,14 +8,14 @@ import (
 )
 
 type Caches struct {
-	locationsCache *utils.Cache[[]Location]
-	recipesCache   *utils.Cache[[]Recipe]
+	LocationsCache *utils.Cache[[]Location]
+	RecipesCache   *utils.Cache[[]Recipe]
 }
 
 func InitCaches(baseUrl, apiKey string) Caches {
 	return Caches{
-		locationsCache: initLocationsCache(baseUrl, apiKey),
-		recipesCache:   initRecipesCache(baseUrl, apiKey),
+		LocationsCache: initLocationsCache(baseUrl, apiKey),
+		RecipesCache:   initRecipesCache(baseUrl, apiKey),
 	}
 }
 
