@@ -40,7 +40,7 @@ func (h *Handler) initCaches() {
 		log.Fatalf("Dining API key not found in environment variables")
 	}
 
-	// h.diningCache = dining.InitCache(eateriesBaseUrl, diningApiKey)
+	h.diningCache = dining.InitCache(eateriesBaseUrl, diningApiKey)
 	h.transitShuttleCaches = harvard_transit.InitCaches(pasioBaseUrl, pasioSystemId, gtfsStaticUrl, gtfsRealtimeBaseUrl)
 	h.transitMbtaCaches = mbta_transit.InitCaches(mbtaGtfsUrl, mbtaGtfsRealtimeBaseUrl)
 }
