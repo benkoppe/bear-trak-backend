@@ -46,6 +46,11 @@ func ConvertVehicle(vehicle gtfs.Vehicle, staticGtfs gtfs.Static, realtimeGtfs g
 
 	if trip == nil {
 		log.Printf("failed to find trip for vehicle ID: %s", vehicleId)
+		if tripId.RouteID == "" {
+			log.Printf("failed to find route ID for vehicle ID: %s", vehicleId)
+		} else {
+			apiVehicle.RouteId = api.NewStringVehicleRouteId(tripId.RouteID)
+		}
 	} else {
 		apiVehicle.RouteId = api.NewStringVehicleRouteId(trip.Route.Id)
 		apiVehicle.Direction = trip.DirectionId.String()
