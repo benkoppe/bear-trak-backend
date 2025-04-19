@@ -10,14 +10,16 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	dining "github.com/benkoppe/bear-trak-backend/go-server/dining/harvard"
-	transit "github.com/benkoppe/bear-trak-backend/go-server/transit/harvard"
+	harvard_transit "github.com/benkoppe/bear-trak-backend/go-server/transit/harvard"
+	mbta_transit "github.com/benkoppe/bear-trak-backend/go-server/transit/mbta"
 )
 
 type Handler struct {
 	DB *db.Queries
 
-	diningCache   dining.Cache
-	transitCaches transit.Caches
+	diningCache          dining.Cache
+	transitShuttleCaches harvard_transit.Caches
+	transitMbtaCaches    mbta_transit.Caches
 }
 
 func NewHandler(db *db.Queries) *Handler {
@@ -38,8 +40,9 @@ func (h *Handler) initCaches() {
 		log.Fatalf("Dining API key not found in environment variables")
 	}
 
-	h.diningCache = dining.InitCache(eateriesBaseUrl, diningApiKey)
-	h.transitCaches = transit.InitCaches(pasioBaseUrl, pasioSystemId, gtfsStaticUrl, gtfsRealtimeBaseUrl)
+	// h.diningCache = dining.InitCache(eateriesBaseUrl, diningApiKey)
+	h.transitShuttleCaches = harvard_transit.InitCaches(pasioBaseUrl, pasioSystemId, gtfsStaticUrl, gtfsRealtimeBaseUrl)
+	h.transitMbtaCaches = mbta_transit.InitCaches(mbtaGtfsUrl, mbtaGtfsRealtimeBaseUrl)
 }
 
 func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
@@ -55,11 +58,27 @@ func (h *Handler) GetV1Gyms(ctx context.Context) ([]api.Gym, error) {
 }
 
 func (h *Handler) GetV1TransitRoutes(ctx context.Context) ([]api.BusRoute, error) {
-	return transit.GetRoutes(h.transitCaches)
+	harvard, err := harvard_transit.GetRoutes(h.transitShuttleCaches)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get harvard routes: %w", err)
+	}
+	mbta, err := mbta_transit.GetRoutes(h.transitMbtaCaches)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get mbta routes: %w", err)
+	}
+	return append(harvard, mbta...), nil
 }
 
 func (h *Handler) GetV1TransitVehicles(ctx context.Context) ([]api.Vehicle, error) {
-	return transit.GetVehicles(h.transitCaches)
+	harvard, err := harvard_transit.GetVehicles(h.transitShuttleCaches)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get harvard vehicles: %w", err)
+	}
+	mbta, err := mbta_transit.GetVehicles(h.transitMbtaCaches)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get mbta vehicles: %w", err)
+	}
+	return append(harvard, mbta...), nil
 }
 
 func (h *Handler) GetV1Study(ctx context.Context) (*api.StudyData, error) {

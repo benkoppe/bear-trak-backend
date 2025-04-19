@@ -9,4 +9,7 @@ const (
 	gtfsStaticUrl = "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip"
 
 	gtfsRealtimeBaseUrl = "https://passio3.com/harvard/passioTransit/gtfs/realtime"
+
+	mbtaGtfsUrl             = "https://cdn.mbta.com/MBTA_GTFS.zip"
+	mbtaGtfsRealtimeBaseUrl = "https://cdn.mbta.com/realtime"
 )
