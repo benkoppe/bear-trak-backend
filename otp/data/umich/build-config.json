@@ -1,9 +1,13 @@
 {
+  "osmDefaults": {
+    "timeZone": "America/Detroit"
+  },
   "transitFeeds": [
     {
       "type": "gtfs",
       "source": "https://webapps.fo.umich.edu/transit_uploads/google_transit.zip",
       "feedId": "umich"
     }
-  ]
+  ],
+  "transitModelTimeZone": "America/Detroit"
 }
