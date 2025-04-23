@@ -98,8 +98,8 @@ jobs:
           push: true
           tags: ${{ matrix.tags }}
           build-args: |
-            SCHOOL: ${{ matrix.school }}
-            JAVA_TOOL_OPTIONS: ${{ matrix.java_tool_options }}
+            SCHOOL=${{ matrix.school }}
+            JAVA_TOOL_OPTIONS=${{ matrix.java_tool_options }}
 
   coolify-deploy:
     runs-on: ubuntu-latest
