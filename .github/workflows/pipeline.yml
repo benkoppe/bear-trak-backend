@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [go-server, otp-cornell, otp-umich, transitclock]
+        service: [go-server, otp-cornell, otp-umich, otp-harvard, transitclock]
         include:
           - service: go-server
             context: ./go-server
@@ -65,6 +65,14 @@ jobs:
             tags: |
               ghcr.io/benkoppe/bear-trak-otp-umich:latest
               ghcr.io/benkoppe/bear-trak-otp-umich:${{ github.sha }}
+          - service: otp-harvard
+            context: ./otp
+            dockerfile: otp/Dockerfile
+            school: harvard
+            java_tool_options: -Xmx1536m
+            tags: |
+              ghcr.io/benkoppe/bear-trak-otp-harvard:latest
+              ghcr.io/benkoppe/bear-trak-otp-harvard:${{ github.sha }}
           - service: transitclock
             context: ./transitclock
             dockerfile: transitclock/Dockerfile
@@ -91,6 +99,7 @@ jobs:
           tags: ${{ matrix.tags }}
           build-args:
             ${{ matrix.school != '' && format('SCHOOL={0}', matrix.school) || '' }}
+            ${{ matrix.java_tool_options != '' && format('JAVA_TOOL_OPTIONS={0}', matrix.java_tool_options) || '' }}
 
   coolify-deploy:
     runs-on: ubuntu-latest
