@@ -1,0 +1,44 @@
+{
+  "updaters": [
+    {
+      "type": "vehicle-positions",
+      "url": "https://passio3.com/harvard/passioTransit/gtfs/realtime/vehiclePositions",
+      "feedId": "harvard",
+      "frequency": "30s",
+      "fuzzyTripMatching": true,
+      "features": ["position"]
+    },
+    {
+      "type": "vehicle-positions",
+      "url": "https://cdn.mbta.com/realtime/VehiclePositions.pb",
+      "feedId": "mbta",
+      "frequency": "30s",
+      "fuzzyTripMatching": true,
+      "features": ["position"]
+    },
+    {
+      "type": "real-time-alerts",
+      "url": "https://passio3.com/harvard/passioTransit/gtfs/realtime/serviceAlerts",
+      "feedId": "harvard",
+      "frequency": "1m"
+    },
+    {
+      "type": "real-time-alerts",
+      "url": "https://cdn.mbta.com/realtime/Alerts.pb",
+      "feedId": "mbta",
+      "frequency": "1m"
+    },
+    {
+      "type": "stop-time-updater",
+      "url": "https://passio3.com/harvard/passioTransit/gtfs/realtime/tripUpdates",
+      "feedId": "harvard",
+      "frequency": "30s"
+    },
+    {
+      "type": "stop-time-updater",
+      "url": "https://cdn.mbta.com/realtime/TripUpdates.pb",
+      "feedId": "mbta",
+      "frequency": "30s"
+    }
+  ]
+}

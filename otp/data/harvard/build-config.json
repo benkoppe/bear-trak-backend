@@ -1,0 +1,18 @@
+{
+  "osmDefaults": {
+    "timeZone": "America/New_York"
+  },
+  "transitFeeds": [
+    {
+      "type": "gtfs",
+      "source": "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip",
+      "feedId": "harvard"
+    },
+    {
+      "type": "gtfs",
+      "source": "https://cdn.mbta.com/MBTA_GTFS.zip",
+      "feedId": "mbta"
+    }
+  ],
+  "transitModelTimeZone": "America/New_York"
+}
