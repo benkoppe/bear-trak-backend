@@ -14,10 +14,7 @@ ENV JAVA_TOOL_OPTIONS="-Xmx512m"
 # Copy static files into the container
 COPY ./data/${SCHOOL}/graph.pbf /var/opentripplanner/graph.pbf
 COPY ./data/${SCHOOL}/router-config.json /var/opentripplanner/router-config.json
-COPY ./data/${SCHOOL}/gtfs-url.txt /var/opentripplanner/gtfs-url.txt
-
-# Download the GTFS zip
-RUN curl -L -o /var/opentripplanner/gtfs.gtfs.zip "$(cat /var/opentripplanner/gtfs-url.txt)"
+COPY ./data/${SCHOOL}/build-config.json /var/opentripplanner/build-config.json
 
 # Build the OTP graph
 RUN /docker-entrypoint.sh --build --save

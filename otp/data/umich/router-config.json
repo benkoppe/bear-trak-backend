@@ -3,7 +3,7 @@
     {
       "type": "vehicle-positions",
       "url": "https://umichtransitclock.thekoppe.com/api/v1/key/f78a2e9a/agency/1/command/gtfs-rt/vehiclePositions?format=binary",
-      "feedId": "1",
+      "feedId": "umich",
       "frequency": "30s",
       "fuzzyTripMatching": true,
       "features": ["position"]
@@ -11,7 +11,7 @@
     {
       "type": "stop-time-updater",
       "url": "https://umichtransitclock.thekoppe.com/api/v1/key/f78a2e9a/agency/1/command/gtfs-rt/tripUpdates?format=binary",
-      "feedId": "1",
+      "feedId": "umich",
       "frequency": "30s"
     }
   ]
