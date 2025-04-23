@@ -9,5 +9,6 @@ services:
         - "linux/amd64"
       args:
         SCHOOL: ${SCHOOL}
+        JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS:--Xmx512m}
     ports:
       - ${SERVER_PORT:-8888}:8080

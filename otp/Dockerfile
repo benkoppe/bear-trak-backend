@@ -9,7 +9,8 @@ ARG SCHOOL
 ENV SCHOOL=$SCHOOL
 
 # Set Java memory limit (can still be overridden at runtime)
-ENV JAVA_TOOL_OPTIONS="-Xmx512m"
+ARG JAVA_TOOL_OPTIONS
+ENV JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS:--Xmx512m}"
 
 # Copy static files into the container
 COPY ./data/${SCHOOL}/graph.pbf /var/opentripplanner/graph.pbf
