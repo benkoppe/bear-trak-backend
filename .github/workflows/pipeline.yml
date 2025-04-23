@@ -97,9 +97,9 @@ jobs:
           file: ${{ matrix.dockerfile }}
           push: true
           tags: ${{ matrix.tags }}
-          build-args:
-            ${{ matrix.school != '' && format('SCHOOL={0}', matrix.school) || '' }}
-            ${{ matrix.java_tool_options != '' && format('JAVA_TOOL_OPTIONS={0}', matrix.java_tool_options) || '' }}
+          build-args: |
+            SCHOOL: ${{ matrix.school }}
+            JAVA_TOOL_OPTIONS: ${{ matrix.java_tool_options }}
 
   coolify-deploy:
     runs-on: ubuntu-latest
