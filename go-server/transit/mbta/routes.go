@@ -109,10 +109,22 @@ func convertRoute(route gtfs.Route, staticGtfs gtfs.Static) api.BusRoute {
 	return apiRoute
 }
 
+// excludes "Shuttle" if the string starts with that
 func firstThreeCaps(s string) string {
 	var result strings.Builder
 	count := 0
-	for _, r := range s {
+
+	processString := s
+
+	if strings.HasPrefix(s, "Shuttle") {
+		if len(s) > 7 {
+			processString = s[7:]
+		} else {
+			return ""
+		}
+	}
+
+	for _, r := range processString {
 		if unicode.IsUpper(r) {
 			result.WriteRune(r)
 			count++
