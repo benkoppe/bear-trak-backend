@@ -93,7 +93,9 @@ func convertRoute(route gtfs.Route, staticGtfs gtfs.Static) api.BusRoute {
 	code := apiRoute.Code
 	codeLen := len(code)
 
-	if codeLen == 0 {
+	if code == "Shuttle" {
+		apiRoute.Code = firstThreeCaps(apiRoute.Name)
+	} else if codeLen == 0 {
 		// separate ID into name
 		// take capital letters from ID for code
 		apiRoute.Code = firstThreeCaps(id)
