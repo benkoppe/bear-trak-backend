@@ -3,6 +3,7 @@ package mbta
 import (
 	"fmt"
 	"log"
+	"sort"
 	"strconv"
 	"strings"
 	"unicode"
@@ -87,6 +88,10 @@ func getRoutes(staticGtfs gtfs.Static) ([]api.BusRoute, error) {
 }
 
 func resolveDuplicateCodes(routes []api.BusRoute) {
+	sort.Slice(routes, func(i, j int) bool {
+		return routes[i].Name < routes[j].Name
+	})
+
 	codeCounts := make(map[string]int)
 
 	for i := range routes {
