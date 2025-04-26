@@ -3,6 +3,7 @@ package mbta
 import (
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 	"unicode"
 
@@ -80,7 +81,28 @@ func getRoutes(staticGtfs gtfs.Static) ([]api.BusRoute, error) {
 		routes = append(routes, apiRoute)
 	}
 
+	resolveDuplicateCodes(routes)
+
 	return routes, nil
+}
+
+func resolveDuplicateCodes(routes []api.BusRoute) {
+	codeCounts := make(map[string]int)
+
+	for i := range routes {
+		originalCode := routes[i].Code
+
+		count, exists := codeCounts[originalCode]
+
+		if !exists {
+			codeCounts[originalCode] = 1
+		} else {
+			newCode := originalCode + "-" + strconv.Itoa(count)
+			routes[i].Code = newCode
+
+			codeCounts[originalCode] = count + 1
+		}
+	}
 }
 
 func convertRoute(route gtfs.Route, staticGtfs gtfs.Static) api.BusRoute {
