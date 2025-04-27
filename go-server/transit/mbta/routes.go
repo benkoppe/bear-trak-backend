@@ -74,10 +74,24 @@ func GetRoutes(caches Caches) ([]api.BusRoute, error) {
 }
 
 func getRoutes(staticGtfs gtfs.Static) ([]api.BusRoute, error) {
+	ignoreIds := getIgnoreIds()
+
 	var routes []api.BusRoute
 
 	for _, route := range staticGtfs.Routes {
 		apiRoute := convertRoute(route, staticGtfs)
+
+		shouldIgnore := false
+		for _, ignoreId := range ignoreIds {
+			if ignoreId == apiRoute.ID.String {
+				shouldIgnore = true
+				break
+			}
+		}
+
+		if shouldIgnore {
+			continue
+		}
 
 		routes = append(routes, apiRoute)
 	}

@@ -28,10 +28,23 @@ func GetVehicles(caches Caches) ([]api.Vehicle, error) {
 }
 
 func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) ([]api.Vehicle, error) {
+	ignoreIds := getIgnoreIds()
+
 	var vehicles []api.Vehicle
 
 	for _, vehicle := range realtimeGtfs.Vehicles {
+		shouldIgnore := false
+		for _, ignoreId := range ignoreIds {
+			if ignoreId == vehicle.GetTrip().ID.RouteID {
+				shouldIgnore = true
+			}
+		}
+		if shouldIgnore {
+			continue
+		}
+
 		vehicle := gtfs_rt.ConvertVehicle(vehicle, staticGtfs, realtimeGtfs)
+
 		vehicles = append(vehicles, vehicle)
 	}
 
