@@ -3,12 +3,16 @@ package libraries
 import (
 	"fmt"
 	"log"
+	"regexp"
 	"strconv"
+	"strings"
+	"unicode"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/study/harvard/libraries/external"
 	"github.com/benkoppe/bear-trak-backend/go-server/study/harvard/libraries/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/study/shared/libcal"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
 func Get(cache external.Cache) ([]api.Library, error) {
@@ -38,18 +42,19 @@ func Get(cache external.Cache) ([]api.Library, error) {
 }
 
 func convertExternalLibrary(static static.LibraryData, external external.Library) (*api.Library, error) {
-	library := api.Library{
-		Name:             external.Name,
-		Latitude:         external.Coordinates.Latitude,
-		Longitude:        external.Coordinates.Longitude,
-		PrinterLocations: []string{},
-	}
-
 	for _, excludeId := range static.ExclusionIDs {
 		if external.ID == excludeId {
 			// skip detected
 			return nil, nil
 		}
+	}
+
+	library := api.Library{
+		Name:             external.Name,
+		Latitude:         external.Coordinates.Latitude,
+		Longitude:        external.Coordinates.Longitude,
+		ImagePath:        getImagePath(external),
+		PrinterLocations: []string{},
 	}
 
 	id, err := strconv.Atoi(external.ID)
@@ -82,4 +87,27 @@ func convertExternalLibrary(static static.LibraryData, external external.Library
 	}
 
 	return &library, nil
+}
+
+func getImagePath(external external.Library) string {
+	name := external.Name
+
+	lowercased := strings.ToLower(name)
+
+	// filter characters
+	var builder strings.Builder
+	for _, r := range lowercased {
+		// filter marks, and only let letters, numbers, and whitespace through
+		if !unicode.IsMark(r) && (unicode.IsLetter(r) || unicode.IsNumber(r) || unicode.IsSpace(r)) {
+			builder.WriteRune(r)
+		}
+	}
+	stripped := builder.String()
+
+	// regex pattern to match with whitespace
+	re := regexp.MustCompile(`\s+`)
+
+	// replace all whitespace with underscores
+	imageName := re.ReplaceAllString(stripped, "_")
+	return utils.ImageNameToPath("study/harvard", imageName)
 }
