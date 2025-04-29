@@ -7,10 +7,13 @@ import (
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/study/harvard/libraries/external"
+	"github.com/benkoppe/bear-trak-backend/go-server/study/harvard/libraries/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/study/shared/libcal"
 )
 
 func Get(cache external.Cache) ([]api.Library, error) {
+	staticData := static.GetLibraryData()
+
 	externalData, err := cache.Get()
 	if err != nil {
 		return nil, fmt.Errorf("error loading external data: %v", err)
@@ -18,9 +21,13 @@ func Get(cache external.Cache) ([]api.Library, error) {
 
 	var libraries []api.Library
 	for _, externalLibrary := range externalData {
-		library, err := convertExternalLibrary(externalLibrary)
+		library, err := convertExternalLibrary(staticData, externalLibrary)
 		if err != nil {
 			log.Printf("error converting external library: %v", err)
+			continue
+		}
+
+		if library == nil {
 			continue
 		}
 
@@ -30,12 +37,19 @@ func Get(cache external.Cache) ([]api.Library, error) {
 	return libraries, nil
 }
 
-func convertExternalLibrary(external external.Library) (*api.Library, error) {
+func convertExternalLibrary(static static.LibraryData, external external.Library) (*api.Library, error) {
 	library := api.Library{
 		Name:             external.Name,
 		Latitude:         external.Coordinates.Latitude,
 		Longitude:        external.Coordinates.Longitude,
 		PrinterLocations: []string{},
+	}
+
+	for _, excludeId := range static.ExclusionIDs {
+		if external.ID == excludeId {
+			// skip detected
+			return nil, nil
+		}
 	}
 
 	id, err := strconv.Atoi(external.ID)
@@ -49,11 +63,23 @@ func convertExternalLibrary(external external.Library) (*api.Library, error) {
 	}
 	details := external.WeeksHours.Locations[0]
 
+	cardAccess := false
+	for _, cardAccessId := range static.CardAccessIDs {
+		if external.ID == cardAccessId {
+			cardAccess = true
+			break
+		}
+	}
+
 	hours, err := libcal.ConvertToHours(details.Weeks)
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert libcal hours: %v", err)
 	}
-	library.Hours = hours
+	if !cardAccess {
+		library.Hours = hours
+	} else {
+		library.CardAccessHours = hours
+	}
 
 	return &library, nil
 }
