@@ -3,14 +3,13 @@ package libraries
 import (
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/schools/cornell/external_map"
 	"github.com/benkoppe/bear-trak-backend/go-server/study/cornell/libraries/external"
 	"github.com/benkoppe/bear-trak-backend/go-server/study/cornell/libraries/static"
+	"github.com/benkoppe/bear-trak-backend/go-server/study/shared/libcal"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
-	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
 )
 
 func Get(cache external.Cache, mapCache external_map.Cache) ([]api.Library, error) {
@@ -99,58 +98,5 @@ func getExternalHours(externalData []external.Library, lid int) ([]api.Hours, er
 		return nil, fmt.Errorf("no external data for library %d", lid)
 	}
 
-	est := time_utils.LoadEST()
-	now := time.Now().In(est)
-	today := time.Date(
-		now.Year(),
-		now.Month(),
-		now.Day(),
-		0, 0, 0, 0, est,
-	)
-	weekAhead := today.AddDate(0, 0, 7)
-
-	var hours []api.Hours
-	for _, day := range externalLibrary.GetAllDays() {
-		if !day.Date.ToTime().Before(today) && day.Date.ToTime().Before(weekAhead) {
-			if day.Times.Status == "24hours" {
-				hours = append(hours, api.Hours{
-					Start: day.Date.ToTime(),
-					End:   day.Date.ToTime().AddDate(0, 0, 1),
-				})
-				continue
-			}
-			hours = append(hours, convertExternalHours(day.Date.ToTime(), day.Times.Hours)...)
-		}
-	}
-
-	return hours, nil
-}
-
-func convertExternalHours(date time.Time, externalHours []external.Hours) []api.Hours {
-	var hours []api.Hours
-	for _, externalHour := range externalHours {
-		start, e1 := externalHour.From.ToDate(date)
-		end, e2 := externalHour.To.ToDate(date)
-
-		if e1 != nil {
-			fmt.Printf("error parsing hours: %v", e1)
-			continue
-		}
-		if e2 != nil {
-			fmt.Printf("error parsing hours: %v", e2)
-			continue
-		}
-
-		// if end is before the start (ie 12am was parsed as the wrong day, add a day)
-		if end.Before(start) {
-			end = end.AddDate(0, 0, 1)
-		}
-
-		hours = append(hours, api.Hours{
-			Start: start,
-			End:   end,
-		})
-	}
-
-	return hours
+	return libcal.ConvertToHours(externalLibrary.Weeks)
 }
