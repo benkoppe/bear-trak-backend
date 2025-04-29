@@ -12,4 +12,6 @@ const (
 
 	mbtaGtfsUrl             = "https://cdn.mbta.com/MBTA_GTFS.zip"
 	mbtaGtfsRealtimeBaseUrl = "https://cdn.mbta.com/realtime"
+
+	librariesUrl = "https://library.harvard.edu/api/v1/library?_format=json&weeks=2"
 )

@@ -10,6 +10,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	dining "github.com/benkoppe/bear-trak-backend/go-server/dining/harvard"
+	study "github.com/benkoppe/bear-trak-backend/go-server/study/harvard"
 	harvard_transit "github.com/benkoppe/bear-trak-backend/go-server/transit/harvard"
 	mbta_transit "github.com/benkoppe/bear-trak-backend/go-server/transit/mbta"
 )
@@ -20,6 +21,7 @@ type Handler struct {
 	diningCache          dining.Cache
 	transitShuttleCaches harvard_transit.Caches
 	transitMbtaCaches    mbta_transit.Caches
+	studyCache           study.Cache
 }
 
 func NewHandler(db *db.Queries) *Handler {
@@ -40,9 +42,10 @@ func (h *Handler) initCaches() {
 		log.Fatalf("Dining API key not found in environment variables")
 	}
 
-	h.diningCache = dining.InitCache(eateriesBaseUrl, diningApiKey)
+	// h.diningCache = dining.InitCache(eateriesBaseUrl, diningApiKey)
 	h.transitShuttleCaches = harvard_transit.InitCaches(pasioBaseUrl, pasioSystemId, gtfsStaticUrl, gtfsRealtimeBaseUrl)
 	h.transitMbtaCaches = mbta_transit.InitCaches(mbtaGtfsUrl, mbtaGtfsRealtimeBaseUrl)
+	h.studyCache = study.InitCache(librariesUrl)
 }
 
 func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
@@ -82,7 +85,7 @@ func (h *Handler) GetV1TransitVehicles(ctx context.Context) ([]api.Vehicle, erro
 }
 
 func (h *Handler) GetV1Study(ctx context.Context) (*api.StudyData, error) {
-	return nil, fmt.Errorf("not implemented")
+	return study.Get(h.studyCache)
 }
 
 func (h *Handler) GetV1DiningUser(ctx context.Context, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {
