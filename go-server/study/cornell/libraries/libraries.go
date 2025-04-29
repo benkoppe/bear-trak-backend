@@ -85,7 +85,7 @@ func convertStaticLibrary(static static.Library) api.Library {
 	return api.Library{
 		ID:               static.ID,
 		Name:             static.Name,
-		ImagePath:        utils.ImageNameToPath("study", static.ImageName),
+		ImagePath:        utils.ImageNameToPath("study/cornell", static.ImageName),
 		PrinterLocations: static.PrinterLocations,
 	}
 }
