@@ -72,7 +72,7 @@ func main() {
 
 	// serve static files from the embedded filesystem on /static/
 	fileServer := http.FileServer(http.FS(staticFS))
-	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
+	mux.Handle("/static/", corsMiddleware(http.StripPrefix("/static", fileServer)))
 
 	// start the timed tasks in a separate goroutine
 	go runTimedTasks(dbQueries, handler, *config)
