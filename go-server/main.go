@@ -52,11 +52,17 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// allowed origins for domain cross-request
+	allowedOrigins := []string{
+		"http://localhost:5173",
+	}
+	corsMiddleware := corsMiddleware(allowedOrigins)
+
 	// create multiplexer to handle service and static file routes
 	mux := http.NewServeMux()
 
 	// mount the API
-	mux.Handle("/", srv)
+	mux.Handle("/", corsMiddleware(srv))
 
 	// create a sub filesystem rooted as "static"
 	staticFS, err := fs.Sub(embeddedStaticFiles, "static")
@@ -110,5 +116,31 @@ func executeHourlyTasks(queries *db.Queries, handler api.Handler, config schools
 		if err != nil {
 			log.Printf("Error fetching house dinner data: %v", err)
 		}
+	}
+}
+
+func corsMiddleware(allowedOrigins []string) func(http.Handler) http.Handler {
+	allowed := make(map[string]struct{}, len(allowedOrigins))
+	for _, origin := range allowedOrigins {
+		allowed[origin] = struct{}{}
+	}
+
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			origin := r.Header.Get("Origin")
+			if _, ok := allowed[origin]; ok {
+				w.Header().Set("Access-Control-Allow-Origin", origin)
+				w.Header().Set("Access-Control-Allow-Credentials", "true")
+				w.Header().Set("Vary", "Origin")
+			}
+			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+			if r.Method == http.MethodOptions {
+				w.WriteHeader(http.StatusOK)
+				return
+			}
+			next.ServeHTTP(w, r)
+		})
 	}
 }
