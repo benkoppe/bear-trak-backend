@@ -310,7 +310,7 @@ func uploadPDF(pdfData []byte, fileName string) (string, error) {
 }
 
 func sendOCRRequest(pdfURL string, mistralApiKey string) (string, error) {
-	payload := map[string]interface{}{
+	payload := map[string]any{
 		"model": "mistral-ocr-latest",
 		"document": map[string]string{
 			"document_url": pdfURL,
