@@ -367,8 +367,15 @@ func sendAIRequest(menuOCR string, openrouterApiKey string) (*Result, error) {
 		Model: "google/gemini-2.0-flash-001",
 		Messages: []openrouter.ChatCompletionMessage{
 			{
-				Role:    openrouter.ChatMessageRoleUser,
-				Content: openrouter.Content{Text: "What is the entirety of this week's house dinner? Use the OCR below to instruct your answer and transcribe to the given JSON schema. Don't include special characters like â€, the TM symbol, or HTML tags like <br>. Don't include the text 'House Dinner' in the dinner name. If no menu can be found, set MenuFound to FALSE in the schema, otherwise set it to TRUE.\n\n" + menuOCR},
+				Role: openrouter.ChatMessageRoleUser,
+				Content: openrouter.Content{Text: `What is the entirety of this week's
+					house dinner? Use the OCR below to instruct your answer and
+					transcribe to the given JSON schema. Don't include special characters
+					like â€, the TM symbol, or HTML tags like <br>. Don't include the
+					text 'House Dinner' in the dinner name. Sometimes, newsletters don't
+					contain house dinner menus. Look carefully to ensure that a house
+					dinner menu actually exists. If no menu can be found, set MenuFound
+					to FALSE in the schema, otherwise set it to TRUE.\n\n` + menuOCR},
 			},
 		},
 		ResponseFormat: &openrouter.ChatCompletionResponseFormat{
