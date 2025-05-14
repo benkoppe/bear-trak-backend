@@ -45,11 +45,11 @@ type DatedResult struct {
 
 type Cache = *utils.Cache[[]DatedResult]
 
-func InitCache(emailPassword, mistralApiKey, openrouterApiKey string) Cache {
+func InitCache(emailPassword, mistralApiKey, openrouterApiKey, openrouterModel string) Cache {
 	return utils.NewCache("diningEmail",
 		24*time.Hour,
 		func() ([]DatedResult, error) {
-			return fetchData(emailPassword, mistralApiKey, openrouterApiKey)
+			return fetchData(emailPassword, mistralApiKey, openrouterApiKey, openrouterModel)
 		})
 }
 
@@ -62,7 +62,7 @@ var (
 	cacheMu         sync.RWMutex
 )
 
-func fetchData(emailPassword, mistralApiKey, openrouterApiKey string) ([]DatedResult, error) {
+func fetchData(emailPassword, mistralApiKey, openrouterApiKey, openrouterModel string) ([]DatedResult, error) {
 	c, err := client.DialTLS("imap.gmail.com:993", nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to IMAP server: %w", err)
@@ -84,7 +84,7 @@ func fetchData(emailPassword, mistralApiKey, openrouterApiKey string) ([]DatedRe
 	var dinners []DatedResult
 
 	for _, subject := range subjects {
-		menu, err := getLatestMenu(c, subject, mistralApiKey, openrouterApiKey)
+		menu, err := getLatestMenu(c, subject, mistralApiKey, openrouterApiKey, openrouterModel)
 		if err != nil {
 			log.Println("Error fetching menu for", subject, ":", err)
 			continue
@@ -95,7 +95,7 @@ func fetchData(emailPassword, mistralApiKey, openrouterApiKey string) ([]DatedRe
 	return dinners, nil
 }
 
-func getLatestMenu(c *client.Client, subject string, mistrakApiKey string, openrouterApiKey string) (*DatedResult, error) {
+func getLatestMenu(c *client.Client, subject string, mistralApiKey, openrouterApiKey, openrouterModel string) (*DatedResult, error) {
 	email, err := emailsContainingSubject(c, subject)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch emails: %w", err)
@@ -136,12 +136,12 @@ func getLatestMenu(c *client.Client, subject string, mistrakApiKey string, openr
 		return nil, fmt.Errorf("failed to upload PDF: %w", err)
 	}
 
-	ocr, err := sendOCRRequest(uploadURL, mistrakApiKey)
+	ocr, err := sendOCRRequest(uploadURL, mistralApiKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to perform OCR: %w", err)
 	}
 
-	menu, err := sendAIRequest(ocr, openrouterApiKey)
+	menu, err := sendAIRequest(ocr, openrouterApiKey, openrouterModel)
 	if err != nil {
 		return nil, fmt.Errorf("failed to send AI request: %w", err)
 	}
@@ -350,7 +350,7 @@ func sendOCRRequest(pdfURL string, mistralApiKey string) (string, error) {
 	return respStr, nil
 }
 
-func sendAIRequest(menuOCR string, openrouterApiKey string) (*Result, error) {
+func sendAIRequest(menuOCR string, openrouterApiKey, openrouterModel string) (*Result, error) {
 	ctx := context.Background()
 
 	client := openrouter.NewClient(
@@ -364,7 +364,7 @@ func sendAIRequest(menuOCR string, openrouterApiKey string) (*Result, error) {
 	}
 
 	request := openrouter.ChatCompletionRequest{
-		Model: "google/gemini-2.0-flash-001",
+		Model: openrouterModel,
 		Messages: []openrouter.ChatCompletionMessage{
 			{
 				Role: openrouter.ChatMessageRoleUser,

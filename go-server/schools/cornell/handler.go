@@ -43,6 +43,7 @@ const (
 	EMAIL_PASSWORD_ENV_VAR     = "EMAIL_PASSWORD"
 	MISTRAL_API_KEY_ENV_VAR    = "MISTRAL_API_KEY"
 	OPENROUTER_API_KEY_ENV_VAR = "OPENROUTER_API_KEY"
+	OPENROUTER_MODEL_ENV_VAR   = "OPENROUTER_MODEL"
 )
 
 func InitHouseDinnerCache() dining_email.Cache {
@@ -58,8 +59,12 @@ func InitHouseDinnerCache() dining_email.Cache {
 	if openrouterApiKey == "" {
 		log.Fatalf("Openrouter API key " + OPENROUTER_API_KEY_ENV_VAR + " not found in environment variables")
 	}
+	openrouterModel := os.Getenv(OPENROUTER_MODEL_ENV_VAR)
+	if openrouterModel == "" {
+		openrouterModel = "google/gemini-2.0-flash-001"
+	}
 
-	return dining_email.InitCache(emailPassword, mistralApiKey, openrouterApiKey)
+	return dining_email.InitCache(emailPassword, mistralApiKey, openrouterApiKey, openrouterModel)
 }
 
 func (h *Handler) initCaches() {
