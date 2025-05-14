@@ -406,9 +406,5 @@ func sendAIRequest(menuOCR string, openrouterApiKey, openrouterModel string) (*R
 		return nil, fmt.Errorf("failed to unmarshal response JSON: %v", err)
 	}
 
-	if !result.MenuFound {
-		return nil, fmt.Errorf("no menu found in response")
-	}
-
 	return &result, nil
 }

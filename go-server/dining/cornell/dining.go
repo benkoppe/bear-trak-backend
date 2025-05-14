@@ -377,6 +377,11 @@ func appendHouseDinnerMenus(eateries []api.Eatery, staticEateries []static.Eater
 			converted = append(converted, eatery)
 			continue
 		}
+		if !houseDinnerMenu.Menu.MenuFound {
+			log.Printf("Newsletter doesn't contain house dinner menu for subject: %s", *staticEatery.HouseDinnerSubject)
+			converted = append(converted, eatery)
+			continue
+		}
 
 		events := eatery.NextWeekEvents.Wednesday
 		event := utils.Find(events, func(e api.EateryEvent) bool {
