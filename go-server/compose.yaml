@@ -14,10 +14,8 @@ services:
       - POSTGRES_SSLMODE=disable
       - SCHOOL_CODE=${SCHOOL_CODE}
       - BUSTIME_API_KEY
-      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
-      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - OPENROUTER_MODEL=${OPENROUTER_MODEL}
+    env_file:
+      - .env
     depends_on:
       - db
     networks: 
