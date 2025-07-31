@@ -1,4 +1,4 @@
-FROM maven:3.6-jdk-8
+FROM maven:3.8.8-eclipse-temurin-8
 LABEL org.opencontainers.image.authors="Nathan Walker <nathan@rylath.net>, Sean Óg Crudden <og.crudden@gmail.com>"
 
 RUN apt-get update \
