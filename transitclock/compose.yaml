@@ -14,7 +14,7 @@ services:
       timeout: 5s
       retries: 5
 
-  server:
+  server: # deploy with tunnel on port 8080
     image: ghcr.io/benkoppe/trak-transitclock:${SOURCE_COMMIT:-latest}
     restart: always
     build:
