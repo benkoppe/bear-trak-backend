@@ -22,6 +22,8 @@ services:
       - ${SERVER_PORT:-3000}:3000
     depends_on:
       - db
+    networks: 
+      - tunnel
 
   db:
     image: postgres
@@ -40,3 +42,7 @@ services:
 
 volumes:
   db-data:
+
+networks:
+  tunnel:
+    external: true
