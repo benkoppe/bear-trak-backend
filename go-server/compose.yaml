@@ -1,5 +1,5 @@
 services:
-  go-server:
+  go-server: # deploy with tunnel on port 3000
     image: ghcr.io/benkoppe/bear-trak-go:${SOURCE_COMMIT:-latest}
     restart: always
     build:
@@ -18,13 +18,10 @@ services:
       - MISTRAL_API_KEY=${MISTRAL_API_KEY}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - OPENROUTER_MODEL=${OPENROUTER_MODEL}
-    ports:
-      - ${SERVER_PORT:-3000}:3000
     depends_on:
       - db
     networks: 
       - tunnel
-      - default
 
   db:
     image: postgres
