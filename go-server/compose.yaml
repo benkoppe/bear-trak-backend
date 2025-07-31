@@ -22,6 +22,7 @@ services:
       - db
     networks: 
       - tunnel
+      - default
 
   db:
     image: postgres
