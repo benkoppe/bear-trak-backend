@@ -1,5 +1,5 @@
 services:
-  otp:
+  otp: # deploy with tunnel on port 8080
     image: ghcr.io/benkoppe/bear-trak-otp-${SCHOOL}:${SOURCE_COMMIT:-latest}
     restart: always
     build:
@@ -10,8 +10,6 @@ services:
       args:
         SCHOOL: ${SCHOOL}
         JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS:--Xmx512m}
-    ports:
-      - ${SERVER_PORT:-8888}:8080
     networks:
       - tunnel
 
