@@ -7,5 +7,5 @@ const (
 
 	bustimeUrl = "https://mbus.ltp.umich.edu/bustime/api/v3"
 
-	gtfsStaticUrl = "/data/umich/gtfs.zip"
+	gtfsStaticUrl = "/data/gtfs-umich.zip"
 )
