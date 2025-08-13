@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_DB: "${AGENCYNAME-UMICH}"
       POSTGRES_PASSWORD: ${PGPASSWORD}
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
