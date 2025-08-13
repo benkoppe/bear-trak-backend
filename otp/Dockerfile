@@ -16,6 +16,7 @@ ENV JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS:--Xmx512m}"
 COPY ./data/${SCHOOL}/graph.pbf /var/opentripplanner/graph.pbf
 COPY ./data/${SCHOOL}/router-config.json /var/opentripplanner/router-config.json
 COPY ./data/${SCHOOL}/build-config.json /var/opentripplanner/build-config.json
+COPY ./data/${SCHOOL}/gtfs.zip* /var/opentripplanner/gtfs.zip
 
 # Build the OTP graph
 RUN /docker-entrypoint.sh --build --save
