@@ -5,7 +5,7 @@
   "transitFeeds": [
     {
       "type": "gtfs",
-      "source": "file://gtfs.zip",
+      "source": "gtfs.zip",
       "feedId": "umich"
     }
   ],
