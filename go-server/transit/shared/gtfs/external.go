@@ -13,18 +13,18 @@ import (
 
 type Cache = *utils.Cache[*gtfs.Static]
 
-func InitCache(url string) Cache {
+func InitCache(source string) Cache {
 	return utils.NewCache(
 		"transitExternalGtfs",
 		utils.NoExpiration,
 		func() (*gtfs.Static, error) {
-			return loadData(url)
+			return loadData(source)
 		},
 	)
 }
 
-func loadData(url string) (*gtfs.Static, error) {
-	tcatGtfsData, err := loadTcatGtfs(url)
+func loadData(source string) (*gtfs.Static, error) {
+	tcatGtfsData, err := loadTcatGtfs(source)
 	if err != nil {
 		return nil, fmt.Errorf("error loading tcat data: %v", err)
 	}
@@ -43,8 +43,8 @@ func loadTcatGtfs(source string) ([]byte, error) {
 
 	if strings.HasPrefix(source, "http://") || strings.HasPrefix(source, "https://") {
 		// Load from HTTP
-		resp, err := http.Get(url)
-		if err !== nil {
+		resp, err := http.Get(source)
+		if err != nil {
 			return nil, fmt.Errorf("error fetching gtfs ZIP: %v", err)
 		}
 		reader = resp.Body
@@ -58,7 +58,7 @@ func loadTcatGtfs(source string) ([]byte, error) {
 
 	defer reader.Close()
 
-	originalGtfsData, err := io.ReadAll(resp.Body)
+	originalGtfsData, err := io.ReadAll(reader)
 	if err != nil {
 		return nil, fmt.Errorf("error reading gtfs ZIP: %v", err)
 	}
