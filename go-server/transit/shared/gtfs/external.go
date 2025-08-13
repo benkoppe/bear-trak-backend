@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 	"github.com/jamespfennell/gtfs"
@@ -35,12 +37,26 @@ func loadData(url string) (*gtfs.Static, error) {
 	return staticData, nil
 }
 
-func loadTcatGtfs(url string) ([]byte, error) {
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, fmt.Errorf("error fetching gtfs ZIP: %v", err)
+func loadTcatGtfs(source string) ([]byte, error) {
+	var reader io.ReadCloser
+	var err error
+
+	if strings.HasPrefix(source, "http://") || strings.HasPrefix(source, "https://") {
+		// Load from HTTP
+		resp, err := http.Get(url)
+		if err !== nil {
+			return nil, fmt.Errorf("error fetching gtfs ZIP: %v", err)
+		}
+		reader = resp.Body
+	} else {
+		// Load from file
+		reader, err = os.Open(source)
+		if err != nil {
+			return nil, fmt.Errorf("error opening gtfs ZIP file: %v", err)
+		}
 	}
-	defer resp.Body.Close()
+
+	defer reader.Close()
 
 	originalGtfsData, err := io.ReadAll(resp.Body)
 	if err != nil {

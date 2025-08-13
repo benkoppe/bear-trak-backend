@@ -51,6 +51,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
 
 # Copy the executable from the "build" stage.
 COPY --from=build /bin/server /bin/
+COPY ./static/container-data/* /data/
 
 # Expose the port that the application listens on.
 EXPOSE 3000
