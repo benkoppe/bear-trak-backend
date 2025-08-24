@@ -54,7 +54,7 @@ func main() {
 
 	// allowed origins for domain cross-request
 	allowedOrigins := []string{
-		"http://localhost:5173",
+		"http://localhost:3000",
 		"https://trak.2ben.dev",
 	}
 	corsMiddleware := corsMiddleware(allowedOrigins)
