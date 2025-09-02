@@ -1,3 +1,4 @@
+// Package harvard loads harvard transit content.
 package harvard
 
 import (

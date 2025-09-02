@@ -1,3 +1,4 @@
+// Package shared includes all shared transit methods.
 package shared
 
 import "github.com/benkoppe/bear-trak-backend/go-server/api"

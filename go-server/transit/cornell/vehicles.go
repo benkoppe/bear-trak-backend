@@ -1,4 +1,4 @@
-package transit
+package cornell
 
 import (
 	"fmt"

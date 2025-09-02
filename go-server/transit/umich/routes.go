@@ -1,3 +1,4 @@
+// Package umich loads umich transit content.
 package umich
 
 import (

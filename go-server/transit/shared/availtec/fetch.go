@@ -1,3 +1,4 @@
+// Package availtec loads transit data from availtec.
 package availtec
 
 import (

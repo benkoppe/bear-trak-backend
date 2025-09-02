@@ -1,3 +1,4 @@
+// Package gtfs_rt handles gtfs-rt data.
 package gtfs_rt
 
 import (

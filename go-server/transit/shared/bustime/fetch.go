@@ -1,3 +1,4 @@
+// Package bustime loads transit data from bustime.
 package bustime
 
 import (

@@ -1,4 +1,5 @@
-package transit
+// Package cornell loads cornell transit content.
+package cornell
 
 import (
 	"fmt"

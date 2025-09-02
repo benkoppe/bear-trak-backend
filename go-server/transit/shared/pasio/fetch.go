@@ -1,3 +1,4 @@
+// Package pasio loads transit data from pasio go.
 package pasio
 
 import (

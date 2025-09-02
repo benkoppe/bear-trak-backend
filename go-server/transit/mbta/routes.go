@@ -1,3 +1,4 @@
+// Package mbta loads mbta transit content.
 package mbta
 
 import (

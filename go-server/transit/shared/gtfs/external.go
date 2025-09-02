@@ -1,3 +1,4 @@
+// Package gtfs handles gtfs data.
 package gtfs
 
 import (
