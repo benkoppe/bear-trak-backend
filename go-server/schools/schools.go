@@ -6,7 +6,6 @@ import (
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
-	dining_email "github.com/benkoppe/bear-trak-backend/go-server/dining/cornell/email"
 	"github.com/benkoppe/bear-trak-backend/go-server/schools/cornell"
 	"github.com/benkoppe/bear-trak-backend/go-server/schools/harvard"
 	_ "github.com/benkoppe/bear-trak-backend/go-server/schools/shared"
@@ -26,7 +25,7 @@ const (
 func NewHandler(code SchoolCode, db *db.Queries, config *Config) (api.Handler, error) {
 	switch code {
 	case Cornell:
-		return cornell.NewHandler(db, config.HouseDinnerCache), nil
+		return cornell.NewHandler(db), nil
 	case UMich:
 		return umich.NewHandler(db), nil
 	case Harvard:
@@ -38,16 +37,13 @@ func NewHandler(code SchoolCode, db *db.Queries, config *Config) (api.Handler, e
 
 type Config struct {
 	EnabledGymCapacities bool
-	HouseDinnerCache     dining_email.Cache
 }
 
 func GetConfig(code SchoolCode) (*Config, error) {
 	switch code {
 	case Cornell:
-		houseDinnerCache := cornell.InitHouseDinnerCache()
 		return &Config{
 			EnabledGymCapacities: true,
-			HouseDinnerCache:     houseDinnerCache,
 		}, nil
 	case UMich:
 		return &Config{

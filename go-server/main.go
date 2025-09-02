@@ -111,13 +111,6 @@ func executeHourlyTasks(queries *db.Queries, handler api.Handler, config schools
 			log.Printf("Error logging gym capacities: %v", err)
 		}
 	}
-
-	// if config.HouseDinnerCache != nil {
-	// 	_, err := config.HouseDinnerCache.ForceRefresh()
-	// 	if err != nil {
-	// 		log.Printf("Error fetching house dinner data: %v", err)
-	// 	}
-	// }
 }
 
 func corsMiddleware(allowedOrigins []string) func(http.Handler) http.Handler {

@@ -2,15 +2,12 @@ package cornell
 
 import (
 	"context"
-	"log"
-	"os"
 
 	alerts "github.com/benkoppe/bear-trak-backend/go-server/alerts/cornell"
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	dining_users "github.com/benkoppe/bear-trak-backend/go-server/dining-users"
 	dining "github.com/benkoppe/bear-trak-backend/go-server/dining/cornell"
-	dining_email "github.com/benkoppe/bear-trak-backend/go-server/dining/cornell/email"
 	gyms "github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell"
 	"github.com/benkoppe/bear-trak-backend/go-server/schools/cornell/external_map"
 	"github.com/benkoppe/bear-trak-backend/go-server/schools/shared"
@@ -21,50 +18,20 @@ import (
 type Handler struct {
 	DB *db.Queries
 
-	diningCache      dining.Cache
-	houseDinnerCache dining_email.Cache
-	gymsCaches       gyms.Caches
-	transitCaches    transit.Caches
-	studyCache       study.Cache
-	mapCache         external_map.Cache
+	diningCache   dining.Cache
+	gymsCaches    gyms.Caches
+	transitCaches transit.Caches
+	studyCache    study.Cache
+	mapCache      external_map.Cache
 }
 
-func NewHandler(db *db.Queries, houseDinnerCache dining_email.Cache) *Handler {
+func NewHandler(db *db.Queries) *Handler {
 	h := &Handler{
-		DB:               db,
-		houseDinnerCache: houseDinnerCache,
+		DB: db,
 	}
 	h.initCaches()
 
 	return h
-}
-
-const (
-	EMAIL_PASSWORD_ENV_VAR     = "EMAIL_PASSWORD"
-	MISTRAL_API_KEY_ENV_VAR    = "MISTRAL_API_KEY"
-	OPENROUTER_API_KEY_ENV_VAR = "OPENROUTER_API_KEY"
-	OPENROUTER_MODEL_ENV_VAR   = "OPENROUTER_MODEL"
-)
-
-func InitHouseDinnerCache() dining_email.Cache {
-	emailPassword := os.Getenv(EMAIL_PASSWORD_ENV_VAR)
-	if emailPassword == "" {
-		log.Fatalf("Email Password key " + EMAIL_PASSWORD_ENV_VAR + " not found in environment variables")
-	}
-	mistralApiKey := os.Getenv(MISTRAL_API_KEY_ENV_VAR)
-	if mistralApiKey == "" {
-		log.Fatalf("Mistral API key " + MISTRAL_API_KEY_ENV_VAR + " not found in environment variables")
-	}
-	openrouterApiKey := os.Getenv(OPENROUTER_API_KEY_ENV_VAR)
-	if openrouterApiKey == "" {
-		log.Fatalf("Openrouter API key " + OPENROUTER_API_KEY_ENV_VAR + " not found in environment variables")
-	}
-	openrouterModel := os.Getenv(OPENROUTER_MODEL_ENV_VAR)
-	if openrouterModel == "" {
-		openrouterModel = "google/gemini-2.0-flash-001"
-	}
-
-	return dining_email.InitCache(emailPassword, mistralApiKey, openrouterApiKey, openrouterModel)
 }
 
 func (h *Handler) initCaches() {
@@ -80,7 +47,7 @@ func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
 }
 
 func (h *Handler) GetV1Dining(ctx context.Context) ([]api.Eatery, error) {
-	return dining.Get(h.diningCache, h.houseDinnerCache)
+	return dining.Get(h.diningCache)
 }
 
 func (h *Handler) GetV1Gyms(ctx context.Context) ([]api.Gym, error) {
