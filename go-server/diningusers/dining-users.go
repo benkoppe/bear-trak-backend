@@ -1,5 +1,5 @@
-// Package dining_users includes all methods for CBORD dining integration.
-package dining_users
+// Package diningusers includes all methods for CBORD dining integration.
+package diningusers
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
-	"github.com/benkoppe/bear-trak-backend/go-server/dining-users/external"
+	"github.com/benkoppe/bear-trak-backend/go-server/diningusers/external"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 	"golang.org/x/sync/errgroup"
 )
