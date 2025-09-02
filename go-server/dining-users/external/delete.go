@@ -6,21 +6,21 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
-func DeletePIN(baseUrl string, deviceId string, sessionId string) (*bool, error) {
-	fullUrl, err := utils.ExtendUrl(baseUrl, "user")
-	if fullUrl == nil {
+func DeletePIN(baseURL string, deviceID string, sessionID string) (*bool, error) {
+	fullURL, err := utils.ExtendURL(baseURL, "user")
+	if fullURL == nil {
 		return nil, fmt.Errorf("failed to extend url: %w", err)
 	}
 
-	requestBody := map[string]interface{}{
+	requestBody := map[string]any{
 		"method": "deletePIN",
 		"params": map[string]string{
-			"sessionId": sessionId,
-			"deviceId":  deviceId,
+			"sessionId": sessionID,
+			"deviceId":  deviceID,
 		},
 	}
 
-	resp, err := utils.DoPostRequest[boolResponse](*fullUrl, requestBody)
+	resp, err := utils.DoPostRequest[boolResponse](*fullURL, requestBody)
 	if resp == nil {
 		return nil, err
 	}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"unicode"
@@ -43,11 +44,9 @@ func Get(cache external.Cache) ([]api.Library, error) {
 }
 
 func convertExternalLibrary(static static.LibraryData, external external.Library) (*api.Library, error) {
-	for _, excludeId := range static.ExclusionIDs {
-		if external.ID == excludeId {
-			// skip detected
-			return nil, nil
-		}
+	if slices.Contains(static.ExclusionIDs, external.ID) {
+		// skip detected
+		return nil, nil
 	}
 
 	library := api.Library{
@@ -69,13 +68,7 @@ func convertExternalLibrary(static static.LibraryData, external external.Library
 	}
 	details := external.WeeksHours.Locations[0]
 
-	cardAccess := false
-	for _, cardAccessId := range static.CardAccessIDs {
-		if external.ID == cardAccessId {
-			cardAccess = true
-			break
-		}
-	}
+	cardAccess := slices.Contains(static.CardAccessIDs, external.ID)
 
 	hours, err := libcal.ConvertToHours(details.Weeks)
 	if err != nil {

@@ -9,7 +9,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 )
 
-// For some reason, some floats/ints are encoded as strings
+// Float64String - For some reason, some floats/ints are encoded as strings
 type Float64String float64
 
 func (f *Float64String) UnmarshalJSON(data []byte) error {
@@ -61,7 +61,7 @@ func (i *IntString) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// Defines a TransitTime
+// TransitTime Defines a TransitTime
 // this is encoded in the transit API as
 // a string of the format "20250316 16:16" (YYYYMMDD HH:MM)
 type TransitTime time.Time

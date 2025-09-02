@@ -4,6 +4,7 @@ package mbta
 import (
 	"fmt"
 	"log"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -22,16 +23,16 @@ type Caches struct {
 	realtimeCache gtfs_rt.Cache
 }
 
-func InitCaches(staticGtfsUrl, realtimeGtfsBaseUrl string) Caches {
-	alerts, err := utils.ExtendUrl(realtimeGtfsBaseUrl, "Alerts.pb")
+func InitCaches(staticGtfsURL, realtimeGtfsBaseURL string) Caches {
+	alerts, err := utils.ExtendURL(realtimeGtfsBaseURL, "Alerts.pb")
 	if err != nil {
 		log.Fatalf("failed to extend realtime GTFS alerts URL: %v", err)
 	}
-	tripUpdates, err := utils.ExtendUrl(realtimeGtfsBaseUrl, "TripUpdates.pb")
+	tripUpdates, err := utils.ExtendURL(realtimeGtfsBaseURL, "TripUpdates.pb")
 	if err != nil {
 		log.Fatalf("failed to extend realtime GTFS tripupdates URL: %v", err)
 	}
-	vehicles, err := utils.ExtendUrl(realtimeGtfsBaseUrl, "VehiclePositions.pb")
+	vehicles, err := utils.ExtendURL(realtimeGtfsBaseURL, "VehiclePositions.pb")
 	if err != nil {
 		log.Fatalf("failed to extend realtime GTFS vehicle positions URL: %v", err)
 	}
@@ -43,7 +44,7 @@ func InitCaches(staticGtfsUrl, realtimeGtfsBaseUrl string) Caches {
 	}
 
 	return Caches{
-		staticCache:   shared_gtfs.InitCache(staticGtfsUrl),
+		staticCache:   shared_gtfs.InitCache(staticGtfsURL),
 		realtimeCache: gtfs_rt.InitCache(mbtaGtfsRealtime),
 	}
 }
@@ -82,13 +83,7 @@ func getRoutes(staticGtfs gtfs.Static) ([]api.BusRoute, error) {
 	for _, route := range staticGtfs.Routes {
 		apiRoute := convertRoute(route, staticGtfs)
 
-		shouldIgnore := false
-		for _, ignoreId := range ignoreIds {
-			if ignoreId == apiRoute.ID.String {
-				shouldIgnore = true
-				break
-			}
-		}
+		shouldIgnore := slices.Contains(ignoreIds, apiRoute.ID.String)
 
 		if shouldIgnore {
 			continue

@@ -16,13 +16,13 @@ import (
 )
 
 // unused -- a concurrent verion is in scrape_all
-func fetchEateryWeek(eateryUrl string) ([]Eatery, error) {
+func fetchEateryWeek(eateryURL string) ([]Eatery, error) {
 	now := time.Now()
 	var eateryWeek []Eatery
 
-	for i := 0; i < 7; i++ {
+	for i := range [7]int{} {
 		date := now.AddDate(0, 0, i)
-		eatery, err := fetchEatery(eateryUrl, date)
+		eatery, err := fetchEatery(eateryURL, date)
 		if err != nil {
 			return nil, fmt.Errorf("failed to fetch eatery for date %s: %w", date.Format("2006-01-02"), err)
 		}
@@ -32,13 +32,13 @@ func fetchEateryWeek(eateryUrl string) ([]Eatery, error) {
 	return eateryWeek, nil
 }
 
-func fetchEatery(eateryUrl string, date time.Time) (*Eatery, error) {
-	fullUrl, err := appendDateSearchParam(eateryUrl, date)
+func fetchEatery(eateryURL string, date time.Time) (*Eatery, error) {
+	fullURL, err := appendDateSearchParam(eateryURL, date)
 	if err != nil {
 		return nil, fmt.Errorf("failed to append date search param: %w", err)
 	}
 
-	resp, err := http.Get(fullUrl)
+	resp, err := http.Get(fullURL)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching external data: %w", err)
 	}
@@ -52,8 +52,8 @@ func fetchEatery(eateryUrl string, date time.Time) (*Eatery, error) {
 	return eatery, nil
 }
 
-func appendDateSearchParam(eateryUrl string, date time.Time) (string, error) {
-	parsedUrl, err := url.Parse(eateryUrl)
+func appendDateSearchParam(eateryURL string, date time.Time) (string, error) {
+	parsedURL, err := url.Parse(eateryURL)
 	if err != nil {
 		return "", fmt.Errorf("failed to parse base URL: %w", err)
 	}
@@ -61,11 +61,11 @@ func appendDateSearchParam(eateryUrl string, date time.Time) (string, error) {
 	formattedDate := date.Format("2006-01-02")
 
 	// query parameters
-	query := parsedUrl.Query()
+	query := parsedURL.Query()
 	query.Set("menuDate", formattedDate)
 
-	parsedUrl.RawQuery = query.Encode()
-	return parsedUrl.String(), nil
+	parsedURL.RawQuery = query.Encode()
+	return parsedURL.String(), nil
 }
 
 func scrape(htmlReader io.Reader, date time.Time) (*Eatery, error) {

@@ -11,35 +11,35 @@ import (
 
 type Cache = *utils.Cache[[]Route]
 
-func InitCache(baseUrl string, systemId string) Cache {
+func InitCache(baseURL string, systemID string) Cache {
 	return utils.NewCache(
 		"transitExternalPasio",
 		time.Hour*24,
 		func() ([]Route, error) {
-			return fetchRoutes(baseUrl, systemId)
+			return fetchRoutes(baseURL, systemID)
 		},
 	)
 }
 
-func fetchRoutes(baseUrl string, systemId string) ([]Route, error) {
-	parsedUrl, err := url.Parse(baseUrl)
+func fetchRoutes(baseURL string, systemID string) ([]Route, error) {
+	parsedURL, err := url.Parse(baseURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse base URL: %w", err)
 	}
 
 	// query parameters
-	query := parsedUrl.Query()
+	query := parsedURL.Query()
 	query.Set("getRoutes", "1")
 
-	parsedUrl.RawQuery = query.Encode()
-	fullUrl := parsedUrl.String()
+	parsedURL.RawQuery = query.Encode()
+	fullURL := parsedURL.String()
 
 	requestBody := map[string]string{
-		"systemSelected0": systemId,
+		"systemSelected0": systemID,
 		"amount":          "1",
 	}
 
-	routes, err := utils.DoPostRequest[[]Route](fullUrl, requestBody)
+	routes, err := utils.DoPostRequest[[]Route](fullURL, requestBody)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching routes: %w", err)
 	}

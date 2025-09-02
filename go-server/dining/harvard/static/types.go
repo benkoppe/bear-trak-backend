@@ -11,7 +11,7 @@ import (
 type Eatery struct {
 	ID          int              `json:"id"`
 	Name        string           `json:"name"`
-	ApiNumber   *string          `json:"apiNumber,omitempty"`
+	APINumber   *string          `json:"apiNumber,omitempty"`
 	ImageName   string           `json:"imageName"`
 	Region      string           `json:"region"`
 	Location    Location         `json:"location"`
@@ -36,7 +36,7 @@ type Location struct {
 }
 
 type HarvardHours struct {
-	MealNumber *int                  `json:"mealNumber,omitempty"`
+	MealNumber *int                 `json:"mealNumber,omitempty"`
 	Open       timeutils.TimeString `json:"open"`
 	Close      timeutils.TimeString `json:"close"`
 }
@@ -92,7 +92,7 @@ func (w HarvardWeekHours) CreateFutureHours() []api.Hours {
 	now := time.Now().In(est)
 	var futureHours []api.Hours
 
-	for i := 0; i < 7; i++ {
+	for i := range [7]int{} {
 		date := now.AddDate(0, 0, i)
 		futureHours = append(futureHours, w.GetConvertedHours(date)...)
 	}

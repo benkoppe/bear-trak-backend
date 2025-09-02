@@ -34,8 +34,8 @@ func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) ([]api.Vehi
 
 	for _, vehicle := range realtimeGtfs.Vehicles {
 		shouldIgnore := false
-		for _, ignoreId := range ignoreIds {
-			if ignoreId == vehicle.GetTrip().ID.RouteID {
+		for _, ignoreID := range ignoreIds {
+			if ignoreID == vehicle.GetTrip().ID.RouteID {
 				shouldIgnore = true
 			}
 		}

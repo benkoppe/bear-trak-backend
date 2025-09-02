@@ -17,10 +17,10 @@ type Caches struct {
 	staticCache   shared_gtfs.Cache
 }
 
-func InitCaches(bustimeUrl, bustimeApiKey, staticGtfsUrl string) Caches {
+func InitCaches(bustimeURL, bustimeAPIKey, staticGtfsURL string) Caches {
 	return Caches{
-		staticCache:   shared_gtfs.InitCache(staticGtfsUrl),
-		bustimeCaches: bustime.InitCaches(bustimeUrl, bustimeApiKey),
+		staticCache:   shared_gtfs.InitCache(staticGtfsURL),
+		bustimeCaches: bustime.InitCaches(bustimeURL, bustimeAPIKey),
 	}
 }
 
@@ -56,14 +56,14 @@ func getRoutes(bustimeRoutes []bustime.Route, staticGtfs gtfs.Static) ([]api.Bus
 	for _, route := range bustimeRoutes {
 		var gtfsRoute *gtfs.Route
 		for _, gtfsRouteOption := range staticGtfs.Routes {
-			if gtfsRouteOption.Id == route.Id {
+			if gtfsRouteOption.Id == route.ID {
 				gtfsRoute = &gtfsRouteOption
 				break
 			}
 		}
 
 		if gtfsRoute == nil {
-			return nil, fmt.Errorf("failed to find GTFS route for route ID: %v", route.Id)
+			return nil, fmt.Errorf("failed to find GTFS route for route ID: %v", route.ID)
 		}
 
 		apiRoute := shared_gtfs.ConvertRoute(*gtfsRoute, staticGtfs)

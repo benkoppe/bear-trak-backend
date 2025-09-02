@@ -90,7 +90,7 @@ func (m *Menu) addCategory(title string) *MenuCategory {
 	return &m.Categories[len(m.Categories)-1]
 }
 
-// adds a new menu item to a station
+// AddMenuItem adds a new menu item to a station
 func (mc *MenuCategory) AddMenuItem(name string, traits []string) *MenuItem {
 	item := MenuItem{
 		Name:      name,
@@ -136,7 +136,7 @@ func (mc *MenuCategory) AddMenuItem(name string, traits []string) *MenuItem {
 	return &mc.Items[len(mc.Items)-1]
 }
 
-// adds an allergen to a menu item
+// AddAllergen adds an allergen to a menu item
 func (m *MenuItem) AddAllergen(allergen string) {
 	m.Allergens = append(m.Allergens, allergen)
 }

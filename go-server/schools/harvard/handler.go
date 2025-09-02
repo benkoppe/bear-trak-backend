@@ -43,10 +43,10 @@ func (h *Handler) initCaches() {
 		log.Fatalf("Dining API key not found in environment variables")
 	}
 
-	h.diningCache = dining.InitCache(eateriesBaseUrl, diningApiKey)
-	h.transitShuttleCaches = harvard_transit.InitCaches(pasioBaseUrl, pasioSystemId, gtfsStaticUrl, gtfsRealtimeBaseUrl)
-	h.transitMbtaCaches = mbta_transit.InitCaches(mbtaGtfsUrl, mbtaGtfsRealtimeBaseUrl)
-	h.studyCache = study.InitCache(librariesUrl)
+	h.diningCache = dining.InitCache(eateriesBaseURL, diningApiKey)
+	h.transitShuttleCaches = harvard_transit.InitCaches(pasioBaseURL, pasioSystemID, gtfsStaticURL, gtfsRealtimeBaseURL)
+	h.transitMbtaCaches = mbta_transit.InitCaches(mbtaGtfsURL, mbtaGtfsRealtimeBaseURL)
+	h.studyCache = study.InitCache(librariesURL)
 }
 
 func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {

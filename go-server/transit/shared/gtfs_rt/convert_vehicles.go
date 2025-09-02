@@ -10,31 +10,31 @@ import (
 )
 
 func ConvertVehicle(vehicle gtfs.Vehicle, staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) api.Vehicle {
-	vehicleId := vehicle.GetID()
-	tripId := vehicle.GetTrip().ID
+	vehicleID := vehicle.GetID()
+	tripID := vehicle.GetTrip().ID
 	trip := utils.Find(staticGtfs.Trips, func(t gtfs.ScheduledTrip) bool {
-		return t.ID == tripId.ID
+		return t.ID == tripID.ID
 	})
 
 	apiVehicle := api.Vehicle{
-		ID:            api.NewStringVehicleID(vehicleId.ID),
+		ID:            api.NewStringVehicleID(vehicleID.ID),
 		LastUpdated:   *vehicle.Timestamp,
 		DisplayStatus: "",
 		LastStop:      api.NilString{Null: true},
 	}
 
 	if vehicle.Position.Bearing == nil {
-		log.Printf("failed to find bearing for vehicle ID: %s", vehicleId)
+		log.Printf("failed to find bearing for vehicle ID: %s", vehicleID)
 	} else {
 		apiVehicle.Heading = int(*vehicle.Position.Bearing)
 	}
 	if vehicle.Position.Latitude == nil {
-		log.Printf("failed to find latitude for vehicle ID: %s", vehicleId)
+		log.Printf("failed to find latitude for vehicle ID: %s", vehicleID)
 	} else {
 		apiVehicle.Latitude = float64(*vehicle.Position.Latitude)
 	}
 	if vehicle.Position.Longitude == nil {
-		log.Printf("failed to find longitude for vehicle ID: %s", vehicleId)
+		log.Printf("failed to find longitude for vehicle ID: %s", vehicleID)
 	} else {
 		apiVehicle.Longitude = float64(*vehicle.Position.Longitude)
 	}
@@ -45,11 +45,11 @@ func ConvertVehicle(vehicle gtfs.Vehicle, staticGtfs gtfs.Static, realtimeGtfs g
 	}
 
 	if trip == nil {
-		log.Printf("failed to find trip for vehicle ID: %s", vehicleId)
-		if tripId.RouteID == "" {
-			log.Printf("failed to find route ID for vehicle ID: %s", vehicleId)
+		log.Printf("failed to find trip for vehicle ID: %s", vehicleID)
+		if tripID.RouteID == "" {
+			log.Printf("failed to find route ID for vehicle ID: %s", vehicleID)
 		} else {
-			apiVehicle.RouteId = api.NewStringVehicleRouteId(tripId.RouteID)
+			apiVehicle.RouteId = api.NewStringVehicleRouteId(tripID.RouteID)
 		}
 	} else {
 		apiVehicle.RouteId = api.NewStringVehicleRouteId(trip.Route.Id)
@@ -67,7 +67,7 @@ func ConvertVehicle(vehicle gtfs.Vehicle, staticGtfs gtfs.Static, realtimeGtfs g
 			}
 		}
 	} else {
-		log.Printf("failed to find next stop for vehicle ID: %s", vehicleId)
+		log.Printf("failed to find next stop for vehicle ID: %s", vehicleID)
 	}
 
 	return apiVehicle

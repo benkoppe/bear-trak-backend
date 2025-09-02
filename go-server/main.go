@@ -34,7 +34,7 @@ func main() {
 	}
 
 	// connect to db
-	pool, err := connectToDbPool(context.Background())
+	pool, err := connectToDBPool(context.Background())
 	if err != nil {
 		log.Fatalf("Error connecting to the database: %v", err)
 	}

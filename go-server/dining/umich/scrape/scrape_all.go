@@ -12,18 +12,18 @@ import (
 
 type Cache = *utils.Cache[map[*static.Eatery][]Eatery]
 
-func InitCache(baseUrl string) Cache {
+func InitCache(baseURL string) Cache {
 	return utils.NewCache(
 		"diningScrape",
 		time.Hour*24,
 		func() (map[*static.Eatery][]Eatery, error) {
 			staticEateries := static.GetEateries()
-			return fetchAll(baseUrl, staticEateries)
+			return fetchAll(baseURL, staticEateries)
 		},
 	)
 }
 
-func fetchAll(baseUrl string, eateries []static.Eatery) (map[*static.Eatery][]Eatery, error) {
+func fetchAll(baseURL string, eateries []static.Eatery) (map[*static.Eatery][]Eatery, error) {
 	fetchedEateries := make(map[*static.Eatery][]Eatery)
 	var mu sync.Mutex
 	var wg sync.WaitGroup
@@ -35,13 +35,13 @@ func fetchAll(baseUrl string, eateries []static.Eatery) (map[*static.Eatery][]Ea
 		go func(e static.Eatery) {
 			defer wg.Done()
 
-			eateryUrl, err := utils.ExtendUrl(baseUrl, e.ScrapePath)
+			eateryURL, err := utils.ExtendURL(baseURL, e.ScrapePath)
 			if err != nil {
 				log.Printf("error extending url for eatery %d: %v", e.ID, err)
 				return
 			}
 
-			eateryWeek, err := fetchEateryWeekConcurrent(*eateryUrl, semaphore)
+			eateryWeek, err := fetchEateryWeekConcurrent(*eateryURL, semaphore)
 			if err != nil {
 				log.Printf("error fetching eatery week for eatery %d: %v", e.ID, err)
 				return
@@ -57,7 +57,7 @@ func fetchAll(baseUrl string, eateries []static.Eatery) (map[*static.Eatery][]Ea
 	return fetchedEateries, nil
 }
 
-func fetchEateryWeekConcurrent(eateryUrl string, semaphore chan struct{}) ([]Eatery, error) {
+func fetchEateryWeekConcurrent(eateryURL string, semaphore chan struct{}) ([]Eatery, error) {
 	now := time.Now()
 	eateryWeek := make([]Eatery, 7)
 
@@ -65,7 +65,7 @@ func fetchEateryWeekConcurrent(eateryUrl string, semaphore chan struct{}) ([]Eat
 	var errMu sync.Mutex
 	var firstErr error
 
-	for i := 0; i < 7; i++ {
+	for i := range [7]int{} {
 		wg.Add(1)
 		go func(dayOffset int) {
 			defer wg.Done()
@@ -75,7 +75,7 @@ func fetchEateryWeekConcurrent(eateryUrl string, semaphore chan struct{}) ([]Eat
 			defer func() { <-semaphore }()
 
 			date := now.AddDate(0, 0, dayOffset)
-			eatery, err := fetchEatery(eateryUrl, date)
+			eatery, err := fetchEatery(eateryURL, date)
 			if err != nil {
 				errMu.Lock()
 				if firstErr == nil {

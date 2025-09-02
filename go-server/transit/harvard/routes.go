@@ -20,16 +20,16 @@ type Caches struct {
 	realtimeCache gtfs_rt.Cache
 }
 
-func InitCaches(pasioBaseUrl, pasioSystemId, staticGtfsUrl, realtimeGtfsBaseUrl string) Caches {
-	alerts, err := utils.ExtendUrl(realtimeGtfsBaseUrl, "serviceAlerts")
+func InitCaches(pasioBaseURL, pasioSystemID, staticGtfsURL, realtimeGtfsBaseURL string) Caches {
+	alerts, err := utils.ExtendURL(realtimeGtfsBaseURL, "serviceAlerts")
 	if err != nil {
 		log.Fatalf("failed to extend realtime GTFS alerts URL: %v", err)
 	}
-	tripUpdates, err := utils.ExtendUrl(realtimeGtfsBaseUrl, "tripUpdates")
+	tripUpdates, err := utils.ExtendURL(realtimeGtfsBaseURL, "tripUpdates")
 	if err != nil {
 		log.Fatalf("failed to extend realtime GTFS tripupdates URL: %v", err)
 	}
-	vehicles, err := utils.ExtendUrl(realtimeGtfsBaseUrl, "vehiclePositions")
+	vehicles, err := utils.ExtendURL(realtimeGtfsBaseURL, "vehiclePositions")
 	if err != nil {
 		log.Fatalf("failed to extend realtime GTFS vehicle positions URL: %v", err)
 	}
@@ -41,8 +41,8 @@ func InitCaches(pasioBaseUrl, pasioSystemId, staticGtfsUrl, realtimeGtfsBaseUrl 
 	}
 
 	return Caches{
-		pasioCache:    pasio.InitCache(pasioBaseUrl, pasioSystemId),
-		staticCache:   shared_gtfs.InitCache(staticGtfsUrl),
+		pasioCache:    pasio.InitCache(pasioBaseURL, pasioSystemID),
+		staticCache:   shared_gtfs.InitCache(staticGtfsURL),
 		realtimeCache: gtfs_rt.InitCache(harvardGtfsRealtime),
 	}
 }
@@ -84,14 +84,14 @@ func getRoutes(pasioRoutes []pasio.Route, staticGtfs gtfs.Static) ([]api.BusRout
 	for _, route := range pasioRoutes {
 		var gtfsRoute *gtfs.Route
 		for _, gtfsRouteOption := range staticGtfs.Routes {
-			if gtfsRouteOption.Id == route.GroupId {
+			if gtfsRouteOption.Id == route.GroupID {
 				gtfsRoute = &gtfsRouteOption
 				break
 			}
 		}
 
 		if gtfsRoute == nil {
-			return nil, fmt.Errorf("failed to find GTFS route for route ID: %s", route.GroupId)
+			return nil, fmt.Errorf("failed to find GTFS route for route ID: %s", route.GroupID)
 		}
 
 		apiRoute := shared_gtfs.ConvertRoute(*gtfsRoute, staticGtfs)

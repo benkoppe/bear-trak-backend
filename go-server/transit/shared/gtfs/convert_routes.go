@@ -7,19 +7,19 @@ import (
 	"github.com/twpayne/go-polyline"
 )
 
-// converts route into API routes
+// ConvertRoute converts route into API routes
 func ConvertRoute(route gtfs.Route, staticGtfs gtfs.Static) api.BusRoute {
 	tripsMap := getDirectionTrips(route, staticGtfs)
 
 	var polylines []string
 	var directions []api.BusRouteDirection
 
-	for directionId, trips := range tripsMap {
+	for directionID, trips := range tripsMap {
 		polylines = append(polylines, getPolylines(trips)...)
 		stops := getStops(trips)
 
 		directions = append(directions, api.BusRouteDirection{
-			Name:  ConvertDirectionId(directionId),
+			Name:  ConvertDirectionID(directionID),
 			Stops: convertStops(stops),
 		})
 	}
@@ -40,7 +40,7 @@ func ConvertRoute(route gtfs.Route, staticGtfs gtfs.Static) api.BusRoute {
 	return apiRoute
 }
 
-func ConvertDirectionId(id gtfs.DirectionID) string {
+func ConvertDirectionID(id gtfs.DirectionID) string {
 	switch id {
 	case gtfs.DirectionID_True:
 		return "O"

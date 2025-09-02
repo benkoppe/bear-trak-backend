@@ -19,10 +19,10 @@ type Caches struct {
 	hoursCache    scrape.Cache
 }
 
-func InitCaches(capacityUrl, hoursUrl string) Caches {
+func InitCaches(capacityURL, hoursURL string) Caches {
 	return Caches{
-		capacityCache: external.InitCache(capacityUrl),
-		hoursCache:    scrape.InitCache(hoursUrl),
+		capacityCache: external.InitCache(capacityURL),
+		hoursCache:    scrape.InitCache(hoursURL),
 	}
 }
 

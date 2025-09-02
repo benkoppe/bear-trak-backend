@@ -61,7 +61,7 @@ func (w WeekHours) CreateFutureHours() []api.Hours {
 	now := time.Now().In(est)
 	var futureHours []api.Hours
 
-	for i := 0; i < 7; i++ {
+	for i := range [7]int{} {
 		date := now.AddDate(0, 0, i)
 		futureHours = append(futureHours, w.GetConvertedHours(date)...)
 	}

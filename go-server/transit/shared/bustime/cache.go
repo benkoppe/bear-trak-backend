@@ -11,9 +11,9 @@ type Caches struct {
 	VehiclesCache VehiclesCache
 }
 
-func InitCaches(baseUrl, apiKey string) Caches {
-	routesCache := initRoutesCache(baseUrl, apiKey)
-	vehiclesCache := initVehiclesCache(baseUrl, apiKey, routesCache)
+func InitCaches(baseURL, apiKey string) Caches {
+	routesCache := initRoutesCache(baseURL, apiKey)
+	vehiclesCache := initVehiclesCache(baseURL, apiKey, routesCache)
 	return Caches{
 		RoutesCache:   routesCache,
 		VehiclesCache: vehiclesCache,
@@ -22,18 +22,18 @@ func InitCaches(baseUrl, apiKey string) Caches {
 
 type RoutesCache = *utils.Cache[[]Route]
 
-func initRoutesCache(baseUrl, apiKey string) RoutesCache {
+func initRoutesCache(baseURL, apiKey string) RoutesCache {
 	return utils.NewCache(
 		"busTimeRoutesCache",
 		24*time.Hour,
 		func() ([]Route, error) {
-			return fetchRoutes(baseUrl, apiKey)
+			return fetchRoutes(baseURL, apiKey)
 		})
 }
 
 type VehiclesCache = *utils.Cache[[]Vehicle]
 
-func initVehiclesCache(baseUrl, apiKey string, routesCache RoutesCache) VehiclesCache {
+func initVehiclesCache(baseURL, apiKey string, routesCache RoutesCache) VehiclesCache {
 	return utils.NewCache(
 		"busTimeVehiclesCache",
 		20*time.Second,
@@ -42,6 +42,6 @@ func initVehiclesCache(baseUrl, apiKey string, routesCache RoutesCache) Vehicles
 			if err != nil {
 				return nil, err
 			}
-			return chunkFetchVehicles(baseUrl, apiKey, collectRouteIds(routes))
+			return chunkFetchVehicles(baseURL, apiKey, collectRouteIds(routes))
 		})
 }

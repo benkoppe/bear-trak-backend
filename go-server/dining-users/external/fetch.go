@@ -8,21 +8,21 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
-// nil if authentication fails, errors for other failure
-func FetchUserID(baseUrl string, sessionId string) (*UserIDResponseBody, error) {
-	fullUrl, err := utils.ExtendUrl(baseUrl, "user")
-	if fullUrl == nil {
+// FetchUserID - nil if authentication fails, errors for other failure
+func FetchUserID(baseURL string, sessionID string) (*UserIDResponseBody, error) {
+	fullURL, err := utils.ExtendURL(baseURL, "user")
+	if fullURL == nil {
 		return nil, fmt.Errorf("failed to extend url: %w", err)
 	}
 
-	requestBody := map[string]interface{}{
+	requestBody := map[string]any{
 		"method": "retrieve",
 		"params": map[string]string{
-			"sessionId": sessionId,
+			"sessionId": sessionID,
 		},
 	}
 
-	resp, err := utils.DoPostRequest[userIDResponse](*fullUrl, requestBody)
+	resp, err := utils.DoPostRequest[userIDResponse](*fullURL, requestBody)
 	if resp == nil {
 		return nil, err
 	}
@@ -30,20 +30,20 @@ func FetchUserID(baseUrl string, sessionId string) (*UserIDResponseBody, error) 
 	return resp.Response, nil
 }
 
-func FetchBarcode(baseUrl string, sessionId string) (*string, error) {
-	fullUrl, err := utils.ExtendUrl(baseUrl, "authentication")
-	if fullUrl == nil {
+func FetchBarcode(baseURL string, sessionID string) (*string, error) {
+	fullURL, err := utils.ExtendURL(baseURL, "authentication")
+	if fullURL == nil {
 		return nil, fmt.Errorf("failed to extend url: %w", err)
 	}
 
-	requestBody := map[string]interface{}{
+	requestBody := map[string]any{
 		"method": "retrievePatronBarcodePayload",
 		"params": map[string]string{
-			"sessionId": sessionId,
+			"sessionId": sessionID,
 		},
 	}
 
-	resp, err := utils.DoPostRequest[stringResponse](*fullUrl, requestBody)
+	resp, err := utils.DoPostRequest[stringResponse](*fullURL, requestBody)
 	if resp == nil {
 		return nil, err
 	}
@@ -51,23 +51,23 @@ func FetchBarcode(baseUrl string, sessionId string) (*string, error) {
 	return resp.Response, err
 }
 
-func FetchBarcodeSeed(baseUrl string, sessionId string, institutionId string) (*string, error) {
-	fullUrl, err := utils.ExtendUrl(baseUrl, "configuration")
-	if fullUrl == nil {
+func FetchBarcodeSeed(baseURL string, sessionID string, institutionID string) (*string, error) {
+	fullURL, err := utils.ExtendURL(baseURL, "configuration")
+	if fullURL == nil {
 		return nil, fmt.Errorf("failed to extend url: %w", err)
 	}
 
-	requestBody := map[string]interface{}{
+	requestBody := map[string]any{
 		"method": "nativeStartup",
 		"params": map[string]string{
 			"clientType":    "ios",
 			"clientVersion": "4.33.23",
-			"institutionId": institutionId,
-			"sessionId":     sessionId,
+			"institutionId": institutionID,
+			"sessionId":     sessionID,
 		},
 	}
 
-	resp, err := utils.DoPostRequest[barcodeSeedResponse](*fullUrl, requestBody)
+	resp, err := utils.DoPostRequest[barcodeSeedResponse](*fullURL, requestBody)
 	if resp == nil {
 		return nil, err
 	}
@@ -75,21 +75,21 @@ func FetchBarcodeSeed(baseUrl string, sessionId string, institutionId string) (*
 	return &resp.Response.BarcodeSeed, err
 }
 
-func FetchCashlessKey(baseUrl string, sessionId string) (*string, error) {
-	fullUrl, err := utils.ExtendUrl(baseUrl, "user")
-	if fullUrl == nil {
+func FetchCashlessKey(baseURL string, sessionID string) (*string, error) {
+	fullURL, err := utils.ExtendURL(baseURL, "user")
+	if fullURL == nil {
 		return nil, fmt.Errorf("failed to extend url: %w", err)
 	}
 
-	requestBody := map[string]interface{}{
+	requestBody := map[string]any{
 		"method": "retrieveSetting",
 		"params": map[string]string{
 			"settingName": "CashlessKey",
-			"sessionId":   sessionId,
+			"sessionId":   sessionID,
 		},
 	}
 
-	resp, err := utils.DoPostRequest[cashlessKeyResponse](*fullUrl, requestBody)
+	resp, err := utils.DoPostRequest[cashlessKeyResponse](*fullURL, requestBody)
 	if resp == nil {
 		return nil, err
 	}
@@ -97,21 +97,21 @@ func FetchCashlessKey(baseUrl string, sessionId string) (*string, error) {
 	return &resp.Response.Value, err
 }
 
-func FetchAccounts(baseUrl string, sessionId string, userId string) (*accountsResponseBody, error) {
-	fullUrl, err := utils.ExtendUrl(baseUrl, "commerce")
-	if fullUrl == nil {
+func FetchAccounts(baseURL string, sessionID string, userID string) (*accountsResponseBody, error) {
+	fullURL, err := utils.ExtendURL(baseURL, "commerce")
+	if fullURL == nil {
 		return nil, fmt.Errorf("failed to extend url: %w", err)
 	}
 
-	requestBody := map[string]interface{}{
+	requestBody := map[string]any{
 		"method": "retrieveAccountsByUser",
 		"params": map[string]string{
-			"sessionId": sessionId,
-			"userId":    userId,
+			"sessionId": sessionID,
+			"userId":    userID,
 		},
 	}
 
-	resp, err := utils.DoPostRequest[accountsResponse](*fullUrl, requestBody)
+	resp, err := utils.DoPostRequest[accountsResponse](*fullURL, requestBody)
 	if resp == nil {
 		return nil, err
 	}
@@ -119,21 +119,21 @@ func FetchAccounts(baseUrl string, sessionId string, userId string) (*accountsRe
 	return resp.Response, err
 }
 
-func FetchUserPhoto(baseUrl string, sessionId string, userId string) (*userPhotoResponseBody, error) {
-	fullUrl, err := utils.ExtendUrl(baseUrl, "user")
-	if fullUrl == nil {
+func FetchUserPhoto(baseURL string, sessionID string, userID string) (*userPhotoResponseBody, error) {
+	fullURL, err := utils.ExtendURL(baseURL, "user")
+	if fullURL == nil {
 		return nil, fmt.Errorf("failed to extend url: %w", err)
 	}
 
-	requestBody := map[string]interface{}{
+	requestBody := map[string]any{
 		"method": "retrieveUserPhoto",
 		"params": map[string]string{
-			"sessionId": sessionId,
-			"userId":    userId,
+			"sessionId": sessionID,
+			"userId":    userID,
 		},
 	}
 
-	resp, err := utils.DoPostRequest[userPhotoResponse](*fullUrl, requestBody)
+	resp, err := utils.DoPostRequest[userPhotoResponse](*fullURL, requestBody)
 	if resp == nil {
 		return nil, err
 	}
@@ -141,24 +141,24 @@ func FetchUserPhoto(baseUrl string, sessionId string, userId string) (*userPhoto
 	return resp.Response, nil
 }
 
-func FetchDisplayTenders(baseUrl string, sessionId string, institutionId string) ([]string, error) {
-	fullUrl, err := utils.ExtendUrl(baseUrl, "configuration")
-	if fullUrl == nil {
+func FetchDisplayTenders(baseURL string, sessionID string, institutionID string) ([]string, error) {
+	fullURL, err := utils.ExtendURL(baseURL, "configuration")
+	if fullURL == nil {
 		return nil, fmt.Errorf("failed to extend url: %w", err)
 	}
 
-	requestBody := map[string]interface{}{
+	requestBody := map[string]any{
 		"method": "retrieveSetting",
 		"params": map[string]string{
 			"domain":        "get",
 			"category":      "feature",
 			"name":          "display_tenders",
-			"institutionId": institutionId,
-			"sessionId":     sessionId,
+			"institutionId": institutionID,
+			"sessionId":     sessionID,
 		},
 	}
 
-	resp, err := utils.DoPostRequest[retrieveSettingResponse](*fullUrl, requestBody)
+	resp, err := utils.DoPostRequest[retrieveSettingResponse](*fullURL, requestBody)
 	if resp == nil {
 		return nil, err
 	}

@@ -42,7 +42,7 @@ func DoGetRequest[T any](url string, headers map[string]string) (*T, error) {
 	return &response, nil
 }
 
-func DoPostRequest[T any](url string, payload interface{}) (*T, error) {
+func DoPostRequest[T any](url string, payload any) (*T, error) {
 	jsonData, err := json.Marshal(payload)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request payload: %w", err)

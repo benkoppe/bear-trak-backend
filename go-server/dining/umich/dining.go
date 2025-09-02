@@ -14,8 +14,8 @@ import (
 
 type Cache = scrape.Cache
 
-func InitCache(baseUrl string) Cache {
-	return scrape.InitCache(baseUrl)
+func InitCache(baseURL string) Cache {
+	return scrape.InitCache(baseURL)
 }
 
 func Get(

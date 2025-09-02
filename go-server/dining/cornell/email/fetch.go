@@ -45,11 +45,11 @@ type DatedResult struct {
 
 type Cache = *utils.Cache[[]DatedResult]
 
-func InitCache(emailPassword, mistralApiKey, openrouterApiKey, openrouterModel string) Cache {
+func InitCache(emailPassword, mistralAPIKey, openrouterAPIKey, openrouterModel string) Cache {
 	return utils.NewCache("diningEmail",
 		24*time.Hour,
 		func() ([]DatedResult, error) {
-			return fetchData(emailPassword, mistralApiKey, openrouterApiKey, openrouterModel)
+			return fetchData(emailPassword, mistralAPIKey, openrouterAPIKey, openrouterModel)
 		})
 }
 
@@ -62,7 +62,7 @@ var (
 	cacheMu         sync.RWMutex
 )
 
-func fetchData(emailPassword, mistralApiKey, openrouterApiKey, openrouterModel string) ([]DatedResult, error) {
+func fetchData(emailPassword, mistralAPIKey, openrouterAPIKey, openrouterModel string) ([]DatedResult, error) {
 	c, err := client.DialTLS("imap.gmail.com:993", nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to IMAP server: %w", err)
@@ -84,7 +84,7 @@ func fetchData(emailPassword, mistralApiKey, openrouterApiKey, openrouterModel s
 	var dinners []DatedResult
 
 	for _, subject := range subjects {
-		menu, err := getLatestMenu(c, subject, mistralApiKey, openrouterApiKey, openrouterModel)
+		menu, err := getLatestMenu(c, subject, mistralAPIKey, openrouterAPIKey, openrouterModel)
 		if err != nil {
 			log.Println("Error fetching menu for", subject, ":", err)
 			continue
@@ -95,7 +95,7 @@ func fetchData(emailPassword, mistralApiKey, openrouterApiKey, openrouterModel s
 	return dinners, nil
 }
 
-func getLatestMenu(c *client.Client, subject string, mistralApiKey, openrouterApiKey, openrouterModel string) (*DatedResult, error) {
+func getLatestMenu(c *client.Client, subject string, mistralAPIKey, openrouterAPIKey, openrouterModel string) (*DatedResult, error) {
 	email, err := emailsContainingSubject(c, subject)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch emails: %w", err)
@@ -136,12 +136,12 @@ func getLatestMenu(c *client.Client, subject string, mistralApiKey, openrouterAp
 		return nil, fmt.Errorf("failed to upload PDF: %w", err)
 	}
 
-	ocr, err := sendOCRRequest(uploadURL, mistralApiKey)
+	ocr, err := sendOCRRequest(uploadURL, mistralAPIKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to perform OCR: %w", err)
 	}
 
-	menu, err := sendAIRequest(ocr, openrouterApiKey, openrouterModel)
+	menu, err := sendAIRequest(ocr, openrouterAPIKey, openrouterModel)
 	if err != nil {
 		return nil, fmt.Errorf("failed to send AI request: %w", err)
 	}
@@ -309,7 +309,7 @@ func uploadPDF(pdfData []byte, fileName string) (string, error) {
 	return string(respBody), nil
 }
 
-func sendOCRRequest(pdfURL string, mistralApiKey string) (string, error) {
+func sendOCRRequest(pdfURL string, mistralAPIKey string) (string, error) {
 	payload := map[string]any{
 		"model": "mistral-ocr-latest",
 		"document": map[string]string{
@@ -329,7 +329,7 @@ func sendOCRRequest(pdfURL string, mistralApiKey string) (string, error) {
 	}
 
 	// Replace with actual header key if different
-	req.Header.Set("Authorization", "Bearer "+mistralApiKey)
+	req.Header.Set("Authorization", "Bearer "+mistralAPIKey)
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := http.DefaultClient.Do(req)
@@ -350,11 +350,11 @@ func sendOCRRequest(pdfURL string, mistralApiKey string) (string, error) {
 	return respStr, nil
 }
 
-func sendAIRequest(menuOCR string, openrouterApiKey, openrouterModel string) (*Result, error) {
+func sendAIRequest(menuOCR string, openrouterAPIKey, openrouterModel string) (*Result, error) {
 	ctx := context.Background()
 
 	client := openrouter.NewClient(
-		openrouterApiKey,
+		openrouterAPIKey,
 	)
 
 	var result Result

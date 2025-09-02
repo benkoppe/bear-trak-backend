@@ -1,5 +1,6 @@
+// Package shared contains shared school endpoints
 package shared
 
 const (
-	CbordBaseUrl = "https://services.get.cbord.com/GETServices/services/json"
+	CbordBaseURL = "https://services.get.cbord.com/GETServices/services/json"
 )

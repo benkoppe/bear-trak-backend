@@ -4,13 +4,13 @@ package shared
 import "github.com/benkoppe/bear-trak-backend/go-server/api"
 
 func AppendVehicles(routes []api.BusRoute, vehicles []api.Vehicle) []api.BusRoute {
-	routeIdVehicles := make(map[interface{}]([]api.Vehicle))
+	routeIDVehicles := make(map[any]([]api.Vehicle))
 	for _, vehicle := range vehicles {
-		routeIdVehicles[vehicle.RouteId] = append(routeIdVehicles[vehicle.RouteId], vehicle)
+		routeIDVehicles[vehicle.RouteId] = append(routeIDVehicles[vehicle.RouteId], vehicle)
 	}
 
 	for i := range routes {
-		routes[i].Vehicles = routeIdVehicles[routes[i].ID]
+		routes[i].Vehicles = routeIDVehicles[routes[i].ID]
 	}
 
 	return routes

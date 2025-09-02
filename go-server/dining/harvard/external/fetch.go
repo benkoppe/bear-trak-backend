@@ -13,51 +13,51 @@ type Caches struct {
 	RecipesCache   *utils.Cache[[]Recipe]
 }
 
-func InitCaches(baseUrl, apiKey string) Caches {
+func InitCaches(baseURL, apiKey string) Caches {
 	return Caches{
-		LocationsCache: initLocationsCache(baseUrl, apiKey),
-		RecipesCache:   initRecipesCache(baseUrl, apiKey),
+		LocationsCache: initLocationsCache(baseURL, apiKey),
+		RecipesCache:   initRecipesCache(baseURL, apiKey),
 	}
 }
 
-func initLocationsCache(baseUrl, apiKey string) *utils.Cache[[]Location] {
+func initLocationsCache(baseURL, apiKey string) *utils.Cache[[]Location] {
 	return utils.NewCache(
 		"diningLocations",
 		24*time.Hour,
 		func() ([]Location, error) {
-			return fetchLocations(baseUrl, apiKey)
+			return fetchLocations(baseURL, apiKey)
 		})
 }
 
-func initRecipesCache(baseUrl, apiKey string) *utils.Cache[[]Recipe] {
+func initRecipesCache(baseURL, apiKey string) *utils.Cache[[]Recipe] {
 	return utils.NewCache(
 		"diningRecipes",
 		24*time.Hour,
 		func() ([]Recipe, error) {
-			return fetchRecipes(baseUrl, apiKey)
+			return fetchRecipes(baseURL, apiKey)
 		})
 }
 
-func fetchLocations(baseUrl, apiKey string) ([]Location, error) {
-	fullUrl, err := utils.ExtendUrl(baseUrl, "locations")
+func fetchLocations(baseURL, apiKey string) ([]Location, error) {
+	fullURL, err := utils.ExtendURL(baseURL, "locations")
 	if err != nil {
 		return nil, fmt.Errorf("failed to extend url: %w", err)
 	}
 
-	locations, err := utils.DoGetRequest[[]Location](*fullUrl, getRequestHeaders(apiKey))
+	locations, err := utils.DoGetRequest[[]Location](*fullURL, getRequestHeaders(apiKey))
 	if locations == nil {
 		return []Location{}, err
 	}
 	return *locations, err
 }
 
-func fetchRecipes(baseUrl, apiKey string) ([]Recipe, error) {
-	fullUrl, err := utils.ExtendUrl(baseUrl, "recipes")
+func fetchRecipes(baseURL, apiKey string) ([]Recipe, error) {
+	fullURL, err := utils.ExtendURL(baseURL, "recipes")
 	if err != nil {
 		return nil, fmt.Errorf("failed to extend url: %w", err)
 	}
 
-	recipes, err := utils.DoGetRequest[[]Recipe](*fullUrl, getRequestHeaders(apiKey))
+	recipes, err := utils.DoGetRequest[[]Recipe](*fullURL, getRequestHeaders(apiKey))
 	if recipes == nil {
 		return []Recipe{}, err
 	}

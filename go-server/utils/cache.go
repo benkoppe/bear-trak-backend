@@ -104,7 +104,7 @@ func (c *Cache[T]) refreshInBackground() {
 	c.lastFetch = time.Now()
 }
 
-// forces a synchronous refresh
+// ForceRefresh forces a synchronous refresh
 func (c *Cache[T]) ForceRefresh() (T, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()

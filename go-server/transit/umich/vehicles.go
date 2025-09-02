@@ -23,8 +23,8 @@ func GetVehicles(caches Caches) ([]api.Vehicle, error) {
 
 func convertVehicle(vehicle bustime.Vehicle) api.Vehicle {
 	return api.Vehicle{
-		ID:            api.NewStringVehicleID(vehicle.Id),
-		RouteId:       api.NewStringVehicleRouteId(vehicle.RouteId),
+		ID:            api.NewStringVehicleID(vehicle.ID),
+		RouteId:       api.NewStringVehicleRouteId(vehicle.RouteID),
 		Direction:     "",
 		Heading:       int(vehicle.Heading),
 		Speed:         float64(vehicle.Speed),

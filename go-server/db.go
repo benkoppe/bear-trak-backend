@@ -16,10 +16,10 @@ import (
 //go:embed migrations/*.sql
 var embedMigrations embed.FS
 
-func connectToDbPool(ctx context.Context) (*pgxpool.Pool, error) {
+func connectToDBPool(ctx context.Context) (*pgxpool.Pool, error) {
 	time.Sleep(3 * time.Second) // delay for db startup
 
-	config := getDbConfig()
+	config := getDBConfig()
 
 	pool, err := pgxpool.New(ctx, config.connStr())
 	if err != nil {
@@ -50,11 +50,11 @@ type dbConfig struct {
 	Port     string
 	User     string
 	Password string
-	DbName   string
+	DBName   string
 	SSLMode  string
 }
 
-func getDbConfig() dbConfig {
+func getDBConfig() dbConfig {
 	password := ""
 	password, ok := os.LookupEnv("POSTGRES_PASSWORD")
 	if !ok {
@@ -69,11 +69,11 @@ func getDbConfig() dbConfig {
 		Port:     os.Getenv("POSTGRES_PORT"),
 		User:     os.Getenv("POSTGRES_USER"),
 		Password: password,
-		DbName:   os.Getenv("POSTGRES_DB"),
+		DBName:   os.Getenv("POSTGRES_DB"),
 		SSLMode:  os.Getenv("POSTGRES_SSLMODE"),
 	}
 }
 
 func (c *dbConfig) connStr() string {
-	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s", c.Host, c.Port, c.User, c.Password, c.DbName, c.SSLMode)
+	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s", c.Host, c.Port, c.User, c.Password, c.DBName, c.SSLMode)
 }

@@ -22,7 +22,7 @@ type Eatery struct {
 	AboutShort     string          `json:"aboutshort"`
 	CornellDining  bool            `json:"cornellDining"`
 	OnlineOrdering bool            `json:"onlineOrdering"`
-	OnlineOrderUrl *string         `json:"onlineOrderUrl"`
+	OnlineOrderURL *string         `json:"onlineOrderUrl"`
 	ContactPhone   *string         `json:"contactPhone"`
 	ContactEmail   *string         `json:"contactEmail"`
 	CampusArea     CampusArea      `json:"campusArea"`
@@ -47,13 +47,13 @@ type OperatingHour struct {
 }
 
 type Event struct {
-	Descr          string              `json:"descr"`
+	Descr          string             `json:"descr"`
 	StartTimestamp timeutils.UnixTime `json:"startTimestamp"`
 	EndTimestamp   timeutils.UnixTime `json:"endTimestamp"`
-	Start          string              `json:"start"`
-	End            string              `json:"end"`
-	CalSummary     string              `json:"calSummary"`
-	Menu           []MenuCategory      `json:"menu"`
+	Start          string             `json:"start"`
+	End            string             `json:"end"`
+	CalSummary     string             `json:"calSummary"`
+	Menu           []MenuCategory     `json:"menu"`
 }
 
 type MenuCategory struct {

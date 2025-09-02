@@ -6,15 +6,15 @@ import (
 	"path"
 )
 
-// extends urls, such as ExtendURL("https://example.com/api", "path/to/users")
-func ExtendUrl(baseUrl string, appendPath string) (*string, error) {
-	fullUrl, err := url.Parse(baseUrl)
+// ExtendURL extends urls, such as ExtendURL("https://example.com/api", "path/to/users")
+func ExtendURL(baseURL string, appendPath string) (*string, error) {
+	fullURL, err := url.Parse(baseURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse base URL: %w", err)
 	}
 
-	fullUrl.Path = path.Join(fullUrl.Path, appendPath)
-	output := fullUrl.String()
+	fullURL.Path = path.Join(fullURL.Path, appendPath)
+	output := fullURL.String()
 
 	return &output, nil
 }

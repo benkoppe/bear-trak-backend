@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// resillient datetime parser (good for both dates and times)
+// ParseDateTime is a resillient datetime parser (good for both dates and times)
 // will try multiple layouts in order before failing
 // requires a list of templates
 func ParseDateTime(s string, layouts []string) (time.Time, error) {
@@ -20,7 +20,7 @@ func ParseDateTime(s string, layouts []string) (time.Time, error) {
 	return time.Time{}, fmt.Errorf("unable to parse datetime %q: %v", s, err)
 }
 
-// wrapper around `ParseDateTime` with a list of common formats
+// ParseCommonDateTime is a wrapper around `ParseDateTime` with a list of common formats
 func ParseCommonDateTime(s string) (time.Time, error) {
 	commonLayouts := []string{
 		time.RFC3339,                  // "2006-01-02T15:04:05Z07:00"
@@ -52,7 +52,7 @@ func ParseCommonDateTime(s string) (time.Time, error) {
 	return t, nil
 }
 
-// parses common datetimes, including formats without a year
+// ParseCommonDateTimeYearOptional parses common datetimes, including formats without a year
 // sets the year to the current year if it isn't provided
 func ParseCommonDateTimeYearOptional(s string) (time.Time, error) {
 	// Layouts that include a year.

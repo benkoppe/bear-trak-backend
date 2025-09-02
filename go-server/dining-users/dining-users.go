@@ -17,14 +17,14 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func hashUserId(userIdResp external.UserIDResponseBody) string {
+func hashUserID(userIDResp external.UserIDResponseBody) string {
 	hasher := sha256.New()
-	hasher.Write([]byte(userIdResp.ID))
+	hasher.Write([]byte(userIDResp.ID))
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
-func CreateUser(ctx context.Context, externalBaseUrl, institutionId string, params api.PostV1DiningUserParams, queries *db.Queries) (api.PostV1DiningUserRes, error) {
-	idResp, err := external.FetchUserID(externalBaseUrl, params.SessionId)
+func CreateUser(ctx context.Context, externalBaseURL, institutionID string, params api.PostV1DiningUserParams, queries *db.Queries) (api.PostV1DiningUserRes, error) {
+	idResp, err := external.FetchUserID(externalBaseURL, params.SessionId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch user info: %w", err)
 	}
@@ -32,8 +32,8 @@ func CreateUser(ctx context.Context, externalBaseUrl, institutionId string, para
 		return &api.PostV1DiningUserUnauthorized{}, nil
 	}
 
-	hashedId := hashUserId(*idResp)
-	users, err := queries.GetDiningUserAll(ctx, hashedId)
+	hashedID := hashUserID(*idResp)
+	users, err := queries.GetDiningUserAll(ctx, hashedID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch users from database: %w", err)
 	}
@@ -42,7 +42,7 @@ func CreateUser(ctx context.Context, externalBaseUrl, institutionId string, para
 		return &api.PostV1DiningUserBadRequest{}, nil
 	}
 
-	resp, err := external.CreatePIN(externalBaseUrl, params.DeviceId, params.PIN, params.SessionId)
+	resp, err := external.CreatePIN(externalBaseURL, params.DeviceId, params.PIN, params.SessionId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create PIN: %w", err)
 	}
@@ -52,14 +52,14 @@ func CreateUser(ctx context.Context, externalBaseUrl, institutionId string, para
 	}
 
 	_, err = queries.CreateDiningUser(ctx, db.CreateDiningUserParams{
-		UserID:   hashedId,
+		UserID:   hashedID,
 		DeviceID: params.DeviceId,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to create user in database: %w", err)
 	}
 
-	user, err := GetUser(externalBaseUrl, institutionId, api.GetV1DiningUserParams{SessionId: params.SessionId})
+	user, err := GetUser(externalBaseURL, institutionID, api.GetV1DiningUserParams{SessionId: params.SessionId})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
@@ -80,8 +80,8 @@ func CreateUser(ctx context.Context, externalBaseUrl, institutionId string, para
 	return nil, fmt.Errorf("failed to convert user to DiningUser")
 }
 
-func DeleteUser(ctx context.Context, externalBaseUrl string, params api.DeleteV1DiningUserParams, queries *db.Queries) (api.DeleteV1DiningUserRes, error) {
-	idResp, err := external.FetchUserID(externalBaseUrl, params.SessionId)
+func DeleteUser(ctx context.Context, externalBaseURL string, params api.DeleteV1DiningUserParams, queries *db.Queries) (api.DeleteV1DiningUserRes, error) {
+	idResp, err := external.FetchUserID(externalBaseURL, params.SessionId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch user info: %w", err)
 	}
@@ -89,8 +89,8 @@ func DeleteUser(ctx context.Context, externalBaseUrl string, params api.DeleteV1
 		return &api.DeleteV1DiningUserUnauthorized{}, nil
 	}
 
-	hashedId := hashUserId(*idResp)
-	err = queries.DeleteDiningUser(ctx, hashedId)
+	hashedID := hashUserID(*idResp)
+	err = queries.DeleteDiningUser(ctx, hashedID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to delete user from database: %w", err)
 	}
@@ -98,13 +98,13 @@ func DeleteUser(ctx context.Context, externalBaseUrl string, params api.DeleteV1
 	return &api.Success{Message: "User deleted."}, nil
 }
 
-func RefreshUserToken(ctx context.Context, externalBaseUrl string, params api.GetV1DiningUserSessionParams, queries *db.Queries) (api.GetV1DiningUserSessionRes, error) {
+func RefreshUserToken(ctx context.Context, externalBaseURL string, params api.GetV1DiningUserSessionParams, queries *db.Queries) (api.GetV1DiningUserSessionRes, error) {
 	user, err := queries.GetDiningUser(ctx, params.DeviceId)
 	if err != nil {
 		return &api.GetV1DiningUserSessionUnauthorized{}, nil
 	}
 
-	resp, err := external.CreateSession(externalBaseUrl, params.DeviceId, params.PIN)
+	resp, err := external.CreateSession(externalBaseURL, params.DeviceId, params.PIN)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create session: %w", err)
 	}
@@ -119,8 +119,8 @@ func RefreshUserToken(ctx context.Context, externalBaseUrl string, params api.Ge
 	return &res, nil
 }
 
-func GetUser(externalBaseUrl, institutionId string, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {
-	idResp, err := external.FetchUserID(externalBaseUrl, params.SessionId)
+func GetUser(externalBaseURL, institutionID string, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {
+	idResp, err := external.FetchUserID(externalBaseURL, params.SessionId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user id: %w", err)
 	}
@@ -135,7 +135,7 @@ func GetUser(externalBaseUrl, institutionId string, params api.GetV1DiningUserPa
 
 	// fetch photo concurrently
 	eg.Go(func() error {
-		photoResp, err := external.FetchUserPhoto(externalBaseUrl, params.SessionId, idResp.ID)
+		photoResp, err := external.FetchUserPhoto(externalBaseURL, params.SessionId, idResp.ID)
 		if photoResp != nil {
 			if photoResp.MimeType == "image/jpeg" && photoResp.Data != "" {
 				decodedBytes, err := base64.StdEncoding.DecodeString(photoResp.Data)
@@ -155,7 +155,7 @@ func GetUser(externalBaseUrl, institutionId string, params api.GetV1DiningUserPa
 
 	// fetch barcode seed concurrently
 	eg.Go(func() error {
-		barcodeSeed, err := external.FetchBarcodeSeed(externalBaseUrl, params.SessionId, institutionId)
+		barcodeSeed, err := external.FetchBarcodeSeed(externalBaseURL, params.SessionId, institutionID)
 		if err != nil {
 			return fmt.Errorf("failed to get barcode seed; %w", err)
 		}
@@ -167,7 +167,7 @@ func GetUser(externalBaseUrl, institutionId string, params api.GetV1DiningUserPa
 
 	// fetch cashless key concurrently
 	eg.Go(func() error {
-		cashlessKey, err := external.FetchCashlessKey(externalBaseUrl, params.SessionId)
+		cashlessKey, err := external.FetchCashlessKey(externalBaseURL, params.SessionId)
 		if err != nil {
 			return fmt.Errorf("failed to get cashless key; %w", err)
 		}
@@ -210,8 +210,8 @@ func toProperCaseEachWord(s string) string {
 	return strings.Join(words, " ")
 }
 
-func GetUserBarcode(externalBaseUrl string, params api.GetV1DiningUserBarcodeParams) (api.GetV1DiningUserBarcodeRes, error) {
-	resp, err := external.FetchBarcode(externalBaseUrl, params.SessionId)
+func GetUserBarcode(externalBaseURL string, params api.GetV1DiningUserBarcodeParams) (api.GetV1DiningUserBarcodeRes, error) {
+	resp, err := external.FetchBarcode(externalBaseURL, params.SessionId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user barcode: %w", err)
 	}
@@ -224,8 +224,8 @@ func GetUserBarcode(externalBaseUrl string, params api.GetV1DiningUserBarcodePar
 	return &res, nil
 }
 
-func GetUserAccounts(externalBaseUrl, institutionId string, params api.GetV1DiningUserAccountsParams) (api.GetV1DiningUserAccountsRes, error) {
-	idResp, err := external.FetchUserID(externalBaseUrl, params.SessionId)
+func GetUserAccounts(externalBaseURL, institutionID string, params api.GetV1DiningUserAccountsParams) (api.GetV1DiningUserAccountsRes, error) {
+	idResp, err := external.FetchUserID(externalBaseURL, params.SessionId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user id: %w", err)
 	}
@@ -233,7 +233,7 @@ func GetUserAccounts(externalBaseUrl, institutionId string, params api.GetV1Dini
 		return &api.GetV1DiningUserAccountsUnauthorized{}, nil
 	}
 
-	resp, err := external.FetchAccounts(externalBaseUrl, params.SessionId, idResp.ID)
+	resp, err := external.FetchAccounts(externalBaseURL, params.SessionId, idResp.ID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user accounts: %w", err)
 	}
@@ -242,7 +242,7 @@ func GetUserAccounts(externalBaseUrl, institutionId string, params api.GetV1Dini
 		return &api.GetV1DiningUserAccountsUnauthorized{}, nil
 	}
 
-	displayTenders, err := external.FetchDisplayTenders(externalBaseUrl, params.SessionId, institutionId)
+	displayTenders, err := external.FetchDisplayTenders(externalBaseURL, params.SessionId, institutionID)
 	if err != nil {
 		fmt.Printf("failed to get display tenders: %v\n", err)
 	}

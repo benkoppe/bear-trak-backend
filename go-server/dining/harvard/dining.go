@@ -15,8 +15,8 @@ import (
 
 type Cache = external.Caches
 
-func InitCache(baseUrl, apiKey string) Cache {
-	return external.InitCaches(baseUrl, apiKey)
+func InitCache(baseURL, apiKey string) Cache {
+	return external.InitCaches(baseURL, apiKey)
 }
 
 func Get(
@@ -53,7 +53,7 @@ func convertStatic(static static.Eatery, externalRecipes []external.Recipe) api.
 		Hours:      static.WeekHours.CreateFutureHours(),
 	}
 
-	if static.ApiNumber != nil {
+	if static.APINumber != nil {
 		eatery.NextWeekEvents = shared.SelectNextWeekEvents(collectFutureEvents(static, externalRecipes))
 	}
 
@@ -65,10 +65,10 @@ func convertStatic(static static.Eatery, externalRecipes []external.Recipe) api.
 }
 
 func collectFutureEvents(static static.Eatery, externalRecipes []external.Recipe) []api.EateryEvent {
-	if static.ApiNumber == nil {
+	if static.APINumber == nil {
 		return nil
 	}
-	locationNumber := *static.ApiNumber
+	locationNumber := *static.APINumber
 	weekHours := static.WeekHours
 
 	est := timeutils.LoadEST()
@@ -76,7 +76,7 @@ func collectFutureEvents(static static.Eatery, externalRecipes []external.Recipe
 
 	var events []api.EateryEvent
 
-	for i := 0; i < 7; i++ {
+	for i := range [7]int{} {
 		date := now.AddDate(0, 0, i)
 		hours := weekHours.GetHours(date)
 

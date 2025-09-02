@@ -17,10 +17,10 @@ type Caches struct {
 	staticCache   shared_gtfs.Cache
 }
 
-func InitCaches(availtecUrl string, staticGtfsUrl string) Caches {
+func InitCaches(availtecURL string, staticGtfsURL string) Caches {
 	return Caches{
-		availtecCache: availtec.InitCache(availtecUrl),
-		staticCache:   shared_gtfs.InitCache(staticGtfsUrl),
+		availtecCache: availtec.InitCache(availtecURL),
+		staticCache:   shared_gtfs.InitCache(staticGtfsURL),
 	}
 }
 
@@ -56,18 +56,18 @@ func getRoutes(availtecRoutes []availtec.Route, staticGtfs gtfs.Static) ([]api.B
 	for _, route := range availtecRoutes {
 		var gtfsRoute *gtfs.Route
 		for _, gtfsRouteOption := range staticGtfs.Routes {
-			if gtfsRouteOption.Id == strconv.Itoa(route.RouteId) {
+			if gtfsRouteOption.Id == strconv.Itoa(route.RouteID) {
 				gtfsRoute = &gtfsRouteOption
 				break
 			}
 		}
 
 		if gtfsRoute == nil {
-			return nil, fmt.Errorf("failed to find GTFS route for route ID: %v", route.RouteId)
+			return nil, fmt.Errorf("failed to find GTFS route for route ID: %v", route.RouteID)
 		}
 
 		apiRoute := shared_gtfs.ConvertRoute(*gtfsRoute, staticGtfs)
-		apiRoute.ID = api.NewIntBusRouteID(route.RouteId)
+		apiRoute.ID = api.NewIntBusRouteID(route.RouteID)
 
 		routes = append(routes, apiRoute)
 	}
