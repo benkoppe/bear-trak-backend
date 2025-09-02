@@ -2,7 +2,6 @@ package scrape
 
 import (
 	"log"
-	"sync"
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/dining/umich/static"
@@ -24,36 +23,36 @@ func InitCache(baseURL string) Cache {
 
 func fetchAll(baseURL string, eateries []static.Eatery) (map[*static.Eatery][]Eatery, error) {
 	fetchedEateries := make(map[*static.Eatery][]Eatery)
-	var mu sync.Mutex
-	var wg sync.WaitGroup
+	// var mu sync.Mutex
+	// var wg sync.WaitGroup
 
 	// semaphore := make(chan struct{}, 10)
 	scraper := NewBrowserScraper()
 
 	for _, eatery := range eateries {
-		wg.Add(1)
-		go func(e static.Eatery) {
-			defer wg.Done()
+		// wg.Add(1)
+		// go func(e static.Eatery) {
+		// defer wg.Done()
 
-			eateryURL, err := utils.ExtendURL(baseURL, e.ScrapePath)
-			if err != nil {
-				log.Printf("error extending url for eatery %d: %v", e.ID, err)
-				return
-			}
+		eateryURL, err := utils.ExtendURL(baseURL, eatery.ScrapePath)
+		if err != nil {
+			log.Printf("error extending url for eatery %d: %v", eatery.ID, err)
+			// return
+		}
 
-			eateryWeek, err := fetchEateryWeek(*eateryURL, scraper)
-			if err != nil {
-				log.Printf("error fetching eatery week for eatery %d: %v", e.ID, err)
-				return
-			}
+		eateryWeek, err := fetchEateryWeek(*eateryURL, scraper)
+		if err != nil {
+			log.Printf("error fetching eatery week for eatery %d: %v", eatery.ID, err)
+			// return
+		}
 
-			mu.Lock()
-			fetchedEateries[&e] = eateryWeek
-			mu.Unlock()
-		}(eatery)
+		// mu.Lock()
+		fetchedEateries[&eatery] = eateryWeek
+		// mu.Unlock()
+		// }(eatery)
 	}
 
-	wg.Wait()
+	// wg.Wait()
 	return fetchedEateries, nil
 }
 
