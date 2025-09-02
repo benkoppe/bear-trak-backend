@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
-	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 	"github.com/jamespfennell/gtfs"
 )
 
@@ -63,7 +63,7 @@ func getSingleRealtimeGtfs(url string) (*gtfs.Realtime, error) {
 		return nil, fmt.Errorf("error reading realtime tcat data: %v", err)
 	}
 
-	estLocation := time_utils.LoadEST()
+	estLocation := timeutils.LoadEST()
 	realtimeData, err := gtfs.ParseRealtime(b, &gtfs.ParseRealtimeOptions{Timezone: estLocation})
 	if err != nil {
 		return nil, fmt.Errorf("error parsing realtime tcat data: %v", err)

@@ -1,5 +1,5 @@
-// Package time_utils includes all time-related utils.
-package time_utils
+// Package timeutils includes all time-related utils.
+package timeutils
 
 import (
 	"encoding/json"

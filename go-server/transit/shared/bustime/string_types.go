@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 )
 
 // For some reason, some floats/ints are encoded as strings
@@ -111,13 +111,13 @@ func (tt *TransitTime) UnmarshalJSON(data []byte) error {
 	}
 
 	// Create the time in local timezone
-	est := time_utils.LoadEST()
+	est := timeutils.LoadEST()
 	t := time.Date(year, time.Month(month), day, hour, minute, 0, 0, est)
 	*tt = TransitTime(t)
 	return nil
 }
 
 func (tt TransitTime) ToTime() time.Time {
-	est := time_utils.LoadEST()
+	est := timeutils.LoadEST()
 	return time.Time(tt).In(est)
 }

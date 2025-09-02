@@ -1,12 +1,12 @@
 package external
 
-import "github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+import "github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 
 type Gym struct {
 	LocationID   int    `json:"LocationId"`
 	LocationName string `json:"LocationName"`
 
-	LastUpdatedDateAndTime time_utils.ESTTime `json:"LastUpdatedDateAndTime"`
+	LastUpdatedDateAndTime timeutils.ESTTime `json:"LastUpdatedDateAndTime"`
 
 	// used to calculate percentage
 	TotalCapacity int `json:"TotalCapacity"`

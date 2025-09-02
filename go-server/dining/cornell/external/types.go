@@ -1,7 +1,7 @@
 package external
 
 import (
-	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 )
 
 type EateryAPIResponse struct {
@@ -48,8 +48,8 @@ type OperatingHour struct {
 
 type Event struct {
 	Descr          string              `json:"descr"`
-	StartTimestamp time_utils.UnixTime `json:"startTimestamp"`
-	EndTimestamp   time_utils.UnixTime `json:"endTimestamp"`
+	StartTimestamp timeutils.UnixTime `json:"startTimestamp"`
+	EndTimestamp   timeutils.UnixTime `json:"endTimestamp"`
 	Start          string              `json:"start"`
 	End            string              `json:"end"`
 	CalSummary     string              `json:"calSummary"`

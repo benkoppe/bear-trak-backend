@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
-	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 	"github.com/emersion/go-imap"
@@ -217,7 +217,7 @@ func findNextWednesday(startDate time.Time) time.Time {
 
 	nextWednesday := currDate.AddDate(0, 0, daysToAdd)
 
-	est := time_utils.LoadEST()
+	est := timeutils.LoadEST()
 	nextWednesdayEST := time.Date(
 		nextWednesday.Year(), nextWednesday.Month(), nextWednesday.Day(), 18, 30, 0, 0, est,
 	)

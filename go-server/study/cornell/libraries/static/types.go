@@ -1,6 +1,6 @@
 package static
 
-import "github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+import "github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 
 type Library struct {
 	ID               int                   `json:"id"`
@@ -11,7 +11,7 @@ type Library struct {
 	ExternalMapNote  *string               `json:"externalMapNote,omitempty"`
 	PrinterLocations []string              `json:"printerLocations"`
 	Location         *Location             `json:"location,omitempty"`
-	WeekHours        *time_utils.WeekHours `json:"weekHours,omitempty"`
+	WeekHours        *timeutils.WeekHours `json:"weekHours,omitempty"`
 }
 
 type Location struct {

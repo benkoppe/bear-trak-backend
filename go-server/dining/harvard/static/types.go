@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
-	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 )
 
 type Eatery struct {
@@ -37,8 +37,8 @@ type Location struct {
 
 type HarvardHours struct {
 	MealNumber *int                  `json:"mealNumber,omitempty"`
-	Open       time_utils.TimeString `json:"open"`
-	Close      time_utils.TimeString `json:"close"`
+	Open       timeutils.TimeString `json:"open"`
+	Close      timeutils.TimeString `json:"close"`
 }
 
 type HarvardWeekHours struct {
@@ -88,7 +88,7 @@ func (w HarvardWeekHours) GetConvertedHours(date time.Time) []api.Hours {
 }
 
 func (w HarvardWeekHours) CreateFutureHours() []api.Hours {
-	est := time_utils.LoadEST()
+	est := timeutils.LoadEST()
 	now := time.Now().In(est)
 	var futureHours []api.Hours
 

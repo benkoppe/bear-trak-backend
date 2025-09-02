@@ -18,7 +18,7 @@ import (
 
 	"github.com/benkoppe/bear-trak-backend/go-server/dining/cornell/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
-	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 	"golang.org/x/text/unicode/norm"
 )
 
@@ -196,7 +196,7 @@ func convertExternalCategories(external external.Eatery) []api.EateryCategoriesI
 func hoursFromEvents(events []api.EateryEvent) []api.Hours {
 	var hours []api.Hours
 
-	est := time_utils.LoadEST()
+	est := timeutils.LoadEST()
 
 	// convert to hours objects
 	for _, event := range events {

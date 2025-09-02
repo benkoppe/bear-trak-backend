@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
-	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 )
 
 // parseCaption will try multiple patterns to extract title, start and/or end dates.
@@ -21,8 +21,8 @@ func parseCaption(caption string) captionData {
 		startStr := matches[2]
 		endStr := matches[3]
 
-		startDate, err1 := time_utils.ParseCommonDateTimeYearOptional(startStr)
-		endDate, err2 := time_utils.ParseCommonDateTimeYearOptional(endStr)
+		startDate, err1 := timeutils.ParseCommonDateTimeYearOptional(startStr)
+		endDate, err2 := timeutils.ParseCommonDateTimeYearOptional(endStr)
 
 		var startPtr, endPtr *time.Time
 		if err1 == nil && err2 == nil {
@@ -44,8 +44,8 @@ func parseCaption(caption string) captionData {
 		startStr := matches[2]
 		endStr := matches[3]
 
-		startDate, err1 := time_utils.ParseCommonDateTimeYearOptional(startStr)
-		endDate, err2 := time_utils.ParseCommonDateTimeYearOptional(endStr)
+		startDate, err1 := timeutils.ParseCommonDateTimeYearOptional(startStr)
+		endDate, err2 := timeutils.ParseCommonDateTimeYearOptional(endStr)
 
 		var startPtr, endPtr *time.Time
 		if err1 == nil && err2 == nil {
@@ -65,7 +65,7 @@ func parseCaption(caption string) captionData {
 	if matches := reStarting.FindStringSubmatch(caption); len(matches) == 3 {
 		title := strings.TrimSpace(matches[1])
 		dateStr := matches[2]
-		startDate, err := time_utils.ParseCommonDateTimeYearOptional(dateStr)
+		startDate, err := timeutils.ParseCommonDateTimeYearOptional(dateStr)
 		var startPtr *time.Time
 		if err == nil {
 			startPtr = &startDate
@@ -140,7 +140,7 @@ func parseHeaderDays(header string) []string {
 func parseGymSchedule(headers, values []string) GymSchedule {
 	schedule := GymSchedule{
 		GymName:   values[0],
-		WeekHours: time_utils.WeekHours{},
+		WeekHours: timeutils.WeekHours{},
 	}
 	// process remaining headers
 	for i := 1; i < len(headers) && i < len(values); i++ {
@@ -148,7 +148,7 @@ func parseGymSchedule(headers, values []string) GymSchedule {
 		cell := values[i]
 
 		days := parseHeaderDays(header)
-		hrs := time_utils.ParseHours(cell, nil)
+		hrs := timeutils.ParseHours(cell, nil)
 		for _, day := range days {
 			err := schedule.WeekHours.AddHours(day, hrs)
 			if err != nil {

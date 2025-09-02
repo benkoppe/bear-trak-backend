@@ -1,6 +1,6 @@
 package availtec
 
-import "github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+import "github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 
 type Route struct {
 	Color             string    `json:"Color"`
@@ -25,7 +25,7 @@ type Vehicle struct {
 	StopId                     int                      `json:"StopId"`
 	Heading                    int                      `json:"Heading"`
 	LastStop                   string                   `json:"LastStop"`
-	LastUpdated                time_utils.MicrosoftTime `json:"LastUpdated"`
+	LastUpdated                timeutils.MicrosoftTime `json:"LastUpdated"`
 	Latitude                   float64                  `json:"Latitude"`
 	Longitude                  float64                  `json:"Longitude"`
 	RouteId                    int                      `json:"RouteId"`

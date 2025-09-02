@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
-	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 )
 
 type WeekHours struct {
@@ -21,7 +21,7 @@ type WeekHours struct {
 }
 
 type Day struct {
-	Date     time_utils.DateTimeString `json:"date"`
+	Date     timeutils.DateTimeString `json:"date"`
 	Times    Times                     `json:"times"`
 	Rendered string                    `json:"rendered"`
 }
@@ -33,8 +33,8 @@ type Times struct {
 }
 
 type Hours struct {
-	From time_utils.TimeString `json:"from"`
-	To   time_utils.TimeString `json:"to"`
+	From timeutils.TimeString `json:"from"`
+	To   timeutils.TimeString `json:"to"`
 }
 
 func GetAllDays(weeks []WeekHours) []Day {
@@ -61,7 +61,7 @@ func GetAllDays(weeks []WeekHours) []Day {
 }
 
 func ConvertToHours(weeks []WeekHours) ([]api.Hours, error) {
-	est := time_utils.LoadEST()
+	est := timeutils.LoadEST()
 	now := time.Now().In(est)
 	today := time.Date(
 		now.Year(),

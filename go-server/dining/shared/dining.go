@@ -5,11 +5,11 @@ import (
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
-	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 )
 
 func SelectNextWeekEvents(events []api.EateryEvent) api.EateryNextWeekEvents {
-	est := time_utils.LoadEST()
+	est := timeutils.LoadEST()
 	now := time.Now().In(est)
 	weekStart := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 	weekEnd := weekStart.AddDate(0, 0, 7)

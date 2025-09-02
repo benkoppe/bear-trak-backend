@@ -10,7 +10,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/dining/harvard/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining/shared"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
-	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 )
 
 type Cache = external.Caches
@@ -71,7 +71,7 @@ func collectFutureEvents(static static.Eatery, externalRecipes []external.Recipe
 	locationNumber := *static.ApiNumber
 	weekHours := static.WeekHours
 
-	est := time_utils.LoadEST()
+	est := timeutils.LoadEST()
 	now := time.Now().In(est)
 
 	var events []api.EateryEvent

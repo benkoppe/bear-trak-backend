@@ -11,7 +11,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/scrape"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
-	"github.com/benkoppe/bear-trak-backend/go-server/utils/time_utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 )
 
 type Caches struct {
@@ -87,7 +87,7 @@ func findCapacityData(static static.Gym, externalData []external.Gym) *external.
 
 func createFutureHours(static static.Gym, schedules []scrape.ParsedSchedule) []api.Hours {
 	staticHours := static.WeekHours
-	est := time_utils.LoadEST()
+	est := timeutils.LoadEST()
 	now := time.Now().In(est)
 	var futureHours []api.Hours
 
@@ -181,7 +181,7 @@ func convertExternalGymCapacity(gym static.Gym, capacity external.Gym) api.GymCa
 	percentage := api.NewNilInt(capacity.GetPercentage())
 
 	// if gym is closed, set percentage to null
-	est := time_utils.LoadEST()
+	est := timeutils.LoadEST()
 	if !gym.WeekHours.IsOpen(time.Now().In(est)) {
 		percentage = api.NilInt{Null: true}
 	}
