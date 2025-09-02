@@ -1,3 +1,4 @@
+// Package scrape will scrape umich dining content.
 package scrape
 
 import (

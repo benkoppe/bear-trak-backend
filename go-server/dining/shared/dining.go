@@ -1,3 +1,4 @@
+// Package shared includes all shared dining methods.
 package shared
 
 import (

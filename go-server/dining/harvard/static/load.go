@@ -1,3 +1,4 @@
+// Package static loads static harvard dining content.
 package static
 
 import (

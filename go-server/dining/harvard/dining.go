@@ -1,3 +1,4 @@
+// Package harvard loads harvard dining content.
 package harvard
 
 import (

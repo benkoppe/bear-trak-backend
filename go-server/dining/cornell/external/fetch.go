@@ -1,3 +1,4 @@
+// Package external loads external cornell dining content.
 package external
 
 import (

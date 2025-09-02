@@ -1,3 +1,4 @@
+// Package static loads static cornell dining content.
 package static
 
 import (

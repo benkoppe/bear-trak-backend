@@ -1,3 +1,4 @@
+// Package static loads static umich dining content.
 package static
 
 import (

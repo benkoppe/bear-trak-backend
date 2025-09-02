@@ -1,3 +1,4 @@
+// Package cornell loads cornell dining content.
 package cornell
 
 import (

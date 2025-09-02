@@ -1,3 +1,4 @@
+// Package umich loads umich dining content.
 package umich
 
 import (

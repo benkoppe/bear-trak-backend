@@ -1,3 +1,4 @@
+// Package external loads external harvard dining content.
 package external
 
 import (
