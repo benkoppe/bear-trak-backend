@@ -16,21 +16,21 @@ import (
 )
 
 // unused -- a concurrent verion is in scrape_all
-func fetchEateryWeek(eateryURL string) ([]Eatery, error) {
-	now := time.Now()
-	var eateryWeek []Eatery
-
-	for i := range [7]int{} {
-		date := now.AddDate(0, 0, i)
-		eatery, err := fetchEatery(eateryURL, date)
-		if err != nil {
-			return nil, fmt.Errorf("failed to fetch eatery for date %s: %w", date.Format("2006-01-02"), err)
-		}
-		eateryWeek = append(eateryWeek, *eatery)
-	}
-
-	return eateryWeek, nil
-}
+// func fetchEateryWeek(eateryURL string) ([]Eatery, error) {
+// 	now := time.Now()
+// 	var eateryWeek []Eatery
+//
+// 	for i := range [7]int{} {
+// 		date := now.AddDate(0, 0, i)
+// 		eatery, err := fetchEatery(eateryURL, date)
+// 		if err != nil {
+// 			return nil, fmt.Errorf("failed to fetch eatery for date %s: %w", date.Format("2006-01-02"), err)
+// 		}
+// 		eateryWeek = append(eateryWeek, *eatery)
+// 	}
+//
+// 	return eateryWeek, nil
+// }
 
 func fetchEatery(eateryURL string, date time.Time) (*Eatery, error) {
 	fullURL, err := appendDateSearchParam(eateryURL, date)
