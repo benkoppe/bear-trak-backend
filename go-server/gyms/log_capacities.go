@@ -1,3 +1,4 @@
+// Package gyms includes all general gym methods.
 package gyms
 
 import (

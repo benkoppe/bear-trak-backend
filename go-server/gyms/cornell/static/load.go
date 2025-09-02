@@ -1,3 +1,4 @@
+// Package static loads all static cornell gym data.
 package static
 
 import (

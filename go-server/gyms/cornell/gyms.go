@@ -1,3 +1,4 @@
+// Package gyms loads all cornell gym content.
 package gyms
 
 import (

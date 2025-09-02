@@ -1,3 +1,4 @@
+// Package external loads all external cornell gym content.
 package external
 
 import (

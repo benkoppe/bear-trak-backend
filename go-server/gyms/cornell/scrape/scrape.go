@@ -1,3 +1,4 @@
+// Package scrape loads all scraped cornell gym content.
 package scrape
 
 import (
