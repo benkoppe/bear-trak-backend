@@ -35,11 +35,11 @@ func NewHandler(db *db.Queries) *Handler {
 }
 
 func (h *Handler) initCaches() {
-	h.diningCache = dining.InitCache(eateriesUrl)
-	h.gymsCaches = gyms.InitCaches(gymCapacitiesUrl, gymHoursUrl)
-	h.transitCaches = transit.InitCaches(availtecUrl, gtfsStaticUrl)
-	h.studyCache = study.InitCache(librariesUrl)
-	h.mapCache = external_map.InitCache(mapOverlaysUrl)
+	h.diningCache = dining.InitCache(eateriesURL)
+	h.gymsCaches = gyms.InitCaches(gymCapacitiesURL, gymHoursURL)
+	h.transitCaches = transit.InitCaches(availtecURL, gtfsStaticURL)
+	h.studyCache = study.InitCache(librariesURL)
+	h.mapCache = external_map.InitCache(mapOverlaysURL)
 }
 
 func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
@@ -67,11 +67,11 @@ func (h *Handler) GetV1Study(ctx context.Context) (*api.StudyData, error) {
 }
 
 func (h *Handler) GetV1DiningUser(ctx context.Context, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {
-	return dining_users.GetUser(shared.CbordBaseURL, cbordInstitutionId, params)
+	return dining_users.GetUser(shared.CbordBaseURL, cbordInstitutionID, params)
 }
 
 func (h *Handler) PostV1DiningUser(ctx context.Context, params api.PostV1DiningUserParams) (api.PostV1DiningUserRes, error) {
-	return dining_users.CreateUser(ctx, shared.CbordBaseURL, cbordInstitutionId, params, h.DB)
+	return dining_users.CreateUser(ctx, shared.CbordBaseURL, cbordInstitutionID, params, h.DB)
 }
 
 func (h *Handler) DeleteV1DiningUser(ctx context.Context, params api.DeleteV1DiningUserParams) (api.DeleteV1DiningUserRes, error) {
@@ -83,7 +83,7 @@ func (h *Handler) GetV1DiningUserSession(ctx context.Context, params api.GetV1Di
 }
 
 func (h *Handler) GetV1DiningUserAccounts(ctx context.Context, params api.GetV1DiningUserAccountsParams) (api.GetV1DiningUserAccountsRes, error) {
-	return dining_users.GetUserAccounts(shared.CbordBaseURL, cbordInstitutionId, params)
+	return dining_users.GetUserAccounts(shared.CbordBaseURL, cbordInstitutionID, params)
 }
 
 func (h *Handler) GetV1DiningUserBarcode(ctx context.Context, params api.GetV1DiningUserBarcodeParams) (api.GetV1DiningUserBarcodeRes, error) {

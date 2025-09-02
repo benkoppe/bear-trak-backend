@@ -34,16 +34,16 @@ func NewHandler(db *db.Queries) *Handler {
 	return h
 }
 
-const DINING_API_KEY_ENV_VAR = "HARVARD_DINING_API_KEY"
+const DiningAPIKeyEnvVar = "HARVARD_DINING_API_KEY"
 
 func (h *Handler) initCaches() {
 	// get API key from environment variables
-	diningApiKey := os.Getenv(DINING_API_KEY_ENV_VAR)
-	if diningApiKey == "" {
+	diningAPIKey := os.Getenv(DiningAPIKeyEnvVar)
+	if diningAPIKey == "" {
 		log.Fatalf("Dining API key not found in environment variables")
 	}
 
-	h.diningCache = dining.InitCache(eateriesBaseURL, diningApiKey)
+	h.diningCache = dining.InitCache(eateriesBaseURL, diningAPIKey)
 	h.transitShuttleCaches = harvard_transit.InitCaches(pasioBaseURL, pasioSystemID, gtfsStaticURL, gtfsRealtimeBaseURL)
 	h.transitMbtaCaches = mbta_transit.InitCaches(mbtaGtfsURL, mbtaGtfsRealtimeBaseURL)
 	h.studyCache = study.InitCache(librariesURL)
