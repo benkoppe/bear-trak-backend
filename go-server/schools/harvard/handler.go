@@ -1,3 +1,4 @@
+// Package harvard configures an api handler for harvard.
 package harvard
 
 import (

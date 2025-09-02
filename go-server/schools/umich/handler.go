@@ -1,3 +1,4 @@
+// Package umich configures an api handler for umich.
 package umich
 
 import (

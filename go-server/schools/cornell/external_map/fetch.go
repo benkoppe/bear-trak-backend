@@ -1,3 +1,4 @@
+// Package external_map loads external data from cornell's map page.
 package external_map
 
 import (

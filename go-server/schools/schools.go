@@ -1,3 +1,4 @@
+// Package schools contains all general cross-school methods.
 package schools
 
 import (

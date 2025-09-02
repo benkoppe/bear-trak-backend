@@ -1,3 +1,4 @@
+// Package cornell configures an api handler for cornell.
 package cornell
 
 const (
