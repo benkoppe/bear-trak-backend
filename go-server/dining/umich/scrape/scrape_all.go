@@ -1,7 +1,6 @@
 package scrape
 
 import (
-	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -28,7 +27,8 @@ func fetchAll(baseURL string, eateries []static.Eatery) (map[*static.Eatery][]Ea
 	var mu sync.Mutex
 	var wg sync.WaitGroup
 
-	semaphore := make(chan struct{}, 10)
+	// semaphore := make(chan struct{}, 10)
+	scraper := NewBrowserScraper()
 
 	for _, eatery := range eateries {
 		wg.Add(1)
@@ -41,7 +41,7 @@ func fetchAll(baseURL string, eateries []static.Eatery) (map[*static.Eatery][]Ea
 				return
 			}
 
-			eateryWeek, err := fetchEateryWeekConcurrent(*eateryURL, semaphore)
+			eateryWeek, err := fetchEateryWeek(*eateryURL, scraper)
 			if err != nil {
 				log.Printf("error fetching eatery week for eatery %d: %v", e.ID, err)
 				return
@@ -57,42 +57,44 @@ func fetchAll(baseURL string, eateries []static.Eatery) (map[*static.Eatery][]Ea
 	return fetchedEateries, nil
 }
 
-func fetchEateryWeekConcurrent(eateryURL string, semaphore chan struct{}) ([]Eatery, error) {
-	now := time.Now()
-	eateryWeek := make([]Eatery, 7)
+// unused with new chromedp approach -- reverted back to old fetchEateryWeek
 
-	var wg sync.WaitGroup
-	var errMu sync.Mutex
-	var firstErr error
-
-	for i := range [7]int{} {
-		wg.Add(1)
-		go func(dayOffset int) {
-			defer wg.Done()
-
-			// acquire semaphore slot, or wait
-			semaphore <- struct{}{}
-			defer func() { <-semaphore }()
-
-			date := now.AddDate(0, 0, dayOffset)
-			eatery, err := fetchEatery(eateryURL, date)
-			if err != nil {
-				errMu.Lock()
-				if firstErr == nil {
-					firstErr = fmt.Errorf("failed to fetch eatery for date %s: %w", date.Format("2006-01-02"), err)
-				}
-				errMu.Unlock()
-				return
-			}
-
-			eateryWeek[dayOffset] = *eatery
-		}(i)
-	}
-
-	wg.Wait()
-	if firstErr != nil {
-		return nil, firstErr
-	}
-
-	return eateryWeek, nil
-}
+// func fetchEateryWeekConcurrent(eateryURL string, semaphore chan struct{}) ([]Eatery, error) {
+// 	now := time.Now()
+// 	eateryWeek := make([]Eatery, 7)
+//
+// 	var wg sync.WaitGroup
+// 	var errMu sync.Mutex
+// 	var firstErr error
+//
+// 	for i := range [7]int{} {
+// 		wg.Add(1)
+// 		go func(dayOffset int) {
+// 			defer wg.Done()
+//
+// 			// acquire semaphore slot, or wait
+// 			semaphore <- struct{}{}
+// 			defer func() { <-semaphore }()
+//
+// 			date := now.AddDate(0, 0, dayOffset)
+// 			eatery, err := fetchEatery(eateryURL, date)
+// 			if err != nil {
+// 				errMu.Lock()
+// 				if firstErr == nil {
+// 					firstErr = fmt.Errorf("failed to fetch eatery for date %s: %w", date.Format("2006-01-02"), err)
+// 				}
+// 				errMu.Unlock()
+// 				return
+// 			}
+//
+// 			eateryWeek[dayOffset] = *eatery
+// 		}(i)
+// 	}
+//
+// 	wg.Wait()
+// 	if firstErr != nil {
+// 		return nil, firstErr
+// 	}
+//
+// 	return eateryWeek, nil
+// }
