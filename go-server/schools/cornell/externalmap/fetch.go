@@ -21,7 +21,7 @@ func (cache Cache) Get(categoryDomID string) ([]Item, error) {
 	}
 
 	category := utils.Find(categories, func(cat itemCategory) bool {
-		return cat.DOM_ID == categoryDomID
+		return cat.DomID == categoryDomID
 	})
 	if category == nil {
 		return nil, fmt.Errorf("no category found with DOM_ID %s", categoryDomID)

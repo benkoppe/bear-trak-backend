@@ -5,8 +5,8 @@ type overlayResponse struct {
 }
 
 type itemCategory struct {
-	DOM_ID string `json:"DOM_ID"`
-	Items  []Item `json:"items"`
+	DomID string `json:"DOM_ID"`
+	Items []Item `json:"items"`
 }
 
 type Item struct {
