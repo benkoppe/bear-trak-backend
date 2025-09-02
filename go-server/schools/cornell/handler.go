@@ -9,7 +9,7 @@ import (
 	dining_users "github.com/benkoppe/bear-trak-backend/go-server/dining-users"
 	dining "github.com/benkoppe/bear-trak-backend/go-server/dining/cornell"
 	gyms "github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell"
-	"github.com/benkoppe/bear-trak-backend/go-server/schools/cornell/external_map"
+	"github.com/benkoppe/bear-trak-backend/go-server/schools/cornell/externalmap"
 	"github.com/benkoppe/bear-trak-backend/go-server/schools/shared"
 	study "github.com/benkoppe/bear-trak-backend/go-server/study/cornell"
 	transit "github.com/benkoppe/bear-trak-backend/go-server/transit/cornell"
@@ -22,7 +22,7 @@ type Handler struct {
 	gymsCaches    gyms.Caches
 	transitCaches transit.Caches
 	studyCache    study.Cache
-	mapCache      external_map.Cache
+	mapCache      externalmap.Cache
 }
 
 func NewHandler(db *db.Queries) *Handler {
@@ -39,7 +39,7 @@ func (h *Handler) initCaches() {
 	h.gymsCaches = gyms.InitCaches(gymCapacitiesURL, gymHoursURL)
 	h.transitCaches = transit.InitCaches(availtecURL, gtfsStaticURL)
 	h.studyCache = study.InitCache(librariesURL)
-	h.mapCache = external_map.InitCache(mapOverlaysURL)
+	h.mapCache = externalmap.InitCache(mapOverlaysURL)
 }
 
 func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {

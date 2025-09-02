@@ -6,10 +6,10 @@ import (
 	"strings"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
-	"github.com/benkoppe/bear-trak-backend/go-server/schools/cornell/external_map"
+	"github.com/benkoppe/bear-trak-backend/go-server/schools/cornell/externalmap"
 )
 
-func Get(mapCache external_map.Cache) ([]api.Printer, error) {
+func Get(mapCache externalmap.Cache) ([]api.Printer, error) {
 	mapItems, err := mapCache.Get("CUPrint")
 	if err != nil {
 		return nil, fmt.Errorf("error loading map data: %v", err)
@@ -23,7 +23,7 @@ func Get(mapCache external_map.Cache) ([]api.Printer, error) {
 	return printers, nil
 }
 
-func convertExternalPrinter(mapItem external_map.Item) api.Printer {
+func convertExternalPrinter(mapItem externalmap.Item) api.Printer {
 	printer := api.Printer{
 		Latitude:  mapItem.LatLng.Latitude,
 		Longitude: mapItem.LatLng.Longitude,

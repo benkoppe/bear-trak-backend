@@ -6,14 +6,14 @@ import (
 	"strings"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
-	"github.com/benkoppe/bear-trak-backend/go-server/schools/cornell/external_map"
+	"github.com/benkoppe/bear-trak-backend/go-server/schools/cornell/externalmap"
 	"github.com/benkoppe/bear-trak-backend/go-server/study/cornell/libraries/external"
 	"github.com/benkoppe/bear-trak-backend/go-server/study/cornell/libraries/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/study/shared/libcal"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 )
 
-func Get(cache external.Cache, mapCache external_map.Cache) ([]api.Library, error) {
+func Get(cache external.Cache, mapCache externalmap.Cache) ([]api.Library, error) {
 	staticData := static.GetLibraries()
 
 	if len(staticData) == 0 {
@@ -58,7 +58,7 @@ func Get(cache external.Cache, mapCache external_map.Cache) ([]api.Library, erro
 		}
 
 		if staticLibrary.ExternalMapNote != nil {
-			mapItem := utils.Find(mapItems, func(item external_map.Item) bool {
+			mapItem := utils.Find(mapItems, func(item externalmap.Item) bool {
 				return strings.Contains(item.Notes, *staticLibrary.ExternalMapNote)
 			})
 			if mapItem == nil {

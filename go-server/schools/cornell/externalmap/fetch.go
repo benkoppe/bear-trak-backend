@@ -1,5 +1,5 @@
-// Package external_map loads external data from cornell's map page.
-package external_map
+// Package externalmap loads external data from cornell's map page.
+package externalmap
 
 import (
 	"fmt"

@@ -1,4 +1,4 @@
-package external_map
+package externalmap
 
 type overlayResponse struct {
 	Overlays []itemCategory `json:"overlays"`
