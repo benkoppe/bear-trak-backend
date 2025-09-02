@@ -1,3 +1,4 @@
+// Package utils includes all utility methods.
 package utils
 
 import (

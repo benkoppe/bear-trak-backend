@@ -1,3 +1,4 @@
+// Package time_utils includes all time-related utils.
 package time_utils
 
 import (
