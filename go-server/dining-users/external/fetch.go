@@ -1,3 +1,4 @@
+// Package external loads all external CBORD dining data.
 package external
 
 import (

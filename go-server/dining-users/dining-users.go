@@ -1,3 +1,4 @@
+// Package dining_users includes all methods for CBORD dining integration.
 package dining_users
 
 import (
