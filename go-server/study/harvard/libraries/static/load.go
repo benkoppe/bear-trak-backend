@@ -1,3 +1,4 @@
+// Package static loads static harvard library content.
 package static
 
 import (

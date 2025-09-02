@@ -1,3 +1,4 @@
+// Package printers loads cornell printer data.
 package printers
 
 import (

@@ -1,4 +1,5 @@
-package study
+// Package cornell loads cornell study content.
+package cornell
 
 import (
 	"fmt"

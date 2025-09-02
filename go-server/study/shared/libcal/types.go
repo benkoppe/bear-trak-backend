@@ -1,3 +1,4 @@
+// Package libcal includes libcla study content types.
 package libcal
 
 import (

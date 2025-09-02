@@ -1,4 +1,5 @@
-package study
+// Package harvard loads harvard study content.
+package harvard
 
 import (
 	"fmt"

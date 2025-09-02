@@ -1,3 +1,4 @@
+// Package external loads external harvard library data.
 package external
 
 import (

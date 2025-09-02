@@ -1,3 +1,4 @@
+// Package external loads external cornell library data.
 package external
 
 import (

@@ -1,3 +1,4 @@
+// Package static loads static cornell library data.
 package static
 
 import (

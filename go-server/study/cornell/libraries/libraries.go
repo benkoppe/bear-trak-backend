@@ -1,3 +1,4 @@
+// Package libraries loads cornell library data.
 package libraries
 
 import (

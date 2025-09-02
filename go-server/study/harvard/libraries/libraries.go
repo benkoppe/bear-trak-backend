@@ -1,3 +1,4 @@
+// Package libraries loads harvard library content.
 package libraries
 
 import (
