@@ -1,3 +1,4 @@
+// Package cornell loads all cornell alert data.
 package cornell
 
 import (

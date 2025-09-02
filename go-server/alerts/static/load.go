@@ -1,3 +1,4 @@
+// Package static includes all alert helper methods pertaining to static data.
 package static
 
 import (

@@ -1,3 +1,4 @@
+// Package umich loads all umich alert data.
 package umich
 
 import (

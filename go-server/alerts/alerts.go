@@ -1,3 +1,4 @@
+// Package alerts includes all general alert methods.
 package alerts
 
 import (

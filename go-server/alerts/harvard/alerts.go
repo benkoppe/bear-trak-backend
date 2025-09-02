@@ -1,3 +1,4 @@
+// Package harvard loads all harvard alert data.
 package harvard
 
 import (
