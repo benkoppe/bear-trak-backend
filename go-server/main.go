@@ -86,18 +86,18 @@ func main() {
 
 func runTimedTasks(queries *db.Queries, handler api.Handler, config schools.Config) {
 	// initial run
-	executeHourlyTasks(queries, handler, config)
+	executeTimedTasks(queries, handler, config)
 
 	// create a ticker to run the tasks
 	ticker := time.NewTicker(5 * time.Minute)
 	defer ticker.Stop()
 
 	for range ticker.C {
-		executeHourlyTasks(queries, handler, config)
+		executeTimedTasks(queries, handler, config)
 	}
 }
 
-func executeHourlyTasks(queries *db.Queries, handler api.Handler, config schools.Config) {
+func executeTimedTasks(queries *db.Queries, handler api.Handler, config schools.Config) {
 	est := timeutils.LoadEST()
 	log.Println("Executing timed tasks at:", time.Now().In(est))
 
