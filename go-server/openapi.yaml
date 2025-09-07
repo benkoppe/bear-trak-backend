@@ -90,6 +90,54 @@ paths:
       x-stoplight:
         id: bgkkzgl4exihm
       description: Returns all necessary data for BearTrak's gym section.
+  /v1/gyms/capacities:
+    get:
+      summary: Gym Capacities
+      tags:
+        - gyms
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GymCapacityData"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: getV1GymCapacities
+      x-stoplight:
+        id: a8uzxemghpcxz
+      description: Returns all time-logged gym capacity data
+  /v1/gyms/capacities/predictions:
+    get:
+      summary: Gym Capacity Predictions
+      tags:
+        - gyms
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GymCapacityPredictions"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: getV1GymCapacityPredictions
+      x-stoplight:
+        id: aglc6o7iqsbqo
+      description: Returns all time-logged gym capacity prediction data
   /v1/study:
     get:
       summary: Study
@@ -802,6 +850,94 @@ components:
               x-stoplight:
                 id: n9pqcuhk7s66i
               format: date-time
+    GymCapacityData:
+      title: GymCapacityData
+      x-stoplight:
+        id: rjjb8aqhbkiri
+      type: object
+      required:
+        - id
+        - points
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: 2bupc8hujsvvj
+        points:
+          type: array
+          x-stoplight:
+            id: wqt1i48u7gww8
+          items:
+            $ref: "#/components/schemas/GymCapacityDataPoint"
+      x-tags:
+        - gyms
+    GymCapacityDataPoint:
+      title: GymCapacityDataPoint
+      x-stoplight:
+        id: l4j55or0rri9u
+      type: object
+      required:
+        - lastUpdated
+        - count
+      properties:
+        lastUpdated:
+          type: string
+          x-stoplight:
+            id: db55h2chssrfx
+          format: date-time
+        count:
+          type: integer
+          x-stoplight:
+            id: j8fmix5z0120e
+      x-tags:
+        - gyms
+    GymCapacityPredictions:
+      title: GymCapacityPredictions
+      x-stoplight:
+        id: xqniueqx6wcri
+      type: object
+      required:
+        - id
+        - points
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: q65xhjqx5m0yw
+        points:
+          type: array
+          x-stoplight:
+            id: zpi9i5111yriv
+          items:
+            $ref: "#/components/schemas/GymCapacityPredictionPoint"
+      x-tags:
+        - gyms
+    GymCapacityPredictionPoint:
+      title: GymCapacityPredictionPoint
+      x-stoplight:
+        id: jvusbyik0nvpm
+      type: object
+      required:
+        - timestamp
+        - predictionMadeAt
+        - count
+      properties:
+        timestamp:
+          type: string
+          x-stoplight:
+            id: bl8gvqhe0aimz
+          format: date-time
+        predictionMadeAt:
+          type: string
+          x-stoplight:
+            id: pvd98gwizcfde
+          format: date-time
+        count:
+          type: integer
+          x-stoplight:
+            id: gu942os4jb8ia
+      x-tags:
+        - gyms
     BusRoute:
       title: BusRoute
       x-stoplight:

@@ -2,6 +2,7 @@ package cornell
 
 import (
 	"context"
+	"fmt"
 
 	alerts "github.com/benkoppe/bear-trak-backend/go-server/alerts/cornell"
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
@@ -52,6 +53,14 @@ func (h *Handler) GetV1Dining(ctx context.Context) ([]api.Eatery, error) {
 
 func (h *Handler) GetV1Gyms(ctx context.Context) ([]api.Gym, error) {
 	return gyms.Get(h.gymsCaches)
+}
+
+func (h *Handler) GetV1GymCapacities(ctx context.Context) ([]api.GymCapacityData, error) {
+	return nil, fmt.Errorf("not implemented")
+}
+
+func (h *Handler) GetV1GymCapacityPredictions(ctx context.Context) ([]api.GymCapacityPredictions, error) {
+	return nil, fmt.Errorf("not implemented")
 }
 
 func (h *Handler) GetV1TransitRoutes(ctx context.Context) ([]api.BusRoute, error) {

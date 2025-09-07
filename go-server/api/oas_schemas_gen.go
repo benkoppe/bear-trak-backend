@@ -1177,6 +1177,121 @@ func (s *GymCapacity) SetLastUpdated(val time.Time) {
 	s.LastUpdated = val
 }
 
+// Ref: #/components/schemas/GymCapacityData
+type GymCapacityData struct {
+	ID     int                    `json:"id"`
+	Points []GymCapacityDataPoint `json:"points"`
+}
+
+// GetID returns the value of ID.
+func (s *GymCapacityData) GetID() int {
+	return s.ID
+}
+
+// GetPoints returns the value of Points.
+func (s *GymCapacityData) GetPoints() []GymCapacityDataPoint {
+	return s.Points
+}
+
+// SetID sets the value of ID.
+func (s *GymCapacityData) SetID(val int) {
+	s.ID = val
+}
+
+// SetPoints sets the value of Points.
+func (s *GymCapacityData) SetPoints(val []GymCapacityDataPoint) {
+	s.Points = val
+}
+
+// Ref: #/components/schemas/GymCapacityDataPoint
+type GymCapacityDataPoint struct {
+	LastUpdated time.Time `json:"lastUpdated"`
+	Count       int       `json:"count"`
+}
+
+// GetLastUpdated returns the value of LastUpdated.
+func (s *GymCapacityDataPoint) GetLastUpdated() time.Time {
+	return s.LastUpdated
+}
+
+// GetCount returns the value of Count.
+func (s *GymCapacityDataPoint) GetCount() int {
+	return s.Count
+}
+
+// SetLastUpdated sets the value of LastUpdated.
+func (s *GymCapacityDataPoint) SetLastUpdated(val time.Time) {
+	s.LastUpdated = val
+}
+
+// SetCount sets the value of Count.
+func (s *GymCapacityDataPoint) SetCount(val int) {
+	s.Count = val
+}
+
+// Ref: #/components/schemas/GymCapacityPredictionPoint
+type GymCapacityPredictionPoint struct {
+	Timestamp        time.Time `json:"timestamp"`
+	PredictionMadeAt time.Time `json:"predictionMadeAt"`
+	Count            int       `json:"count"`
+}
+
+// GetTimestamp returns the value of Timestamp.
+func (s *GymCapacityPredictionPoint) GetTimestamp() time.Time {
+	return s.Timestamp
+}
+
+// GetPredictionMadeAt returns the value of PredictionMadeAt.
+func (s *GymCapacityPredictionPoint) GetPredictionMadeAt() time.Time {
+	return s.PredictionMadeAt
+}
+
+// GetCount returns the value of Count.
+func (s *GymCapacityPredictionPoint) GetCount() int {
+	return s.Count
+}
+
+// SetTimestamp sets the value of Timestamp.
+func (s *GymCapacityPredictionPoint) SetTimestamp(val time.Time) {
+	s.Timestamp = val
+}
+
+// SetPredictionMadeAt sets the value of PredictionMadeAt.
+func (s *GymCapacityPredictionPoint) SetPredictionMadeAt(val time.Time) {
+	s.PredictionMadeAt = val
+}
+
+// SetCount sets the value of Count.
+func (s *GymCapacityPredictionPoint) SetCount(val int) {
+	s.Count = val
+}
+
+// Ref: #/components/schemas/GymCapacityPredictions
+type GymCapacityPredictions struct {
+	ID     int                          `json:"id"`
+	Points []GymCapacityPredictionPoint `json:"points"`
+}
+
+// GetID returns the value of ID.
+func (s *GymCapacityPredictions) GetID() int {
+	return s.ID
+}
+
+// GetPoints returns the value of Points.
+func (s *GymCapacityPredictions) GetPoints() []GymCapacityPredictionPoint {
+	return s.Points
+}
+
+// SetID sets the value of ID.
+func (s *GymCapacityPredictions) SetID(val int) {
+	s.ID = val
+}
+
+// SetPoints sets the value of Points.
+func (s *GymCapacityPredictions) SetPoints(val []GymCapacityPredictionPoint) {
+	s.Points = val
+}
+
 type GymEquipmentCategoriesItem struct {
 	CategoryType GymEquipmentCategoriesItemCategoryType `json:"categoryType"`
 	Items        []string                               `json:"items"`

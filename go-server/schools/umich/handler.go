@@ -57,6 +57,14 @@ func (h *Handler) GetV1Gyms(ctx context.Context) ([]api.Gym, error) {
 	return nil, fmt.Errorf("umich doesn't implement the gyms feature")
 }
 
+func (h *Handler) GetV1GymCapacities(ctx context.Context) ([]api.GymCapacityData, error) {
+	return nil, fmt.Errorf("not implemented")
+}
+
+func (h *Handler) GetV1GymCapacityPredictions(ctx context.Context) ([]api.GymCapacityPredictions, error) {
+	return nil, fmt.Errorf("not implemented")
+}
+
 func (h *Handler) GetV1TransitRoutes(ctx context.Context) ([]api.BusRoute, error) {
 	return transit.GetRoutes(h.transitCaches)
 }
