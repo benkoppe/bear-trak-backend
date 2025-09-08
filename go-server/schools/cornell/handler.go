@@ -2,7 +2,6 @@ package cornell
 
 import (
 	"context"
-	"fmt"
 
 	alerts "github.com/benkoppe/bear-trak-backend/go-server/alerts/cornell"
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
@@ -37,7 +36,7 @@ func NewHandler(db *db.Queries) *Handler {
 
 func (h *Handler) initCaches(db *db.Queries) {
 	h.diningCache = dining.InitCache(eateriesURL)
-	h.gymsCaches = gyms.InitCaches(gymCapacitiesURL, gymHoursURL, db)
+	h.gymsCaches = gyms.InitCaches(gymCapacitiesURL, gymHoursURL, gymPredictionsURL, db)
 	h.transitCaches = transit.InitCaches(availtecURL, gtfsStaticURL)
 	h.studyCache = study.InitCache(librariesURL)
 	h.mapCache = externalmap.InitCache(mapOverlaysURL)
@@ -60,7 +59,7 @@ func (h *Handler) GetV1GymCapacities(ctx context.Context) ([]api.GymCapacityData
 }
 
 func (h *Handler) GetV1GymCapacityPredictions(ctx context.Context) ([]api.GymCapacityPredictions, error) {
-	return nil, fmt.Errorf("not implemented")
+	return gyms.GetCapacityPredictionPoints(h.gymsCaches)
 }
 
 func (h *Handler) GetV1TransitRoutes(ctx context.Context) ([]api.BusRoute, error) {

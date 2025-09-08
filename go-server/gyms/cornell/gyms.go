@@ -10,6 +10,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/capacities"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/external"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/predictions"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/scrape"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
@@ -17,18 +18,20 @@ import (
 )
 
 type Caches struct {
-	externalCache   external.Cache
-	hoursCache      scrape.Cache
-	capacitiesCache capacities.Cache
+	externalCache    external.Cache
+	hoursCache       scrape.Cache
+	capacitiesCache  capacities.Cache
+	predictionsCache predictions.Cache
 }
 
-func InitCaches(capacityURL, hoursURL string, queries *db.Queries) Caches {
+func InitCaches(capacityURL, hoursURL, predictionsURL string, queries *db.Queries) Caches {
 	externalCache := external.InitCache(capacityURL)
 
 	return Caches{
-		externalCache:   externalCache,
-		hoursCache:      scrape.InitCache(hoursURL),
-		capacitiesCache: capacities.InitCache(queries, externalCache),
+		externalCache:    externalCache,
+		hoursCache:       scrape.InitCache(hoursURL),
+		capacitiesCache:  capacities.InitCache(queries, externalCache),
+		predictionsCache: predictions.InitCache(predictionsURL),
 	}
 }
 

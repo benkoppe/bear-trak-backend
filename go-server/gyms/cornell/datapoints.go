@@ -7,3 +7,9 @@ func GetCapacityPoints(caches Caches) ([]api.GymCapacityData, error) {
 
 	return capacitiesData, err
 }
+
+func GetCapacityPredictionPoints(caches Caches) ([]api.GymCapacityPredictions, error) {
+	predictionsData, err := caches.predictionsCache.Get()
+
+	return predictionsData, err
+}
