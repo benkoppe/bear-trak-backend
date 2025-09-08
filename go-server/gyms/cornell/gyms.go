@@ -46,12 +46,12 @@ func Get(caches Caches) ([]api.Gym, error) {
 	if err != nil {
 		// don't break here - if capacities doesn't work, we still want to provide static data.
 		// instead, simply print an error.
-		fmt.Printf("error fetching external data: %v", err)
+		fmt.Printf("error fetching external data: %v\n", err)
 	}
 
 	scrapedSchedules, err := caches.hoursCache.Get()
 	if err != nil {
-		fmt.Printf("error fetching scraped schedules: %v", err)
+		fmt.Printf("error fetching scraped schedules: %v\n", err)
 	}
 
 	var gyms []api.Gym

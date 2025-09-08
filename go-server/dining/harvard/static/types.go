@@ -79,7 +79,7 @@ func (w HarvardWeekHours) GetConvertedHours(date time.Time) []api.Hours {
 
 		futureHour, err := hours.Convert(date)
 		if err != nil {
-			fmt.Printf("error converting hours: %v", err)
+			fmt.Printf("error converting hours: %v\n", err)
 			continue
 		}
 		convertedHours = append(convertedHours, *futureHour)

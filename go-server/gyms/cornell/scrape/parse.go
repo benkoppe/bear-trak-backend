@@ -114,7 +114,7 @@ func parseHeaderDays(header string) []string {
 			startDay := extractDayName(parts[0])
 			endDay := extractDayName(parts[1])
 			if len(startDay) != 1 || len(endDay) != 1 {
-				fmt.Printf("Couldn't parse days from header: %s", header)
+				fmt.Printf("Couldn't parse days from header: %s\n", header)
 				return nil
 			}
 			daysOfWeek := []string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}

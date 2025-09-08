@@ -11,7 +11,7 @@ func GetAlerts(data []byte) []Alert {
 
 	err := json.Unmarshal(data, &alerts)
 	if err != nil {
-		fmt.Printf("error unmarshalling alerts: %v", err)
+		fmt.Printf("error unmarshalling alerts: %v\n", err)
 	}
 
 	return alerts

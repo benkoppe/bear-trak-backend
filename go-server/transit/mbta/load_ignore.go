@@ -14,7 +14,7 @@ func getIgnoreIds() []string {
 
 	err := json.Unmarshal(ignoreBytes, &ignoreIds)
 	if err != nil {
-		fmt.Printf("error unmarshalling mbta ignore IDs: %v", err)
+		fmt.Printf("error unmarshalling mbta ignore IDs: %v\n", err)
 	}
 
 	return ignoreIds

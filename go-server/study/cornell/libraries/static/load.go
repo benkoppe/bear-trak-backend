@@ -15,7 +15,7 @@ func GetLibraries() []Library {
 
 	err := json.Unmarshal(libraryBytes, &libraries)
 	if err != nil {
-		fmt.Printf("error unmarshalling static libraries: %v", err)
+		fmt.Printf("error unmarshalling static libraries: %v\n", err)
 	}
 
 	return libraries

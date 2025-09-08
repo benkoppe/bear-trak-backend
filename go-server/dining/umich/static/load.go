@@ -15,7 +15,7 @@ func GetEateries() []Eatery {
 
 	err := json.Unmarshal(eateryBytes, &eateries)
 	if err != nil {
-		fmt.Printf("error unmarshalling static eateries: %v", err)
+		fmt.Printf("error unmarshalling static eateries: %v\n", err)
 	}
 
 	return eateries

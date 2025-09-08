@@ -94,12 +94,12 @@ func collectFutureEvents(static static.Eatery, externalRecipes []external.Recipe
 				menu := convertExternalRecipesToMenu(recipes)
 				start, err := hour.Open.ToDate(date)
 				if err != nil {
-					fmt.Printf("error converting open time: %v", err)
+					fmt.Printf("error converting open time: %v\n", err)
 					continue
 				}
 				end, err := hour.Close.ToDate(date)
 				if err != nil {
-					fmt.Printf("error converting close time: %v", err)
+					fmt.Printf("error converting close time: %v\n", err)
 					continue
 				}
 				event := api.EateryEvent{

@@ -22,8 +22,8 @@ type WeekHours struct {
 
 type Day struct {
 	Date     timeutils.DateTimeString `json:"date"`
-	Times    Times                     `json:"times"`
-	Rendered string                    `json:"rendered"`
+	Times    Times                    `json:"times"`
+	Rendered string                   `json:"rendered"`
 }
 
 type Times struct {
@@ -95,11 +95,11 @@ func convertHours(date time.Time, libcalHours []Hours) []api.Hours {
 		end, e2 := libcalHour.To.ToDate(date)
 
 		if e1 != nil {
-			fmt.Printf("error parsing hours: %v", e1)
+			fmt.Printf("error parsing hours: %v\n", e1)
 			continue
 		}
 		if e2 != nil {
-			fmt.Printf("error parsing hours: %v", e2)
+			fmt.Printf("error parsing hours: %v\n", e2)
 			continue
 		}
 

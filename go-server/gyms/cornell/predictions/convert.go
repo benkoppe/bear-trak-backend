@@ -46,7 +46,7 @@ func convertAllFetched(fetched []Prediction) []api.GymCapacityPredictions {
 		})
 
 		if staticGym == nil {
-			fmt.Printf("couldn't find static ID for location name %s", locationName)
+			fmt.Printf("couldn't find static ID for location name %s\n", locationName)
 			continue
 		}
 

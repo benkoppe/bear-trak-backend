@@ -15,7 +15,7 @@ func GetGyms() []Gym {
 
 	err := json.Unmarshal(gymBytes, &gyms)
 	if err != nil {
-		fmt.Printf("error unmarshalling static gyms: %v", err)
+		fmt.Printf("error unmarshalling static gyms: %v\n", err)
 	}
 
 	return gyms

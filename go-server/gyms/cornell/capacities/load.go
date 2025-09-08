@@ -62,7 +62,7 @@ func LoadData(queries *db.Queries, externalCache external.Cache) ([]api.GymCapac
 		})
 
 		if locationExternalData == nil {
-			fmt.Printf("couldn't find external data for location ID %d", locationID)
+			fmt.Printf("couldn't find external data for location ID %d\n", locationID)
 			continue
 		}
 
