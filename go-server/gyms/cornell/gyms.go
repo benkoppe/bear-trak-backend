@@ -7,6 +7,8 @@ import (
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/db"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/capacities"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/external"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/scrape"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
@@ -15,14 +17,18 @@ import (
 )
 
 type Caches struct {
-	externalCache external.Cache
-	hoursCache    scrape.Cache
+	externalCache   external.Cache
+	hoursCache      scrape.Cache
+	capacitiesCache capacities.Cache
 }
 
-func InitCaches(capacityURL, hoursURL string) Caches {
+func InitCaches(capacityURL, hoursURL string, queries *db.Queries) Caches {
+	externalCache := external.InitCache(capacityURL)
+
 	return Caches{
-		externalCache: external.InitCache(capacityURL),
-		hoursCache:    scrape.InitCache(hoursURL),
+		externalCache:   externalCache,
+		hoursCache:      scrape.InitCache(hoursURL),
+		capacitiesCache: capacities.InitCache(queries, externalCache),
 	}
 }
 
