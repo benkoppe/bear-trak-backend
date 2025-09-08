@@ -15,13 +15,13 @@ import (
 )
 
 type Caches struct {
-	capacityCache external.Cache
+	externalCache external.Cache
 	hoursCache    scrape.Cache
 }
 
 func InitCaches(capacityURL, hoursURL string) Caches {
 	return Caches{
-		capacityCache: external.InitCache(capacityURL),
+		externalCache: external.InitCache(capacityURL),
 		hoursCache:    scrape.InitCache(hoursURL),
 	}
 }
@@ -33,7 +33,7 @@ func Get(caches Caches) ([]api.Gym, error) {
 		return nil, fmt.Errorf("loaded empty static gyms")
 	}
 
-	externalData, err := caches.capacityCache.Get()
+	externalData, err := caches.externalCache.Get()
 	if err != nil {
 		// don't break here - if capacities doesn't work, we still want to provide static data.
 		// instead, simply print an error.
