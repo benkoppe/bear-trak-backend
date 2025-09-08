@@ -15,7 +15,6 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms"
 	"github.com/benkoppe/bear-trak-backend/go-server/schools"
-	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 )
 
 //go:embed static/*
@@ -98,8 +97,8 @@ func runTimedTasks(queries *db.Queries, handler api.Handler, config schools.Conf
 }
 
 func executeTimedTasks(queries *db.Queries, handler api.Handler, config schools.Config) {
-	est := timeutils.LoadEST()
-	log.Println("Executing timed tasks at:", time.Now().In(est))
+	// est := timeutils.LoadEST()
+	// log.Println("Executing timed tasks at:", time.Now().In(est))
 
 	// create a context with a timeout for the operation
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
