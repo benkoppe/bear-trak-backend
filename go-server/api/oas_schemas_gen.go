@@ -1179,13 +1179,13 @@ func (s *GymCapacity) SetLastUpdated(val time.Time) {
 
 // Ref: #/components/schemas/GymCapacityData
 type GymCapacityData struct {
-	ID     int                    `json:"id"`
-	Points []GymCapacityDataPoint `json:"points"`
+	LocationId int                    `json:"locationId"`
+	Points     []GymCapacityDataPoint `json:"points"`
 }
 
-// GetID returns the value of ID.
-func (s *GymCapacityData) GetID() int {
-	return s.ID
+// GetLocationId returns the value of LocationId.
+func (s *GymCapacityData) GetLocationId() int {
+	return s.LocationId
 }
 
 // GetPoints returns the value of Points.
@@ -1193,9 +1193,9 @@ func (s *GymCapacityData) GetPoints() []GymCapacityDataPoint {
 	return s.Points
 }
 
-// SetID sets the value of ID.
-func (s *GymCapacityData) SetID(val int) {
-	s.ID = val
+// SetLocationId sets the value of LocationId.
+func (s *GymCapacityData) SetLocationId(val int) {
+	s.LocationId = val
 }
 
 // SetPoints sets the value of Points.
@@ -1268,13 +1268,13 @@ func (s *GymCapacityPredictionPoint) SetCount(val int) {
 
 // Ref: #/components/schemas/GymCapacityPredictions
 type GymCapacityPredictions struct {
-	ID     int                          `json:"id"`
-	Points []GymCapacityPredictionPoint `json:"points"`
+	LocationId int                          `json:"locationId"`
+	Points     []GymCapacityPredictionPoint `json:"points"`
 }
 
-// GetID returns the value of ID.
-func (s *GymCapacityPredictions) GetID() int {
-	return s.ID
+// GetLocationId returns the value of LocationId.
+func (s *GymCapacityPredictions) GetLocationId() int {
+	return s.LocationId
 }
 
 // GetPoints returns the value of Points.
@@ -1282,9 +1282,9 @@ func (s *GymCapacityPredictions) GetPoints() []GymCapacityPredictionPoint {
 	return s.Points
 }
 
-// SetID sets the value of ID.
-func (s *GymCapacityPredictions) SetID(val int) {
-	s.ID = val
+// SetLocationId sets the value of LocationId.
+func (s *GymCapacityPredictions) SetLocationId(val int) {
+	s.LocationId = val
 }
 
 // SetPoints sets the value of Points.

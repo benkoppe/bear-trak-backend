@@ -3251,8 +3251,8 @@ func (s *GymCapacityData) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *GymCapacityData) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("id")
-		e.Int(s.ID)
+		e.FieldStart("locationId")
+		e.Int(s.LocationId)
 	}
 	{
 		e.FieldStart("points")
@@ -3265,7 +3265,7 @@ func (s *GymCapacityData) encodeFields(e *jx.Encoder) {
 }
 
 var jsonFieldsNameOfGymCapacityData = [2]string{
-	0: "id",
+	0: "locationId",
 	1: "points",
 }
 
@@ -3278,17 +3278,17 @@ func (s *GymCapacityData) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "id":
+		case "locationId":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
 				v, err := d.Int()
-				s.ID = int(v)
+				s.LocationId = int(v)
 				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"id\"")
+				return errors.Wrap(err, "decode field \"locationId\"")
 			}
 		case "points":
 			requiredBitSet[0] |= 1 << 1
@@ -3617,8 +3617,8 @@ func (s *GymCapacityPredictions) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *GymCapacityPredictions) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("id")
-		e.Int(s.ID)
+		e.FieldStart("locationId")
+		e.Int(s.LocationId)
 	}
 	{
 		e.FieldStart("points")
@@ -3631,7 +3631,7 @@ func (s *GymCapacityPredictions) encodeFields(e *jx.Encoder) {
 }
 
 var jsonFieldsNameOfGymCapacityPredictions = [2]string{
-	0: "id",
+	0: "locationId",
 	1: "points",
 }
 
@@ -3644,17 +3644,17 @@ func (s *GymCapacityPredictions) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "id":
+		case "locationId":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
 				v, err := d.Int()
-				s.ID = int(v)
+				s.LocationId = int(v)
 				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"id\"")
+				return errors.Wrap(err, "decode field \"locationId\"")
 			}
 		case "points":
 			requiredBitSet[0] |= 1 << 1

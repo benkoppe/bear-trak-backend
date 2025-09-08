@@ -855,11 +855,13 @@ components:
       x-stoplight:
         id: rjjb8aqhbkiri
       type: object
+      x-tags:
+        - gyms
       required:
-        - id
+        - locationId
         - points
       properties:
-        id:
+        locationId:
           type: integer
           x-stoplight:
             id: 2bupc8hujsvvj
@@ -869,8 +871,6 @@ components:
             id: wqt1i48u7gww8
           items:
             $ref: "#/components/schemas/GymCapacityDataPoint"
-      x-tags:
-        - gyms
     GymCapacityDataPoint:
       title: GymCapacityDataPoint
       x-stoplight:
@@ -896,11 +896,13 @@ components:
       x-stoplight:
         id: xqniueqx6wcri
       type: object
+      x-tags:
+        - gyms
       required:
-        - id
+        - locationId
         - points
       properties:
-        id:
+        locationId:
           type: integer
           x-stoplight:
             id: q65xhjqx5m0yw
@@ -910,8 +912,6 @@ components:
             id: zpi9i5111yriv
           items:
             $ref: "#/components/schemas/GymCapacityPredictionPoint"
-      x-tags:
-        - gyms
     GymCapacityPredictionPoint:
       title: GymCapacityPredictionPoint
       x-stoplight:
