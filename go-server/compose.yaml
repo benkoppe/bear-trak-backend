@@ -18,12 +18,12 @@ services:
       - .env
     depends_on:
       - db
-    networks: 
+    networks:
       - tunnel
       - default
 
   db:
-    image: postgres
+    image: postgres:17.6
     user: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
