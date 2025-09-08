@@ -10,6 +10,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/external"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -31,6 +32,7 @@ func LoadData(queries *db.Queries, externalCache external.Cache) ([]api.GymCapac
 	if err != nil {
 		return nil, fmt.Errorf("error fetching external data: %w", err)
 	}
+	staticData := static.GetGyms()
 
 	est := timeutils.LoadEST()
 	now := time.Now().In(est)
@@ -56,13 +58,24 @@ func LoadData(queries *db.Queries, externalCache external.Cache) ([]api.GymCapac
 
 	var result []api.GymCapacityData
 
-	for locationID, capacities := range byLocation {
+	for internalLocationID, capacities := range byLocation {
+		// because of quirks with the gym capacity API changing in the middle of development, there's a difference between
+		// my internal IDs and the external "location IDs". So, first we must find the static data that matches my internal ID
+		// and map that to the external Location ID.
+		locationStaticData := utils.Find(staticData, func(data static.Gym) bool {
+			return data.ID == int(internalLocationID)
+		})
+		if locationStaticData == nil {
+			fmt.Printf("couldn't find static data for internal location ID %d\n", internalLocationID)
+			continue
+		}
+
 		locationExternalData := utils.Find(externalData, func(data external.Gym) bool {
-			return data.LocationID == int(locationID)
+			return data.LocationID == locationStaticData.LocationID
 		})
 
 		if locationExternalData == nil {
-			fmt.Printf("couldn't find external data for location ID %d\n", locationID)
+			fmt.Printf("couldn't find external data for location ID %d\n", internalLocationID)
 			continue
 		}
 
@@ -72,7 +85,7 @@ func LoadData(queries *db.Queries, externalCache external.Cache) ([]api.GymCapac
 		}
 
 		result = append(result, api.GymCapacityData{
-			LocationId: int(locationID),
+			LocationId: int(internalLocationID),
 			Points:     points,
 		})
 
