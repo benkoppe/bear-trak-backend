@@ -29,14 +29,14 @@ func NewHandler(db *db.Queries) *Handler {
 	h := &Handler{
 		DB: db,
 	}
-	h.initCaches()
+	h.initCaches(db)
 
 	return h
 }
 
-func (h *Handler) initCaches() {
+func (h *Handler) initCaches(db *db.Queries) {
 	h.diningCache = dining.InitCache(eateriesURL)
-	h.gymsCaches = gyms.InitCaches(gymCapacitiesURL, gymHoursURL)
+	h.gymsCaches = gyms.InitCaches(gymCapacitiesURL, gymHoursURL, gymPredictionsURL, db)
 	h.transitCaches = transit.InitCaches(availtecURL, gtfsStaticURL)
 	h.studyCache = study.InitCache(librariesURL)
 	h.mapCache = externalmap.InitCache(mapOverlaysURL)
@@ -52,6 +52,14 @@ func (h *Handler) GetV1Dining(ctx context.Context) ([]api.Eatery, error) {
 
 func (h *Handler) GetV1Gyms(ctx context.Context) ([]api.Gym, error) {
 	return gyms.Get(h.gymsCaches)
+}
+
+func (h *Handler) GetV1GymCapacities(ctx context.Context) ([]api.GymCapacityData, error) {
+	return gyms.GetCapacityPoints(h.gymsCaches)
+}
+
+func (h *Handler) GetV1GymCapacityPredictions(ctx context.Context) ([]api.GymCapacityPredictions, error) {
+	return gyms.GetCapacityPredictionPoints(h.gymsCaches)
 }
 
 func (h *Handler) GetV1TransitRoutes(ctx context.Context) ([]api.BusRoute, error) {

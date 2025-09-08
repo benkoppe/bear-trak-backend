@@ -39,3 +39,10 @@ INSERT INTO gym_capacities (
   $1, $2, $3
 ) 
 RETURNING *;
+
+-- name: GetGymCapacitiesBetween :many
+SELECT *
+FROM gym_capacities
+WHERE last_updated_at >= $1
+  AND last_updated_at <= $2
+ORDER BY last_updated_at;

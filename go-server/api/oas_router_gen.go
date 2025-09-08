@@ -209,7 +209,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
 					switch r.Method {
 					case "GET":
 						s.handleGetV1GymsRequest([0]string{}, elemIsEscaped, w, r)
@@ -218,6 +217,49 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/capacities"
+
+					if l := len("/capacities"); len(elem) >= l && elem[0:l] == "/capacities" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch r.Method {
+						case "GET":
+							s.handleGetV1GymCapacitiesRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/predictions"
+
+						if l := len("/predictions"); len(elem) >= l && elem[0:l] == "/predictions" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleGetV1GymCapacityPredictionsRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+					}
+
 				}
 
 			case 's': // Prefix: "study"
@@ -573,7 +615,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
 					switch method {
 					case "GET":
 						r.name = GetV1GymsOperation
@@ -586,6 +627,57 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					default:
 						return
 					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/capacities"
+
+					if l := len("/capacities"); len(elem) >= l && elem[0:l] == "/capacities" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch method {
+						case "GET":
+							r.name = GetV1GymCapacitiesOperation
+							r.summary = "Gym Capacities"
+							r.operationID = "getV1GymCapacities"
+							r.pathPattern = "/v1/gyms/capacities"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/predictions"
+
+						if l := len("/predictions"); len(elem) >= l && elem[0:l] == "/predictions" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = GetV1GymCapacityPredictionsOperation
+								r.summary = "Gym Capacity Predictions"
+								r.operationID = "getV1GymCapacityPredictions"
+								r.pathPattern = "/v1/gyms/capacities/predictions"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+					}
+
 				}
 
 			case 's': // Prefix: "study"

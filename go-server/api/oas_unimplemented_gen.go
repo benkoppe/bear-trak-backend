@@ -76,6 +76,24 @@ func (UnimplementedHandler) GetV1DiningUserSession(ctx context.Context, params G
 	return r, ht.ErrNotImplemented
 }
 
+// GetV1GymCapacities implements getV1GymCapacities operation.
+//
+// Returns all time-logged gym capacity data.
+//
+// GET /v1/gyms/capacities
+func (UnimplementedHandler) GetV1GymCapacities(ctx context.Context) (r []GymCapacityData, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetV1GymCapacityPredictions implements getV1GymCapacityPredictions operation.
+//
+// Returns all time-logged gym capacity prediction data.
+//
+// GET /v1/gyms/capacities/predictions
+func (UnimplementedHandler) GetV1GymCapacityPredictions(ctx context.Context) (r []GymCapacityPredictions, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // GetV1Gyms implements getV1Gyms operation.
 //
 // Returns all necessary data for BearTrak's gym section.

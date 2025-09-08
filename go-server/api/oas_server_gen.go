@@ -50,6 +50,18 @@ type Handler interface {
 	//
 	// GET /v1/dining/user/session
 	GetV1DiningUserSession(ctx context.Context, params GetV1DiningUserSessionParams) (GetV1DiningUserSessionRes, error)
+	// GetV1GymCapacities implements getV1GymCapacities operation.
+	//
+	// Returns all time-logged gym capacity data.
+	//
+	// GET /v1/gyms/capacities
+	GetV1GymCapacities(ctx context.Context) ([]GymCapacityData, error)
+	// GetV1GymCapacityPredictions implements getV1GymCapacityPredictions operation.
+	//
+	// Returns all time-logged gym capacity prediction data.
+	//
+	// GET /v1/gyms/capacities/predictions
+	GetV1GymCapacityPredictions(ctx context.Context) ([]GymCapacityPredictions, error)
 	// GetV1Gyms implements getV1Gyms operation.
 	//
 	// Returns all necessary data for BearTrak's gym section.

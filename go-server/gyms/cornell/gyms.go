@@ -7,7 +7,10 @@ import (
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/db"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/capacities"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/external"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/predictions"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/scrape"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
@@ -15,14 +18,20 @@ import (
 )
 
 type Caches struct {
-	capacityCache external.Cache
-	hoursCache    scrape.Cache
+	externalCache    external.Cache
+	hoursCache       scrape.Cache
+	capacitiesCache  capacities.Cache
+	predictionsCache predictions.Cache
 }
 
-func InitCaches(capacityURL, hoursURL string) Caches {
+func InitCaches(capacityURL, hoursURL, predictionsURL string, queries *db.Queries) Caches {
+	externalCache := external.InitCache(capacityURL)
+
 	return Caches{
-		capacityCache: external.InitCache(capacityURL),
-		hoursCache:    scrape.InitCache(hoursURL),
+		externalCache:    externalCache,
+		hoursCache:       scrape.InitCache(hoursURL),
+		capacitiesCache:  capacities.InitCache(queries, externalCache),
+		predictionsCache: predictions.InitCache(predictionsURL),
 	}
 }
 
@@ -33,7 +42,7 @@ func Get(caches Caches) ([]api.Gym, error) {
 		return nil, fmt.Errorf("loaded empty static gyms")
 	}
 
-	externalData, err := caches.capacityCache.Get()
+	externalData, err := caches.externalCache.Get()
 	if err != nil {
 		// don't break here - if capacities doesn't work, we still want to provide static data.
 		// instead, simply print an error.
@@ -91,7 +100,7 @@ func createFutureHours(static static.Gym, schedules []scrape.ParsedSchedule) []a
 	now := time.Now().In(est)
 	var futureHours []api.Hours
 
-	for i := 0; i < 7; i++ {
+	for i := range [7]int{} {
 		date := now.AddDate(0, 0, i)
 		weekHours := staticHours
 		overrideStatic := false

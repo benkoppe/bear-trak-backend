@@ -6,8 +6,9 @@ const (
 
 	cbordInstitutionID = "73116ae4-22ad-4c71-8ffd-11ba015407b1"
 
-	gymCapacitiesURL = "https://goboardapi.azurewebsites.net/api/FacilityCount/GetCountsByAccount?AccountAPIKey=355de24d-d0e4-4262-ae97-bc0c78b92839"
-	gymHoursURL      = "https://scl.cornell.edu/recreation/cornell-fitness-centers"
+	gymCapacitiesURL  = "https://goboardapi.azurewebsites.net/api/FacilityCount/GetCountsByAccount?AccountAPIKey=355de24d-d0e4-4262-ae97-bc0c78b92839"
+	gymHoursURL       = "https://scl.cornell.edu/recreation/cornell-fitness-centers"
+	gymPredictionsURL = "https://raw.githubusercontent.com/zainbilalh/cornell-gym-predictions/refs/heads/main/predictions.csv"
 
 	availtecURL = "https://realtimetcatbus.availtec.com/InfoPoint/rest"
 
