@@ -89,10 +89,9 @@ func LoadData(queries *db.Queries, externalCache external.Cache) ([]api.GymCapac
 			Points:     points,
 		})
 
-		return result, nil
 	}
 
-	return nil, nil
+	return result, nil
 }
 
 func convertDB(entry db.GymCapacity, externalData external.Gym) api.GymCapacityDataPoint {
