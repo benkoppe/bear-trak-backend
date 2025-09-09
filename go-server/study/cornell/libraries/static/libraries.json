@@ -1,13 +1,5 @@
 [
   {
-    "id": 0,
-    "name": "Adelson Library",
-    "imageName": "adelson",
-    "lid": 3329,
-    "externalMapNote": "Adelson Library",
-    "printerLocations": []
-  },
-  {
     "id": 1,
     "name": "Catherwood Library",
     "imageName": "catherwood",
