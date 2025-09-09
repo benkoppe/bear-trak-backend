@@ -36,7 +36,7 @@ func LoadData(queries *db.Queries, externalCache external.Cache) ([]api.GymCapac
 
 	est := timeutils.LoadEST()
 	now := time.Now().In(est)
-	dayStart := now.Truncate(24 * time.Hour)
+	dayStart := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 	dayEnd := dayStart.Add(24 * time.Hour)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
