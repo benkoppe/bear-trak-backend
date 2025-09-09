@@ -84,6 +84,17 @@ func LoadData(queries *db.Queries, externalCache external.Cache) ([]api.GymCapac
 			points = append(points, convertDB(entry, *locationExternalData))
 		}
 
+		// perform time-based smoothing
+		points = utils.SmoothTime(points,
+			10*time.Minute,
+			func(p api.GymCapacityDataPoint) float64 { return float64(p.Count) },
+			func(p api.GymCapacityDataPoint, v float64) api.GymCapacityDataPoint {
+				p.Count = int(math.Round(v))
+				return p
+			},
+			func(p api.GymCapacityDataPoint) time.Time { return p.LastUpdated },
+		)
+
 		result = append(result, api.GymCapacityData{
 			LocationId: int(internalLocationID),
 			Points:     points,
