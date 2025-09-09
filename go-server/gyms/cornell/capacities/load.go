@@ -86,7 +86,7 @@ func LoadData(queries *db.Queries, externalCache external.Cache) ([]api.GymCapac
 
 		// perform time-based smoothing
 		points = utils.SmoothTime(points,
-			10*time.Minute,
+			20*time.Minute,
 			func(p api.GymCapacityDataPoint) float64 { return float64(p.Count) },
 			func(p api.GymCapacityDataPoint, v float64) api.GymCapacityDataPoint {
 				p.Count = int(math.Round(v))
