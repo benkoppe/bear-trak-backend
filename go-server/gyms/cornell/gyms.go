@@ -3,7 +3,6 @@ package gyms
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
@@ -12,6 +11,7 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/external"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/predictions"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/scrape"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/shared"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
@@ -26,12 +26,13 @@ type Caches struct {
 
 func InitCaches(capacityURL, hoursURL, predictionsURL string, queries *db.Queries) Caches {
 	externalCache := external.InitCache(capacityURL)
+	hoursCache := scrape.InitCache(hoursURL)
 
 	return Caches{
 		externalCache:    externalCache,
-		hoursCache:       scrape.InitCache(hoursURL),
-		capacitiesCache:  capacities.InitCache(queries, externalCache),
-		predictionsCache: predictions.InitCache(predictionsURL),
+		hoursCache:       hoursCache,
+		capacitiesCache:  capacities.InitCache(queries, externalCache, hoursCache),
+		predictionsCache: predictions.InitCache(predictionsURL, hoursCache),
 	}
 }
 
@@ -78,7 +79,7 @@ func convertStatic(static static.Gym, schedules []scrape.ParsedSchedule) api.Gym
 		ImagePath:           utils.ImageNameToPath("gyms", static.ImageName),
 		Latitude:            static.Location.Latitude,
 		Longitude:           static.Location.Longitude,
-		Hours:               createFutureHours(static, schedules),
+		Hours:               shared.CreateFutureHours(static, schedules),
 		Facilities:          convertStaticFacilities(static),
 		EquipmentCategories: convertStaticEquipmentCategories(static),
 		Capacity:            api.NilGymCapacity{Null: true},
@@ -92,38 +93,6 @@ func findCapacityData(static static.Gym, externalData []external.Gym) *external.
 		}
 	}
 	return nil
-}
-
-func createFutureHours(static static.Gym, schedules []scrape.ParsedSchedule) []api.Hours {
-	staticHours := static.WeekHours
-	est := timeutils.LoadEST()
-	now := time.Now().In(est)
-	var futureHours []api.Hours
-
-	for i := range [7]int{} {
-		date := now.AddDate(0, 0, i)
-		weekHours := staticHours
-		overrideStatic := false
-
-		// if a scraped schedule is found, override the static hours for this day
-		schedule := scrape.DetermineRelevantSchedule(schedules, date)
-		if schedule != nil {
-			gymSchedule := scrape.GetGymSchedule(*schedule, static)
-			if gymSchedule != nil {
-				weekHours = gymSchedule.WeekHours
-				overrideStatic = true
-			}
-		}
-
-		if !overrideStatic {
-			// log that static data was used for hours
-			log.Printf("FALLBACK: using static hours for gym %s on %s", static.Name, date)
-		}
-
-		futureHours = append(futureHours, weekHours.GetConvertedHours(date)...)
-	}
-
-	return futureHours
 }
 
 func convertStaticFacilities(static static.Gym) []api.GymFacilitiesItem {

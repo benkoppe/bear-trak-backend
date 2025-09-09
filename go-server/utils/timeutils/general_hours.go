@@ -211,3 +211,34 @@ func ParseHours(raw string, opts *HoursParserOptions) []Hours {
 
 	return hrs
 }
+
+func FirstOpenAndLastClose(dayHours []api.Hours, date time.Time) (*time.Time, *time.Time) {
+	dayStart := time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, date.Location())
+	dayEnd := dayStart.Add(24 * time.Hour)
+
+	var todays []api.Hours
+	for _, h := range dayHours {
+		// Keep any hours that overlap this day
+		if h.Start.After(dayStart) && h.Start.Before(dayEnd) {
+			todays = append(todays, h)
+		}
+	}
+
+	if len(todays) == 0 {
+		return nil, nil
+	}
+
+	firstOpen := todays[0].Start
+	lastClose := todays[0].End
+
+	for _, h := range todays[1:] {
+		if h.Start.Before(firstOpen) {
+			firstOpen = h.Start
+		}
+		if h.End.After(lastClose) {
+			lastClose = h.End
+		}
+	}
+
+	return &firstOpen, &lastClose
+}

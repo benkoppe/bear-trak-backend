@@ -10,6 +10,8 @@ import (
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/external"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/scrape"
+	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/shared"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
@@ -18,19 +20,23 @@ import (
 
 type Cache = *utils.Cache[[]api.GymCapacityData]
 
-func InitCache(queries *db.Queries, externalCache external.Cache) Cache {
+func InitCache(queries *db.Queries, externalCache external.Cache, hoursCache scrape.Cache) Cache {
 	return utils.NewCache(
 		"gymCapacities",
 		1*time.Minute,
 		func() ([]api.GymCapacityData, error) {
-			return LoadData(queries, externalCache)
+			return LoadData(queries, externalCache, hoursCache)
 		})
 }
 
-func LoadData(queries *db.Queries, externalCache external.Cache) ([]api.GymCapacityData, error) {
+func LoadData(queries *db.Queries, externalCache external.Cache, hoursCache scrape.Cache) ([]api.GymCapacityData, error) {
 	externalData, err := externalCache.Get()
 	if err != nil {
 		return nil, fmt.Errorf("error fetching external data: %w", err)
+	}
+	scrapedSchedules, err := hoursCache.Get()
+	if err != nil {
+		fmt.Printf("error fetching scraped schedules: %v\n", err)
 	}
 	staticData := static.GetGyms()
 
@@ -95,9 +101,13 @@ func LoadData(queries *db.Queries, externalCache external.Cache) ([]api.GymCapac
 			func(p api.GymCapacityDataPoint) time.Time { return p.LastUpdated },
 		)
 
+		hours := shared.CreateFutureHours(*locationStaticData, scrapedSchedules)
+		firstOpen, lastClose := timeutils.FirstOpenAndLastClose(hours, now)
+		filteredPoints := shared.FilterByTimeRange(points, func(p api.GymCapacityDataPoint) time.Time { return p.LastUpdated }, firstOpen, lastClose)
+
 		result = append(result, api.GymCapacityData{
 			LocationId: int(internalLocationID),
-			Points:     points,
+			Points:     filteredPoints,
 		})
 
 	}
