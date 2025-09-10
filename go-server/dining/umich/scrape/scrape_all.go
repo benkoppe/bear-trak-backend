@@ -68,6 +68,7 @@ func fetchAll(baseURL string, eateries []static.Eatery) (map[*static.Eatery][]Ea
 
 	wg.Wait()
 	close(progressCh)
+	log.Printf("cache refresh completed: %d/%d eateries fetched successfully", len(fetchedEateries), len(eateries))
 	return fetchedEateries, nil
 }
 

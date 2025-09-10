@@ -94,7 +94,8 @@ func (c *Cache[T]) refreshInBackground() {
 
 	newData, err := c.fetchFunc()
 	if err != nil {
-		return // fail silently in background refresh
+		log.Printf("background cache refresh failed: %v", err)
+		return
 	}
 
 	c.mutex.Lock()
