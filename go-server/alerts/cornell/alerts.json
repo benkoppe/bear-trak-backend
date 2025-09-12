@@ -56,7 +56,7 @@
     "id": 6,
     "title": "No TCAT Vehicles",
     "message": "For users of Transit mode, we're sorry for the lack of TCAT vehicle information currently! The data source appears to be broken, and apps like MyStop are also broken. This has happened before, and it's been fixed pretty quickly!",
-    "enabled": true,
+    "enabled": false,
     "showOnce": true
   }
 ]
