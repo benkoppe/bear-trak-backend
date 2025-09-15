@@ -42,6 +42,7 @@ func fetchAll(baseURL string, eateries []static.Eatery) (map[*static.Eatery][]Ea
 
 	semaphore := make(chan struct{}, 5) // global limit
 	scraper := NewBrowserScraper()
+	defer scraper.Close()
 
 	for i := range eateries {
 		wg.Add(1)
