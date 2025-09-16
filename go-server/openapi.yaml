@@ -1373,6 +1373,11 @@ components:
         - title
         - description
         - hours
+        - imageURL
+        - locationName
+        - latitude
+        - longitude
+        - group
       properties:
         id:
           type: integer
@@ -1392,20 +1397,22 @@ components:
           type: string
           x-stoplight:
             id: c4lfv04cksyfy
+          nullable: true
         locationName:
           type: string
           x-stoplight:
             id: 1bb8p19yt3csx
+          nullable: true
         latitude:
           type: number
           x-stoplight:
             id: b3x94bh5tf38d
-          format: double
+          nullable: true
         longitude:
           type: number
           x-stoplight:
             id: ovf6r4c8pj8bs
-          format: double
+          nullable: true
         group:
           $ref: "#/components/schemas/EventGroup"
     EventGroup:

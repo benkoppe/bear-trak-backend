@@ -1008,15 +1008,15 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 
 // Ref: #/components/schemas/Event
 type Event struct {
-	ID           int           `json:"id"`
-	Title        string        `json:"title"`
-	Description  string        `json:"description"`
-	Hours        Hours         `json:"hours"`
-	ImageURL     OptString     `json:"imageURL"`
-	LocationName OptString     `json:"locationName"`
-	Latitude     OptFloat64    `json:"latitude"`
-	Longitude    OptFloat64    `json:"longitude"`
-	Group        OptEventGroup `json:"group"`
+	ID           int        `json:"id"`
+	Title        string     `json:"title"`
+	Description  string     `json:"description"`
+	Hours        Hours      `json:"hours"`
+	ImageURL     NilString  `json:"imageURL"`
+	LocationName NilString  `json:"locationName"`
+	Latitude     NilFloat64 `json:"latitude"`
+	Longitude    NilFloat64 `json:"longitude"`
+	Group        EventGroup `json:"group"`
 }
 
 // GetID returns the value of ID.
@@ -1040,27 +1040,27 @@ func (s *Event) GetHours() Hours {
 }
 
 // GetImageURL returns the value of ImageURL.
-func (s *Event) GetImageURL() OptString {
+func (s *Event) GetImageURL() NilString {
 	return s.ImageURL
 }
 
 // GetLocationName returns the value of LocationName.
-func (s *Event) GetLocationName() OptString {
+func (s *Event) GetLocationName() NilString {
 	return s.LocationName
 }
 
 // GetLatitude returns the value of Latitude.
-func (s *Event) GetLatitude() OptFloat64 {
+func (s *Event) GetLatitude() NilFloat64 {
 	return s.Latitude
 }
 
 // GetLongitude returns the value of Longitude.
-func (s *Event) GetLongitude() OptFloat64 {
+func (s *Event) GetLongitude() NilFloat64 {
 	return s.Longitude
 }
 
 // GetGroup returns the value of Group.
-func (s *Event) GetGroup() OptEventGroup {
+func (s *Event) GetGroup() EventGroup {
 	return s.Group
 }
 
@@ -1085,27 +1085,27 @@ func (s *Event) SetHours(val Hours) {
 }
 
 // SetImageURL sets the value of ImageURL.
-func (s *Event) SetImageURL(val OptString) {
+func (s *Event) SetImageURL(val NilString) {
 	s.ImageURL = val
 }
 
 // SetLocationName sets the value of LocationName.
-func (s *Event) SetLocationName(val OptString) {
+func (s *Event) SetLocationName(val NilString) {
 	s.LocationName = val
 }
 
 // SetLatitude sets the value of Latitude.
-func (s *Event) SetLatitude(val OptFloat64) {
+func (s *Event) SetLatitude(val NilFloat64) {
 	s.Latitude = val
 }
 
 // SetLongitude sets the value of Longitude.
-func (s *Event) SetLongitude(val OptFloat64) {
+func (s *Event) SetLongitude(val NilFloat64) {
 	s.Longitude = val
 }
 
 // SetGroup sets the value of Group.
-func (s *Event) SetGroup(val OptEventGroup) {
+func (s *Event) SetGroup(val EventGroup) {
 	s.Group = val
 }
 
@@ -1783,6 +1783,51 @@ func (o NilAlertButton) Or(d AlertButton) AlertButton {
 	return d
 }
 
+// NewNilFloat64 returns new NilFloat64 with value set to v.
+func NewNilFloat64(v float64) NilFloat64 {
+	return NilFloat64{
+		Value: v,
+	}
+}
+
+// NilFloat64 is nullable float64.
+type NilFloat64 struct {
+	Value float64
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilFloat64) SetTo(v float64) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o NilFloat64) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *NilFloat64) SetToNull() {
+	o.Null = true
+	var v float64
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilFloat64) Get() (v float64, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilFloat64) Or(d float64) float64 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewNilGymCapacity returns new NilGymCapacity with value set to v.
 func NewNilGymCapacity(v GymCapacity) NilGymCapacity {
 	return NilGymCapacity{
@@ -1918,98 +1963,6 @@ func (o NilString) Or(d string) string {
 	return d
 }
 
-// NewOptEventGroup returns new OptEventGroup with value set to v.
-func NewOptEventGroup(v EventGroup) OptEventGroup {
-	return OptEventGroup{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptEventGroup is optional EventGroup.
-type OptEventGroup struct {
-	Value EventGroup
-	Set   bool
-}
-
-// IsSet returns true if OptEventGroup was set.
-func (o OptEventGroup) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptEventGroup) Reset() {
-	var v EventGroup
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptEventGroup) SetTo(v EventGroup) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptEventGroup) Get() (v EventGroup, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptEventGroup) Or(d EventGroup) EventGroup {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptFloat64 returns new OptFloat64 with value set to v.
-func NewOptFloat64(v float64) OptFloat64 {
-	return OptFloat64{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptFloat64 is optional float64.
-type OptFloat64 struct {
-	Value float64
-	Set   bool
-}
-
-// IsSet returns true if OptFloat64 was set.
-func (o OptFloat64) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptFloat64) Reset() {
-	var v float64
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptFloat64) SetTo(v float64) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptFloat64) Get() (v float64, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptFloat64) Or(d float64) float64 {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
 	return OptInt{
@@ -2050,52 +2003,6 @@ func (o OptInt) Get() (v int, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptInt) Or(d int) int {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptString returns new OptString with value set to v.
-func NewOptString(v string) OptString {
-	return OptString{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptString is optional string.
-type OptString struct {
-	Value string
-	Set   bool
-}
-
-// IsSet returns true if OptString was set.
-func (o OptString) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptString) Reset() {
-	var v string
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptString) SetTo(v string) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptString) Get() (v string, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptString) Or(d string) string {
 	if v, ok := o.Get(); ok {
 		return v
 	}
