@@ -16,9 +16,10 @@ func NewBrowserScraper() *BrowserScraper {
 		chromedp.Headless,
 		chromedp.DisableGPU,
 		chromedp.NoSandbox,
-		chromedp.Flag("disable-site-isolation-trials", true), // fewer processes (less isolation)
-		chromedp.Flag("js-flags", "--max-old-space-size=96"), // shrink V8 heaps (risky if pages are big)
-		chromedp.Flag("disable-dev-shm-usage", true),         // avoid tiny /dev/shm on small VMs
+		chromedp.Flag("user-data-dir", "/tmp/chromedp-profile"), // persistent profile dir
+		chromedp.Flag("disable-site-isolation-trials", true),    // fewer processes (less isolation)
+		chromedp.Flag("js-flags", "--max-old-space-size=96"),    // shrink V8 heaps (risky if pages are big)
+		chromedp.Flag("disable-dev-shm-usage", true),            // avoid tiny /dev/shm on small VMs
 		chromedp.Flag("no-first-run", true),
 		chromedp.Flag("no-default-browser-check", true),
 		chromedp.Flag("window-size", "1280,800"),
