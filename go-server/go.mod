@@ -56,6 +56,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
+	github.com/sethvargo/go-envconfig v1.3.0 // indirect
 	github.com/sethvargo/go-retry v0.3.0 // indirect
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	go.opencensus.io v0.22.3 // indirect
