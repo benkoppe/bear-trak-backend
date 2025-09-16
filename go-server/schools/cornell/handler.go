@@ -2,18 +2,22 @@ package cornell
 
 import (
 	"context"
-	"fmt"
+	"log"
 
 	alerts "github.com/benkoppe/bear-trak-backend/go-server/alerts/cornell"
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
 	dining "github.com/benkoppe/bear-trak-backend/go-server/dining/cornell"
 	"github.com/benkoppe/bear-trak-backend/go-server/diningusers"
+	"github.com/benkoppe/bear-trak-backend/go-server/events/campusgroups"
+	"github.com/benkoppe/bear-trak-backend/go-server/events/campusgroups/geolocate"
+	"github.com/benkoppe/bear-trak-backend/go-server/events/campusgroups/login"
 	gyms "github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell"
 	"github.com/benkoppe/bear-trak-backend/go-server/schools/cornell/externalmap"
 	"github.com/benkoppe/bear-trak-backend/go-server/schools/shared"
 	study "github.com/benkoppe/bear-trak-backend/go-server/study/cornell"
 	transit "github.com/benkoppe/bear-trak-backend/go-server/transit/cornell"
+	"github.com/sethvargo/go-envconfig"
 )
 
 type Handler struct {
@@ -23,6 +27,7 @@ type Handler struct {
 	gymsCaches    gyms.Caches
 	transitCaches transit.Caches
 	studyCache    study.Cache
+	eventsCache   campusgroups.Cache
 	mapCache      externalmap.Cache
 }
 
@@ -35,12 +40,41 @@ func NewHandler(db *db.Queries) *Handler {
 	return h
 }
 
+type CampusGroupsConfig struct {
+	LoginEmail       string `env:"LOGIN_EMAIL"`
+	OtpEmail         string `env:"OTP_EMAIL"`
+	OtpEmailPassword string `env:"OTP_EMAIL_PASSWORD"`
+	GoogleMapsAPIKey string `env:"GOOGLE_MAPS_API_KEY"`
+}
+
+type Config struct {
+	CGConfig CampusGroupsConfig `env:", prefix=CG_"`
+}
+
 func (h *Handler) initCaches(db *db.Queries) {
 	h.diningCache = dining.InitCache(eateriesURL)
 	h.gymsCaches = gyms.InitCaches(gymCapacitiesURL, gymHoursURL, gymPredictionsURL, db)
 	h.transitCaches = transit.InitCaches(availtecURL, gtfsStaticURL)
 	h.studyCache = study.InitCache(librariesURL)
 	h.mapCache = externalmap.InitCache(mapOverlaysURL)
+
+	ctx := context.Background()
+	var c Config
+	if err := envconfig.Process(ctx, &c); err != nil {
+		log.Fatal(err)
+	}
+	h.eventsCache = campusgroups.InitCache(
+		campusGroupsBaseURL,
+		login.LoginParams{
+			LoginEmail:       c.CGConfig.LoginEmail,
+			OtpEmail:         c.CGConfig.OtpEmail,
+			OtpEmailPassword: c.CGConfig.OtpEmailPassword,
+		},
+		&geolocate.GeoLocator{
+			APIKey:       c.CGConfig.GoogleMapsAPIKey,
+			PreferBounds: &ithacaMapBounds,
+		},
+	)
 }
 
 func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
@@ -76,7 +110,7 @@ func (h *Handler) GetV1Study(ctx context.Context) (*api.StudyData, error) {
 }
 
 func (h *Handler) GetV1Events(ctx context.Context) ([]api.Event, error) {
-	return nil, fmt.Errorf("not implemented")
+	return h.eventsCache.Get()
 }
 
 func (h *Handler) GetV1DiningUser(ctx context.Context, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {
