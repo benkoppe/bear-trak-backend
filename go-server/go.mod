@@ -58,6 +58,7 @@ require (
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/sethvargo/go-retry v0.3.0 // indirect
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
+	go.opencensus.io v0.22.3 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
@@ -65,7 +66,9 @@ require (
 	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6 // indirect
 	golang.org/x/net v0.40.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
+	googlemaps.github.io/maps v1.7.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
