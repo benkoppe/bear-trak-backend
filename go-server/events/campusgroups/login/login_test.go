@@ -7,19 +7,21 @@ import (
 )
 
 func TestLogin(t *testing.T) {
-	loginURL := "https://cornell.campusgroups.com/login_only"
-	loginEmail := os.Getenv("LOGIN_EMAIL")
-	otpEmail := os.Getenv("OTP_EMAIL")
-	otpEmailPassword := os.Getenv("OTP_EMAIL_PASSWORD")
+	url := "https://cornell.campusgroups.com/login_only"
+	p := LoginParams{
+		LoginEmail:       os.Getenv("LOGIN_EMAIL"),
+		OtpEmail:         os.Getenv("OTP_EMAIL"),
+		OtpEmailPassword: os.Getenv("OTP_EMAIL_PASSWORD"),
+	}
 
-	out, err := GetLoginCookie(loginURL, loginEmail, otpEmail, otpEmailPassword)
+	out, err := GetLoginCookie(url, p)
 	if err != nil {
 		t.Fatalf("login failed: %v \n", err)
 	}
 
 	log.Printf("got: %s \n", out)
 
-	out2, err := GetLoginCookie(loginURL, loginEmail, otpEmail, otpEmailPassword)
+	out2, err := GetLoginCookie(url, p)
 	if err != nil {
 		t.Fatalf("login failed: %v \n", err)
 	}

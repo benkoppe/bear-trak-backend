@@ -17,7 +17,13 @@ import (
 
 var SessionCookieName = "CG.SessionID"
 
-func GetLoginCookie(loginURL, loginEmail, otpEmail, otpEmailPassword string) (string, error) {
+type LoginParams struct {
+	LoginEmail       string
+	OtpEmail         string
+	OtpEmailPassword string
+}
+
+func GetLoginCookie(loginURL string, p LoginParams) (string, error) {
 	// create browser scraper
 	bs := utils.NewBrowserScraper()
 	defer bs.Close()
@@ -46,12 +52,12 @@ func GetLoginCookie(loginURL, loginEmail, otpEmail, otpEmailPassword string) (st
 	}
 	defer c.Logout()
 
-	if err := c.Login(otpEmail, otpEmailPassword); err != nil {
+	if err := c.Login(p.OtpEmail, p.OtpEmailPassword); err != nil {
 		return "", fmt.Errorf("failed to login to email: %w", err)
 	}
 
 	// email snapshot + first stage of login flow
-	baseline, err := triggerOtpAndSnapshot(c, ctx, loginEmail, 10)
+	baseline, err := triggerOtpAndSnapshot(c, ctx, p.LoginEmail, 10)
 	if err != nil {
 		return "", err
 	}
