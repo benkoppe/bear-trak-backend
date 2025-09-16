@@ -1,4 +1,3 @@
-// Package campusgroups loads event data from campusgroups
 package campusgroups
 
 import (
