@@ -13,6 +13,7 @@ const (
 	GetV1DiningUserAccountsOperation     OperationName = "GetV1DiningUserAccounts"
 	GetV1DiningUserBarcodeOperation      OperationName = "GetV1DiningUserBarcode"
 	GetV1DiningUserSessionOperation      OperationName = "GetV1DiningUserSession"
+	GetV1EventsOperation                 OperationName = "GetV1Events"
 	GetV1GymCapacitiesOperation          OperationName = "GetV1GymCapacities"
 	GetV1GymCapacityPredictionsOperation OperationName = "GetV1GymCapacityPredictions"
 	GetV1GymsOperation                   OperationName = "GetV1Gyms"

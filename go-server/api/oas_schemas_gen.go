@@ -1006,6 +1006,146 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
+// Ref: #/components/schemas/Event
+type Event struct {
+	ID           int           `json:"id"`
+	Title        string        `json:"title"`
+	Description  string        `json:"description"`
+	Hours        Hours         `json:"hours"`
+	ImageURL     OptString     `json:"imageURL"`
+	LocationName OptString     `json:"locationName"`
+	Latitude     OptFloat64    `json:"latitude"`
+	Longitude    OptFloat64    `json:"longitude"`
+	Group        OptEventGroup `json:"group"`
+}
+
+// GetID returns the value of ID.
+func (s *Event) GetID() int {
+	return s.ID
+}
+
+// GetTitle returns the value of Title.
+func (s *Event) GetTitle() string {
+	return s.Title
+}
+
+// GetDescription returns the value of Description.
+func (s *Event) GetDescription() string {
+	return s.Description
+}
+
+// GetHours returns the value of Hours.
+func (s *Event) GetHours() Hours {
+	return s.Hours
+}
+
+// GetImageURL returns the value of ImageURL.
+func (s *Event) GetImageURL() OptString {
+	return s.ImageURL
+}
+
+// GetLocationName returns the value of LocationName.
+func (s *Event) GetLocationName() OptString {
+	return s.LocationName
+}
+
+// GetLatitude returns the value of Latitude.
+func (s *Event) GetLatitude() OptFloat64 {
+	return s.Latitude
+}
+
+// GetLongitude returns the value of Longitude.
+func (s *Event) GetLongitude() OptFloat64 {
+	return s.Longitude
+}
+
+// GetGroup returns the value of Group.
+func (s *Event) GetGroup() OptEventGroup {
+	return s.Group
+}
+
+// SetID sets the value of ID.
+func (s *Event) SetID(val int) {
+	s.ID = val
+}
+
+// SetTitle sets the value of Title.
+func (s *Event) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetDescription sets the value of Description.
+func (s *Event) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetHours sets the value of Hours.
+func (s *Event) SetHours(val Hours) {
+	s.Hours = val
+}
+
+// SetImageURL sets the value of ImageURL.
+func (s *Event) SetImageURL(val OptString) {
+	s.ImageURL = val
+}
+
+// SetLocationName sets the value of LocationName.
+func (s *Event) SetLocationName(val OptString) {
+	s.LocationName = val
+}
+
+// SetLatitude sets the value of Latitude.
+func (s *Event) SetLatitude(val OptFloat64) {
+	s.Latitude = val
+}
+
+// SetLongitude sets the value of Longitude.
+func (s *Event) SetLongitude(val OptFloat64) {
+	s.Longitude = val
+}
+
+// SetGroup sets the value of Group.
+func (s *Event) SetGroup(val OptEventGroup) {
+	s.Group = val
+}
+
+// Ref: #/components/schemas/EventGroup
+type EventGroup struct {
+	ID   int     `json:"id"`
+	Name string  `json:"name"`
+	URL  url.URL `json:"url"`
+}
+
+// GetID returns the value of ID.
+func (s *EventGroup) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *EventGroup) GetName() string {
+	return s.Name
+}
+
+// GetURL returns the value of URL.
+func (s *EventGroup) GetURL() url.URL {
+	return s.URL
+}
+
+// SetID sets the value of ID.
+func (s *EventGroup) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *EventGroup) SetName(val string) {
+	s.Name = val
+}
+
+// SetURL sets the value of URL.
+func (s *EventGroup) SetURL(val url.URL) {
+	s.URL = val
+}
+
 type GetV1DiningUserAccountsOKApplicationJSON []DiningUserAccount
 
 func (*GetV1DiningUserAccountsOKApplicationJSON) getV1DiningUserAccountsRes() {}
@@ -1778,6 +1918,98 @@ func (o NilString) Or(d string) string {
 	return d
 }
 
+// NewOptEventGroup returns new OptEventGroup with value set to v.
+func NewOptEventGroup(v EventGroup) OptEventGroup {
+	return OptEventGroup{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptEventGroup is optional EventGroup.
+type OptEventGroup struct {
+	Value EventGroup
+	Set   bool
+}
+
+// IsSet returns true if OptEventGroup was set.
+func (o OptEventGroup) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptEventGroup) Reset() {
+	var v EventGroup
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptEventGroup) SetTo(v EventGroup) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptEventGroup) Get() (v EventGroup, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptEventGroup) Or(d EventGroup) EventGroup {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptFloat64 returns new OptFloat64 with value set to v.
+func NewOptFloat64(v float64) OptFloat64 {
+	return OptFloat64{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptFloat64 is optional float64.
+type OptFloat64 struct {
+	Value float64
+	Set   bool
+}
+
+// IsSet returns true if OptFloat64 was set.
+func (o OptFloat64) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptFloat64) Reset() {
+	var v float64
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptFloat64) SetTo(v float64) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptFloat64) Get() (v float64, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptFloat64) Or(d float64) float64 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
 	return OptInt{
@@ -1818,6 +2050,52 @@ func (o OptInt) Get() (v int, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptInt) Or(d int) int {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptString returns new OptString with value set to v.
+func NewOptString(v string) OptString {
+	return OptString{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptString is optional string.
+type OptString struct {
+	Value string
+	Set   bool
+}
+
+// IsSet returns true if OptString was set.
+func (o OptString) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptString) Reset() {
+	var v string
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptString) SetTo(v string) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptString) Get() (v string, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptString) Or(d string) string {
 	if v, ok := o.Get(); ok {
 		return v
 	}
