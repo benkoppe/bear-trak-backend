@@ -20,6 +20,8 @@ services:
     networks:
       - tunnel
       - default
+    volumes:
+      - chromedp-profile:/tmp/chromedp-profile # persist chromedp data
 
   db:
     image: postgres:17.6
