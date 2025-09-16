@@ -41,7 +41,7 @@ func fetchAll(baseURL string, eateries []static.Eatery) (map[*static.Eatery][]Ea
 	}()
 
 	semaphore := make(chan struct{}, 5) // global limit
-	scraper := NewBrowserScraper()
+	scraper := utils.NewBrowserScraper()
 	defer scraper.Close()
 
 	for i := range eateries {
@@ -75,7 +75,7 @@ func fetchAll(baseURL string, eateries []static.Eatery) (map[*static.Eatery][]Ea
 
 // unused with new chromedp approach -- reverted back to old fetchEateryWeek
 
-func fetchEateryWeekConcurrent(eateryURL string, semaphore chan struct{}, scraper *BrowserScraper, progressCh chan<- struct{}) ([]Eatery, error) {
+func fetchEateryWeekConcurrent(eateryURL string, semaphore chan struct{}, scraper *utils.BrowserScraper, progressCh chan<- struct{}) ([]Eatery, error) {
 	now := time.Now()
 	eateryWeek := make([]Eatery, 7)
 
@@ -92,7 +92,7 @@ func fetchEateryWeekConcurrent(eateryURL string, semaphore chan struct{}, scrape
 			defer func() { <-semaphore }()
 
 			date := now.AddDate(0, 0, dayOffset)
-			eatery, err := scraper.fetchEatery(eateryURL, date)
+			eatery, err := fetchEatery(scraper, eateryURL, date)
 			if err != nil {
 				errMu.Lock()
 				if firstErr == nil {
