@@ -17,4 +17,6 @@ const (
 	librariesURL = "https://api3.libcal.com/widget/hours/grid?iid=973&format=json"
 
 	mapOverlaysURL = "https://www.cornell.edu/about/maps/data.cfm?action=getOverlays"
+
+	campusGroupsBaseURL = "https://cornell.campusgroups.com"
 )
