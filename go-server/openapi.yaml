@@ -209,6 +209,30 @@ paths:
       x-stoplight:
         id: skii58kqavo15
       description: "Returns time-sensitive, vehicle-related data for BearTrak's transit section."
+  /v1/events:
+    get:
+      summary: Events
+      tags:
+        - events
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: getV1Events
+      x-stoplight:
+        id: ohky43ld8kd45
+      description: Returns event data for BearTrak's events section.
   /v1/dining/user:
     parameters: []
     get:
@@ -1337,6 +1361,86 @@ components:
             id: jcwvolwde4ydo
           items:
             $ref: "#/components/schemas/Printer"
+    Event:
+      title: Event
+      x-stoplight:
+        id: ha882pgnoy3dc
+      type: object
+      x-tags:
+        - events
+      required:
+        - id
+        - title
+        - description
+        - hours
+        - imageURL
+        - locationName
+        - latitude
+        - longitude
+        - group
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: zgr9empv3aude
+        title:
+          type: string
+          x-stoplight:
+            id: gs1fixrt6igmz
+        description:
+          type: string
+          x-stoplight:
+            id: cwwomk1xym0jo
+        hours:
+          $ref: "#/components/schemas/Hours"
+        imageURL:
+          type: string
+          x-stoplight:
+            id: c4lfv04cksyfy
+          nullable: true
+        locationName:
+          type: string
+          x-stoplight:
+            id: 1bb8p19yt3csx
+          nullable: true
+        latitude:
+          type: number
+          x-stoplight:
+            id: b3x94bh5tf38d
+          nullable: true
+        longitude:
+          type: number
+          x-stoplight:
+            id: ovf6r4c8pj8bs
+          nullable: true
+        group:
+          $ref: "#/components/schemas/EventGroup"
+    EventGroup:
+      title: EventGroup
+      x-stoplight:
+        id: icql2do15vvat
+      type: object
+      description: ""
+      required:
+        - id
+        - name
+        - url
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: rqompukvz2mzg
+        name:
+          type: string
+          x-stoplight:
+            id: be7nsxd4v93oi
+        url:
+          type: string
+          x-stoplight:
+            id: wk5xd1zgwq1tz
+          format: uri
+      x-tags:
+        - events
   parameters:
     DiningUserSession:
       name: sessionId

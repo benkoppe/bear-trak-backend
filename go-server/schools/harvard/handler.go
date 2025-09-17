@@ -97,6 +97,10 @@ func (h *Handler) GetV1Study(ctx context.Context) (*api.StudyData, error) {
 	return study.Get(h.studyCache)
 }
 
+func (h *Handler) GetV1Events(ctx context.Context) ([]api.Event, error) {
+	return nil, fmt.Errorf("not implemented")
+}
+
 func (h *Handler) GetV1DiningUser(ctx context.Context, params api.GetV1DiningUserParams) (api.GetV1DiningUserRes, error) {
 	return nil, fmt.Errorf("not implemented")
 }

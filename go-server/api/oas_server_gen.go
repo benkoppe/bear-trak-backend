@@ -50,6 +50,12 @@ type Handler interface {
 	//
 	// GET /v1/dining/user/session
 	GetV1DiningUserSession(ctx context.Context, params GetV1DiningUserSessionParams) (GetV1DiningUserSessionRes, error)
+	// GetV1Events implements getV1Events operation.
+	//
+	// Returns event data for BearTrak's events section.
+	//
+	// GET /v1/events
+	GetV1Events(ctx context.Context) ([]Event, error)
 	// GetV1GymCapacities implements getV1GymCapacities operation.
 	//
 	// Returns all time-logged gym capacity data.

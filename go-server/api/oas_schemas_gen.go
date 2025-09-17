@@ -1006,6 +1006,146 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
+// Ref: #/components/schemas/Event
+type Event struct {
+	ID           int        `json:"id"`
+	Title        string     `json:"title"`
+	Description  string     `json:"description"`
+	Hours        Hours      `json:"hours"`
+	ImageURL     NilString  `json:"imageURL"`
+	LocationName NilString  `json:"locationName"`
+	Latitude     NilFloat64 `json:"latitude"`
+	Longitude    NilFloat64 `json:"longitude"`
+	Group        EventGroup `json:"group"`
+}
+
+// GetID returns the value of ID.
+func (s *Event) GetID() int {
+	return s.ID
+}
+
+// GetTitle returns the value of Title.
+func (s *Event) GetTitle() string {
+	return s.Title
+}
+
+// GetDescription returns the value of Description.
+func (s *Event) GetDescription() string {
+	return s.Description
+}
+
+// GetHours returns the value of Hours.
+func (s *Event) GetHours() Hours {
+	return s.Hours
+}
+
+// GetImageURL returns the value of ImageURL.
+func (s *Event) GetImageURL() NilString {
+	return s.ImageURL
+}
+
+// GetLocationName returns the value of LocationName.
+func (s *Event) GetLocationName() NilString {
+	return s.LocationName
+}
+
+// GetLatitude returns the value of Latitude.
+func (s *Event) GetLatitude() NilFloat64 {
+	return s.Latitude
+}
+
+// GetLongitude returns the value of Longitude.
+func (s *Event) GetLongitude() NilFloat64 {
+	return s.Longitude
+}
+
+// GetGroup returns the value of Group.
+func (s *Event) GetGroup() EventGroup {
+	return s.Group
+}
+
+// SetID sets the value of ID.
+func (s *Event) SetID(val int) {
+	s.ID = val
+}
+
+// SetTitle sets the value of Title.
+func (s *Event) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetDescription sets the value of Description.
+func (s *Event) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetHours sets the value of Hours.
+func (s *Event) SetHours(val Hours) {
+	s.Hours = val
+}
+
+// SetImageURL sets the value of ImageURL.
+func (s *Event) SetImageURL(val NilString) {
+	s.ImageURL = val
+}
+
+// SetLocationName sets the value of LocationName.
+func (s *Event) SetLocationName(val NilString) {
+	s.LocationName = val
+}
+
+// SetLatitude sets the value of Latitude.
+func (s *Event) SetLatitude(val NilFloat64) {
+	s.Latitude = val
+}
+
+// SetLongitude sets the value of Longitude.
+func (s *Event) SetLongitude(val NilFloat64) {
+	s.Longitude = val
+}
+
+// SetGroup sets the value of Group.
+func (s *Event) SetGroup(val EventGroup) {
+	s.Group = val
+}
+
+// Ref: #/components/schemas/EventGroup
+type EventGroup struct {
+	ID   int     `json:"id"`
+	Name string  `json:"name"`
+	URL  url.URL `json:"url"`
+}
+
+// GetID returns the value of ID.
+func (s *EventGroup) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *EventGroup) GetName() string {
+	return s.Name
+}
+
+// GetURL returns the value of URL.
+func (s *EventGroup) GetURL() url.URL {
+	return s.URL
+}
+
+// SetID sets the value of ID.
+func (s *EventGroup) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *EventGroup) SetName(val string) {
+	s.Name = val
+}
+
+// SetURL sets the value of URL.
+func (s *EventGroup) SetURL(val url.URL) {
+	s.URL = val
+}
+
 type GetV1DiningUserAccountsOKApplicationJSON []DiningUserAccount
 
 func (*GetV1DiningUserAccountsOKApplicationJSON) getV1DiningUserAccountsRes() {}
@@ -1637,6 +1777,51 @@ func (o NilAlertButton) Get() (v AlertButton, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o NilAlertButton) Or(d AlertButton) AlertButton {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewNilFloat64 returns new NilFloat64 with value set to v.
+func NewNilFloat64(v float64) NilFloat64 {
+	return NilFloat64{
+		Value: v,
+	}
+}
+
+// NilFloat64 is nullable float64.
+type NilFloat64 struct {
+	Value float64
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilFloat64) SetTo(v float64) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o NilFloat64) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *NilFloat64) SetToNull() {
+	o.Null = true
+	var v float64
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilFloat64) Get() (v float64, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilFloat64) Or(d float64) float64 {
 	if v, ok := o.Get(); ok {
 		return v
 	}

@@ -76,6 +76,15 @@ func (UnimplementedHandler) GetV1DiningUserSession(ctx context.Context, params G
 	return r, ht.ErrNotImplemented
 }
 
+// GetV1Events implements getV1Events operation.
+//
+// Returns event data for BearTrak's events section.
+//
+// GET /v1/events
+func (UnimplementedHandler) GetV1Events(ctx context.Context) (r []Event, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // GetV1GymCapacities implements getV1GymCapacities operation.
 //
 // Returns all time-logged gym capacity data.

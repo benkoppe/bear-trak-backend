@@ -12,63 +12,64 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils"
 	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 	"github.com/chromedp/chromedp"
 )
 
-// fetchEateryWeek is unused -- a concurrent verion is in scrape_all
-func fetchEateryWeek(eateryURL string, scraper *BrowserScraper) ([]Eatery, error) {
-	now := time.Now()
-	var eateryWeek []Eatery
-
-	for i := range [7]int{} {
-		date := now.AddDate(0, 0, i)
-		eatery, err := scraper.fetchEatery(eateryURL, date)
-		if err != nil {
-			return nil, fmt.Errorf("failed to fetch eatery for date %s: %w", date.Format("2006-01-02"), err)
-		}
-		eateryWeek = append(eateryWeek, *eatery)
-	}
-
-	return eateryWeek, nil
-}
-
-func fetchEatery(eateryURL string, date time.Time) (*Eatery, error) {
-	fullURL, err := appendDateSearchParam(eateryURL, date)
-	if err != nil {
-		return nil, fmt.Errorf("failed to append date search param: %w", err)
-	}
-
-	ctx, cancel := chromedp.NewContext(context.Background())
-	defer cancel()
-
-	ctx, cancel = context.WithTimeout(ctx, 45*time.Second)
-	defer cancel()
-
-	var htmlContent string
-
-	err = chromedp.Run(ctx,
-		chromedp.Navigate(fullURL),
-		chromedp.WaitVisible("#mdining-items"),
-		chromedp.OuterHTML("html", &htmlContent),
-	)
-	if err != nil {
-		return nil, fmt.Errorf("error fetching external data via chromedp: %w", err)
-	}
-
-	// resp, err := http.Get(fullURL)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("error fetching external data: %w", err)
-	// }
-	// defer resp.Body.Close()
-
-	eatery, err := scrape(strings.NewReader(htmlContent), date)
-	if err != nil {
-		return nil, fmt.Errorf("error scraping page: %w", err)
-	}
-
-	return eatery, nil
-}
+// // fetchEateryWeek is unused -- a concurrent verion is in scrape_all
+// func fetchEateryWeek(eateryURL string, scraper *BrowserScraper) ([]Eatery, error) {
+// 	now := time.Now()
+// 	var eateryWeek []Eatery
+//
+// 	for i := range [7]int{} {
+// 		date := now.AddDate(0, 0, i)
+// 		eatery, err := scraper.fetchEatery(eateryURL, date)
+// 		if err != nil {
+// 			return nil, fmt.Errorf("failed to fetch eatery for date %s: %w", date.Format("2006-01-02"), err)
+// 		}
+// 		eateryWeek = append(eateryWeek, *eatery)
+// 	}
+//
+// 	return eateryWeek, nil
+// }
+//
+// func fetchEatery(eateryURL string, date time.Time) (*Eatery, error) {
+// 	fullURL, err := appendDateSearchParam(eateryURL, date)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to append date search param: %w", err)
+// 	}
+//
+// 	ctx, cancel := chromedp.NewContext(context.Background())
+// 	defer cancel()
+//
+// 	ctx, cancel = context.WithTimeout(ctx, 45*time.Second)
+// 	defer cancel()
+//
+// 	var htmlContent string
+//
+// 	err = chromedp.Run(ctx,
+// 		chromedp.Navigate(fullURL),
+// 		chromedp.WaitVisible("#mdining-items"),
+// 		chromedp.OuterHTML("html", &htmlContent),
+// 	)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("error fetching external data via chromedp: %w", err)
+// 	}
+//
+// 	// resp, err := http.Get(fullURL)
+// 	// if err != nil {
+// 	// 	return nil, fmt.Errorf("error fetching external data: %w", err)
+// 	// }
+// 	// defer resp.Body.Close()
+//
+// 	eatery, err := scrape(strings.NewReader(htmlContent), date)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("error scraping page: %w", err)
+// 	}
+//
+// 	return eatery, nil
+// }
 
 func appendDateSearchParam(eateryURL string, date time.Time) (string, error) {
 	parsedURL, err := url.Parse(eateryURL)
@@ -210,46 +211,13 @@ func parseMenu(contentSel *goquery.Selection, mealName string, eatery *Eatery) {
 	})
 }
 
-type BrowserScraper struct {
-	ctx    context.Context
-	cancel context.CancelFunc
-}
-
-func NewBrowserScraper() *BrowserScraper {
-	opts := append(chromedp.DefaultExecAllocatorOptions[:],
-		chromedp.Headless,
-		chromedp.DisableGPU,
-		chromedp.NoSandbox,
-		chromedp.Flag("disable-site-isolation-trials", true), // fewer processes (less isolation)
-		chromedp.Flag("js-flags", "--max-old-space-size=96"), // shrink V8 heaps (risky if pages are big)
-		chromedp.Flag("disable-dev-shm-usage", true),         // avoid tiny /dev/shm on small VMs
-		chromedp.Flag("no-first-run", true),
-		chromedp.Flag("no-default-browser-check", true),
-		chromedp.Flag("window-size", "1280,800"),
-		chromedp.Flag("mute-audio", true),
-		chromedp.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"),
-	)
-
-	allocCtx, _ := chromedp.NewExecAllocator(context.Background(), opts...)
-	ctx, cancel := chromedp.NewContext(allocCtx)
-
-	return &BrowserScraper{
-		ctx:    ctx,
-		cancel: cancel,
-	}
-}
-
-func (bs *BrowserScraper) Close() {
-	bs.cancel()
-}
-
-func (bs *BrowserScraper) fetchEatery(eateryURL string, date time.Time) (*Eatery, error) {
+func fetchEatery(bs *utils.BrowserScraper, eateryURL string, date time.Time) (*Eatery, error) {
 	fullURL, err := appendDateSearchParam(eateryURL, date)
 	if err != nil {
 		return nil, fmt.Errorf("failed to append date search param: %w", err)
 	}
 
-	tabCtx, tabCancel := chromedp.NewContext(bs.ctx)
+	tabCtx, tabCancel := chromedp.NewContext(bs.Ctx)
 	defer tabCancel()
 
 	timeoutCtx, cancel := context.WithTimeout(tabCtx, 30*time.Second)

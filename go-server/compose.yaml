@@ -13,7 +13,6 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_SSLMODE=disable
       - SCHOOL_CODE=${SCHOOL_CODE}
-      - BUSTIME_API_KEY
     env_file:
       - .env
     depends_on:
@@ -21,6 +20,8 @@ services:
     networks:
       - tunnel
       - default
+    volumes:
+      - chromedp-profile:/tmp/chromedp-profile # persist chromedp data
 
   db:
     image: postgres:17.6
