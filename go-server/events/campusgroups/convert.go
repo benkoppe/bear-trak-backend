@@ -2,6 +2,7 @@ package campusgroups
 
 import (
 	"fmt"
+	"html"
 	"net/url"
 	"sort"
 	"strings"
@@ -41,8 +42,8 @@ func convertEvent(e ProcessedEvent) (*api.Event, error) {
 
 	pe := api.Event{
 		ID:           e.Event.ID,
-		Title:        e.Event.Title,
-		Description:  e.Event.EventDescription,
+		Title:        html.UnescapeString(e.Event.Title),
+		Description:  html.UnescapeString(e.Event.EventDescription),
 		Hours:        *eventHours,
 		ImageURL:     api.NilString{Null: true},
 		LocationName: api.NewNilString(e.Event.EventLocation),
