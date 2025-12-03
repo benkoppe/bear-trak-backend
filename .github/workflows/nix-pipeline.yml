@@ -42,14 +42,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build docker image
-        env:
-          OUTPUT: ${{ matrix.output }}
         run: |
-          nix build "$OUTPUT"
-
-      - name: Load docker image
-        run: |
-          ./result | docker load
+          nix build "${{ matrix.output }}"
 
       - name: Docker meta
         id: meta
@@ -58,8 +52,9 @@ jobs:
           images: ghcr.io/${{ github.repository_owner }}/${{ matrix.name }}
 
       - name: Push docker image
-        uses: akhilerm/tag-push-action@v2.2.0
+        uses: coscene-io/skopeo-copy-action@v1.0.0
         with:
+          src-image: "docker-archive:./result"
           src: ${{ matrix.name }}:latest
           dst: |
             ${{ steps.meta.outputs.tags }}
