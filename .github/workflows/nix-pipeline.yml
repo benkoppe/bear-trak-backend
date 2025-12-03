@@ -62,7 +62,7 @@ jobs:
           TAGS: ${{ steps.meta.outputs.tags }}
         run: |
           # Convert comma-separated list → bash array
-          IFS=',' read -ra TAG_ARR <<< "$TAGS"
+          IFS='\n' read -ra TAG_ARR <<< "$TAGS"
 
           # First tag is the main destination
           PRIMARY="${TAG_ARR[0]}"
