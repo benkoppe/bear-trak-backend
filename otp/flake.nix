@@ -112,15 +112,22 @@
                   pkgs.jdk21_headless
                   otpGraph
                 ];
-                config.Cmd = [
-                  "${pkgs.jdk21_headless}/bin/java"
-                  "${ramFlag}"
-                  "-jar"
-                  "${otpShaded}"
-                  "--load"
-                  "--serve"
-                  "${otpGraph}"
-                ];
+                config = {
+                  Entrypoint = [
+                    "${pkgs.jdk21_headless}/bin/java"
+                    "${ramFlag}"
+                    "-jar"
+                    "${otpShaded}"
+                  ];
+                  Cmd = [
+                    "--load"
+                    "--serve"
+                    "${otpGraph}"
+                  ];
+                  ExposedPorts = {
+                    "8080/tcp" = { };
+                  };
+                };
               };
           in
           {
