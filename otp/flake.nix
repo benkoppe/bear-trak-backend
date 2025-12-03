@@ -110,7 +110,7 @@
                 '';
               in
               pkgs.dockerTools.streamLayeredImage {
-                name = "ghcr.io/benkoppe/bear-trak-otp-${school}";
+                name = "bear-trak-otp-${school}";
                 tag = "latest";
 
                 contents = [

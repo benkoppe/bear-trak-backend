@@ -60,6 +60,6 @@ jobs:
       - name: Push docker image
         uses: akhilerm/tag-push-action@v2.2.0
         with:
-          src: ghcr.io/${{ github.repository_owner }}/${{ matrix.name }}:latest
+          src: ${{ matrix.name }}:latest
           dst: |
             ${{ steps.meta.outputs.tags }}
