@@ -58,5 +58,21 @@ jobs:
             type=sha
 
       - name: Push docker image
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
         run: |
-          echo ${{ steps.meta.outputs.tags }}
+          # Convert comma-separated list → bash array
+          IFS=',' read -ra TAG_ARR <<< "$TAGS"
+
+          # First tag is the main destination
+          PRIMARY="${TAG_ARR[0]}"
+          shifted_tags=("${TAG_ARR[@]:1}")
+
+          # Build --additional-tag flags
+          ADDITIONAL=""
+          for t in "${shifted_tags[@]}"; do
+            ADDITIONAL="$ADDITIONAL --additional-tag $t"
+          done
+
+          CMD="nix run nixpkgs#skopeo -- copy docker-archive:./result $PRIMARY $ADDITIONAL"
+          echo $CMD
