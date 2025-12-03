@@ -49,7 +49,7 @@ jobs:
 
       - name: Load docker image
         run: |
-          docker load < ./result
+          ./result | docker load
 
       - name: Docker meta
         id: meta
