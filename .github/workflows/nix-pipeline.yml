@@ -52,9 +52,5 @@ jobs:
           images: ghcr.io/${{ github.repository_owner }}/${{ matrix.name }}
 
       - name: Push docker image
-        uses: coscene-io/skopeo-copy-action@v1.0.0
-        with:
-          src-image: "docker-archive:./result"
-          src: ${{ matrix.name }}:latest
-          dst: |
-            ${{ steps.meta.outputs.tags }}
+        run: |
+          echo ${{ steps.meta.outputs.tags }}
