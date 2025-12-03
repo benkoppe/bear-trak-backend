@@ -72,3 +72,4 @@ jobs:
 
           CMD="nix run nixpkgs#skopeo -- copy docker-archive:./result $PRIMARY $ADDITIONAL"
           echo "$CMD"
+          eval "$CMD"
