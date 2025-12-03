@@ -55,7 +55,7 @@
                 };
                 harvard = {
                   gtfs.url = "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip";
-                  gtfs.sha256 = "sha256-p+PR8Fwl07dSSXIEi2NslqQzUXZRG2b6wnAyoHWAAE4=";
+                  gtfs.sha256 = "sha256-y/AxO76jR8ZAmQGud2EtXxRVOsJ8EaPzVs21ISAgBEg=";
                 };
                 umich = {
                   gtfs.url = "https://webapps.fo.umich.edu/transit_uploads/google_transit.zip";
