@@ -20,55 +20,6 @@ permissions:
   contents: read
 
 jobs:
-  nix-build-and-push-images:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: [otp-cornell, otp-umich, otp-harvard]
-        include:
-          - service: otp-cornell
-            output: ./otp#cornell
-            name: bear-trak-otp-cornell
-
-          - service: otp-umich
-            output: ./otp#umich
-            name: bear-trak-otp-umich
-
-          - service: otp-harvard
-            output: ./otp#harvard
-            name: bear-trak-otp-harvard
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
-
-      - uses: docker/login-action@v3
-        with:
-          registry: https://ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build docker image
-        env:
-          OUTPUT: ${{ matrix.output }}
-        run: |
-          nix build "$OUTPUT"
-
-      - name: Push docker image
-        env:
-          SHA: ${{ github.sha }}
-          OWNER: ${{ github.repository_owner }}
-          NAME: ${{ matrix.name }}
-        run: |
-          docker load < ./result
-          export IMAGE="ghcr.io/$OWNER/$NAME"
-          docker tag "$IMAGE:latest" "$IMAGE:$SHA"
-          docker push "$IMAGE:latest"
-          docker push "$IMAGE:$SHA"
-
   build-and-push-images:
     runs-on: ubuntu-latest
     strategy:

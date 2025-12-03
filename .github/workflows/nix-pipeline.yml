@@ -1,24 +1,27 @@
-name: Docker Build and Push
+name: Build Nix Docker
 
 on:
-  workflow_call:
-    inputs:
-      output:
-        description: "Flake output to build"
-        required: true
-        type: string
-      name:
-        description: "Image name. Doesn't include repo name or tags"
-        required: true
-        type: string
-
-permissions:
-  contents: read
-  packages: write
+  workflow_dispatch:
+  pull_request:
 
 jobs:
-  build:
+  build-push:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [otp-cornell, otp-umich, otp-harvard]
+        include:
+          - service: otp-cornell
+            output: ./otp#cornell
+            name: bear-trak-otp-cornell
+
+          - service: otp-umich
+            output: ./otp#umich
+            name: bear-trak-otp-umich
+
+          - service: otp-harvard
+            output: ./otp#harvard
+            name: bear-trak-otp-harvard
 
     steps:
       - uses: actions/checkout@v4
@@ -36,7 +39,7 @@ jobs:
 
       - name: Build docker image
         env:
-          OUTPUT: ${{ inputs.output }}
+          OUTPUT: ${{ matrix.output }}
         run: |
           nix build "$OUTPUT"
 
@@ -48,11 +51,11 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository_owner }}/${{ inputs.name }}
+          images: ghcr.io/${{ github.repository_owner }}/${{ matrix.name }}
 
       - name: Push docker image
         uses: akhilerm/tag-push-action@v2.j.0
         with:
-          src: ghcr.io/${{ github.repository_owner }}/${{ inputs.name }}:latest
+          src: ghcr.io/${{ github.repository_owner }}/${{ matrix.name }}:latest
           dst: |
             ${{ steps.meta.outputs.tags }}
