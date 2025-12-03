@@ -5,7 +5,7 @@
   "transitFeeds": [
     {
       "type": "gtfs",
-      "source": "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip",
+      "source": "gtfs.zip",
       "feedId": "harvard"
     },
     {
