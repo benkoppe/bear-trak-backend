@@ -39,27 +39,32 @@
                 name: attrs:
                 attrs
                 // rec {
-                  gtfs.package = pkgs.fetchurl { inherit (attrs.gtfs) url sha256; };
+                  gtfsPackages = lib.mapAttrs (gtfsName: g: pkgs.fetchurl { inherit (g) url sha256; }) attrs.gtfs;
                   dataDir = ./data/${name};
                   otpRoot = pkgs.runCommand "otp-root-${name}" { } ''
                     mkdir -p $out
                     cp ${dataDir}/* $out
-                    cp ${gtfs.package} $out/gtfs.zip
+
+                    ${lib.concatStringsSep "\n" (
+                      lib.mapAttrsToList (gtfsName: pkg: "cp ${pkg} $out/${gtfsName}") gtfsPackages
+                    )}
                   '';
                 }
               )
               {
-                cornell = {
-                  gtfs.url = "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-zip.ashx";
-                  gtfs.sha256 = "sha256-0kv+K6c4H6S2ajac/XNArZ25v3FN9v2+NYSwm2/IJ+Y=";
+                cornell.gtfs."gtfs.zip" = {
+                  url = "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-zip.ashx";
+                  sha256 = "sha256-0kv+K6c4H6S2ajac/XNArZ25v3FN9v2+NYSwm2/IJ+Y=";
                 };
-                harvard = {
-                  gtfs.url = "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip";
-                  gtfs.sha256 = "sha256-y/AxO76jR8ZAmQGud2EtXxRVOsJ8EaPzVs21ISAgBEg=";
+                harvard.gtfs = {
+                  "gtfs.zip".url = "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip";
+                  "gtfs.zip".sha256 = "sha256-y/AxO76jR8ZAmQGud2EtXxRVOsJ8EaPzVs21ISAgBEg=";
+                  "gtfs-mbta.zip".url = "https://cdn.mbta.com/MBTA_GTFS.zip";
+                  "gtfs-mbta.zip".sha256 = "sha256-FZEloeNhPJszzVKB2ujmwEyGEKj6v6jeIgvc9Kv//8I=";
                 };
-                umich = {
-                  gtfs.url = "https://webapps.fo.umich.edu/transit_uploads/google_transit.zip";
-                  gtfs.sha256 = "sha256-jxi03T+hlolRWB0yQL5G5QIQxj7m60RRRqobn2Q9390=";
+                umich.gtfs."gtfs.zip" = {
+                  url = "https://webapps.fo.umich.edu/transit_uploads/google_transit.zip";
+                  sha256 = "sha256-jxi03T+hlolRWB0yQL5G5QIQxj7m60RRRqobn2Q9390=";
                 };
               };
         in
