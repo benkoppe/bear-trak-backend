@@ -93,13 +93,13 @@
             mkImage =
               school: schoolAttrs:
               let
-                otpRootAndGraph = pkgs.runCommand "otp-graph-${school}" { } ''
+                otpGraph = pkgs.runCommand "otp-graph-${school}" { } ''
                   mkdir work
                   cp ${schoolAttrs.otpRoot}/* work/
                   cd work
                   ${pkgs.jdk21_headless}/bin/java -Xmx2G -jar ${otpShaded} --build --save .
                   mkdir -p $out
-                  cp * $out
+                  cp ./*-config.json ./graph.obj $out
                 '';
               in
               pkgs.dockerTools.buildLayeredImage {
@@ -108,7 +108,7 @@
 
                 contents = [
                   pkgs.jdk21_headless
-                  otpRootAndGraph
+                  otpGraph
                 ];
                 config.Cmd = [
                   "${pkgs.jdk21_headless}/bin/java"
@@ -117,7 +117,7 @@
                   "${otpShaded}"
                   "--load"
                   "--serve"
-                  "${otpRootAndGraph}"
+                  "${otpGraph}"
                 ];
               };
           in
