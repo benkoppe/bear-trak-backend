@@ -23,6 +23,7 @@
         {
           pkgs,
           lib,
+          system,
           ...
         }:
         let
@@ -124,7 +125,7 @@
           in
           {
             packages = lib.mkMerge [
-              (lib.mapAttrs mkImage schools)
+              (lib.mkIf (system == "x86_64-linux") (lib.mapAttrs mkImage schools))
               (lib.mapAttrs' (
                 school: schoolAttrs: lib.nameValuePair ("gtfs-" + school) schoolAttrs.gtfs.package
               ) schools)
