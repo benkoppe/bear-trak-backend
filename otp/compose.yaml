@@ -2,14 +2,6 @@ services:
   otp: # deploy with tunnel on port 8080
     image: ghcr.io/benkoppe/bear-trak-otp-${SCHOOL}:${SOURCE_COMMIT:-latest}
     restart: always
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-      platforms:
-        - "linux/amd64"
-      args:
-        SCHOOL: ${SCHOOL}
-        JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS:--Xmx512m}
     networks:
       - tunnel
 
