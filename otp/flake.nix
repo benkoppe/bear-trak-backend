@@ -31,6 +31,7 @@
             url = "https://github.com/opentripplanner/OpenTripPlanner/releases/download/v${otpVersion}/otp-shaded-${otpVersion}.jar";
             sha256 = "sha256-60Ikyw9Z7ZE+4kDReDgJGg5totgdghbDHAfFFQKDFpc=";
           };
+          ramFlag = "-XX:MaxRAMPercentage=75";
           schools =
             lib.mapAttrs
               (
@@ -75,7 +76,7 @@
               };
               scripts = lib.mkMerge [
                 {
-                  otp.exec = "${config.languages.java.jdk.package}/bin/java -Xmx2G -jar ${otpShaded} $@";
+                  otp.exec = "${config.languages.java.jdk.package}/bin/java ${ramFlag} -jar ${otpShaded} $@";
                   otp-build.exec = "otp --build $@";
                 }
                 (lib.mapAttrs' (
@@ -97,7 +98,7 @@
                   mkdir work
                   cp ${schoolAttrs.otpRoot}/* work/
                   cd work
-                  ${pkgs.jdk21_headless}/bin/java -Xmx2G -jar ${otpShaded} --build --save .
+                  ${pkgs.jdk21_headless}/bin/java ${ramFlag} -jar ${otpShaded} --build --save .
                   mkdir -p $out
                   cp ./*-config.json ./graph.obj $out
                 '';
@@ -112,7 +113,7 @@
                 ];
                 config.Cmd = [
                   "${pkgs.jdk21_headless}/bin/java"
-                  "-Xmx2G"
+                  "${ramFlag}"
                   "-jar"
                   "${otpShaded}"
                   "--load"
