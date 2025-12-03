@@ -61,18 +61,14 @@ jobs:
         env:
           TAGS: ${{ steps.meta.outputs.tags }}
         run: |
-          # Convert comma-separated list → bash array
-          IFS='\n' read -ra TAG_ARR <<< "$TAGS"
-
-          # First tag is the main destination
+          readarray -t TAG_ARR <<< "$TAGS"
           PRIMARY="${TAG_ARR[0]}"
           shifted_tags=("${TAG_ARR[@]:1}")
 
-          # Build --additional-tag flags
           ADDITIONAL=""
           for t in "${shifted_tags[@]}"; do
-            ADDITIONAL="$ADDITIONAL --additional-tag $t"
+            ADDITIONAL+=" --additional-tag $t"
           done
 
           CMD="nix run nixpkgs#skopeo -- copy docker-archive:./result $PRIMARY $ADDITIONAL"
-          echo $CMD
+          echo "$CMD"
