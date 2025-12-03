@@ -4,13 +4,14 @@
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    devenv.url = "github:cachix/devenv";
   };
 
   outputs =
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
-
+        inputs.devenv.flakeModule
       ];
       systems = [
         "x86_64-linux"
@@ -20,15 +21,114 @@
       ];
       perSystem =
         {
-          config,
-          self',
-          inputs',
           pkgs,
-          system,
+          lib,
           ...
         }:
+        let
+          otpVersion = "2.8.1";
+          otpShaded = pkgs.fetchurl {
+            url = "https://github.com/opentripplanner/OpenTripPlanner/releases/download/v${otpVersion}/otp-shaded-${otpVersion}.jar";
+            sha256 = "sha256-60Ikyw9Z7ZE+4kDReDgJGg5totgdghbDHAfFFQKDFpc=";
+          };
+          schools =
+            lib.mapAttrs
+              (
+                name: attrs:
+                attrs
+                // rec {
+                  gtfs.package = pkgs.fetchurl { inherit (attrs.gtfs) url sha256; };
+                  dataDir = ./data/${name};
+                  otpRoot = pkgs.runCommand "otp-root-${name}" { } ''
+                    mkdir -p $out
+                    cp ${dataDir}/* $out
+                    cp ${gtfs.package} $out/gtfs.zip
+                  '';
+                }
+              )
+              {
+                cornell = {
+                  gtfs.url = "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-zip.ashx";
+                  gtfs.sha256 = "sha256-0kv+K6c4H6S2ajac/XNArZ25v3FN9v2+NYSwm2/IJ+Y=";
+                };
+                harvard = {
+                  gtfs.url = "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip";
+                  gtfs.sha256 = "sha256-p+PR8Fwl07dSSXIEi2NslqQzUXZRG2b6wnAyoHWAAE4=";
+                };
+                umich = {
+                  gtfs.url = "https://webapps.fo.umich.edu/transit_uploads/google_transit.zip";
+                  gtfs.sha256 = "sha256-jxi03T+hlolRWB0yQL5G5QIQxj7m60RRRqobn2Q9390=";
+                };
+              };
+        in
         {
-          packages.default = pkgs.hello;
-        };
+          devenv.shells.default =
+            { config, ... }:
+            {
+              packages = with pkgs; [
+                osmium-tool
+              ];
+              languages.java = {
+                enable = true;
+                jdk.package = pkgs.jdk21;
+                maven.enable = true;
+              };
+              scripts = lib.mkMerge [
+                {
+                  otp.exec = "${config.languages.java.jdk.package}/bin/java -Xmx2G -jar ${otpShaded} $@";
+                  otp-build.exec = "otp --build $@";
+                }
+                (lib.mapAttrs' (
+                  school: schoolAttrs:
+                  lib.nameValuePair "otp-${school}" {
+                    exec = "otp-build ${schoolAttrs.otpRoot} $@";
+                  }
+                ) schools)
+              ];
+
+            };
+        }
+        // (
+          let
+            mkImage =
+              school: schoolAttrs:
+              let
+                otpRootAndGraph = pkgs.runCommand "otp-graph-${school}" { } ''
+                  mkdir work
+                  cp ${schoolAttrs.otpRoot}/* work/
+                  cd work
+                  ${pkgs.jdk21_headless}/bin/java -Xmx2G -jar ${otpShaded} --build --save .
+                  mkdir -p $out
+                  cp * $out
+                '';
+              in
+              pkgs.dockerTools.buildLayeredImage {
+                name = "ghcr.io/benkoppe/bear-trak-otp-${school}";
+                tag = "latest";
+
+                contents = [
+                  pkgs.jdk21_headless
+                  otpRootAndGraph
+                ];
+                config.Cmd = [
+                  "${pkgs.jdk21_headless}/bin/java"
+                  "-Xmx2G"
+                  "-jar"
+                  "${otpShaded}"
+                  "--load"
+                  "--serve"
+                  "${otpRootAndGraph}"
+                ];
+              };
+          in
+          {
+            packages = lib.mkMerge [
+              (lib.mapAttrs mkImage schools)
+              (lib.mapAttrs' (
+                school: schoolAttrs: lib.nameValuePair ("gtfs-" + school) schoolAttrs.gtfs.package
+              ) schools)
+            ];
+          }
+        );
     };
 }
