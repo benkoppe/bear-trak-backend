@@ -70,6 +70,6 @@ jobs:
             ADDITIONAL+=" --additional-tag $t"
           done
 
-          CMD="nix run nixpkgs#skopeo -- copy docker-archive:./result $PRIMARY $ADDITIONAL"
+          CMD="nix run nixpkgs#skopeo -- copy docker-archive:./result docker://$PRIMARY $ADDITIONAL"
           echo "$CMD"
           eval "$CMD"
