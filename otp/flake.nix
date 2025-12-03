@@ -109,7 +109,7 @@
                   cp ./*-config.json ./graph.obj $out
                 '';
               in
-              pkgs.dockerTools.streamLayeredImage {
+              pkgs.dockerTools.buildLayeredImage {
                 name = "bear-trak-otp-${school}";
                 tag = "latest";
 
