@@ -83,6 +83,9 @@
             # Default is 100, so this ensures this image gets its own layer(s)
             # after being merged with the base image.
             maxLayers = 120;
+            contents = [
+              pkgs.cacert
+            ];
             config = {
               Entrypoint = [ "${server}/bin/go-server" ];
             };
