@@ -26,6 +26,7 @@
           lib,
           pkgs,
           inputs',
+          config,
           ...
         }:
         let
@@ -89,6 +90,13 @@
             }
             (lib.mkIf pkgs.stdenv.isLinux { inherit containerImage; })
           ];
+        };
+
+      flake =
+        { lib, ... }:
+        {
+          inputs.nixpkgs.config.allowUnfreePredicate =
+            pkg: builtins.elem (lib.getName pkg) [ "google-chrome" ];
         };
     };
 }
