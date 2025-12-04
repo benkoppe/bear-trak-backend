@@ -27,11 +27,18 @@
             url = "https://github.com/TheTransitClock/transitime/releases/latest/download/Core.jar";
             sha256 = "sha256-nLUVRraZPcvVr187TPNIFopnrH5vLmxi7R7rBoJfGDo=";
           };
-          src = pkgs.runCommand "trak-avl-module-src" { } ''
-            mkdir -p $out
-            cp ${coreJar} $out/Core.jar
-            cp -r ${./.}/* $out/
-          '';
+          src = pkgs.symlinkJoin {
+            name = "trak-avl-module-src";
+            paths = [
+              ./.
+              (pkgs.linkFarm "core-jar" [
+                {
+                  name = "Core.jar";
+                  path = coreJar;
+                }
+              ])
+            ];
+          };
           package = pkgs.maven.buildMavenPackage {
             pname = "trak-avl-module";
             version = "1.0";
