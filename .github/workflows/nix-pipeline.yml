@@ -13,8 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [otp-cornell, otp-umich, otp-harvard]
+        service: [go-server, otp-cornell, otp-umich, otp-harvard]
         include:
+          - service: go-server
+            output: ./go-server#containerImage
+            name: bear-trak-go
+
           - service: otp-cornell
             output: ./otp#cornell
             name: bear-trak-otp-cornell
