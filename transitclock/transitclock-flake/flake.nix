@@ -45,7 +45,17 @@
           };
         in
         {
-          packages.default = package;
+          packages = {
+            default = package;
+            source = pkgs.stdenv.mkDerivation {
+              name = "transitime-src";
+              src = inputs.transitime;
+              installPhase = ''
+                mkdir -p $out
+                cp -r . $out
+              '';
+            };
+          };
         };
     };
 }
