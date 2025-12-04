@@ -91,8 +91,6 @@
               CATALINA_BASE = "/tmp/tomcat";
             };
             text = ''
-              cp -r ${runtimeEnv}/bin ./bin
-
               mkdir -p $CONFIG_DIR
               cp -r $READONLY_CONFIG_DIR/* $CONFIG_DIR/
 
