@@ -3,6 +3,9 @@ name: Nix Build Pipeline
 on:
   workflow_dispatch:
   pull_request:
+  push:
+    branches:
+      - "main"
 
 permissions:
   packages: write
