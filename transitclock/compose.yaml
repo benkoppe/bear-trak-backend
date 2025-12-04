@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:9.6.3
+    image: postgres:17
     container_name: transitclock-db
     platform: linux/amd64
     restart: unless-stopped
@@ -8,6 +8,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: "${AGENCYNAME-UMICH}"
       POSTGRES_PASSWORD: ${PGPASSWORD}
+      TZ: "America/New_York"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
@@ -15,11 +16,9 @@ services:
       retries: 5
 
   server: # deploy with tunnel on port 8080
-    image: ghcr.io/benkoppe/trak-transitclock:${SOURCE_COMMIT:-latest}
+    image: trak-transitclock:latest
+    pull_policy: never
     restart: always
-    build:
-      context: .
-      no_cache: true
     platform: linux/amd64
     container_name: transitclock-server-instance
     depends_on:
@@ -36,18 +35,18 @@ services:
       AGENCYNAME: "${AGENCYNAME-UMICH}"
       GTFS_URL: "${GTFS_URL:-https://webapps.fo.umich.edu/transit_uploads/google_transit.zip}"
       TRAK_URL: "${TRAK_URL:-https://bluetrakapi.thekoppe.com}"
+      TZ: "America/New_York"
     volumes:
       - logs:/usr/local/transitclock/logs/
       - cache:/usr/local/transitclock/cache/
-    networks: 
-      - tunnel
+    networks:
+      # - tunnel
       - default
-    command: ["sh", "/usr/local/transitclock/bin/entrypoint.sh"]
+    ports:
+      - 8080:8080
 
 volumes:
   logs:
   cache:
-
-networks:
-  tunnel:
-    external: true
+# networks:
+# tunnel:
