@@ -16,8 +16,7 @@ services:
       retries: 5
 
   server: # deploy with tunnel on port 8080
-    image: trak-transitclock:latest
-    pull_policy: never
+    image: ghcr.io/benkoppe/trak-transitclock:${SOURCE_COMMIT:-latest}
     restart: always
     platform: linux/amd64
     container_name: transitclock-server-instance
