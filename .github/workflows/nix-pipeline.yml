@@ -62,14 +62,17 @@ jobs:
           TAGS: ${{ steps.meta.outputs.tags }}
         run: |
           readarray -t TAG_ARR <<< "$TAGS"
+
           PRIMARY="${TAG_ARR[0]}"
-          shifted_tags=("${TAG_ARR[@]:1}")
+          shift  # drop first element
+          REST=("${TAG_ARR[@]}")
 
-          ADDITIONAL=""
-          for t in "${shifted_tags[@]}"; do
-            ADDITIONAL+=" --additional-tag $t"
+          nix run nixpkgs#skopeo -- \
+            copy docker-archive:./result \
+            "docker://$PRIMARY"
+
+          for t in "${REST[@]}"; do
+            echo "Tagging $PRIMARY → $t"
+            nix run nixpkgs#skopeo -- \
+              copy "docker://$PRIMARY" "docker://$t"
           done
-
-          CMD="nix run nixpkgs#skopeo -- copy docker-archive:./result docker://$PRIMARY $ADDITIONAL"
-          echo "$CMD"
-          eval "$CMD"
