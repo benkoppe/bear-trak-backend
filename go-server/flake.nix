@@ -60,6 +60,9 @@
             name = "bear-trak-go";
             tag = "latest";
 
+            contents = [
+              pkgs.cacert
+            ];
             config = {
               Entrypoint = [ "${server}/bin/go-server" ];
             };
