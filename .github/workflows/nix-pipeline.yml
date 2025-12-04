@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [go-server, otp-cornell, otp-umich, otp-harvard]
+        service: [go-server, otp-cornell, otp-umich, otp-harvard, transitclock]
         include:
           - service: go-server
             output: ./go-server#containerImage
@@ -30,6 +30,10 @@ jobs:
           - service: otp-harvard
             output: ./otp#harvard
             name: bear-trak-otp-harvard
+
+          - service: transitclock
+            output: ./transitclock#default
+            name: trak-transitclock
 
     steps:
       - uses: actions/checkout@v4
