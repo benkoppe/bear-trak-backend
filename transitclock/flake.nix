@@ -88,6 +88,9 @@
 
               WEBAPPS_DIR = "${runtimeEnv}/var/tomcat/webapps";
               CATALINA_BASE = "/tmp/tomcat";
+
+              # GTFS_URL = "file://${umich-gtfs}";
+              SOURCE_DIR = "${inputs'.transitclock.packages.source}";
             };
             text = ''
               ln -sf ${runtimeEnv}/bin ./bin
