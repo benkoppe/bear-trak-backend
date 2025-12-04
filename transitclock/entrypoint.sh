@@ -6,28 +6,28 @@ set -e
 # Wait for the database service ('db') to be ready.
 # Using the provided check_db_up.sh script.
 echo "Waiting for database connection..."
-check_db_up.sh # This script must use 'db' as the hostname and PGPASSWORD env var
+./bin/check_db_up.sh # This script must use 'db' as the hostname and PGPASSWORD env var
 
 echo "Creating database tables..."
-create_tables.sh
+./bin/create_tables.sh
 
 echo "Importing GTFS data..."
-import_gtfs.sh
+./bin/import_gtfs.sh
 
 echo "Creating API key..."
-create_api_key.sh
+./bin/create_api_key.sh
 
 echo "Creating web agency..."
-create_webagency.sh
+./bin/create_webagency.sh
 
 # --- Optional Steps (from original script comments) ---
 # Uncomment if needed
 # echo "Importing AVL data..."
-# import_avl.sh
+# ./import_avl.sh
 # echo "Processing AVL data..."
-# process_avl.sh
+# ./process_avl.sh
 
 # --- Start Main Application ---
 echo "Starting TransitClock server..."
 # Use exec to replace this script process with the main application process
-exec start_transitclock.sh
+exec ./bin/start_transitclock.sh

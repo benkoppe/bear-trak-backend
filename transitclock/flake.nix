@@ -78,7 +78,6 @@
               pkgs.coreutils
               pkgs.findutils
               pkgs.gnused
-              runtimeEnv
             ];
             runtimeEnv = {
               LIB_DIR = "${runtimeEnv}/lib";
@@ -91,6 +90,8 @@
               CATALINA_BASE = "/tmp/tomcat";
             };
             text = ''
+              ln -sf ${runtimeEnv}/bin ./bin
+
               mkdir -p $CONFIG_DIR
               cp -r $READONLY_CONFIG_DIR/* $CONFIG_DIR/
 
