@@ -4,6 +4,8 @@
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    transitclock.url = "path:../transitclock-flake";
   };
 
   outputs =
@@ -20,23 +22,15 @@
       perSystem =
         {
           pkgs,
+          inputs',
           ...
         }:
         let
-          coreJar = pkgs.fetchurl {
-            url = "https://github.com/TheTransitClock/transitime/releases/latest/download/Core.jar";
-            sha256 = "sha256-nLUVRraZPcvVr187TPNIFopnrH5vLmxi7R7rBoJfGDo=";
-          };
           src = pkgs.symlinkJoin {
             name = "trak-avl-module-src";
             paths = [
               ./.
-              (pkgs.linkFarm "core-jar" [
-                {
-                  name = "Core.jar";
-                  path = coreJar;
-                }
-              ])
+              "${inputs'.transitclock.packages.default}/lib"
             ];
           };
           package = pkgs.maven.buildMavenPackage {
