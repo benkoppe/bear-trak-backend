@@ -33,6 +33,7 @@ services:
       POSTGRES_PORT_5432_TCP_PORT: 5432
       AGENCYID: "${AGENCYID-1}"
       AGENCYNAME: "${AGENCYNAME-UMICH}"
+      GTFS_URL: "${GTFS_URL:-https://webapps.fo.umich.edu/transit_uploads/google_transit.zip}"
       TRAK_URL: "${TRAK_URL:-https://bluetrakapi.thekoppe.com}"
       TZ: "America/New_York"
     volumes:
