@@ -1,5 +1,5 @@
 {
-  description = "Description for the project";
+  description = "OpenTripPlanner";
 
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
