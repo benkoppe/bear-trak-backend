@@ -64,8 +64,7 @@ jobs:
           readarray -t TAG_ARR <<< "$TAGS"
 
           PRIMARY="${TAG_ARR[0]}"
-          shift  # drop first element
-          REST=("${TAG_ARR[@]}")
+          REST=("${TAG_ARR[@]:1}")
 
           nix run nixpkgs#skopeo -- \
             copy docker-archive:./result \
