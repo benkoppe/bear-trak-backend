@@ -1,4 +1,4 @@
-name: Build Nix Docker
+name: Nix Build Pipeline
 
 on:
   workflow_dispatch:
