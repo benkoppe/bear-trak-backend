@@ -62,6 +62,7 @@
 
             contents = [
               pkgs.cacert
+              pkgs.google-chrome
             ];
             config = {
               Entrypoint = [ "${server}/bin/go-server" ];
