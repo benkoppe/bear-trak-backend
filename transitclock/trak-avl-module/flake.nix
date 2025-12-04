@@ -33,7 +33,7 @@
               "${inputs'.transitclock.packages.default}/lib"
             ];
           };
-          package = pkgs.maven.buildMavenPackage {
+          package = pkgs.maven.buildMavenPackage rec {
             pname = "trak-avl-module";
             version = "1.0";
             inherit src;
@@ -43,7 +43,7 @@
 
             installPhase = ''
               mkdir -p $out/lib
-              cp target/trak-avl-module-1.0-SNAPSHOT.jar $out/lib/
+              cp target/trak-avl-module-${version}-SNAPSHOT.jar $out/lib/trak-avl-module.jar
             '';
           };
         in
