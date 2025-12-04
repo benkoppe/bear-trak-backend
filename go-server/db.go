@@ -37,7 +37,9 @@ func connectToDBPool(ctx context.Context) (*pgxpool.Pool, error) {
 	}
 
 	db := stdlib.OpenDBFromPool(pool)
-	defer db.Close()
+	defer func() {
+		_ = db.Close()
+	}()
 	if err := goose.Up(db, "migrations"); err != nil {
 		return nil, fmt.Errorf("unable to run migrations: %v", err)
 	}

@@ -15,3 +15,7 @@ mvn install:install-file -Dfile=./Core.jar -DgroupId=org.transitclock -Dartifact
 ```
 
 - That should be everything! See `pom.xml` to see how this is referenced locally as a dependency. Build with `mvn package`.
+
+## UPDATE
+
+Just use nix. Now packaged as a flake.

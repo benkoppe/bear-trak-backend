@@ -1,0 +1,86 @@
+name: Nix Build Pipeline
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+permissions:
+  packages: write
+  contents: read
+  id-token: write
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [go-server, otp-cornell, otp-umich, otp-harvard, transitclock]
+        include:
+          - service: go-server
+            output: ./go-server#containerImage
+            name: bear-trak-go
+
+          - service: otp-cornell
+            output: ./otp#cornell
+            name: bear-trak-otp-cornell
+
+          - service: otp-umich
+            output: ./otp#umich
+            name: bear-trak-otp-umich
+
+          - service: otp-harvard
+            output: ./otp#harvard
+            name: bear-trak-otp-harvard
+
+          - service: transitclock
+            output: ./transitclock#default
+            name: trak-transitclock
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - uses: docker/login-action@v3
+        with:
+          registry: https://ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build docker image
+        run: |
+          nix build "${{ matrix.output }}"
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/${{ matrix.name }}
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=sha
+
+      - name: Push docker image
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          readarray -t TAG_ARR <<< "$TAGS"
+
+          PRIMARY="${TAG_ARR[0]}"
+          REST=("${TAG_ARR[@]:1}")
+
+          nix run nixpkgs#skopeo -- \
+            copy docker-archive:./result \
+            "docker://$PRIMARY"
+
+          for t in "${REST[@]}"; do
+            echo "Tagging $PRIMARY → $t"
+            nix run nixpkgs#skopeo -- \
+              copy "docker://$PRIMARY" "docker://$t"
+          done

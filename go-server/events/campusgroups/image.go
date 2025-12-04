@@ -20,7 +20,7 @@ func fetchEventImage(base *url.URL, eventID int) (*string, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error fetching page: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("HTTP error: %d", resp.StatusCode)

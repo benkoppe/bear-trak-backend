@@ -6,6 +6,7 @@ package login
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
@@ -50,7 +51,12 @@ func GetLoginCookie(loginURL string, p LoginParams) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to connect to email: %w", err)
 	}
-	defer c.Logout()
+	defer func() {
+		if err := c.Logout(); err != nil {
+			// log, metric, etc. — don't return because we're in a defer
+			log.Printf("imap logout failed: %v", err)
+		}
+	}()
 
 	if err := c.Login(p.OtpEmail, p.OtpEmailPassword); err != nil {
 		return "", fmt.Errorf("failed to login to email: %w", err)

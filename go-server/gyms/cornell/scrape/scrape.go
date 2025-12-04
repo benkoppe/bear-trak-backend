@@ -27,7 +27,7 @@ func fetchData(url string) ([]ParsedSchedule, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error fetching external data: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	tables, err := scrapeTables(resp.Body)
 	if err != nil {

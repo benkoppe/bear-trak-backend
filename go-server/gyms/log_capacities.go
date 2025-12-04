@@ -29,7 +29,7 @@ func LogCapacities(ctx context.Context, handler api.Handler, queries *db.Queries
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
 				// no rows found, should be logged
-				logCapacity(ctx, queries, gym, capacity)
+				_ = logCapacity(ctx, queries, gym, capacity)
 			} else {
 				// other error, continue
 				log.Printf("error fetching latest capacity: %v", err)
@@ -42,7 +42,7 @@ func LogCapacities(ctx context.Context, handler api.Handler, queries *db.Queries
 			continue
 		}
 
-		logCapacity(ctx, queries, gym, capacity)
+		_ = logCapacity(ctx, queries, gym, capacity)
 	}
 
 	return nil

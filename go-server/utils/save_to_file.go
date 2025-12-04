@@ -10,7 +10,7 @@ func SaveToFile(data []byte, path string) error {
 	if err != nil {
 		return fmt.Errorf("unable to create file %s: %w", path, err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	_, err = file.Write(data)
 	if err != nil {

@@ -7,6 +7,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"log"
 	"strings"
 	"unicode"
 
@@ -113,7 +114,10 @@ func RefreshUserToken(ctx context.Context, externalBaseURL string, params api.Ge
 		return &api.GetV1DiningUserSessionUnauthorized{}, nil
 	}
 
-	queries.UpdateDiningUserSession(ctx, user.ID)
+	err = queries.UpdateDiningUserSession(ctx, user.ID)
+	if err != nil {
+		log.Printf("failed to update dining user session timestamp: %v", err)
+	}
 
 	res := api.GetV1DiningUserSessionOKApplicationJSON(*resp)
 	return &res, nil
