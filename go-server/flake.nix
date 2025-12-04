@@ -57,14 +57,32 @@
             modules = ./gomod2nix.toml;
             doCheck = false; # tests were for while writing and many are broken
           };
+
+          chrome-headless-amd64 = pkgs.dockerTools.pullImage {
+            imageName = "docker.io/chromedp/headless-shell";
+            imageDigest = "sha256:de5b057849de96955de7662023420a46355abfbb24d57aa01282ec7c811aacab";
+            finalImageTag = "latest";
+            sha256 = "sha256-SYPr3y9n79RRJEv0Tms9/SlVFzfYkzU9EDIRNXfwq6s=";
+            os = "linux";
+            arch = "amd64";
+          };
+          chrome-headless-arm64 = pkgs.dockerTools.pullImage {
+            imageName = "docker.io/chromedp/headless-shell";
+            imageDigest = "sha256:de5b057849de96955de7662023420a46355abfbb24d57aa01282ec7c811aacab";
+            finalImageTag = "latest";
+            sha256 = "sha256-0ND5n5Q+yZ4ACCISxzvgFpe+K4nISITXyf/NYWkpncc=";
+            os = "linux";
+            arch = "arm64";
+          };
           containerImage = pkgs.dockerTools.buildLayeredImage {
             name = "bear-trak-go";
             tag = "latest";
 
-            contents = [
-              pkgs.cacert
-              pkgs.google-chrome
-            ];
+            fromImage = if pkgs.stdenv.isAarch64 then chrome-headless-arm64 else chrome-headless-amd64;
+            architecture = system;
+            # Default is 100, so this ensures this image gets its own layer(s)
+            # after being merged with the base image.
+            maxLayers = 120;
             config = {
               Entrypoint = [ "${server}/bin/go-server" ];
             };
@@ -84,16 +102,9 @@
               ];
             };
 
-          packages = lib.mkMerge [
-            {
-              default = server;
-            }
-            (lib.mkIf pkgs.stdenv.isLinux { inherit containerImage; })
-          ];
-
-          _module.args.pkgs = import inputs.nixpkgs {
-            inherit system;
-            config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "google-chrome" ];
+          packages = {
+            default = server;
+            inherit containerImage;
           };
         };
     };
