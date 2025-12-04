@@ -70,14 +70,15 @@
           };
           entrypoint = pkgs.writeShellApplication {
             name = "start-transitclock";
-            runtimeInputs = with pkgs; [
-              openjdk8
-              tomcat9
-              jq
-              postgresql
-              coreutils
-              findutils
-              gnused
+            runtimeInputs = [
+              pkgs.openjdk8
+              pkgs.tomcat9
+              pkgs.jq
+              pkgs.postgresql
+              pkgs.coreutils
+              pkgs.findutils
+              pkgs.gnused
+              runtimeEnv
             ];
             runtimeEnv = {
               LIB_DIR = "${runtimeEnv}/lib";
