@@ -23,7 +23,7 @@ func DoGetRequest[T any](url string, headers map[string]string) (*T, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to make the request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
@@ -52,7 +52,7 @@ func DoPostRequest[T any](url string, payload any) (*T, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to perform request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {

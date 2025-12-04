@@ -15,7 +15,7 @@ func fetchData(url string) ([]Prediction, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch URL %q: %w", url, err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("unexpected HTTP status %d when fetching %q", resp.StatusCode, url)

@@ -57,7 +57,7 @@ func loadTcatGtfs(source string) ([]byte, error) {
 		}
 	}
 
-	defer reader.Close()
+	defer func() { _ = reader.Close() }()
 
 	originalGtfsData, err := io.ReadAll(reader)
 	if err != nil {
