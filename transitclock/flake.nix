@@ -105,7 +105,7 @@
             ''
             + builtins.readFile ./entrypoint.sh;
           };
-          dockerImage = pkgs.dockerTools.buildLayeredImage {
+          containerImage = pkgs.dockerTools.buildLayeredImage {
             name = "trak-transitclock";
             tag = "latest";
 
@@ -123,8 +123,8 @@
         in
         {
           packages = {
-            default = dockerImage;
-            inherit runtimeEnv dockerImage entrypoint;
+            default = containerImage;
+            inherit runtimeEnv containerImage entrypoint;
           };
           apps = {
             entrypoint.program = "${entrypoint}/bin/start-transitclock";
