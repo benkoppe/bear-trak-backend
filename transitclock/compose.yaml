@@ -39,7 +39,7 @@ services:
       - logs:/usr/local/transitclock/logs/
       - cache:/usr/local/transitclock/cache/
     networks:
-      - tunnel
+      - cloudflared
       - default
 
 volumes:
@@ -47,5 +47,5 @@ volumes:
   cache:
 
 networks:
-  tunnel:
+  cloudflared:
     external: true

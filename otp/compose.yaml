@@ -3,8 +3,8 @@ services:
     image: ghcr.io/benkoppe/bear-trak-otp-${SCHOOL}:${SOURCE_COMMIT:-latest}
     restart: always
     networks:
-      - tunnel
+      - cloudflared
 
 networks:
-  tunnel:
+  cloudflared:
     external: true
