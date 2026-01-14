@@ -8,12 +8,14 @@
       url = "github:nix-community/gomod2nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    devenv.url = "github:cachix/devenv";
   };
 
   outputs =
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
+        inputs.devenv.flakeModule
       ];
       systems = [
         "x86_64-linux"
@@ -23,7 +25,6 @@
       ];
       perSystem =
         {
-          lib,
           pkgs,
           inputs',
           system,
@@ -94,11 +95,11 @@
         {
           checks = { inherit lint; };
 
-          devShells.default =
+          devenv.shells.default =
             let
               goEnv = gomod2nixPkgs.mkGoEnv { pwd = ./.; };
             in
-            pkgs.mkShell {
+            {
               packages = [
                 goEnv
                 gomod2nixPkgs.gomod2nix
