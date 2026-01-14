@@ -98,12 +98,37 @@
           devenv.shells.default =
             let
               goEnv = gomod2nixPkgs.mkGoEnv { pwd = ./.; };
+              postgresPort = 5432;
             in
             {
               packages = [
                 goEnv
                 gomod2nixPkgs.gomod2nix
               ];
+
+              services.postgres = {
+                enable = true;
+                package = pkgs.postgresql_17;
+                initialDatabases = [
+                  {
+                    name = "app";
+                    user = "postgres";
+                    pass = "test";
+                  }
+                ];
+                port = postgresPort;
+                listen_addresses = "localhost";
+              };
+
+              env = {
+                POSTGRES_USER = "postgres";
+                POSTGRES_PASSWORD = "test";
+                POSTGRES_HOST = "localhost";
+                POSTGRES_PORT = toString postgresPort;
+                POSTGRES_DB = "app";
+                POSTGRES_SSLMODE = "disable";
+                SCHOOL_CODE = "cornell";
+              };
             };
 
           packages = {
