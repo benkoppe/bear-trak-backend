@@ -2,7 +2,7 @@
 package cornell
 
 const (
-	eateriesURL = "https://now.dining.cornell.edu/api/1.0/dining/eateries.json"
+	eateriesURL = "https://admin-now.dining.cornell.edu/api/1.0/dining/eateries.json"
 
 	cbordInstitutionID = "73116ae4-22ad-4c71-8ffd-11ba015407b1"
 
