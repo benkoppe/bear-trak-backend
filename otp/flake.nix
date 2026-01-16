@@ -5,6 +5,10 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     devenv.url = "github:cachix/devenv";
+    nix2container = {
+      url = "github:nlewo/nix2container";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -53,13 +57,13 @@
               {
                 cornell.gtfs."gtfs.zip" = {
                   url = "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-zip.ashx";
-                  sha256 = "sha256-0kv+K6c4H6S2ajac/XNArZ25v3FN9v2+NYSwm2/IJ+Y=";
+                  sha256 = "sha256-oAvmvfqJxd3o2bcTFuJp5M+u9unIjkxKypPCJ7KahIA=";
                 };
                 harvard.gtfs = {
                   "gtfs.zip".url = "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip";
-                  "gtfs.zip".sha256 = "sha256-VkFPaHmfvh+xI7rQulXZk0o2yY+PfBG22ved+VijiqU=";
+                  "gtfs.zip".sha256 = "sha256-pOj9fhIUMcv5xdEnkiXXcCd9+oU3fnq3JQvMBdOMDCo=";
                   "gtfs-mbta.zip".url = "https://cdn.mbta.com/MBTA_GTFS.zip";
-                  "gtfs-mbta.zip".sha256 = "sha256-FZEloeNhPJszzVKB2ujmwEyGEKj6v6jeIgvc9Kv//8I=";
+                  "gtfs-mbta.zip".sha256 = "sha256-UYTv2cHiB4GbX+0vJCFOJb5oATwrnkgxoT8knI14o7Y=";
                 };
                 umich.gtfs."gtfs.zip" = {
                   url = "https://webapps.fo.umich.edu/transit_uploads/google_transit.zip";
