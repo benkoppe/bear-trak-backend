@@ -23,7 +23,6 @@
         {
           pkgs,
           lib,
-          system,
           ...
         }:
         let
@@ -64,7 +63,7 @@
                 };
                 umich.gtfs."gtfs.zip" = {
                   url = "https://webapps.fo.umich.edu/transit_uploads/google_transit.zip";
-                  sha256 = "sha256-jxi03T+hlolRWB0yQL5G5QIQxj7m60RRRqobn2Q9390=";
+                  sha256 = "sha256-9oT89xjuneNMXZbwA08RI/d7e7BsfI7AS+wuk0S/DKU=";
                 };
               };
         in
