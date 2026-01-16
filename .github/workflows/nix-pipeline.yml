@@ -89,8 +89,11 @@ jobs:
           PRIMARY="${TAG_ARR[0]}-${{ matrix.platform }}"
           REST=("${TAG_ARR[@]:1}")
 
+          PLATFORM="${{ matrix.platform }}"
+          ARCH="${PLATFORM#*/}"
+
           nix run nixpkgs#skopeo -- \
-            copy --override-arch ${{ matrix.platform#*/ }} \
+            copy --override-arch "$ARCH" \
             docker-archive:./result \
             "docker://$PRIMARY"
 
