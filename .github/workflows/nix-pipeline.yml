@@ -17,26 +17,37 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        arch: [x86_64-linux, aarch64-linux]
         service: [go-server, otp-cornell, otp-umich, otp-harvard, transitclock]
         include:
+          - arch: x86_64-linux
+            platform: linux/amd64
+          - arch: aarch64-linux
+            platform: linux/arm64
+
           - service: go-server
-            output: ./go-server#containerImage
+            flake: ./go-server
+            output: containerImage
             name: bear-trak-go
 
           - service: otp-cornell
-            output: ./otp#cornell
+            flake: ./otp
+            output: cornell
             name: bear-trak-otp-cornell
 
           - service: otp-umich
-            output: ./otp#umich
+            flake: ./otp
+            output: umich
             name: bear-trak-otp-umich
 
           - service: otp-harvard
-            output: ./otp#harvard
+            flake: ./otp
+            output: harvard
             name: bear-trak-otp-harvard
 
           - service: transitclock
-            output: ./transitclock#default
+            flake: ./transitclock
+            output: default
             name: trak-transitclock
 
     steps:
@@ -55,7 +66,7 @@ jobs:
 
       - name: Build docker image
         run: |
-          nix build "${{ matrix.output }}"
+          nix build "${{ matrix.flake }}#packages.${{ matrix.arch }}.${{ matrix.output }}"
 
       - name: Docker meta
         id: meta
@@ -75,15 +86,81 @@ jobs:
         run: |
           readarray -t TAG_ARR <<< "$TAGS"
 
-          PRIMARY="${TAG_ARR[0]}"
+          PRIMARY="${TAG_ARR[0]}-${{ matrix.platform }}"
           REST=("${TAG_ARR[@]:1}")
 
           nix run nixpkgs#skopeo -- \
-            copy docker-archive:./result \
+            copy --override-arch ${{ matrix.platform#*/ }} \
+            docker-archive:./result \
             "docker://$PRIMARY"
 
           for t in "${REST[@]}"; do
             echo "Tagging $PRIMARY → $t"
             nix run nixpkgs#skopeo -- \
-              copy "docker://$PRIMARY" "docker://$t"
+              copy "docker://$PRIMARY" "docker://${t}-${{ matrix.platform }}"
+          done
+
+  manifest:
+    name: Create multi-arch manifests
+    runs-on: ubuntu-latest
+    needs: build-push
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: go-server
+            name: bear-trak-go
+
+          - service: otp-cornell
+            name: bear-trak-otp-cornell
+
+          - service: otp-umich
+            name: bear-trak-otp-umich
+
+          - service: otp-harvard
+            name: bear-trak-otp-harvard
+
+          - service: transitclock
+            name: trak-transitclock
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/${{ matrix.name }}
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=sha
+
+      - name: Create and push multi-arch manifests
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          set -euo pipefail
+
+          readarray -t TAG_ARR <<< "$TAGS"
+
+          for tag in "${TAG_ARR[@]}"; do
+            echo "Creating manifest: $tag"
+
+            nix run nixpkgs#skopeo -- \
+              manifest create "docker://$tag" \
+                "docker://$tag-linux/amd64" \
+                "docker://$tag-linux/arm64"
           done
