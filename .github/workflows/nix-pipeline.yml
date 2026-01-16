@@ -21,10 +21,10 @@ jobs:
         service: [go-server, otp-cornell, otp-umich, otp-harvard, transitclock]
         include:
           - arch: x86_64-linux
-            platform: linux/amd64
+            platform: linux-amd64
             runs-on: ubuntu-latest
           - arch: aarch64-linux
-            platform: linux/arm64
+            platform: linux-arm64
             runs-on: ubuntu-24.04-arm
 
           - service: go-server
@@ -92,7 +92,7 @@ jobs:
           REST=("${TAG_ARR[@]:1}")
 
           PLATFORM="${{ matrix.platform }}"
-          ARCH="${PLATFORM#*/}"
+          ARCH="${PLATFORM#*-}"
 
           nix run nixpkgs#skopeo -- \
             copy --override-arch "$ARCH" \
@@ -166,6 +166,6 @@ jobs:
 
             nix run nixpkgs#skopeo -- \
               manifest create "docker://$tag" \
-                "docker://$tag-linux/amd64" \
-                "docker://$tag-linux/arm64"
+                "docker://$tag-linux-amd64" \
+                "docker://$tag-linux-arm64"
           done
