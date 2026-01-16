@@ -61,7 +61,7 @@
                 };
                 harvard.gtfs = {
                   "gtfs.zip".url = "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip";
-                  "gtfs.zip".sha256 = "sha256-pOj9fhIUMcv5xdEnkiXXcCd9+oU3fnq3JQvMBdOMDCo=";
+                  "gtfs.zip".sha256 = "sha256-EpMUc81e4ESTWzZeTNwjBzuOzGJlXILKq0pbPorBe6Q=";
                   "gtfs-mbta.zip".url = "https://cdn.mbta.com/MBTA_GTFS.zip";
                   "gtfs-mbta.zip".sha256 = "sha256-UYTv2cHiB4GbX+0vJCFOJb5oATwrnkgxoT8knI14o7Y=";
                 };
