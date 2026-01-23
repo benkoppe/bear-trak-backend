@@ -2,9 +2,3 @@ services:
   otp: # deploy with tunnel on port 8080
     image: ghcr.io/benkoppe/bear-trak-otp-${SCHOOL}:${SOURCE_COMMIT:-latest}
     restart: always
-    networks:
-      - cloudflared
-
-networks:
-  cloudflared:
-    external: true
