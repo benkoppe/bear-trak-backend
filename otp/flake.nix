@@ -141,8 +141,12 @@
           {
             packages = lib.mkMerge [
               (lib.mkIf pkgs.stdenv.isLinux (lib.mapAttrs mkImage schools))
-              (lib.mapAttrs' (
-                school: schoolAttrs: lib.nameValuePair ("gtfs-" + school) schoolAttrs.gtfs.package
+
+              (lib.concatMapAttrs (
+                school: schoolAttrs:
+                lib.mapAttrs' (
+                  gtfsName: drv: lib.nameValuePair ("gtfs-" + school + "-" + gtfsName) drv
+                ) schoolAttrs.gtfsPackages
               ) schools)
             ];
           }
