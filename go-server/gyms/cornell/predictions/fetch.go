@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 )
 
 func fetchData(url string) ([]Prediction, error) {
@@ -52,24 +54,46 @@ func fetchData(url string) ([]Prediction, error) {
 	return predictions, nil
 }
 
+var est = timeutils.LoadEST()
+
+func parseUTCToEST(layout, value string) (time.Time, error) {
+	t, err := time.Parse(layout, value)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return t.In(est), nil
+}
+
 func parsePrediction(record []string, line int) (Prediction, error) {
 	if len(record) < 4 {
-		return Prediction{}, fmt.Errorf("line %d: invalid record length (expected 4 fields, got %d): %v", line, len(record), record)
+		return Prediction{}, fmt.Errorf(
+			"line %d: invalid record length (expected 4 fields, got %d): %v",
+			line, len(record), record,
+		)
 	}
 
-	ts, err := time.Parse("2006-01-02 15:04:05-07:00", record[1])
+	ts, err := parseUTCToEST("2006-01-02 15:04:05", record[1])
 	if err != nil {
-		return Prediction{}, fmt.Errorf("line %d: failed to parse Timestamp %q: %w", line, record[1], err)
+		return Prediction{}, fmt.Errorf(
+			"line %d: failed to parse Timestamp %q: %w",
+			line, record[1], err,
+		)
 	}
 
 	pred, err := strconv.Atoi(record[2])
 	if err != nil {
-		return Prediction{}, fmt.Errorf("line %d: failed to parse Predicted value %q: %w", line, record[2], err)
+		return Prediction{}, fmt.Errorf(
+			"line %d: failed to parse Predicted value %q: %w",
+			line, record[2], err,
+		)
 	}
 
-	pm, err := time.Parse("2006-01-02 15:04:05.999999999-07:00", record[3])
+	pm, err := parseUTCToEST("2006-01-02 15:04:05.999999999", record[3])
 	if err != nil {
-		return Prediction{}, fmt.Errorf("line %d: failed to parse PredictionMadeAt %q: %w", line, record[3], err)
+		return Prediction{}, fmt.Errorf(
+			"line %d: failed to parse PredictionMadeAt %q: %w",
+			line, record[3], err,
+		)
 	}
 
 	return Prediction{
