@@ -32,17 +32,23 @@ func NewHandler(db *db.Queries) *Handler {
 	return h
 }
 
-const APIKeyEnvVar = "BUSTIME_API_KEY"
+const (
+	BustimeAPIKeyEnvVar     = "BUSTIME_API_KEY"
+	UMichDiningAPIKeyEnvVar = "UMICH_DINING_API_KEY"
+)
 
 func (h *Handler) initCaches() {
-	// get API key from environment variables
-	bustimeAPIKey := os.Getenv(APIKeyEnvVar)
+	bustimeAPIKey := os.Getenv(BustimeAPIKeyEnvVar)
 	if bustimeAPIKey == "" {
-		log.Fatalf("API key not found in environment variables")
+		log.Fatalf("missing required environment variable: %s", BustimeAPIKeyEnvVar)
 	}
 	h.transitCaches = transit.InitCaches(bustimeURL, bustimeAPIKey, gtfsStaticURL)
 
-	h.diningCache = dining.InitCache(eateriesBaseURL)
+	umichDiningAPIKey := os.Getenv(UMichDiningAPIKeyEnvVar)
+	if umichDiningAPIKey == "" {
+		log.Fatalf("missing required environment variable: %s", UMichDiningAPIKeyEnvVar)
+	}
+	h.diningCache = dining.InitCache(diningBaseURL, umichDiningAPIKey)
 }
 
 func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
