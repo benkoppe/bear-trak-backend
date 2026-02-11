@@ -77,6 +77,7 @@ func convertExternalEvents(external external.Eatery) []api.EateryEvent {
 	for _, operatingHours := range external.OperatingHours {
 		for _, event := range operatingHours.Events {
 			events = append(events, api.EateryEvent{
+				Name:           api.NewOptString(event.Descr),
 				Start:          event.StartTimestamp.ToTime(),
 				End:            event.EndTimestamp.ToTime(),
 				MenuCategories: convertExternalMenu(event),
