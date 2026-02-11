@@ -9,16 +9,15 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
-	"go.opentelemetry.io/otel/trace"
-
 	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/ogen-go/ogen/otelogen"
 	"github.com/ogen-go/ogen/uri"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/metric"
+	semconv "go.opentelemetry.io/otel/semconv/v1.37.0"
+	"go.opentelemetry.io/otel/trace"
 )
 
 func trimTrailingSlashes(u *url.URL) {
@@ -181,8 +180,9 @@ func (c *Client) sendDeleteV1DiningUser(ctx context.Context, params DeleteV1Dini
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteV1DiningUser"),
 		semconv.HTTPRequestMethodKey.String("DELETE"),
-		semconv.HTTPRouteKey.String("/v1/dining/user"),
+		semconv.URLTemplateKey.String("/v1/dining/user"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -271,8 +271,9 @@ func (c *Client) sendGetV1Alerts(ctx context.Context) (res []Alert, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1Alerts"),
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/alerts"),
+		semconv.URLTemplateKey.String("/v1/alerts"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -343,8 +344,9 @@ func (c *Client) sendGetV1Dining(ctx context.Context) (res []Eatery, err error) 
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1Dining"),
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/dining"),
+		semconv.URLTemplateKey.String("/v1/dining"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -415,8 +417,9 @@ func (c *Client) sendGetV1DiningUser(ctx context.Context, params GetV1DiningUser
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1DiningUser"),
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/dining/user"),
+		semconv.URLTemplateKey.String("/v1/dining/user"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -505,8 +508,9 @@ func (c *Client) sendGetV1DiningUserAccounts(ctx context.Context, params GetV1Di
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1DiningUserAccounts"),
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/dining/user/accounts"),
+		semconv.URLTemplateKey.String("/v1/dining/user/accounts"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -595,8 +599,9 @@ func (c *Client) sendGetV1DiningUserBarcode(ctx context.Context, params GetV1Din
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1DiningUserBarcode"),
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/dining/user/barcode"),
+		semconv.URLTemplateKey.String("/v1/dining/user/barcode"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -685,8 +690,9 @@ func (c *Client) sendGetV1DiningUserSession(ctx context.Context, params GetV1Din
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1DiningUserSession"),
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/dining/user/session"),
+		semconv.URLTemplateKey.String("/v1/dining/user/session"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -789,8 +795,9 @@ func (c *Client) sendGetV1Events(ctx context.Context) (res []Event, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1Events"),
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/events"),
+		semconv.URLTemplateKey.String("/v1/events"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -861,8 +868,9 @@ func (c *Client) sendGetV1GymCapacities(ctx context.Context) (res []GymCapacityD
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1GymCapacities"),
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/gyms/capacities"),
+		semconv.URLTemplateKey.String("/v1/gyms/capacities"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -933,8 +941,9 @@ func (c *Client) sendGetV1GymCapacityPredictions(ctx context.Context) (res []Gym
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1GymCapacityPredictions"),
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/gyms/capacities/predictions"),
+		semconv.URLTemplateKey.String("/v1/gyms/capacities/predictions"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1005,8 +1014,9 @@ func (c *Client) sendGetV1Gyms(ctx context.Context) (res []Gym, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1Gyms"),
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/gyms"),
+		semconv.URLTemplateKey.String("/v1/gyms"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1077,8 +1087,9 @@ func (c *Client) sendGetV1Study(ctx context.Context) (res *StudyData, err error)
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1Study"),
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/study"),
+		semconv.URLTemplateKey.String("/v1/study"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1149,8 +1160,9 @@ func (c *Client) sendGetV1TransitRoutes(ctx context.Context) (res []BusRoute, er
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1TransitRoutes"),
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/transit/routes"),
+		semconv.URLTemplateKey.String("/v1/transit/routes"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1221,8 +1233,9 @@ func (c *Client) sendGetV1TransitVehicles(ctx context.Context) (res []Vehicle, e
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getV1TransitVehicles"),
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/transit/vehicles"),
+		semconv.URLTemplateKey.String("/v1/transit/vehicles"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1293,8 +1306,9 @@ func (c *Client) sendPostV1DiningUser(ctx context.Context, params PostV1DiningUs
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("postV1DiningUser"),
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/dining/user"),
+		semconv.URLTemplateKey.String("/v1/dining/user"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()

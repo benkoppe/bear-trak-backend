@@ -8,16 +8,15 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
-	"go.opentelemetry.io/otel/trace"
-
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/ogen-go/ogen/middleware"
 	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/otelogen"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/metric"
+	semconv "go.opentelemetry.io/otel/semconv/v1.37.0"
+	"go.opentelemetry.io/otel/trace"
 )
 
 type codeRecorder struct {
@@ -28,6 +27,10 @@ type codeRecorder struct {
 func (c *codeRecorder) WriteHeader(status int) {
 	c.status = status
 	c.ResponseWriter.WriteHeader(status)
+}
+
+func (c *codeRecorder) Unwrap() http.ResponseWriter {
+	return c.ResponseWriter
 }
 
 // handleDeleteV1DiningUserRequest handles deleteV1DiningUser operation.
@@ -86,7 +89,7 @@ func (s *Server) handleDeleteV1DiningUserRequest(args [0]string, argsEscaped boo
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -115,6 +118,8 @@ func (s *Server) handleDeleteV1DiningUserRequest(args [0]string, argsEscaped boo
 		return
 	}
 
+	var rawBody []byte
+
 	var response DeleteV1DiningUserRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -123,6 +128,7 @@ func (s *Server) handleDeleteV1DiningUserRequest(args [0]string, argsEscaped boo
 			OperationSummary: "Delete",
 			OperationID:      "deleteV1DiningUser",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
 					Name: "sessionId",
@@ -235,7 +241,7 @@ func (s *Server) handleGetV1AlertsRequest(args [0]string, argsEscaped bool, w ht
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -250,6 +256,8 @@ func (s *Server) handleGetV1AlertsRequest(args [0]string, argsEscaped bool, w ht
 		err error
 	)
 
+	var rawBody []byte
+
 	var response []Alert
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -258,6 +266,7 @@ func (s *Server) handleGetV1AlertsRequest(args [0]string, argsEscaped bool, w ht
 			OperationSummary: "Alerts",
 			OperationID:      "getV1Alerts",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -365,7 +374,7 @@ func (s *Server) handleGetV1DiningRequest(args [0]string, argsEscaped bool, w ht
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -380,6 +389,8 @@ func (s *Server) handleGetV1DiningRequest(args [0]string, argsEscaped bool, w ht
 		err error
 	)
 
+	var rawBody []byte
+
 	var response []Eatery
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -388,6 +399,7 @@ func (s *Server) handleGetV1DiningRequest(args [0]string, argsEscaped bool, w ht
 			OperationSummary: "Dining",
 			OperationID:      "getV1Dining",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -495,7 +507,7 @@ func (s *Server) handleGetV1DiningUserRequest(args [0]string, argsEscaped bool, 
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -524,6 +536,8 @@ func (s *Server) handleGetV1DiningUserRequest(args [0]string, argsEscaped bool, 
 		return
 	}
 
+	var rawBody []byte
+
 	var response GetV1DiningUserRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -532,6 +546,7 @@ func (s *Server) handleGetV1DiningUserRequest(args [0]string, argsEscaped bool, 
 			OperationSummary: "Get Information",
 			OperationID:      "getV1DiningUser",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
 					Name: "sessionId",
@@ -644,7 +659,7 @@ func (s *Server) handleGetV1DiningUserAccountsRequest(args [0]string, argsEscape
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -673,6 +688,8 @@ func (s *Server) handleGetV1DiningUserAccountsRequest(args [0]string, argsEscape
 		return
 	}
 
+	var rawBody []byte
+
 	var response GetV1DiningUserAccountsRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -681,6 +698,7 @@ func (s *Server) handleGetV1DiningUserAccountsRequest(args [0]string, argsEscape
 			OperationSummary: "Dining Accounts",
 			OperationID:      "getV1DiningUserAccounts",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
 					Name: "sessionId",
@@ -793,7 +811,7 @@ func (s *Server) handleGetV1DiningUserBarcodeRequest(args [0]string, argsEscaped
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -822,6 +840,8 @@ func (s *Server) handleGetV1DiningUserBarcodeRequest(args [0]string, argsEscaped
 		return
 	}
 
+	var rawBody []byte
+
 	var response GetV1DiningUserBarcodeRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -830,6 +850,7 @@ func (s *Server) handleGetV1DiningUserBarcodeRequest(args [0]string, argsEscaped
 			OperationSummary: "Dining Barcode",
 			OperationID:      "getV1DiningUserBarcode",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
 					Name: "sessionId",
@@ -942,7 +963,7 @@ func (s *Server) handleGetV1DiningUserSessionRequest(args [0]string, argsEscaped
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -971,6 +992,8 @@ func (s *Server) handleGetV1DiningUserSessionRequest(args [0]string, argsEscaped
 		return
 	}
 
+	var rawBody []byte
+
 	var response GetV1DiningUserSessionRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -979,6 +1002,7 @@ func (s *Server) handleGetV1DiningUserSessionRequest(args [0]string, argsEscaped
 			OperationSummary: "Refresh Token",
 			OperationID:      "getV1DiningUserSession",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
 					Name: "deviceId",
@@ -1095,7 +1119,7 @@ func (s *Server) handleGetV1EventsRequest(args [0]string, argsEscaped bool, w ht
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -1110,6 +1134,8 @@ func (s *Server) handleGetV1EventsRequest(args [0]string, argsEscaped bool, w ht
 		err error
 	)
 
+	var rawBody []byte
+
 	var response []Event
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -1118,6 +1144,7 @@ func (s *Server) handleGetV1EventsRequest(args [0]string, argsEscaped bool, w ht
 			OperationSummary: "Events",
 			OperationID:      "getV1Events",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -1225,7 +1252,7 @@ func (s *Server) handleGetV1GymCapacitiesRequest(args [0]string, argsEscaped boo
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -1240,6 +1267,8 @@ func (s *Server) handleGetV1GymCapacitiesRequest(args [0]string, argsEscaped boo
 		err error
 	)
 
+	var rawBody []byte
+
 	var response []GymCapacityData
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -1248,6 +1277,7 @@ func (s *Server) handleGetV1GymCapacitiesRequest(args [0]string, argsEscaped boo
 			OperationSummary: "Gym Capacities",
 			OperationID:      "getV1GymCapacities",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -1355,7 +1385,7 @@ func (s *Server) handleGetV1GymCapacityPredictionsRequest(args [0]string, argsEs
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -1370,6 +1400,8 @@ func (s *Server) handleGetV1GymCapacityPredictionsRequest(args [0]string, argsEs
 		err error
 	)
 
+	var rawBody []byte
+
 	var response []GymCapacityPredictions
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -1378,6 +1410,7 @@ func (s *Server) handleGetV1GymCapacityPredictionsRequest(args [0]string, argsEs
 			OperationSummary: "Gym Capacity Predictions",
 			OperationID:      "getV1GymCapacityPredictions",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -1485,7 +1518,7 @@ func (s *Server) handleGetV1GymsRequest(args [0]string, argsEscaped bool, w http
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -1500,6 +1533,8 @@ func (s *Server) handleGetV1GymsRequest(args [0]string, argsEscaped bool, w http
 		err error
 	)
 
+	var rawBody []byte
+
 	var response []Gym
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -1508,6 +1543,7 @@ func (s *Server) handleGetV1GymsRequest(args [0]string, argsEscaped bool, w http
 			OperationSummary: "Gyms",
 			OperationID:      "getV1Gyms",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -1615,7 +1651,7 @@ func (s *Server) handleGetV1StudyRequest(args [0]string, argsEscaped bool, w htt
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -1630,6 +1666,8 @@ func (s *Server) handleGetV1StudyRequest(args [0]string, argsEscaped bool, w htt
 		err error
 	)
 
+	var rawBody []byte
+
 	var response *StudyData
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -1638,6 +1676,7 @@ func (s *Server) handleGetV1StudyRequest(args [0]string, argsEscaped bool, w htt
 			OperationSummary: "Study",
 			OperationID:      "getV1Study",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -1745,7 +1784,7 @@ func (s *Server) handleGetV1TransitRoutesRequest(args [0]string, argsEscaped boo
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -1760,6 +1799,8 @@ func (s *Server) handleGetV1TransitRoutesRequest(args [0]string, argsEscaped boo
 		err error
 	)
 
+	var rawBody []byte
+
 	var response []BusRoute
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -1768,6 +1809,7 @@ func (s *Server) handleGetV1TransitRoutesRequest(args [0]string, argsEscaped boo
 			OperationSummary: "Routes",
 			OperationID:      "getV1TransitRoutes",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -1875,7 +1917,7 @@ func (s *Server) handleGetV1TransitVehiclesRequest(args [0]string, argsEscaped b
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -1890,6 +1932,8 @@ func (s *Server) handleGetV1TransitVehiclesRequest(args [0]string, argsEscaped b
 		err error
 	)
 
+	var rawBody []byte
+
 	var response []Vehicle
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -1898,6 +1942,7 @@ func (s *Server) handleGetV1TransitVehiclesRequest(args [0]string, argsEscaped b
 			OperationSummary: "Vehicles",
 			OperationID:      "getV1TransitVehicles",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -2005,7 +2050,7 @@ func (s *Server) handlePostV1DiningUserRequest(args [0]string, argsEscaped bool,
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -2034,6 +2079,8 @@ func (s *Server) handlePostV1DiningUserRequest(args [0]string, argsEscaped bool,
 		return
 	}
 
+	var rawBody []byte
+
 	var response PostV1DiningUserRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -2042,6 +2089,7 @@ func (s *Server) handlePostV1DiningUserRequest(args [0]string, argsEscaped bool,
 			OperationSummary: "Register",
 			OperationID:      "postV1DiningUser",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
 					Name: "sessionId",
