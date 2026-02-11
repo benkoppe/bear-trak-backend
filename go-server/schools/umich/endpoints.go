@@ -1,7 +1,7 @@
 package umich
 
 const (
-	eateriesBaseURL = "https://dining.umich.edu/menus-locations"
+	diningBaseURL = "https://prod-michigan-dining-services-prod.apps.containersprod.art2.p1.openshiftapps.com/dining"
 
 	cbordInstitutionID = "25b49373-032d-4b08-ae72-307f54ec6f56"
 

@@ -13,6 +13,7 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_SSLMODE=disable
       - SCHOOL_CODE=${SCHOOL_CODE}
+      - UMICH_DINING_API_KEY=${UMICH_DINING_API_KEY}
     env_file:
       - .env
     depends_on:
