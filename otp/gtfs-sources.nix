@@ -16,7 +16,7 @@
       };
       "gtfs.zip" = {
         url = "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip";
-        sha256 = "sha256-qu0SfhGnUu7bSo/hFk2DE9dnh9O98SOgNuqSFsGsZHY=";
+        sha256 = "sha256-OPa3O6HFSAgAIa/yAwk3xJVf5H0GOQIgcGsRnk3LX7s=";
       };
     };
   };
