@@ -711,6 +711,10 @@ components:
             id: 0n2srgyvll5ai
           items:
             $ref: "#/components/schemas/EateryMenuCategory"
+        name:
+          type: string
+          x-stoplight:
+            id: noct4s1vy7klz
     EateryMenuCategory:
       title: EateryMenuCategory
       x-stoplight:

@@ -365,12 +365,13 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // Route is route object.
 type Route struct {
-	name        string
-	summary     string
-	operationID string
-	pathPattern string
-	count       int
-	args        [0]string
+	name           string
+	summary        string
+	operationID    string
+	operationGroup string
+	pathPattern    string
+	count          int
+	args           [0]string
 }
 
 // Name returns ogen operation name.
@@ -388,6 +389,11 @@ func (r Route) Summary() string {
 // OperationID returns OpenAPI operationId.
 func (r Route) OperationID() string {
 	return r.operationID
+}
+
+// OperationGroup returns the x-ogen-operation-group value.
+func (r Route) OperationGroup() string {
+	return r.operationGroup
 }
 
 // PathPattern returns OpenAPI path.
@@ -465,6 +471,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = GetV1AlertsOperation
 						r.summary = "Alerts"
 						r.operationID = "getV1Alerts"
+						r.operationGroup = ""
 						r.pathPattern = "/v1/alerts"
 						r.args = args
 						r.count = 0
@@ -488,6 +495,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = GetV1DiningOperation
 						r.summary = "Dining"
 						r.operationID = "getV1Dining"
+						r.operationGroup = ""
 						r.pathPattern = "/v1/dining"
 						r.args = args
 						r.count = 0
@@ -511,6 +519,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = DeleteV1DiningUserOperation
 							r.summary = "Delete"
 							r.operationID = "deleteV1DiningUser"
+							r.operationGroup = ""
 							r.pathPattern = "/v1/dining/user"
 							r.args = args
 							r.count = 0
@@ -519,6 +528,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = GetV1DiningUserOperation
 							r.summary = "Get Information"
 							r.operationID = "getV1DiningUser"
+							r.operationGroup = ""
 							r.pathPattern = "/v1/dining/user"
 							r.args = args
 							r.count = 0
@@ -527,6 +537,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = PostV1DiningUserOperation
 							r.summary = "Register"
 							r.operationID = "postV1DiningUser"
+							r.operationGroup = ""
 							r.pathPattern = "/v1/dining/user"
 							r.args = args
 							r.count = 0
@@ -563,6 +574,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.name = GetV1DiningUserAccountsOperation
 									r.summary = "Dining Accounts"
 									r.operationID = "getV1DiningUserAccounts"
+									r.operationGroup = ""
 									r.pathPattern = "/v1/dining/user/accounts"
 									r.args = args
 									r.count = 0
@@ -587,6 +599,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.name = GetV1DiningUserBarcodeOperation
 									r.summary = "Dining Barcode"
 									r.operationID = "getV1DiningUserBarcode"
+									r.operationGroup = ""
 									r.pathPattern = "/v1/dining/user/barcode"
 									r.args = args
 									r.count = 0
@@ -611,6 +624,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.name = GetV1DiningUserSessionOperation
 									r.summary = "Refresh Token"
 									r.operationID = "getV1DiningUserSession"
+									r.operationGroup = ""
 									r.pathPattern = "/v1/dining/user/session"
 									r.args = args
 									r.count = 0
@@ -641,6 +655,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = GetV1EventsOperation
 						r.summary = "Events"
 						r.operationID = "getV1Events"
+						r.operationGroup = ""
 						r.pathPattern = "/v1/events"
 						r.args = args
 						r.count = 0
@@ -664,6 +679,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = GetV1GymsOperation
 						r.summary = "Gyms"
 						r.operationID = "getV1Gyms"
+						r.operationGroup = ""
 						r.pathPattern = "/v1/gyms"
 						r.args = args
 						r.count = 0
@@ -687,6 +703,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = GetV1GymCapacitiesOperation
 							r.summary = "Gym Capacities"
 							r.operationID = "getV1GymCapacities"
+							r.operationGroup = ""
 							r.pathPattern = "/v1/gyms/capacities"
 							r.args = args
 							r.count = 0
@@ -711,6 +728,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.name = GetV1GymCapacityPredictionsOperation
 								r.summary = "Gym Capacity Predictions"
 								r.operationID = "getV1GymCapacityPredictions"
+								r.operationGroup = ""
 								r.pathPattern = "/v1/gyms/capacities/predictions"
 								r.args = args
 								r.count = 0
@@ -739,6 +757,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = GetV1StudyOperation
 						r.summary = "Study"
 						r.operationID = "getV1Study"
+						r.operationGroup = ""
 						r.pathPattern = "/v1/study"
 						r.args = args
 						r.count = 0
@@ -775,6 +794,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = GetV1TransitRoutesOperation
 							r.summary = "Routes"
 							r.operationID = "getV1TransitRoutes"
+							r.operationGroup = ""
 							r.pathPattern = "/v1/transit/routes"
 							r.args = args
 							r.count = 0
@@ -799,6 +819,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = GetV1TransitVehiclesOperation
 							r.summary = "Vehicles"
 							r.operationID = "getV1TransitVehicles"
+							r.operationGroup = ""
 							r.pathPattern = "/v1/transit/vehicles"
 							r.args = args
 							r.count = 0

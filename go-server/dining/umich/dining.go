@@ -139,6 +139,7 @@ func convertLocationEvents(locationData external.LocationDiningData) []api.Eater
 					continue
 				}
 				events = append(events, api.EateryEvent{
+					Name:           api.NewOptString(hour.EventTitle),
 					Start:          hour.EventTimeStart,
 					End:            hour.EventTimeEnd,
 					MenuCategories: menu,

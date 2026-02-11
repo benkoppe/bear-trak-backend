@@ -15,7 +15,7 @@ import (
 var (
 	DaysToFetch             = 7
 	MaxConcurrentLocations  = 6
-	LocationDataCacheExpiry = 30 * time.Minute
+	LocationDataCacheExpiry = 8 * time.Hour
 )
 
 type Cache = *utils.Cache[[]LocationDiningData]
