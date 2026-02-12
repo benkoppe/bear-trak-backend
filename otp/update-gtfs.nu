@@ -1,5 +1,16 @@
 #!/usr/bin/env nu
 
+const SCRIPT_PATH = (path self)
+
+def git_repo_root [] {
+  let res = (^git rev-parse --show-toplevel | complete)
+  if $res.exit_code != 0 {
+    ""
+  } else {
+    $res.stdout | str trim
+  }
+}
+
 def prefetch_nix_hash [url: string] {
   let res = (^nix store prefetch-file --hash-type sha256 --json $url | complete)
   if $res.exit_code != 0 {
@@ -57,12 +68,30 @@ def render_sources_nix [sources: record] {
 }
 
 def default_sources_path [] {
-  let script_dir = ($env.FILE_PWD? | default "")
-  if $script_dir != "" {
-    $script_dir | path join "gtfs-sources.nix"
-  } else {
-    "gtfs-sources.nix"
+  let script_path = $SCRIPT_PATH
+
+  if (($script_path | str trim) != "") {
+    let script_dir = ($script_path | path dirname)
+
+    if ($script_dir | str starts-with "/nix/store") {
+      let repo_root = (git_repo_root)
+      if $repo_root != "" {
+        let otp_sources = ($repo_root | path join "otp" "gtfs-sources.nix")
+        if ($otp_sources | path exists) {
+          return $otp_sources
+        }
+
+        let repo_sources = ($repo_root | path join "gtfs-sources.nix")
+        if ($repo_sources | path exists) {
+          return $repo_sources
+        }
+      }
+    }
+
+    return ($script_dir | path join "gtfs-sources.nix")
   }
+
+  "gtfs-sources.nix"
 }
 
 def load_sources [sources_path: string] {
