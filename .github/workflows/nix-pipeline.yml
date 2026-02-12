@@ -13,7 +13,49 @@ permissions:
   id-token: write
 
 jobs:
+  update-gtfs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      build_sha: ${{ steps.select-sha.outputs.build_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Update GTFS hashes
+        run: nix run ./otp#update-gtfs
+
+      - name: Commit and push GTFS updates
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          if git diff --quiet -- otp/gtfs-sources.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add otp/gtfs-sources.json
+          git commit -m "chore(otp): update GTFS hashes"
+          git push origin "HEAD:${BRANCH}"
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Select build SHA
+        id: select-sha
+        run: |
+          echo "build_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
   build-push:
+    needs: update-gtfs
     runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
@@ -55,6 +97,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ needs.update-gtfs.outputs.build_sha }}
           fetch-depth: 0
 
       - uses: DeterminateSystems/nix-installer-action@main
