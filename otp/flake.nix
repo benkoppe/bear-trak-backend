@@ -9,6 +9,7 @@
       url = "github:nlewo/nix2container";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin"; # required by nix2container
   };
 
   outputs =
@@ -36,25 +37,22 @@
             sha256 = "sha256-60Ikyw9Z7ZE+4kDReDgJGg5totgdghbDHAfFFQKDFpc=";
           };
           ramFlag = "-XX:MaxRAMPercentage=75";
-          schools =
-            lib.mapAttrs
-              (
-                name: attrs:
-                attrs
-                // rec {
-                  gtfsPackages = lib.mapAttrs (gtfsName: g: pkgs.fetchurl { inherit (g) url sha256; }) attrs.gtfs;
-                  dataDir = ./data/${name};
-                  otpRoot = pkgs.runCommand "otp-root-${name}" { } ''
-                    mkdir -p $out
-                    cp ${dataDir}/* $out
+          schools = lib.mapAttrs (
+            name: attrs:
+            attrs
+            // rec {
+              gtfsPackages = lib.mapAttrs (gtfsName: g: pkgs.fetchurl { inherit (g) url sha256; }) attrs.gtfs;
+              dataDir = ./data/${name};
+              otpRoot = pkgs.runCommand "otp-root-${name}" { } ''
+                mkdir -p $out
+                cp ${dataDir}/* $out
 
-                    ${lib.concatStringsSep "\n" (
-                      lib.mapAttrsToList (gtfsName: pkg: "cp ${pkg} $out/${gtfsName}") gtfsPackages
-                    )}
-                  '';
-                }
-              )
-              (import ./gtfs-sources.nix);
+                ${lib.concatStringsSep "\n" (
+                  lib.mapAttrsToList (gtfsName: pkg: "cp ${pkg} $out/${gtfsName}") gtfsPackages
+                )}
+              '';
+            }
+          ) (builtins.fromJSON (builtins.readFile ./gtfs-sources.json));
         in
         {
           devenv.shells.default =
@@ -80,8 +78,38 @@
                   }
                 ) schools)
               ];
-
             };
+
+          apps.update-gtfs =
+            let
+              updateGtfsApp = pkgs.writeShellApplication {
+                name = "update-gtfs";
+                runtimeInputs = [
+                  pkgs.git
+                  pkgs.nix
+                  pkgs.nushell
+                ];
+                text = ''
+                  exec nu ${./update-gtfs.nu} "$@"
+                '';
+              };
+            in
+            {
+              type = "app";
+              program = "${updateGtfsApp}/bin/update-gtfs";
+            };
+
+          checks = lib.mapAttrs' (
+            school: schoolAttrs:
+            lib.nameValuePair "gtfs-${school}" (
+              pkgs.runCommand "check-gtfs-${school}" { } ''
+                mkdir -p $out
+                ${lib.concatStringsSep "\n" (
+                  lib.mapAttrsToList (_: pkg: "cp ${pkg} $out/") schoolAttrs.gtfsPackages
+                )}
+              ''
+            )
+          ) schools;
         }
         // (
           let
