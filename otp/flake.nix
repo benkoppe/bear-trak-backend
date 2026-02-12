@@ -98,6 +98,18 @@
               type = "app";
               program = "${updateGtfsApp}/bin/update-gtfs";
             };
+
+          checks = lib.mapAttrs' (
+            school: schoolAttrs:
+            lib.nameValuePair "gtfs-${school}" (
+              pkgs.runCommand "check-gtfs-${school}" { } ''
+                mkdir -p $out
+                ${lib.concatStringsSep "\n" (
+                  lib.mapAttrsToList (_: pkg: "cp ${pkg} $out/") schoolAttrs.gtfsPackages
+                )}
+              ''
+            )
+          ) schools;
         }
         // (
           let
