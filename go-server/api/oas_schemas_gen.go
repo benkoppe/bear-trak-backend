@@ -1166,15 +1166,6 @@ type GetV1DiningUserAccountsUnauthorized struct{}
 
 func (*GetV1DiningUserAccountsUnauthorized) getV1DiningUserAccountsRes() {}
 
-type GetV1DiningUserBarcodeOKApplicationJSON string
-
-func (*GetV1DiningUserBarcodeOKApplicationJSON) getV1DiningUserBarcodeRes() {}
-
-// GetV1DiningUserBarcodeUnauthorized is response for GetV1DiningUserBarcode operation.
-type GetV1DiningUserBarcodeUnauthorized struct{}
-
-func (*GetV1DiningUserBarcodeUnauthorized) getV1DiningUserBarcodeRes() {}
-
 type GetV1DiningUserSessionOKApplicationJSON string
 
 func (*GetV1DiningUserSessionOKApplicationJSON) getV1DiningUserSessionRes() {}

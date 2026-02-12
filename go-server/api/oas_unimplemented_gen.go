@@ -58,15 +58,6 @@ func (UnimplementedHandler) GetV1DiningUserAccounts(ctx context.Context, params 
 	return r, ht.ErrNotImplemented
 }
 
-// GetV1DiningUserBarcode implements getV1DiningUserBarcode operation.
-//
-// Returns a user's dining hall barcode given a session.
-//
-// GET /v1/dining/user/barcode
-func (UnimplementedHandler) GetV1DiningUserBarcode(ctx context.Context, params GetV1DiningUserBarcodeParams) (r GetV1DiningUserBarcodeRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // GetV1DiningUserSession implements getV1DiningUserSession operation.
 //
 // Refreshes a session given a user device.

@@ -30,27 +30,6 @@ func FetchUserID(baseURL string, sessionID string) (*UserIDResponseBody, error) 
 	return resp.Response, nil
 }
 
-func FetchBarcode(baseURL string, sessionID string) (*string, error) {
-	fullURL, err := utils.ExtendURL(baseURL, "authentication")
-	if fullURL == nil {
-		return nil, fmt.Errorf("failed to extend url: %w", err)
-	}
-
-	requestBody := map[string]any{
-		"method": "retrievePatronBarcodePayload",
-		"params": map[string]string{
-			"sessionId": sessionID,
-		},
-	}
-
-	resp, err := utils.DoPostRequest[stringResponse](*fullURL, requestBody)
-	if resp == nil {
-		return nil, err
-	}
-
-	return resp.Response, err
-}
-
 func FetchBarcodeSeed(baseURL string, sessionID string, institutionID string) (*string, error) {
 	fullURL, err := utils.ExtendURL(baseURL, "configuration")
 	if fullURL == nil {

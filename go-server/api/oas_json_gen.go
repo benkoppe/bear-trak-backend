@@ -3149,46 +3149,6 @@ func (s *GetV1DiningUserAccountsOKApplicationJSON) UnmarshalJSON(data []byte) er
 	return s.Decode(d)
 }
 
-// Encode encodes GetV1DiningUserBarcodeOKApplicationJSON as json.
-func (s GetV1DiningUserBarcodeOKApplicationJSON) Encode(e *jx.Encoder) {
-	unwrapped := string(s)
-
-	e.Str(unwrapped)
-}
-
-// Decode decodes GetV1DiningUserBarcodeOKApplicationJSON from json.
-func (s *GetV1DiningUserBarcodeOKApplicationJSON) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode GetV1DiningUserBarcodeOKApplicationJSON to nil")
-	}
-	var unwrapped string
-	if err := func() error {
-		v, err := d.Str()
-		unwrapped = string(v)
-		if err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = GetV1DiningUserBarcodeOKApplicationJSON(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s GetV1DiningUserBarcodeOKApplicationJSON) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *GetV1DiningUserBarcodeOKApplicationJSON) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
 // Encode encodes GetV1DiningUserSessionOKApplicationJSON as json.
 func (s GetV1DiningUserSessionOKApplicationJSON) Encode(e *jx.Encoder) {
 	unwrapped := string(s)

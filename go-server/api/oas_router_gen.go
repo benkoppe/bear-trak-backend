@@ -154,26 +154,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								return
 							}
 
-						case 'b': // Prefix: "barcode"
-
-							if l := len("barcode"); len(elem) >= l && elem[0:l] == "barcode" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "GET":
-									s.handleGetV1DiningUserBarcodeRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "GET")
-								}
-
-								return
-							}
-
 						case 's': // Prefix: "session"
 
 							if l := len("session"); len(elem) >= l && elem[0:l] == "session" {
@@ -576,31 +556,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.operationID = "getV1DiningUserAccounts"
 									r.operationGroup = ""
 									r.pathPattern = "/v1/dining/user/accounts"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-						case 'b': // Prefix: "barcode"
-
-							if l := len("barcode"); len(elem) >= l && elem[0:l] == "barcode" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "GET":
-									r.name = GetV1DiningUserBarcodeOperation
-									r.summary = "Dining Barcode"
-									r.operationID = "getV1DiningUserBarcode"
-									r.operationGroup = ""
-									r.pathPattern = "/v1/dining/user/barcode"
 									r.args = args
 									r.count = 0
 									return r, true

@@ -9,10 +9,6 @@ type GetV1DiningUserAccountsRes interface {
 	getV1DiningUserAccountsRes()
 }
 
-type GetV1DiningUserBarcodeRes interface {
-	getV1DiningUserBarcodeRes()
-}
-
 type GetV1DiningUserRes interface {
 	getV1DiningUserRes()
 }

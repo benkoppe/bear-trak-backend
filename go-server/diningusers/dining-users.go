@@ -214,20 +214,6 @@ func toProperCaseEachWord(s string) string {
 	return strings.Join(words, " ")
 }
 
-func GetUserBarcode(externalBaseURL string, params api.GetV1DiningUserBarcodeParams) (api.GetV1DiningUserBarcodeRes, error) {
-	resp, err := external.FetchBarcode(externalBaseURL, params.SessionId)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get user barcode: %w", err)
-	}
-
-	if resp == nil {
-		return &api.GetV1DiningUserBarcodeUnauthorized{}, nil
-	}
-
-	res := api.GetV1DiningUserBarcodeOKApplicationJSON(*resp)
-	return &res, nil
-}
-
 func GetUserAccounts(externalBaseURL, institutionID string, params api.GetV1DiningUserAccountsParams) (api.GetV1DiningUserAccountsRes, error) {
 	idResp, err := external.FetchUserID(externalBaseURL, params.SessionId)
 	if err != nil {

@@ -185,64 +185,6 @@ func decodeGetV1DiningUserAccountsParams(args [0]string, argsEscaped bool, r *ht
 	return params, nil
 }
 
-// GetV1DiningUserBarcodeParams is parameters of getV1DiningUserBarcode operation.
-type GetV1DiningUserBarcodeParams struct {
-	// An authenticated dining user sessionId.
-	SessionId string
-}
-
-func unpackGetV1DiningUserBarcodeParams(packed middleware.Parameters) (params GetV1DiningUserBarcodeParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "sessionId",
-			In:   "query",
-		}
-		params.SessionId = packed[key].(string)
-	}
-	return params
-}
-
-func decodeGetV1DiningUserBarcodeParams(args [0]string, argsEscaped bool, r *http.Request) (params GetV1DiningUserBarcodeParams, _ error) {
-	q := uri.NewQueryDecoder(r.URL.Query())
-	// Decode query: sessionId.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "sessionId",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
-					return err
-				}
-
-				params.SessionId = c
-				return nil
-			}); err != nil {
-				return err
-			}
-		} else {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "sessionId",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
 // GetV1DiningUserSessionParams is parameters of getV1DiningUserSession operation.
 type GetV1DiningUserSessionParams struct {
 	// A dining user deviceId.

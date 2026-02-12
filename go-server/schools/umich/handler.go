@@ -107,10 +107,6 @@ func (h *Handler) GetV1DiningUserAccounts(ctx context.Context, params api.GetV1D
 	return diningusers.GetUserAccounts(shared.CbordBaseURL, cbordInstitutionID, params)
 }
 
-func (h *Handler) GetV1DiningUserBarcode(ctx context.Context, params api.GetV1DiningUserBarcodeParams) (api.GetV1DiningUserBarcodeRes, error) {
-	return diningusers.GetUserBarcode(shared.CbordBaseURL, params)
-}
-
 func (h *Handler) NewError(ctx context.Context, err error) *api.ErrorStatusCode {
 	return &api.ErrorStatusCode{
 		StatusCode: 400,

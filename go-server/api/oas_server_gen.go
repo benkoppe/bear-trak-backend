@@ -38,12 +38,6 @@ type Handler interface {
 	//
 	// GET /v1/dining/user/accounts
 	GetV1DiningUserAccounts(ctx context.Context, params GetV1DiningUserAccountsParams) (GetV1DiningUserAccountsRes, error)
-	// GetV1DiningUserBarcode implements getV1DiningUserBarcode operation.
-	//
-	// Returns a user's dining hall barcode given a session.
-	//
-	// GET /v1/dining/user/barcode
-	GetV1DiningUserBarcode(ctx context.Context, params GetV1DiningUserBarcodeParams) (GetV1DiningUserBarcodeRes, error)
 	// GetV1DiningUserSession implements getV1DiningUserSession operation.
 	//
 	// Refreshes a session given a user device.
