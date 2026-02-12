@@ -121,10 +121,6 @@ func (h *Handler) GetV1DiningUserAccounts(ctx context.Context, params api.GetV1D
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (h *Handler) GetV1DiningUserBarcode(ctx context.Context, params api.GetV1DiningUserBarcodeParams) (api.GetV1DiningUserBarcodeRes, error) {
-	return nil, fmt.Errorf("not implemented")
-}
-
 func (h *Handler) NewError(ctx context.Context, err error) *api.ErrorStatusCode {
 	return &api.ErrorStatusCode{
 		StatusCode: 400,
