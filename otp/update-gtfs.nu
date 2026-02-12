@@ -33,40 +33,6 @@ def prefetch_nix_hash [url: string] {
   }
 }
 
-def nix_escape [s: string] {
-  $s
-    | str replace -a '\\' '\\\\'
-    | str replace -a '"' '\\"'
-}
-
-def render_sources_nix [sources: record] {
-  let nl = (char nl)
-  mut out = "{" + $nl
-
-  for school in (($sources | columns) | sort) {
-    let school_rec = ($sources | get $school)
-    let gtfs = ($school_rec | get gtfs)
-
-    $out = $out + $"  ($school) = {" + $nl
-    $out = $out + $"    gtfs = {" + $nl
-
-    for feed_name in (($gtfs | columns) | sort) {
-      let feed = ($gtfs | get $feed_name)
-      let url = (nix_escape $feed.url)
-      let sha256 = (nix_escape $feed.sha256)
-      $out = $out + $"      \"($feed_name)\" = {" + $nl
-      $out = $out + $"        url = \"($url)\";" + $nl
-      $out = $out + $"        sha256 = \"($sha256)\";" + $nl
-      $out = $out + $"      };" + $nl
-    }
-
-    $out = $out + $"    };" + $nl
-    $out = $out + $"  };" + $nl + $nl
-  }
-
-  $out + "}" + $nl
-}
-
 def default_sources_path [] {
   let script_path = $SCRIPT_PATH
 
@@ -76,37 +42,30 @@ def default_sources_path [] {
     if ($script_dir | str starts-with "/nix/store") {
       let repo_root = (git_repo_root)
       if $repo_root != "" {
-        let otp_sources = ($repo_root | path join "otp" "gtfs-sources.nix")
+        let otp_sources = ($repo_root | path join "otp" "gtfs-sources.json")
         if ($otp_sources | path exists) {
           return $otp_sources
         }
 
-        let repo_sources = ($repo_root | path join "gtfs-sources.nix")
+        let repo_sources = ($repo_root | path join "gtfs-sources.json")
         if ($repo_sources | path exists) {
           return $repo_sources
         }
       }
     }
 
-    return ($script_dir | path join "gtfs-sources.nix")
+    return ($script_dir | path join "gtfs-sources.json")
   }
 
-  "gtfs-sources.nix"
+  "gtfs-sources.json"
 }
 
 def load_sources [sources_path: string] {
-  let res = (^nix eval --json --file ($sources_path | path expand) | complete)
-  if $res.exit_code != 0 {
-    error make {
-      msg: $"failed to read ($sources_path) via nix eval: ($res.stderr | str trim)"
-    }
-  }
-
   try {
-    $res.stdout | from json
+    open $sources_path --raw | from json
   } catch {
     error make {
-      msg: $"failed to parse nix eval output from ($sources_path)"
+      msg: $"failed to parse JSON from ($sources_path)"
     }
   }
 }
@@ -166,7 +125,7 @@ def main [
   let sources = (load_sources $sources_path)
   let refresh = (refresh_hashes $sources)
 
-  let rendered = (render_sources_nix ($refresh | get sources))
+  let rendered = (($refresh | get sources) | to json --indent 2) + (char nl)
   let prev_raw = (open $sources_path --raw)
 
   if (($prev_raw | str trim --right) == ($rendered | str trim --right)) {

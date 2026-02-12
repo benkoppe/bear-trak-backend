@@ -52,7 +52,7 @@
                 )}
               '';
             }
-          ) (import ./gtfs-sources.nix);
+          ) (builtins.fromJSON (builtins.readFile ./gtfs-sources.json));
         in
         {
           devenv.shells.default =
