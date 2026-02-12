@@ -31,7 +31,6 @@ jobs:
         run: nix run ./otp#update-gtfs
 
       - name: Commit and push GTFS updates
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         env:
           BRANCH: ${{ github.ref_name }}
         run: |
