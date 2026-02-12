@@ -12,11 +12,11 @@
     gtfs = {
       "gtfs-mbta.zip" = {
         url = "https://cdn.mbta.com/MBTA_GTFS.zip";
-        sha256 = "sha256-VUqNgdqS6jPlaR6vA8Kc1sE0zCxi35BSfnSuh7KnCnw=";
+        sha256 = "sha256-mze1XnaLux75c8TAuQrwOavngGHSVstz8aW5twpJfYA=";
       };
       "gtfs.zip" = {
         url = "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip";
-        sha256 = "sha256-xoIRsQZhgaTgIHWt2ykw9wyWGSRZr2bWpv/B2/ERcz0=";
+        sha256 = "sha256-SOyIe9eMWHA3SS0qKMXhlZW/xjvurYok2yE1TDf9jC8=";
       };
     };
   };
