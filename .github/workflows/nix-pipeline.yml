@@ -18,7 +18,7 @@ jobs:
     permissions:
       contents: write
     outputs:
-      build_sha: ${{ steps.select-sha.outputs.build_sha }}
+      build_sha: ${{ steps.commit-and-push.outputs.build_sha }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,11 +31,19 @@ jobs:
         run: nix run ./otp#update-gtfs
 
       - name: Commit and push GTFS updates
+        id: commit-and-push
         env:
-          BRANCH: ${{ github.ref_name }}
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
+          HEAD_REF: ${{ github.head_ref }}
+          REPO: ${{ github.repository }}
+          PR_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name || '' }}
         run: |
+          ORIGINAL_SHA="$(git rev-parse HEAD)"
+
           if git diff --quiet -- otp/gtfs-sources.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "build_sha=${ORIGINAL_SHA}" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -44,14 +52,27 @@ jobs:
 
           git add otp/gtfs-sources.json
           git commit -m "chore(otp): update GTFS hashes"
-          git push origin "HEAD:${BRANCH}"
+          NEW_SHA="$(git rev-parse HEAD)"
+
+          TARGET_BRANCH="${REF_NAME}"
+          if [ "${EVENT_NAME}" = "pull_request" ]; then
+            TARGET_BRANCH="${HEAD_REF}"
+            if [ "${PR_HEAD_REPO}" != "${REPO}" ]; then
+              echo "Fork PR detected (${PR_HEAD_REPO}); skipping push."
+              echo "changed=true" >> "$GITHUB_OUTPUT"
+              echo "build_sha=${ORIGINAL_SHA}" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+
+          if git push origin "HEAD:${TARGET_BRANCH}"; then
+            echo "build_sha=${NEW_SHA}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Push failed; continuing with original SHA ${ORIGINAL_SHA}."
+            echo "build_sha=${ORIGINAL_SHA}" >> "$GITHUB_OUTPUT"
+          fi
 
           echo "changed=true" >> "$GITHUB_OUTPUT"
-
-      - name: Select build SHA
-        id: select-sha
-        run: |
-          echo "build_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
   build-push:
     needs: update-gtfs
