@@ -204,6 +204,7 @@ jobs:
         run: |
           readarray -t TAG_ARR <<< "$TAGS"
           for tag in "${TAG_ARR[@]}"; do
+            [[ -z "$tag" ]] && continue
             echo "Creating manifest for $tag"
             docker buildx imagetools create \
               -t "$tag" \
