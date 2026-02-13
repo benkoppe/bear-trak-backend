@@ -167,3 +167,46 @@ jobs:
             nix run nixpkgs#skopeo -- \
               copy "docker://$PRIMARY" "docker://${t}-${{ matrix.platform }}"
           done
+
+  create-manifests:
+    needs: build-push
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: bear-trak-go
+          - name: bear-trak-otp-cornell
+          - name: bear-trak-otp-umich
+          - name: bear-trak-otp-harvard
+          - name: trak-transitclock
+    steps:
+      - uses: docker/login-action@v3
+        with:
+          registry: https://ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/${{ matrix.name }}
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=sha
+
+      - name: Create multi-arch manifests
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          readarray -t TAG_ARR <<< "$TAGS"
+          for tag in "${TAG_ARR[@]}"; do
+            echo "Creating manifest for $tag"
+            docker buildx imagetools create \
+              -t "$tag" \
+              "${tag}-linux-amd64" \
+              "${tag}-linux-arm64"
+          done
