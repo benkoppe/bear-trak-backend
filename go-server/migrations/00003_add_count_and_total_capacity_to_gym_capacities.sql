@@ -6,11 +6,22 @@ ALTER TABLE gym_capacities
 
 WITH totals(location_id, total_capacity) AS (
     VALUES
+        -- current internal ids
         (0, 80),
         (1, 65),
         (2, 50),
         (3, 65),
-        (4, 75)
+        (4, 75),
+        -- historical external location ids
+        (5636, 80),
+        (5876, 65),
+        (5872, 50),
+        (5868, 65),
+        (7428, 75),
+        -- known court/location ids from external feed
+        (7867, 20),
+        (7868, 16),
+        (8820, 20)
 )
 UPDATE gym_capacities gc
 SET
@@ -19,6 +30,13 @@ SET
 FROM totals t
 WHERE gc.location_id = t.location_id;
 
+-- Fallback for legacy/unexpected location ids: treat percentage as count out of 100.
+UPDATE gym_capacities
+SET
+    total_capacity = 100,
+    count = percentage
+WHERE total_capacity IS NULL OR count IS NULL;
+
 DO $$
 BEGIN
     IF EXISTS (
@@ -26,7 +44,7 @@ BEGIN
         FROM gym_capacities
         WHERE total_capacity IS NULL OR count IS NULL
     ) THEN
-        RAISE EXCEPTION 'Backfill failed: unmapped location_id values exist in gym_capacities';
+        RAISE EXCEPTION 'Backfill failed: null values remain after fallback';
     END IF;
 END $$;
 
