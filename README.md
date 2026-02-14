@@ -1,6 +1,6 @@
 # bear-trak-backend
 
-This is the backend for BearTrak!
+This is the backend monorepo for BearTrak!
 
 It consists of:
 - `go-server`: The primary backend. Almost all requests go to this server.
