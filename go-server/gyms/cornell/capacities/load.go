@@ -29,7 +29,6 @@ func InitCache(queries *db.Queries, hoursCache scrape.Cache) Cache {
 }
 
 func LoadData(queries *db.Queries, hoursCache scrape.Cache) ([]api.GymCapacityData, error) {
-	var err error
 	scrapedSchedules, err := hoursCache.Get()
 	if err != nil {
 		fmt.Printf("error fetching scraped schedules: %v\n", err)
