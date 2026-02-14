@@ -40,27 +40,37 @@ func (q *Queries) CreateDiningUser(ctx context.Context, arg CreateDiningUserPara
 
 const createGymCapacity = `-- name: CreateGymCapacity :one
 INSERT INTO gym_capacities (
-  location_id, percentage, last_updated_at
+  location_id, percentage, count, total_capacity, last_updated_at
 ) VALUES (
-  $1, $2, $3
+  $1, $2, $3, $4, $5
 ) 
-RETURNING id, location_id, percentage, last_updated_at
+RETURNING id, location_id, percentage, last_updated_at, total_capacity, count
 `
 
 type CreateGymCapacityParams struct {
 	LocationID    int32
 	Percentage    int32
+	Count         int32
+	TotalCapacity int32
 	LastUpdatedAt pgtype.Timestamptz
 }
 
 func (q *Queries) CreateGymCapacity(ctx context.Context, arg CreateGymCapacityParams) (GymCapacity, error) {
-	row := q.db.QueryRow(ctx, createGymCapacity, arg.LocationID, arg.Percentage, arg.LastUpdatedAt)
+	row := q.db.QueryRow(ctx, createGymCapacity,
+		arg.LocationID,
+		arg.Percentage,
+		arg.Count,
+		arg.TotalCapacity,
+		arg.LastUpdatedAt,
+	)
 	var i GymCapacity
 	err := row.Scan(
 		&i.ID,
 		&i.LocationID,
 		&i.Percentage,
 		&i.LastUpdatedAt,
+		&i.TotalCapacity,
+		&i.Count,
 	)
 	return i, err
 }
@@ -127,7 +137,7 @@ func (q *Queries) GetDiningUserAll(ctx context.Context, userID string) ([]Dining
 }
 
 const getGymCapacitiesBetween = `-- name: GetGymCapacitiesBetween :many
-SELECT id, location_id, percentage, last_updated_at
+SELECT id, location_id, percentage, last_updated_at, total_capacity, count
 FROM gym_capacities
 WHERE last_updated_at >= $1
   AND last_updated_at <= $2
@@ -153,6 +163,8 @@ func (q *Queries) GetGymCapacitiesBetween(ctx context.Context, arg GetGymCapacit
 			&i.LocationID,
 			&i.Percentage,
 			&i.LastUpdatedAt,
+			&i.TotalCapacity,
+			&i.Count,
 		); err != nil {
 			return nil, err
 		}
@@ -165,7 +177,7 @@ func (q *Queries) GetGymCapacitiesBetween(ctx context.Context, arg GetGymCapacit
 }
 
 const getLatestCapacity = `-- name: GetLatestCapacity :one
-SELECT id, location_id, percentage, last_updated_at
+SELECT id, location_id, percentage, last_updated_at, total_capacity, count
 FROM gym_capacities
 WHERE location_id = $1
 ORDER BY last_updated_at DESC
@@ -180,6 +192,8 @@ func (q *Queries) GetLatestCapacity(ctx context.Context, locationID int32) (GymC
 		&i.LocationID,
 		&i.Percentage,
 		&i.LastUpdatedAt,
+		&i.TotalCapacity,
+		&i.Count,
 	)
 	return i, err
 }

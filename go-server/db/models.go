@@ -21,4 +21,6 @@ type GymCapacity struct {
 	LocationID    int32
 	Percentage    int32
 	LastUpdatedAt pgtype.Timestamptz
+	TotalCapacity int32
+	Count         int32
 }

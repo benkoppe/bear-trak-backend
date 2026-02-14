@@ -31,7 +31,7 @@ func InitCaches(capacityURL, hoursURL, predictionsURL string, queries *db.Querie
 	return Caches{
 		externalCache:    externalCache,
 		hoursCache:       hoursCache,
-		capacitiesCache:  capacities.InitCache(queries, externalCache, hoursCache),
+		capacitiesCache:  capacities.InitCache(queries, hoursCache),
 		predictionsCache: predictions.InitCache(predictionsURL, hoursCache),
 	}
 }
