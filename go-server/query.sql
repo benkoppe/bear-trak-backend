@@ -34,9 +34,9 @@ LIMIT 1;
 
 -- name: CreateGymCapacity :one
 INSERT INTO gym_capacities (
-  location_id, percentage, last_updated_at
+  location_id, percentage, count, total_capacity, last_updated_at
 ) VALUES (
-  $1, $2, $3
+  $1, $2, $3, $4, $5
 ) 
 RETURNING *;
 
