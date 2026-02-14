@@ -9,7 +9,6 @@ import (
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
-	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/external"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/scrape"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/shared"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms/cornell/static"
@@ -20,20 +19,17 @@ import (
 
 type Cache = *utils.Cache[[]api.GymCapacityData]
 
-func InitCache(queries *db.Queries, externalCache external.Cache, hoursCache scrape.Cache) Cache {
+func InitCache(queries *db.Queries, hoursCache scrape.Cache) Cache {
 	return utils.NewCache(
 		"gymCapacities",
 		1*time.Minute,
 		func() ([]api.GymCapacityData, error) {
-			return LoadData(queries, externalCache, hoursCache)
+			return LoadData(queries, hoursCache)
 		})
 }
 
-func LoadData(queries *db.Queries, externalCache external.Cache, hoursCache scrape.Cache) ([]api.GymCapacityData, error) {
-	externalData, err := externalCache.Get()
-	if err != nil {
-		return nil, fmt.Errorf("error fetching external data: %w", err)
-	}
+func LoadData(queries *db.Queries, hoursCache scrape.Cache) ([]api.GymCapacityData, error) {
+	var err error
 	scrapedSchedules, err := hoursCache.Get()
 	if err != nil {
 		fmt.Printf("error fetching scraped schedules: %v\n", err)
@@ -65,9 +61,6 @@ func LoadData(queries *db.Queries, externalCache external.Cache, hoursCache scra
 	var result []api.GymCapacityData
 
 	for internalLocationID, capacities := range byLocation {
-		// because of quirks with the gym capacity API changing in the middle of development, there's a difference between
-		// my internal IDs and the external "location IDs". So, first we must find the static data that matches my internal ID
-		// and map that to the external Location ID.
 		locationStaticData := utils.Find(staticData, func(data static.Gym) bool {
 			return data.ID == int(internalLocationID)
 		})
@@ -76,18 +69,9 @@ func LoadData(queries *db.Queries, externalCache external.Cache, hoursCache scra
 			continue
 		}
 
-		locationExternalData := utils.Find(externalData, func(data external.Gym) bool {
-			return data.LocationID == locationStaticData.LocationID
-		})
-
-		if locationExternalData == nil {
-			fmt.Printf("couldn't find external data for location ID %d\n", internalLocationID)
-			continue
-		}
-
 		points := make([]api.GymCapacityDataPoint, 0, len(capacities))
 		for _, entry := range capacities {
-			points = append(points, convertDB(entry, *locationExternalData))
+			points = append(points, convertDB(entry))
 		}
 
 		// perform time-based smoothing
@@ -115,9 +99,9 @@ func LoadData(queries *db.Queries, externalCache external.Cache, hoursCache scra
 	return result, nil
 }
 
-func convertDB(entry db.GymCapacity, externalData external.Gym) api.GymCapacityDataPoint {
+func convertDB(entry db.GymCapacity) api.GymCapacityDataPoint {
 	return api.GymCapacityDataPoint{
 		LastUpdated: entry.LastUpdatedAt.Time,
-		Count:       int(math.Round(float64(entry.Percentage) * float64(externalData.TotalCapacity) / 100.0)),
+		Count:       int(entry.Count),
 	}
 }

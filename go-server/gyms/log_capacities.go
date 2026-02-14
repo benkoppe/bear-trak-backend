@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"math"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
@@ -54,9 +55,13 @@ func logCapacity(ctx context.Context, queries *db.Queries, gym api.Gym, capacity
 		return nil
 	}
 
+	count := int(math.Round(float64(percentage) * float64(capacity.Total) / 100.0))
+
 	newCapacity, err := queries.CreateGymCapacity(ctx, db.CreateGymCapacityParams{
 		LocationID:    int32(gym.ID),
 		Percentage:    int32(percentage),
+		Count:         int32(count),
+		TotalCapacity: int32(capacity.Total),
 		LastUpdatedAt: pgtype.Timestamptz{Time: capacity.LastUpdated, Valid: true},
 	})
 	if err == nil {
