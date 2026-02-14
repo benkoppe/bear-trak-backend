@@ -46,3 +46,20 @@ FROM gym_capacities
 WHERE last_updated_at >= $1
   AND last_updated_at <= $2
 ORDER BY last_updated_at;
+
+-- name: GetGymCapacitiesFrom :many
+SELECT *
+FROM gym_capacities
+WHERE last_updated_at >= $1
+ORDER BY last_updated_at;
+
+-- name: GetGymCapacitiesTo :many
+SELECT *
+FROM gym_capacities
+WHERE last_updated_at <= $1
+ORDER BY last_updated_at;
+
+-- name: GetGymCapacitiesAll :many
+SELECT *
+FROM gym_capacities
+ORDER BY last_updated_at;

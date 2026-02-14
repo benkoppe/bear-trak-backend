@@ -136,6 +136,39 @@ func (q *Queries) GetDiningUserAll(ctx context.Context, userID string) ([]Dining
 	return items, nil
 }
 
+const getGymCapacitiesAll = `-- name: GetGymCapacitiesAll :many
+SELECT id, location_id, percentage, last_updated_at, total_capacity, count
+FROM gym_capacities
+ORDER BY last_updated_at
+`
+
+func (q *Queries) GetGymCapacitiesAll(ctx context.Context) ([]GymCapacity, error) {
+	rows, err := q.db.Query(ctx, getGymCapacitiesAll)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GymCapacity
+	for rows.Next() {
+		var i GymCapacity
+		if err := rows.Scan(
+			&i.ID,
+			&i.LocationID,
+			&i.Percentage,
+			&i.LastUpdatedAt,
+			&i.TotalCapacity,
+			&i.Count,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getGymCapacitiesBetween = `-- name: GetGymCapacitiesBetween :many
 SELECT id, location_id, percentage, last_updated_at, total_capacity, count
 FROM gym_capacities
@@ -151,6 +184,74 @@ type GetGymCapacitiesBetweenParams struct {
 
 func (q *Queries) GetGymCapacitiesBetween(ctx context.Context, arg GetGymCapacitiesBetweenParams) ([]GymCapacity, error) {
 	rows, err := q.db.Query(ctx, getGymCapacitiesBetween, arg.LastUpdatedAt, arg.LastUpdatedAt_2)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GymCapacity
+	for rows.Next() {
+		var i GymCapacity
+		if err := rows.Scan(
+			&i.ID,
+			&i.LocationID,
+			&i.Percentage,
+			&i.LastUpdatedAt,
+			&i.TotalCapacity,
+			&i.Count,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getGymCapacitiesFrom = `-- name: GetGymCapacitiesFrom :many
+SELECT id, location_id, percentage, last_updated_at, total_capacity, count
+FROM gym_capacities
+WHERE last_updated_at >= $1
+ORDER BY last_updated_at
+`
+
+func (q *Queries) GetGymCapacitiesFrom(ctx context.Context, lastUpdatedAt pgtype.Timestamptz) ([]GymCapacity, error) {
+	rows, err := q.db.Query(ctx, getGymCapacitiesFrom, lastUpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GymCapacity
+	for rows.Next() {
+		var i GymCapacity
+		if err := rows.Scan(
+			&i.ID,
+			&i.LocationID,
+			&i.Percentage,
+			&i.LastUpdatedAt,
+			&i.TotalCapacity,
+			&i.Count,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getGymCapacitiesTo = `-- name: GetGymCapacitiesTo :many
+SELECT id, location_id, percentage, last_updated_at, total_capacity, count
+FROM gym_capacities
+WHERE last_updated_at <= $1
+ORDER BY last_updated_at
+`
+
+func (q *Queries) GetGymCapacitiesTo(ctx context.Context, lastUpdatedAt pgtype.Timestamptz) ([]GymCapacity, error) {
+	rows, err := q.db.Query(ctx, getGymCapacitiesTo, lastUpdatedAt)
 	if err != nil {
 		return nil, err
 	}

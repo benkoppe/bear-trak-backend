@@ -74,6 +74,17 @@ func main() {
 	fileServer := http.FileServer(http.FS(staticFS))
 	mux.Handle("/static/", corsMiddleware(http.StripPrefix("/static", fileServer)))
 
+	// serve internal export route if token is set
+	internalExportToken := os.Getenv("INTERNAL_EXPORT_TOKEN")
+	if internalExportToken == "" {
+		log.Println("INTERNAL_EXPORT_TOKEN is not set; internal capacities export route is disabled")
+	} else {
+		mux.Handle(
+			"/internal/v1/gyms/capacities/export",
+			gyms.NewCapacitiesExportHandler(dbQueries, internalExportToken),
+		)
+	}
+
 	// start the timed tasks in a separate goroutine
 	go runTimedTasks(dbQueries, handler, *config)
 

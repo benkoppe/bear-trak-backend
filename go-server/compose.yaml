@@ -14,6 +14,7 @@ services:
       - POSTGRES_SSLMODE=disable
       - SCHOOL_CODE=${SCHOOL_CODE}
       - UMICH_DINING_API_KEY=${UMICH_DINING_API_KEY}
+      - INTERNAL_EXPORT_TOKEN=${INTERNAL_EXPORT_TOKEN}
     env_file:
       - .env
     depends_on:
