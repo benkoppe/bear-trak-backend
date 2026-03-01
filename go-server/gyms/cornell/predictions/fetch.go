@@ -56,12 +56,12 @@ func fetchData(url string) ([]Prediction, error) {
 
 var est = timeutils.LoadEST()
 
-func parseUTCToEST(layout, value string) (time.Time, error) {
-	t, err := time.Parse(layout, value)
+func parsePredictionTime(layout, value string) (time.Time, error) {
+	t, err := time.ParseInLocation(layout, value, est)
 	if err != nil {
 		return time.Time{}, err
 	}
-	return t.In(est), nil
+	return t, nil
 }
 
 func parsePrediction(record []string, line int) (Prediction, error) {
@@ -72,7 +72,7 @@ func parsePrediction(record []string, line int) (Prediction, error) {
 		)
 	}
 
-	ts, err := parseUTCToEST("2006-01-02 15:04:05", record[1])
+	ts, err := parsePredictionTime("2006-01-02 15:04:05", record[1])
 	if err != nil {
 		return Prediction{}, fmt.Errorf(
 			"line %d: failed to parse Timestamp %q: %w",
@@ -88,7 +88,7 @@ func parsePrediction(record []string, line int) (Prediction, error) {
 		)
 	}
 
-	pm, err := parseUTCToEST("2006-01-02 15:04:05.999999999", record[3])
+	pm, err := parsePredictionTime("2006-01-02 15:04:05.999999999", record[3])
 	if err != nil {
 		return Prediction{}, fmt.Errorf(
 			"line %d: failed to parse PredictionMadeAt %q: %w",
