@@ -23,7 +23,7 @@ import (
 type Handler struct {
 	DB *db.Queries
 
-	diningCache   dining.Cache
+	diningCaches  dining.Caches
 	gymsCaches    gyms.Caches
 	transitCaches transit.Caches
 	studyCache    study.Cache
@@ -46,23 +46,28 @@ type CampusGroupsConfig struct {
 	OtpEmailPassword string `env:"OTP_EMAIL_PASSWORD"`
 	GoogleMapsAPIKey string `env:"GOOGLE_MAPS_API_KEY"`
 }
+type ConvexConfig struct {
+	URL   string `env:"CLOUD_URL"`
+	Token string `env:"SHARED_TOKEN"`
+}
 
 type Config struct {
-	CGConfig CampusGroupsConfig `env:", prefix=CG_"`
+	CGConfig     CampusGroupsConfig `env:", prefix=CG_"`
+	ConvexConfig ConvexConfig       `env:", prefix=CONVEX_"`
 }
 
 func (h *Handler) initCaches(db *db.Queries) {
-	h.diningCache = dining.InitCache(eateriesURL)
-	h.gymsCaches = gyms.InitCaches(gymCapacitiesURL, gymHoursURL, gymPredictionsURL, db)
-	h.transitCaches = transit.InitCaches(availtecURL, gtfsStaticURL)
-	h.studyCache = study.InitCache(librariesURL)
-	h.mapCache = externalmap.InitCache(mapOverlaysURL)
-
 	ctx := context.Background()
 	var c Config
 	if err := envconfig.Process(ctx, &c); err != nil {
 		log.Fatal(err)
 	}
+
+	h.diningCaches = dining.InitCaches(eateriesURL, c.ConvexConfig.URL, c.ConvexConfig.Token)
+	h.gymsCaches = gyms.InitCaches(gymCapacitiesURL, gymHoursURL, gymPredictionsURL, db)
+	h.transitCaches = transit.InitCaches(availtecURL, gtfsStaticURL)
+	h.studyCache = study.InitCache(librariesURL)
+	h.mapCache = externalmap.InitCache(mapOverlaysURL)
 	h.eventsCache = campusgroups.InitCache(
 		campusGroupsBaseURL,
 		login.LoginParams{
@@ -82,7 +87,7 @@ func (h *Handler) GetV1Alerts(ctx context.Context) ([]api.Alert, error) {
 }
 
 func (h *Handler) GetV1Dining(ctx context.Context) ([]api.Eatery, error) {
-	return dining.Get(h.diningCache)
+	return dining.Get(h.diningCaches)
 }
 
 func (h *Handler) GetV1Gyms(ctx context.Context) ([]api.Gym, error) {
