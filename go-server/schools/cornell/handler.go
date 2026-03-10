@@ -48,7 +48,7 @@ type CampusGroupsConfig struct {
 }
 type ConvexConfig struct {
 	URL   string `env:"CLOUD_URL"`
-	Token string `env:"TOKEN"`
+	Token string `env:"SHARED_TOKEN"`
 }
 
 type Config struct {

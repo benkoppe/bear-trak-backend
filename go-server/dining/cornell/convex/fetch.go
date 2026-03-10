@@ -28,17 +28,14 @@ func fetchEateries(baseURL, token string) ([]Eatery, error) {
 	url := baseURL + "/api/query"
 
 	body := QueryRequest{
-		Path:   "eateries:getAll",
-		Args:   struct{}{},
+		Path: "eateries:getAll",
+		Args: map[string]string{
+			"token": token,
+		},
 		Format: "json",
 	}
 
-	headers := map[string]string{}
-	if token != "" {
-		headers["Authorization"] = "Bearer " + token
-	}
-
-	resp, err := utils.DoPostRequestWithHeaders[QueryResponse](url, body, headers)
+	resp, err := utils.DoPostRequest[QueryResponse](url, body)
 	if err != nil {
 		return nil, fmt.Errorf("convex request failed: %w", err)
 	}
