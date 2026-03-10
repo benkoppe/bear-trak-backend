@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"hash/fnv"
 	"log"
+	"net/url"
 	"regexp"
 	"slices"
 	"sort"
@@ -399,7 +400,12 @@ func convertConvex(ce convex.Eatery) api.Eatery {
 
 	imagePath := ""
 	if ce.ImagePath != nil {
-		imagePath = *ce.ImagePath
+		storageID := convexStorageIDFromURL(*ce.ImagePath)
+		if storageID != "" {
+			imagePath = "convexImages/" + storageID
+		} else {
+			imagePath = *ce.ImagePath
+		}
 	}
 
 	location := ce.LocationCode
@@ -528,4 +534,22 @@ func convertConvexCategories(cats []string) []api.EateryCategoriesItem {
 		}
 	}
 	return categories
+}
+
+func convexStorageIDFromURL(imageURL string) string {
+	parsed, err := url.Parse(imageURL)
+	if err != nil {
+		return ""
+	}
+
+	parts := strings.Split(strings.Trim(parsed.Path, "/"), "/")
+	if len(parts) < 3 {
+		return ""
+	}
+
+	if parts[len(parts)-2] != "storage" {
+		return ""
+	}
+
+	return parts[len(parts)-1]
 }

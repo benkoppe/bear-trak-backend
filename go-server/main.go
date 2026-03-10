@@ -6,7 +6,9 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
+	"strings"
 	"time"
 
 	_ "github.com/bmizerany/pq"
@@ -73,6 +75,7 @@ func main() {
 	// serve static files from the embedded filesystem on /static/
 	fileServer := http.FileServer(http.FS(staticFS))
 	mux.Handle("/static/", corsMiddleware(http.StripPrefix("/static", fileServer)))
+	mux.Handle("/convexImages/", corsMiddleware(newConvexImageRedirectHandler(os.Getenv("CONVEX_CLOUD_URL"))))
 
 	// serve internal export route if token is set
 	internalExportToken := os.Getenv("INTERNAL_EXPORT_TOKEN")
@@ -92,6 +95,27 @@ func main() {
 	if err := http.ListenAndServe(":3000", mux); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func newConvexImageRedirectHandler(convexCloudURL string) http.Handler {
+	base := strings.TrimRight(strings.TrimSpace(convexCloudURL), "/")
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		storageID := strings.TrimPrefix(r.URL.Path, "/convexImages/")
+		storageID = strings.TrimSpace(storageID)
+		if storageID == "" || strings.Contains(storageID, "/") {
+			http.NotFound(w, r)
+			return
+		}
+
+		if base == "" {
+			http.NotFound(w, r)
+			return
+		}
+
+		target := base + "/api/storage/" + url.PathEscape(storageID)
+		http.Redirect(w, r, target, http.StatusFound)
+	})
 }
 
 func runTimedTasks(queries *db.Queries, handler api.Handler, config schools.Config) {
