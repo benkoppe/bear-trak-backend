@@ -33,7 +33,7 @@
             version = "2.0.0";
             src = inputs.transitime;
 
-            mvnHash = "sha256-GH9YIja/ZALIYcP1G0cmVfN4WYIU8dk3ndm5CloAHJ8=";
+            mvnHash = "sha256-5hVY7takDYYywMPddheZ5HViAOVX5iyU19kgGlYVB0Y=";
 
             installPhase = ''
               mkdir -p $out/lib
