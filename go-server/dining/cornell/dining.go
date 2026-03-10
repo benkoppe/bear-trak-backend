@@ -3,6 +3,8 @@ package cornell
 
 import (
 	"fmt"
+	"hash/fnv"
+	"log"
 	"regexp"
 	"slices"
 	"sort"
@@ -11,6 +13,7 @@ import (
 	"unicode"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
+	"github.com/benkoppe/bear-trak-backend/go-server/dining/cornell/convex"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining/cornell/external"
 	"github.com/benkoppe/bear-trak-backend/go-server/dining/shared"
 
@@ -20,16 +23,32 @@ import (
 	"golang.org/x/text/unicode/norm"
 )
 
+// Caches holds all caches needed by the Cornell dining package.
+type Caches struct {
+	ExternalCache external.Cache
+	ConvexCache   convex.Cache
+}
+
+func InitCaches(externalURL, convexURL, convexToken string) Caches {
+	return Caches{
+		ExternalCache: external.InitCache(externalURL),
+		ConvexCache:   convex.InitCache(convexURL, convexToken),
+	}
+}
+
+// Cache is kept as an alias for backwards compatibility within this package.
 type Cache = external.Cache
 
+// InitCache creates only an external (Cornell Dining API) cache.
+// Prefer InitCaches when Convex support is also needed.
 func InitCache(url string) Cache {
 	return external.InitCache(url)
 }
 
 func Get(
-	externalCache Cache,
+	caches Caches,
 ) ([]api.Eatery, error) {
-	externalResponse, err := externalCache.Get()
+	externalResponse, err := caches.ExternalCache.Get()
 	if err != nil {
 		return nil, fmt.Errorf("error fetching external data: %w", err)
 	}
@@ -48,6 +67,18 @@ func Get(
 
 	staticEateries := static.GetEateries()
 	eateries = appendStaticMenus(eateries, staticEateries)
+
+	// Append Convex-managed eateries if the cache is available.
+	if caches.ConvexCache != nil {
+		convexEateries, err := caches.ConvexCache.Get()
+		if err != nil {
+			log.Printf("warning: failed to fetch Convex eateries: %v", err)
+		} else {
+			for _, ce := range convexEateries {
+				eateries = append(eateries, convertConvex(ce))
+			}
+		}
+	}
 
 	return eateries, nil
 }
@@ -351,4 +382,150 @@ func matchingStaticEatery(eatery api.Eatery, staticEateries []static.Eatery) *st
 		}
 	}
 	return nil
+}
+
+// convexIDToInt converts a Convex string _id to a stable negative integer.
+// A negative value is used to ensure there is no collision with Cornell Dining API IDs (which are positive).
+func convexIDToInt(id string) int {
+	h := fnv.New32a()
+	_, _ = h.Write([]byte(id))
+	// negate and ensure negative
+	v := -int(h.Sum32()%0x7FFFFFFF) - 1
+	return v
+}
+
+func convertConvex(ce convex.Eatery) api.Eatery {
+	est := timeutils.LoadEST()
+
+	imagePath := ""
+	if ce.ImagePath != nil {
+		imagePath = *ce.ImagePath
+	}
+
+	location := ce.LocationCode
+
+	hours := convertConvexHours(ce.Hours, est)
+	nextWeekEvents := convertConvexNextWeekEvents(ce.NextWeekEvents, est)
+	allWeekMenu := convertConvexMenu(ce.AllWeekMenu)
+
+	categories := convertConvexCategories(ce.Categories)
+
+	return api.Eatery{
+		ID:             convexIDToInt(ce.ID),
+		Name:           ce.Name,
+		NameShort:      ce.NameShort,
+		ImagePath:      imagePath,
+		Latitude:       ce.Latitude,
+		Longitude:      ce.Longitude,
+		Location:       location,
+		Hours:          hours,
+		Region:         ce.Region,
+		PayMethods:     ce.PayMethods,
+		Categories:     categories,
+		NextWeekEvents: nextWeekEvents,
+		AllWeekMenu:    allWeekMenu,
+	}
+}
+
+func convertConvexHours(ch []convex.Hours, loc *time.Location) []api.Hours {
+	var hours []api.Hours
+	for _, h := range ch {
+		start, err := time.Parse(time.RFC3339, h.Start)
+		if err != nil {
+			log.Printf("convex: failed to parse hours start %q: %v", h.Start, err)
+			continue
+		}
+		end, err := time.Parse(time.RFC3339, h.End)
+		if err != nil {
+			log.Printf("convex: failed to parse hours end %q: %v", h.End, err)
+			continue
+		}
+		hours = append(hours, api.Hours{
+			Start: start.In(loc),
+			End:   end.In(loc),
+		})
+	}
+	return hours
+}
+
+func convertConvexNextWeekEvents(nwe convex.NextWeekEvents, loc *time.Location) api.EateryNextWeekEvents {
+	return api.EateryNextWeekEvents{
+		Monday:    convertConvexEvents(nwe.Monday, loc),
+		Tuesday:   convertConvexEvents(nwe.Tuesday, loc),
+		Wednesday: convertConvexEvents(nwe.Wednesday, loc),
+		Thursday:  convertConvexEvents(nwe.Thursday, loc),
+		Friday:    convertConvexEvents(nwe.Friday, loc),
+		Saturday:  convertConvexEvents(nwe.Saturday, loc),
+		Sunday:    convertConvexEvents(nwe.Sunday, loc),
+	}
+}
+
+func convertConvexEvents(ces []convex.EateryEvent, loc *time.Location) []api.EateryEvent {
+	if ces == nil {
+		return nil
+	}
+	var events []api.EateryEvent
+	for _, ce := range ces {
+		start, err := time.Parse(time.RFC3339, ce.Start)
+		if err != nil {
+			log.Printf("convex: failed to parse event start %q: %v", ce.Start, err)
+			continue
+		}
+		end, err := time.Parse(time.RFC3339, ce.End)
+		if err != nil {
+			log.Printf("convex: failed to parse event end %q: %v", ce.End, err)
+			continue
+		}
+		events = append(events, api.EateryEvent{
+			Start:          start.In(loc),
+			End:            end.In(loc),
+			Name:           api.NewOptString(ce.Name),
+			MenuCategories: convertConvexMenu(ce.MenuCategories),
+		})
+	}
+	return events
+}
+
+func convertConvexMenu(cms []convex.MenuCategory) []api.EateryMenuCategory {
+	if cms == nil {
+		return nil
+	}
+	var categories []api.EateryMenuCategory
+	for _, cm := range cms {
+		var items []api.EateryMenuCategoryItemsItem
+		for _, item := range cm.Items {
+			items = append(items, api.EateryMenuCategoryItemsItem{
+				Name:    item.Name,
+				Healthy: item.Healthy,
+			})
+		}
+		categories = append(categories, api.EateryMenuCategory{
+			Name:  cm.Name,
+			Items: items,
+		})
+	}
+	return categories
+}
+
+func convertConvexCategories(cats []string) []api.EateryCategoriesItem {
+	var categories []api.EateryCategoriesItem
+	for _, cat := range cats {
+		switch cat {
+		case "convenienceStore":
+			categories = append(categories, api.EateryCategoriesItemConvenienceStore)
+		case "cafe":
+			categories = append(categories, api.EateryCategoriesItemCafe)
+		case "diningRoom":
+			categories = append(categories, api.EateryCategoriesItemDiningRoom)
+		case "coffeeShop":
+			categories = append(categories, api.EateryCategoriesItemCoffeeShop)
+		case "cart":
+			categories = append(categories, api.EateryCategoriesItemCart)
+		case "foodCourt":
+			categories = append(categories, api.EateryCategoriesItemFoodCourt)
+		default:
+			log.Printf("convex: unknown category %q, skipping", cat)
+		}
+	}
+	return categories
 }

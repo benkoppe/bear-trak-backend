@@ -43,12 +43,27 @@ func DoGetRequest[T any](url string, headers map[string]string) (*T, error) {
 }
 
 func DoPostRequest[T any](url string, payload any) (*T, error) {
+	return DoPostRequestWithHeaders[T](url, payload, nil)
+}
+
+func DoPostRequestWithHeaders[T any](url string, payload any, headers map[string]string) (*T, error) {
 	jsonData, err := json.Marshal(payload)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request payload: %w", err)
 	}
 
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	for key, value := range headers {
+		req.Header.Set(key, value)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to perform request: %w", err)
 	}
