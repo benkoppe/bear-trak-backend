@@ -3,7 +3,7 @@
     "gtfs": {
       "gtfs.zip": {
         "url": "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-zip.ashx",
-        "sha256": "sha256-oAvmvfqJxd3o2bcTFuJp5M+u9unIjkxKypPCJ7KahIA="
+        "sha256": "sha256-h5w9Wd5ZEVc6ODV/t3BVu4IIwSGinTFbfEii6anIW18="
       }
     }
   },
@@ -11,11 +11,11 @@
     "gtfs": {
       "gtfs-mbta.zip": {
         "url": "https://cdn.mbta.com/MBTA_GTFS.zip",
-        "sha256": "sha256-CBlgKJyb9T1wp20tvogjBnNtFM5CkvAmg0S8tGEEKXI="
+        "sha256": "sha256-48NximuL1OqgMUu2WOf2Vs/n3zMavEQNUcWQ/TkD0wU="
       },
       "gtfs.zip": {
         "url": "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip",
-        "sha256": "sha256-ioO/p/uofsl8i0O1UGNS818HIfFlqBThMaMAZMu1QgE="
+        "sha256": "sha256-nMUr8xXN5C5yAxYaXk/ZpWS1xjHi2gmnBbUaCB4ZAvA="
       }
     }
   },
