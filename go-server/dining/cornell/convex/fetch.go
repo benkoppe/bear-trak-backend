@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/utils"
+	"github.com/benkoppe/bear-trak-backend/go-server/utils/timeutils"
 )
 
 // Cache is a TTL cache holding the list of Convex-managed eateries.
@@ -26,11 +27,13 @@ func InitCache(baseURL, token string) Cache {
 
 func fetchEateries(baseURL, token string) ([]Eatery, error) {
 	url := baseURL + "/api/query"
+	todayKey := time.Now().In(timeutils.LoadEST()).Format("2006-01-02")
 
 	body := QueryRequest{
 		Path: "eateries:getAll",
 		Args: map[string]string{
-			"token": token,
+			"token":    token,
+			"todayKey": todayKey,
 		},
 		Format: "json",
 	}
