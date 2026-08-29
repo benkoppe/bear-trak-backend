@@ -3,7 +3,7 @@
     "gtfs": {
       "gtfs.zip": {
         "url": "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-zip.ashx",
-        "sha256": "sha256-h5w9Wd5ZEVc6ODV/t3BVu4IIwSGinTFbfEii6anIW18="
+        "sha256": "sha256-UfwoVNQXv7qSW6fQd6H8my0x274ahdupFieIWzovd3E="
       }
     }
   },
@@ -11,11 +11,11 @@
     "gtfs": {
       "gtfs-mbta.zip": {
         "url": "https://cdn.mbta.com/MBTA_GTFS.zip",
-        "sha256": "sha256-48NximuL1OqgMUu2WOf2Vs/n3zMavEQNUcWQ/TkD0wU="
+        "sha256": "sha256-LP9ZnUrcwlSO5WpwnIwp1Sd8rRD7x61lrzuyaHjRs24="
       },
       "gtfs.zip": {
         "url": "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip",
-        "sha256": "sha256-nMUr8xXN5C5yAxYaXk/ZpWS1xjHi2gmnBbUaCB4ZAvA="
+        "sha256": "sha256-cYZA5gLh43/lwEcqRy3kXiErfM+WI5kv1INpQ/0lLxA="
       }
     }
   },
@@ -23,7 +23,7 @@
     "gtfs": {
       "gtfs.zip": {
         "url": "https://webapps.fo.umich.edu/transit_uploads/google_transit.zip",
-        "sha256": "sha256-9oT89xjuneNMXZbwA08RI/d7e7BsfI7AS+wuk0S/DKU="
+        "sha256": "sha256-PxXC8kQTtKaeaU+ritDhqfKS+ZocTIbzo0LC5+IamfI="
       }
     }
   }
