@@ -6,15 +6,14 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
-	"strings"
 	"time"
 
 	_ "github.com/bmizerany/pq"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/db"
+	"github.com/benkoppe/bear-trak-backend/go-server/dining/cornell/convex"
 	"github.com/benkoppe/bear-trak-backend/go-server/gyms"
 	"github.com/benkoppe/bear-trak-backend/go-server/schools"
 )
@@ -75,7 +74,7 @@ func main() {
 	// serve static files from the embedded filesystem on /static/
 	fileServer := http.FileServer(http.FS(staticFS))
 	mux.Handle("/static/", corsMiddleware(http.StripPrefix("/static", fileServer)))
-	mux.Handle("/convexImages/", corsMiddleware(newConvexImageRedirectHandler(os.Getenv("CONVEX_CLOUD_URL"))))
+	mux.Handle("/convexImages/", corsMiddleware(convex.NewImageHandler(os.Getenv("CONVEX_CLOUD_URL"))))
 
 	// serve internal export route if token is set
 	internalExportToken := os.Getenv("INTERNAL_EXPORT_TOKEN")
@@ -92,30 +91,16 @@ func main() {
 	go runTimedTasks(dbQueries, handler, *config)
 
 	// start the server
-	if err := http.ListenAndServe(":3000", mux); err != nil {
+	httpServer := &http.Server{
+		Addr:              ":3000",
+		Handler:           mux,
+		ReadHeaderTimeout: 10 * time.Second,
+		WriteTimeout:      30 * time.Second,
+		IdleTimeout:       2 * time.Minute,
+	}
+	if err := httpServer.ListenAndServe(); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func newConvexImageRedirectHandler(convexCloudURL string) http.Handler {
-	base := strings.TrimRight(strings.TrimSpace(convexCloudURL), "/")
-
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		storageID := strings.TrimPrefix(r.URL.Path, "/convexImages/")
-		storageID = strings.TrimSpace(storageID)
-		if storageID == "" || strings.Contains(storageID, "/") {
-			http.NotFound(w, r)
-			return
-		}
-
-		if base == "" {
-			http.NotFound(w, r)
-			return
-		}
-
-		target := base + "/api/storage/" + url.PathEscape(storageID)
-		http.Redirect(w, r, target, http.StatusFound)
-	})
 }
 
 func runTimedTasks(queries *db.Queries, handler api.Handler, config schools.Config) {
