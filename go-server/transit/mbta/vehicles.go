@@ -28,18 +28,11 @@ func GetVehicles(caches Caches) ([]api.Vehicle, error) {
 }
 
 func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) ([]api.Vehicle, error) {
-	ignoreIds := getIgnoreIds()
-
 	var vehicles []api.Vehicle
 
 	for _, vehicle := range realtimeGtfs.Vehicles {
-		shouldIgnore := false
-		for _, ignoreID := range ignoreIds {
-			if ignoreID == vehicle.GetTrip().ID.RouteID {
-				shouldIgnore = true
-			}
-		}
-		if shouldIgnore {
+		// filter before the slow conversion
+		if !isAllowlisted(vehicle.GetTrip().ID.RouteID) {
 			continue
 		}
 

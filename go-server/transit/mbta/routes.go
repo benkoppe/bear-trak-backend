@@ -20,6 +20,7 @@ import (
 
 type Caches struct {
 	staticCache   shared_gtfs.Cache
+	routesCache   *utils.Cache[[]api.BusRoute]
 	realtimeCache gtfs_rt.Cache
 }
 
@@ -43,8 +44,25 @@ func InitCaches(staticGtfsURL, realtimeGtfsBaseURL string) Caches {
 		VehiclePositions: *vehicles,
 	}
 
+	// the full MBTA feed is too large to keep in memory
+	staticCache := shared_gtfs.InitFilteredCache(staticGtfsURL, allowlistIDs)
+
+	// the static feed never reloads, so convert routes once
+	routesCache := utils.NewCache(
+		"transitMbtaRoutes",
+		utils.NoExpiration,
+		func() ([]api.BusRoute, error) {
+			staticGtfs, err := staticCache.Get()
+			if err != nil {
+				return nil, fmt.Errorf("failed to load static data: %v", err)
+			}
+			return getRoutes(*staticGtfs)
+		},
+	)
+
 	return Caches{
-		staticCache:   shared_gtfs.InitCache(staticGtfsURL),
+		staticCache:   staticCache,
+		routesCache:   routesCache,
 		realtimeCache: gtfs_rt.InitCache(mbtaGtfsRealtime),
 	}
 }
@@ -55,10 +73,12 @@ func GetRoutes(caches Caches) ([]api.BusRoute, error) {
 		return nil, fmt.Errorf("failed to load static data: %v", err)
 	}
 
-	routes, err := getRoutes(*staticGtfs)
+	cachedRoutes, err := caches.routesCache.Get()
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse routes: %v", err)
 	}
+	// copy so attaching vehicles doesn't modify the cache
+	routes := slices.Clone(cachedRoutes)
 
 	realtimeGtfs, err := caches.realtimeCache.Get()
 	if err != nil {
@@ -76,20 +96,14 @@ func GetRoutes(caches Caches) ([]api.BusRoute, error) {
 }
 
 func getRoutes(staticGtfs gtfs.Static) ([]api.BusRoute, error) {
-	ignoreIds := getIgnoreIds()
-
 	var routes []api.BusRoute
 
 	for _, route := range staticGtfs.Routes {
-		apiRoute := convertRoute(route, staticGtfs)
-
-		shouldIgnore := slices.Contains(ignoreIds, apiRoute.ID.String)
-
-		if shouldIgnore {
+		if !isAllowlisted(route.Id) {
 			continue
 		}
 
-		routes = append(routes, apiRoute)
+		routes = append(routes, convertRoute(route, staticGtfs))
 	}
 
 	resolveDuplicateCodes(routes)
@@ -122,6 +136,10 @@ func resolveDuplicateCodes(routes []api.BusRoute) {
 
 func convertRoute(route gtfs.Route, staticGtfs gtfs.Static) api.BusRoute {
 	apiRoute := shared_gtfs.ConvertRoute(route, staticGtfs)
+	// route_desc is a category like "Local Bus", not a name
+	if route.LongName != "" {
+		apiRoute.Name = route.LongName
+	}
 
 	id, ok := apiRoute.ID.GetString()
 	if !ok {
