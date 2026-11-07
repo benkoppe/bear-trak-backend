@@ -13,6 +13,10 @@
         "url": "https://cdn.mbta.com/MBTA_GTFS.zip",
         "sha256": "sha256-LP9ZnUrcwlSO5WpwnIwp1Sd8rRD7x61lrzuyaHjRs24="
       },
+      "gtfs-longwood.zip": {
+        "url": "https://passio3.com/longwoodcollective/passioTransit/gtfs/google_transit.zip",
+        "sha256": "sha256-hdQchTpCYeOjkR6E4GTotPri0HMoJO4ahi8FY5m1u7g="
+      },
       "gtfs.zip": {
         "url": "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip",
         "sha256": "sha256-cYZA5gLh43/lwEcqRy3kXiErfM+WI5kv1INpQ/0lLxA="

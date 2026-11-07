@@ -17,6 +17,14 @@
       "features": ["position"]
     },
     {
+      "type": "vehicle-positions",
+      "url": "https://passio3.com/longwoodcollective/passioTransit/gtfs/realtime/vehiclePositions",
+      "feedId": "longwood",
+      "frequency": "30s",
+      "fuzzyTripMatching": true,
+      "features": ["position"]
+    },
+    {
       "type": "real-time-alerts",
       "url": "https://passio3.com/harvard/passioTransit/gtfs/realtime/serviceAlerts",
       "feedId": "harvard",
@@ -29,6 +37,12 @@
       "frequency": "1m"
     },
     {
+      "type": "real-time-alerts",
+      "url": "https://passio3.com/longwoodcollective/passioTransit/gtfs/realtime/serviceAlerts",
+      "feedId": "longwood",
+      "frequency": "1m"
+    },
+    {
       "type": "stop-time-updater",
       "url": "https://passio3.com/harvard/passioTransit/gtfs/realtime/tripUpdates",
       "feedId": "harvard",
@@ -38,6 +52,12 @@
       "type": "stop-time-updater",
       "url": "https://cdn.mbta.com/realtime/TripUpdates.pb",
       "feedId": "mbta",
+      "frequency": "30s"
+    },
+    {
+      "type": "stop-time-updater",
+      "url": "https://passio3.com/longwoodcollective/passioTransit/gtfs/realtime/tripUpdates",
+      "feedId": "longwood",
       "frequency": "30s"
     }
   ]

@@ -12,6 +12,11 @@
       "type": "gtfs",
       "source": "gtfs-mbta.zip",
       "feedId": "mbta"
+    },
+    {
+      "type": "gtfs",
+      "source": "gtfs-longwood.zip",
+      "feedId": "longwood"
     }
   ],
   "transitModelTimeZone": "America/New_York"
