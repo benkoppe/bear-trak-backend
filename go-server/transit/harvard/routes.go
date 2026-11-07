@@ -14,13 +14,34 @@ import (
 	"github.com/jamespfennell/gtfs"
 )
 
+// System locates one Passio system's data.
+type System struct {
+	ID                  string
+	StaticGtfsURL       string
+	RealtimeGtfsBaseURL string
+}
+
 type Caches struct {
+	shuttles systemCaches
+	longwood systemCaches
+}
+
+type systemCaches struct {
 	pasioCache    pasio.Cache
 	staticCache   shared_gtfs.Cache
 	realtimeCache gtfs_rt.Cache
 }
 
-func InitCaches(pasioBaseURL, pasioSystemID, staticGtfsURL, realtimeGtfsBaseURL string) Caches {
+func InitCaches(pasioBaseURL string, shuttles, longwood System) Caches {
+	return Caches{
+		shuttles: initSystemCaches(pasioBaseURL, shuttles),
+		longwood: initSystemCaches(pasioBaseURL, longwood),
+	}
+}
+
+func initSystemCaches(pasioBaseURL string, system System) systemCaches {
+	realtimeGtfsBaseURL := system.RealtimeGtfsBaseURL
+
 	alerts, err := utils.ExtendURL(realtimeGtfsBaseURL, "serviceAlerts")
 	if err != nil {
 		log.Fatalf("failed to extend realtime GTFS alerts URL: %v", err)
@@ -34,20 +55,33 @@ func InitCaches(pasioBaseURL, pasioSystemID, staticGtfsURL, realtimeGtfsBaseURL 
 		log.Fatalf("failed to extend realtime GTFS vehicle positions URL: %v", err)
 	}
 
-	harvardGtfsRealtime := gtfs_rt.RealtimeUrls{
+	gtfsRealtime := gtfs_rt.RealtimeUrls{
 		Alerts:           *alerts,
 		TripUpdates:      *tripUpdates,
 		VehiclePositions: *vehicles,
 	}
 
-	return Caches{
-		pasioCache:    pasio.InitCache(pasioBaseURL, pasioSystemID),
-		staticCache:   shared_gtfs.InitCache(staticGtfsURL),
-		realtimeCache: gtfs_rt.InitCache(harvardGtfsRealtime),
+	return systemCaches{
+		pasioCache:    pasio.InitCache(pasioBaseURL, system.ID),
+		staticCache:   shared_gtfs.InitCache(system.StaticGtfsURL),
+		realtimeCache: gtfs_rt.InitCache(gtfsRealtime),
 	}
 }
 
 func GetRoutes(caches Caches) ([]api.BusRoute, error) {
+	shuttles, err := getSystemRoutes(caches.shuttles)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get shuttle routes: %v", err)
+	}
+	longwood, err := getSystemRoutes(caches.longwood)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get longwood routes: %v", err)
+	}
+
+	return append(shuttles, filterLongwoodRoutes(longwood)...), nil
+}
+
+func getSystemRoutes(caches systemCaches) ([]api.BusRoute, error) {
 	staticGtfs, err := caches.staticCache.Get()
 	if err != nil {
 		return nil, fmt.Errorf("failed to load static data: %v", err)
@@ -91,7 +125,8 @@ func getRoutes(pasioRoutes []pasio.Route, staticGtfs gtfs.Static) ([]api.BusRout
 		}
 
 		if gtfsRoute == nil {
-			return nil, fmt.Errorf("failed to find GTFS route for route ID: %s", route.GroupID)
+			log.Printf("skipping pasio route %q (%s): not found in GTFS", route.Name, route.GroupID)
+			continue
 		}
 
 		apiRoute := shared_gtfs.ConvertRoute(*gtfsRoute, staticGtfs)

@@ -44,8 +44,12 @@ func (h *Handler) initCaches() {
 	}
 
 	h.diningCache = dining.InitCache(eateriesBaseURL, diningAPIKey)
-	h.transitShuttleCaches = harvard_transit.InitCaches(pasioBaseURL, pasioSystemID, gtfsStaticURL, gtfsRealtimeBaseURL)
-	h.transitMbtaCaches = mbta_transit.InitCaches(mbtaGtfsURL, mbtaGtfsRealtimeBaseURL)
+	h.transitShuttleCaches = harvard_transit.InitCaches(
+		pasioBaseURL,
+		harvard_transit.System{ID: pasioSystemID, StaticGtfsURL: gtfsStaticURL, RealtimeGtfsBaseURL: gtfsRealtimeBaseURL},
+		harvard_transit.System{ID: longwoodPasioSystemID, StaticGtfsURL: longwoodGtfsStaticURL, RealtimeGtfsBaseURL: longwoodGtfsRealtimeBaseURL},
+	)
+	h.transitMbtaCaches = mbta_transit.InitCaches(mbtaGtfsURL, mbtaGtfsRealtimeBaseURL, mbtaAllowedRouteIDs)
 	h.studyCache = study.InitCache(librariesURL)
 }
 

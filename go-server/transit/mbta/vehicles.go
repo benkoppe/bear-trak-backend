@@ -2,6 +2,7 @@ package mbta
 
 import (
 	"fmt"
+	"slices"
 
 	"github.com/benkoppe/bear-trak-backend/go-server/api"
 	"github.com/benkoppe/bear-trak-backend/go-server/transit/shared/gtfs_rt"
@@ -19,7 +20,7 @@ func GetVehicles(caches Caches) ([]api.Vehicle, error) {
 		return nil, fmt.Errorf("failed to load realtime data: %v", err)
 	}
 
-	vehicles, err := getVehicles(*staticGtfs, *realtimeGtfs)
+	vehicles, err := getVehicles(*staticGtfs, *realtimeGtfs, caches.allowedRouteIDs)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse vehicles: %v", err)
 	}
@@ -27,12 +28,12 @@ func GetVehicles(caches Caches) ([]api.Vehicle, error) {
 	return vehicles, nil
 }
 
-func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime) ([]api.Vehicle, error) {
+func getVehicles(staticGtfs gtfs.Static, realtimeGtfs gtfs.Realtime, allowedRouteIDs []string) ([]api.Vehicle, error) {
 	var vehicles []api.Vehicle
 
 	for _, vehicle := range realtimeGtfs.Vehicles {
 		// filter before the slow conversion
-		if !isAllowlisted(vehicle.GetTrip().ID.RouteID) {
+		if !slices.Contains(allowedRouteIDs, vehicle.GetTrip().ID.RouteID) {
 			continue
 		}
 

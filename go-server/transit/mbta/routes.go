@@ -19,12 +19,18 @@ import (
 )
 
 type Caches struct {
-	staticCache   shared_gtfs.Cache
-	routesCache   *utils.Cache[[]api.BusRoute]
-	realtimeCache gtfs_rt.Cache
+	staticCache     shared_gtfs.Cache
+	routesCache     *utils.Cache[[]api.BusRoute]
+	realtimeCache   gtfs_rt.Cache
+	allowedRouteIDs []string
 }
 
-func InitCaches(staticGtfsURL, realtimeGtfsBaseURL string) Caches {
+// InitCaches serves only allowedRouteIDs, which must not be empty.
+func InitCaches(staticGtfsURL, realtimeGtfsBaseURL string, allowedRouteIDs []string) Caches {
+	if len(allowedRouteIDs) == 0 {
+		log.Fatalf("mbta allowed route IDs must not be empty")
+	}
+
 	alerts, err := utils.ExtendURL(realtimeGtfsBaseURL, "Alerts.pb")
 	if err != nil {
 		log.Fatalf("failed to extend realtime GTFS alerts URL: %v", err)
@@ -45,7 +51,7 @@ func InitCaches(staticGtfsURL, realtimeGtfsBaseURL string) Caches {
 	}
 
 	// the full MBTA feed is too large to keep in memory
-	staticCache := shared_gtfs.InitFilteredCache(staticGtfsURL, allowlistIDs)
+	staticCache := shared_gtfs.InitFilteredCache(staticGtfsURL, allowedRouteIDs)
 
 	// the static feed never reloads, so convert routes once
 	routesCache := utils.NewCache(
@@ -56,14 +62,15 @@ func InitCaches(staticGtfsURL, realtimeGtfsBaseURL string) Caches {
 			if err != nil {
 				return nil, fmt.Errorf("failed to load static data: %v", err)
 			}
-			return getRoutes(*staticGtfs)
+			return getRoutes(*staticGtfs, allowedRouteIDs)
 		},
 	)
 
 	return Caches{
-		staticCache:   staticCache,
-		routesCache:   routesCache,
-		realtimeCache: gtfs_rt.InitCache(mbtaGtfsRealtime),
+		staticCache:     staticCache,
+		routesCache:     routesCache,
+		realtimeCache:   gtfs_rt.InitCache(mbtaGtfsRealtime),
+		allowedRouteIDs: allowedRouteIDs,
 	}
 }
 
@@ -85,7 +92,7 @@ func GetRoutes(caches Caches) ([]api.BusRoute, error) {
 		return nil, fmt.Errorf("failed to load realtime data: %v", err)
 	}
 
-	vehicles, err := getVehicles(*staticGtfs, *realtimeGtfs)
+	vehicles, err := getVehicles(*staticGtfs, *realtimeGtfs, caches.allowedRouteIDs)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load vehicles: %v", err)
 	}
@@ -95,11 +102,11 @@ func GetRoutes(caches Caches) ([]api.BusRoute, error) {
 	return routes, nil
 }
 
-func getRoutes(staticGtfs gtfs.Static) ([]api.BusRoute, error) {
+func getRoutes(staticGtfs gtfs.Static, allowedRouteIDs []string) ([]api.BusRoute, error) {
 	var routes []api.BusRoute
 
 	for _, route := range staticGtfs.Routes {
-		if !isAllowlisted(route.Id) {
+		if !slices.Contains(allowedRouteIDs, route.Id) {
 			continue
 		}
 

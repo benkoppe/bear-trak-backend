@@ -9,6 +9,19 @@ import (
 )
 
 func GetVehicles(caches Caches) ([]api.Vehicle, error) {
+	shuttles, err := getSystemVehicles(caches.shuttles)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get shuttle vehicles: %v", err)
+	}
+	longwood, err := getSystemVehicles(caches.longwood)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get longwood vehicles: %v", err)
+	}
+
+	return append(shuttles, filterLongwoodVehicles(longwood)...), nil
+}
+
+func getSystemVehicles(caches systemCaches) ([]api.Vehicle, error) {
 	staticGtfs, err := caches.staticCache.Get()
 	if err != nil {
 		return nil, fmt.Errorf("failed to load static data: %v", err)

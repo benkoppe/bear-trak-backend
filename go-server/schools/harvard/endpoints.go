@@ -10,6 +10,11 @@ const (
 
 	gtfsRealtimeBaseURL = "https://passio3.com/harvard/passioTransit/gtfs/realtime"
 
+	// Longwood Collective (formerly MASCO) runs the M2.
+	longwoodPasioSystemID       = "6986"
+	longwoodGtfsStaticURL       = "https://passio3.com/longwoodcollective/passioTransit/gtfs/google_transit.zip"
+	longwoodGtfsRealtimeBaseURL = "https://passio3.com/longwoodcollective/passioTransit/gtfs/realtime"
+
 	mbtaGtfsURL             = "https://cdn.mbta.com/MBTA_GTFS.zip"
 	mbtaGtfsRealtimeBaseURL = "https://cdn.mbta.com/realtime"
 
