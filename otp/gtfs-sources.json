@@ -3,7 +3,7 @@
     "gtfs": {
       "gtfs.zip": {
         "url": "https://realtimetcatbus.availtec.com/InfoPoint/GTFS-zip.ashx",
-        "sha256": "sha256-UfwoVNQXv7qSW6fQd6H8my0x274ahdupFieIWzovd3E="
+        "sha256": "sha256-Bms7VjiX/1lAPlzxa/J65gh4K8CW3LL1iuI0qPyX9cg="
       }
     }
   },
@@ -11,15 +11,15 @@
     "gtfs": {
       "gtfs-mbta.zip": {
         "url": "https://cdn.mbta.com/MBTA_GTFS.zip",
-        "sha256": "sha256-LP9ZnUrcwlSO5WpwnIwp1Sd8rRD7x61lrzuyaHjRs24="
+        "sha256": "sha256-7FswCQKChQqcjDRpj/SWv7sGx/rUQ08mPrTADM7jRBg="
       },
       "gtfs-longwood.zip": {
         "url": "https://passio3.com/longwoodcollective/passioTransit/gtfs/google_transit.zip",
-        "sha256": "sha256-hdQchTpCYeOjkR6E4GTotPri0HMoJO4ahi8FY5m1u7g="
+        "sha256": "sha256-zI7e/ZzxIpYINpeVDY5CTP0ccbq+sZ4j9SQxO924MuQ="
       },
       "gtfs.zip": {
         "url": "https://passio3.com/harvard/passioTransit/gtfs/google_transit.zip",
-        "sha256": "sha256-cYZA5gLh43/lwEcqRy3kXiErfM+WI5kv1INpQ/0lLxA="
+        "sha256": "sha256-ygeTGT2idA5Skk15mt8YYo3PggrbgNJXOJ5+3s69Jf0="
       }
     }
   },
@@ -27,7 +27,7 @@
     "gtfs": {
       "gtfs.zip": {
         "url": "https://webapps.fo.umich.edu/transit_uploads/google_transit.zip",
-        "sha256": "sha256-PxXC8kQTtKaeaU+ritDhqfKS+ZocTIbzo0LC5+IamfI="
+        "sha256": "sha256-nxHbTrTjhZx+DbvIoXWxi8vsKUl7E4Y+2wRflKZAbfI="
       }
     }
   }
